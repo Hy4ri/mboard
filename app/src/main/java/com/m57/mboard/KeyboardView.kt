@@ -33,6 +33,7 @@ class KeyboardView(
     private val gap = 4 * density
     private val dark =
         (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    val backgroundColor get() = bgColor
     private val bgColor = if (dark) 0xFF1B1B1F.toInt() else 0xFFE8E8EC.toInt()
     private val keyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (dark) 0xFF303036.toInt() else -1 }
     private val modPaint =

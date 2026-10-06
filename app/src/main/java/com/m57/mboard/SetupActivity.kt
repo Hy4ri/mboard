@@ -8,6 +8,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 
 /** Enable + select the keyboard, and a field to try it. */
@@ -39,6 +41,25 @@ class SetupActivity : Activity() {
             },
         )
         root.addView(EditText(this).apply { hint = "Try typing here" })
+        val store = ClipStore(this)
+        root.addView(
+            TextView(this).apply {
+                text = "Keep clipboard history for"
+                setPadding(0, pad, 0, 0)
+            },
+        )
+        val group = RadioGroup(this)
+        ClipStore.RETENTION_OPTIONS.forEachIndexed { i, (label, ms) ->
+            group.addView(
+                RadioButton(this).apply {
+                    id = i + 1
+                    text = label
+                    isChecked = store.retentionMs == ms
+                    setOnClickListener { store.retentionMs = ms }
+                },
+            )
+        }
+        root.addView(group)
         setContentView(root)
     }
 }
