@@ -48,6 +48,17 @@ class KeyboardView(
     private val keys = mutableListOf<Pair<RectF, String>>()
     private var downX = 0f
     private var downKey: String? = null
+    private var pressed: Pair<RectF, String>? = null
+    private val popupPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = if (dark) 0xFF5A5A64.toInt() else 0xFFFFFFFF.toInt()
+            setShadowLayer(6 * density, 0f, 2 * density, 0x66000000)
+        }
+    private val hidePopup =
+        Runnable {
+            pressed = null
+            invalidate()
+        }
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -102,6 +113,25 @@ class KeyboardView(
             val y = rect.centerY() - (textPaint.descent() + textPaint.ascent()) / 2
             canvas.drawText(label, rect.centerX(), y, textPaint)
         }
+        drawPopup(canvas, radius)
+    }
+
+    /** Enlarged bubble over the pressed letter key, like a key preview. */
+    private fun drawPopup(
+        canvas: Canvas,
+        radius: Float,
+    ) {
+        val (rect, key) = pressed ?: return
+        val label = if (shifted) key.uppercase() else key
+        val grow = rect.width() * 0.2f
+        val bubble =
+            RectF(rect.left - grow, (rect.top - rowHeight * 0.55f).coerceAtLeast(0f), rect.right + grow, rect.bottom)
+        bubble.offset(-bubble.left.coerceAtMost(0f), 0f)
+        bubble.offset(-(bubble.right - width).coerceAtLeast(0f), 0f)
+        canvas.drawRoundRect(bubble, radius * 1.5f, radius * 1.5f, popupPaint)
+        textPaint.textSize = 26 * density
+        val cy = bubble.top + (rect.top - bubble.top) * 0.9f
+        canvas.drawText(label, bubble.centerX(), cy - (textPaint.descent() + textPaint.ascent()) / 2, textPaint)
     }
 
     private fun keyAt(
@@ -129,7 +159,10 @@ class KeyboardView(
             MotionEvent.ACTION_DOWN -> {
                 downX = event.x
                 downKey = keyAt(event.x, event.y)
-                if (downKey != null) performHapticFeedback(HAPTIC_KEY)
+                val hit = keys.firstOrNull { it.first.contains(event.x, event.y) }
+                removeCallbacks(hidePopup)
+                pressed = hit?.takeIf { (_, k) -> k.length == 1 && k != Keys.SPACE && k !in SPECIAL }
+                invalidate()
                 if (downKey == Keys.BACKSPACE) {
                     onKey(Keys.BACKSPACE)
                     postDelayed(repeatDelete, REPEAT_START_MS)
@@ -138,6 +171,7 @@ class KeyboardView(
 
             MotionEvent.ACTION_UP -> {
                 removeCallbacks(repeatDelete)
+                postDelayed(hidePopup, POPUP_LINGER_MS)
                 val key = downKey ?: return true
                 downKey = null
                 if (key == Keys.BACKSPACE) return true
@@ -150,6 +184,7 @@ class KeyboardView(
 
             MotionEvent.ACTION_CANCEL -> {
                 removeCallbacks(repeatDelete)
+                hidePopup.run()
                 downKey = null
             }
         }
@@ -157,7 +192,8 @@ class KeyboardView(
     }
 
     private companion object {
-        const val HAPTIC_KEY = 3 // HapticFeedbackConstants.KEYBOARD_TAP
+        const val POPUP_LINGER_MS = 100L
+        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE)
         const val REPEAT_START_MS = 400L
         const val REPEAT_INTERVAL_MS = 50L
     }
