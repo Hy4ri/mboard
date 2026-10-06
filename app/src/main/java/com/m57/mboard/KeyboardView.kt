@@ -54,6 +54,25 @@ class KeyboardView(
             color = if (dark) 0xFF5A5A64.toInt() else 0xFFFFFFFF.toInt()
             setShadowLayer(6 * density, 0f, 2 * density, 0x66000000)
         }
+    private var alts: List<String> = emptyList()
+    private var altRects: List<RectF> = emptyList()
+    private var altSelected = 0
+    private val altPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (dark) 0xFF8AB4F8.toInt() else 0xFF1A73E8.toInt() }
+    private val showAlternates =
+        Runnable {
+            val (rect, key) = pressed ?: return@Runnable
+            val extra = ALTERNATES[key] ?: return@Runnable
+            alts = (listOf(key) + extra).map { if (shifted) it.uppercase() else it }
+            val w = rect.width()
+            val top = (rect.top - rowHeight * 1.1f).coerceAtLeast(0f)
+            var left = (rect.centerX() - w / 2).coerceAtMost(width - w * alts.size)
+            left = left.coerceAtLeast(0f)
+            altRects = alts.indices.map { RectF(left + it * w, top, left + (it + 1) * w, top + rowHeight) }
+            altSelected = 0
+            pressed = null
+            invalidate()
+        }
     private val hidePopup =
         Runnable {
             pressed = null
@@ -114,6 +133,29 @@ class KeyboardView(
             canvas.drawText(label, rect.centerX(), y, textPaint)
         }
         drawPopup(canvas, radius)
+        drawAlternates(canvas, radius)
+    }
+
+    private fun drawAlternates(
+        canvas: Canvas,
+        radius: Float,
+    ) {
+        if (alts.isEmpty()) return
+        val strip = RectF(altRects.first().left, altRects.first().top, altRects.last().right, altRects.last().bottom)
+        canvas.drawRoundRect(strip, radius * 1.5f, radius * 1.5f, popupPaint)
+        textPaint.textSize = 24 * density
+        alts.forEachIndexed { i, label ->
+            val cell = altRects[i]
+            if (i == altSelected) canvas.drawRoundRect(cell, radius, radius, altPaint)
+            val y = cell.centerY() - (textPaint.descent() + textPaint.ascent()) / 2
+            canvas.drawText(label, cell.centerX(), y, textPaint)
+        }
+    }
+
+    private fun clearAlternates() {
+        removeCallbacks(showAlternates)
+        alts = emptyList()
+        invalidate()
     }
 
     /** Enlarged bubble over the pressed letter key, like a key preview. */
@@ -163,14 +205,34 @@ class KeyboardView(
                 removeCallbacks(hidePopup)
                 pressed = hit?.takeIf { (_, k) -> k.length == 1 && k != Keys.SPACE && k !in SPECIAL }
                 invalidate()
+                if (pressed != null && downKey in ALTERNATES) postDelayed(showAlternates, LONG_PRESS_MS)
                 if (downKey == Keys.BACKSPACE) {
                     onKey(Keys.BACKSPACE)
                     postDelayed(repeatDelete, REPEAT_START_MS)
                 }
             }
 
+            MotionEvent.ACTION_MOVE -> {
+                if (alts.isNotEmpty()) {
+                    val i = altRects.indexOfFirst { event.x < it.right }
+                    val next = if (i < 0) alts.lastIndex else i
+                    if (next != altSelected) {
+                        altSelected = next
+                        invalidate()
+                    }
+                }
+            }
+
             MotionEvent.ACTION_UP -> {
                 removeCallbacks(repeatDelete)
+                if (alts.isNotEmpty()) {
+                    val choice = alts[altSelected]
+                    clearAlternates()
+                    downKey = null
+                    onKey(choice)
+                    return true
+                }
+                removeCallbacks(showAlternates)
                 postDelayed(hidePopup, POPUP_LINGER_MS)
                 val key = downKey ?: return true
                 downKey = null
@@ -185,6 +247,7 @@ class KeyboardView(
             MotionEvent.ACTION_CANCEL -> {
                 removeCallbacks(repeatDelete)
                 hidePopup.run()
+                clearAlternates()
                 downKey = null
             }
         }
@@ -193,6 +256,7 @@ class KeyboardView(
 
     private companion object {
         const val POPUP_LINGER_MS = 100L
+        const val LONG_PRESS_MS = 250L
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE)
         const val REPEAT_START_MS = 400L
         const val REPEAT_INTERVAL_MS = 50L

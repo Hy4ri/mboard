@@ -11,6 +11,35 @@ object Keys {
     const val SPACE = " "
 }
 
+/** Long-press alternates; the base key is shown first. */
+val ALTERNATES: Map<String, List<String>> =
+    mapOf(
+        "a" to "àáâäãåæ",
+        "e" to "èéêëē",
+        "i" to "ìíîï",
+        "o" to "òóôöõøœ",
+        "u" to "ùúûü",
+        "c" to "ç",
+        "n" to "ñ",
+        "s" to "ß",
+        "y" to "ýÿ",
+        "ا" to "أإآٱ",
+        "ي" to "ئى",
+        "و" to "ؤ",
+        "ه" to "ة",
+        "ء" to "َُِّْ",
+        "1" to "١",
+        "2" to "٢",
+        "3" to "٣",
+        "4" to "٤",
+        "5" to "٥",
+        "6" to "٦",
+        "7" to "٧",
+        "8" to "٨",
+        "9" to "٩",
+        "0" to "٠",
+    ).mapValues { (_, v) -> v.map(Char::toString) } + ("ل" to listOf("لا", "لأ", "لإ", "لآ"))
+
 private val NUMBERS = "1234567890".map(Char::toString)
 
 enum class Layout(
