@@ -70,11 +70,13 @@ class KeyboardView(
         val unit = width / maxUnits
         layout.rows.forEachIndexed { r, row ->
             val rowUnits = row.sumOf { weight(it).toDouble() }.toFloat()
-            var x = (width - rowUnits * unit) / 2
+            // Arabic rows stretch edge to edge; English keeps the classic inset home row.
+            val rowUnit = if (layout == Layout.ARABIC) width / rowUnits else unit
+            var x = (width - rowUnits * rowUnit) / 2
             val top = r * rowHeight + gap
             // Rows are defined in visual left-to-right order for every layout.
             row.forEach { key ->
-                val w = weight(key) * unit
+                val w = weight(key) * rowUnit
                 keys += RectF(x + gap / 2, top, x + w - gap / 2, top + rowHeight - gap) to key
                 x += w
             }
