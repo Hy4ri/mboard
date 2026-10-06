@@ -109,6 +109,20 @@ class KeyboardView(
         y: Float,
     ) = keys.firstOrNull { it.first.contains(x, y) }?.second
 
+    private val repeatDelete =
+        object : Runnable {
+            override fun run() {
+                if (downKey != Keys.BACKSPACE) return
+                onKey(Keys.BACKSPACE)
+                postDelayed(this, REPEAT_INTERVAL_MS)
+            }
+        }
+
+    override fun onDetachedFromWindow() {
+        removeCallbacks(repeatDelete)
+        super.onDetachedFromWindow()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
@@ -116,19 +130,26 @@ class KeyboardView(
                 downX = event.x
                 downKey = keyAt(event.x, event.y)
                 if (downKey != null) performHapticFeedback(HAPTIC_KEY)
+                if (downKey == Keys.BACKSPACE) {
+                    onKey(Keys.BACKSPACE)
+                    postDelayed(repeatDelete, REPEAT_START_MS)
+                }
             }
 
             MotionEvent.ACTION_UP -> {
+                removeCallbacks(repeatDelete)
                 val key = downKey ?: return true
+                downKey = null
+                if (key == Keys.BACKSPACE) return true
                 if (key == Keys.SPACE && abs(event.x - downX) > 40 * density) {
                     onSpaceSwipe()
                 } else {
                     onKey(key)
                 }
-                downKey = null
             }
 
             MotionEvent.ACTION_CANCEL -> {
+                removeCallbacks(repeatDelete)
                 downKey = null
             }
         }
@@ -137,5 +158,7 @@ class KeyboardView(
 
     private companion object {
         const val HAPTIC_KEY = 3 // HapticFeedbackConstants.KEYBOARD_TAP
+        const val REPEAT_START_MS = 400L
+        const val REPEAT_INTERVAL_MS = 50L
     }
 }
