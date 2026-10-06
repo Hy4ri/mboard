@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mboard</string>
+    <string name="subtype_en">English</string>
+    <string name="subtype_ar">العربية</string>
+</resources>
