@@ -11,11 +11,14 @@ object Keys {
     const val SPACE = " "
 }
 
+private val NUMBERS = "1234567890".map(Char::toString)
+
 enum class Layout(
     val rows: List<List<String>>,
 ) {
     ENGLISH(
         listOf(
+            NUMBERS,
             "qwertyuiop".map(Char::toString),
             "asdfghjkl".map(Char::toString),
             listOf(Keys.SHIFT) + "zxcvbnm".map(Char::toString) + Keys.BACKSPACE,
@@ -24,6 +27,7 @@ enum class Layout(
     ),
     ARABIC(
         listOf(
+            NUMBERS,
             "ضصثقفغعهخحج".map(Char::toString),
             "شسيبلاتنمكط".map(Char::toString),
             "ذئءؤرىةوزظد".map(Char::toString) + Keys.BACKSPACE,
