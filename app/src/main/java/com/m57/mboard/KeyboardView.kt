@@ -2,23 +2,48 @@ package com.m57.mboard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
+import java.util.Locale
 import kotlin.math.abs
 
-/** Draws a [Layout] and reports key taps and spacebar swipes. */
+/** Single-owner gestures: a key tap, a space swipe, or a held-space scrub, never two. */
 class KeyboardView(
     context: Context,
     private val onKey: (String) -> Unit,
     private val onSpaceSwipe: () -> Unit,
+    private val onCursorMove: (Int) -> Unit = {},
 ) : View(context) {
-    var layout: Layout = Layout.ENGLISH
+    private val ui = BoardUi(context)
+    private val settings = BoardSettings(context)
+    private val density = resources.displayMetrics.density
+    private val rowHeight = settings.rowHeightDp * density
+    private val gap = 4 * density
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+    private val showNumberRow = settings.numberRow
+    private val showPreview = settings.keyPreview
+
+    private data class Cell(
+        val rect: RectF,
+        val key: String,
+        val row: Int,
+    )
+
+    private val cells = mutableListOf<Cell>()
+    private var geometryLayout: Layout? = null
+    private var geometryWidth = -1
+    var layout = Layout.ENGLISH
         set(value) {
+            if (field == value) return
+            cancelTouch()
             field = value
+            geometryLayout = null
+            if (touchReady) access.resetLayout()
             requestLayout()
             invalidate()
         }
@@ -27,242 +52,586 @@ class KeyboardView(
             field = value
             invalidate()
         }
-
-    private val density = resources.displayMetrics.density
-    private val rowHeight = 54 * density
-    private val gap = 4 * density
-    private val dark =
-        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-    val backgroundColor get() = bgColor
-
-    /** Height of the tallest letter layout, so panels can match it. */
-    val keysHeight get() = (rowHeight * Layout.ENGLISH.rows.size + gap).toInt()
-    private val bgColor = if (dark) 0xFF1B1B1F.toInt() else 0xFFE8E8EC.toInt()
-    private val keyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (dark) 0xFF303036.toInt() else -1 }
-    private val modPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = if (dark) 0xFF45454D.toInt() else 0xFFC8C8D0.toInt()
-        }
-    private val textPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = if (dark) -1 else 0xFF111111.toInt()
-            textSize = 22 * density
-            textAlign = Paint.Align.CENTER
-        }
-    private val keys = mutableListOf<Pair<RectF, String>>()
-    private var downX = 0f
-    private var downKey: String? = null
-    private var pressed: Pair<RectF, String>? = null
-    private val popupPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = if (dark) 0xFF5A5A64.toInt() else 0xFFFFFFFF.toInt()
-            setShadowLayer(6 * density, 0f, 2 * density, 0x66000000)
-        }
-    private var alts: List<String> = emptyList()
-    private var altRects: List<RectF> = emptyList()
-    private var altSelected = 0
-    private val altPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (dark) 0xFF8AB4F8.toInt() else 0xFF1A73E8.toInt() }
-    private val showAlternates =
-        Runnable {
-            val (rect, key) = pressed ?: return@Runnable
-            val extra = ALTERNATES[key] ?: return@Runnable
-            alts = (listOf(key) + extra).map { if (shifted) it.uppercase() else it }
-            val w = rect.width()
-            val top = (rect.top - rowHeight * 1.1f).coerceAtLeast(0f)
-            var left = (rect.centerX() - w / 2).coerceAtMost(width - w * alts.size)
-            left = left.coerceAtLeast(0f)
-            altRects = alts.indices.map { RectF(left + it * w, top, left + (it + 1) * w, top + rowHeight) }
-            altSelected = 0
-            pressed = null
+    var capsLocked = false
+        set(value) {
+            field = value
             invalidate()
         }
+    var enterLabel: String = Keys.ENTER
+        set(value) {
+            field = value
+            invalidate()
+        }
+    var languageLabel = "English"
+        set(value) {
+            field = value
+            invalidate()
+        }
+    val backgroundColor get() = ui.background
+    val keysHeight get() = (rowHeight * (if (showNumberRow) 5 else 4) + gap).toInt()
+    private val rows get() =
+        if (!showNumberRow &&
+            (layout == Layout.ENGLISH || layout == Layout.ARABIC)
+        ) {
+            layout.rows.drop(1)
+        } else {
+            layout.rows
+        }
+    private val altStrip = RectF()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
+    private val icons =
+        mapOf(
+            "globe" to icon(R.drawable.ic_language),
+            "shift" to icon(R.drawable.ic_shift),
+            "shifted" to icon(R.drawable.ic_shift_fill1),
+            "locked" to icon(R.drawable.ic_shift_lock_fill1),
+            "delete" to icon(R.drawable.ic_backspace),
+            "enter" to icon(R.drawable.ic_keyboard_return),
+        )
+    private var pointer = MotionEvent.INVALID_POINTER_ID
+    private var origin: Cell? = null
+    private var current: Cell? = null
+    private var downX = 0f
+    private var downY = 0f
+    private var lastX = 0f
+    private var lastY = 0f
+    private var spaceSwiped = false
+    private var scrubbing = false
+    private var scrubAnchor = 0f
+    private var popup: Cell? = null
+    private var alts = emptyList<String>()
+    private var altRects = emptyList<RectF>()
+    private var altSelected = 0
+    private var altOriginX = 0f
     private val hidePopup =
         Runnable {
-            pressed = null
+            popup = null
             invalidate()
+        }
+    private val hold =
+        Runnable {
+            val base = origin ?: return@Runnable
+            if (current != base || pointer == MotionEvent.INVALID_POINTER_ID || spaceSwiped) return@Runnable
+            if (base.key == Keys.SPACE) {
+                scrubbing = true
+                scrubAnchor = lastX
+                popup = null
+                invalidate()
+            } else {
+                showAlternates(base)
+            }
+        }
+    private val repeatDelete =
+        object : Runnable {
+            override fun run() {
+                if (pointer == MotionEvent.INVALID_POINTER_ID || current?.key != Keys.BACKSPACE || origin?.key != Keys.BACKSPACE) return
+                onKey(Keys.BACKSPACE)
+                postDelayed(this, 50L)
+            }
         }
 
     override fun onMeasure(
         widthMeasureSpec: Int,
         heightMeasureSpec: Int,
     ) {
-        val h = (rowHeight * layout.rows.size + gap).toInt() + paddingBottom
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), h)
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), resolveSize(keysHeight + paddingBottom, heightMeasureSpec))
+    }
+
+    override fun onSizeChanged(
+        w: Int,
+        h: Int,
+        oldw: Int,
+        oldh: Int,
+    ) {
+        cancelTouch()
+        geometryWidth = -1
+        if (touchReady) access.resetLayout()
     }
 
     private fun weight(key: String) =
         when (key) {
-            Keys.SPACE -> 4f
-            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.SYMBOLS, Keys.LETTERS -> 1.5f
+            Keys.SPACE -> if (layout == Layout.NUMBER) 1f else 4f
+            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> if (layout == Layout.NUMBER) 1f else 1.5f
+            Keys.SYMBOLS, Keys.LETTERS -> 1.5f
             else -> 1f
         }
 
-    private fun layoutKeys() {
-        keys.clear()
-        val maxUnits = layout.rows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
-        val unit = width / maxUnits
-        layout.rows.forEachIndexed { r, row ->
-            val rowUnits = row.sumOf { weight(it).toDouble() }.toFloat()
-            // Arabic rows stretch edge to edge; English keeps the classic inset home row.
-            val rowUnit = if (layout == Layout.ARABIC) width / rowUnits else unit
-            var x = (width - rowUnits * rowUnit) / 2
-            val top = r * rowHeight + gap
-            // Rows are defined in visual left-to-right order for every layout.
+    private fun geometry() {
+        if (geometryWidth == width && geometryLayout == layout) return
+        cells.clear()
+        if (width <= 0) return
+        val visibleRows = rows
+        val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
+        visibleRows.forEachIndexed { rowIndex, row ->
+            val units = row.sumOf { weight(it).toDouble() }.toFloat()
+            val unit = width / (if (layout == Layout.ARABIC || layout == Layout.NUMBER) units else maxUnits)
+            var x = (width - units * unit) / 2
             row.forEach { key ->
-                val w = weight(key) * rowUnit
-                keys += RectF(x + gap / 2, top, x + w - gap / 2, top + rowHeight - gap) to key
-                x += w
+                val size = weight(key) * unit
+                cells.add(
+                    Cell(RectF(x + gap / 2, rowIndex * rowHeight + gap, x + size - gap / 2, (rowIndex + 1) * rowHeight), key, rowIndex),
+                )
+                x += size
+            }
+        }
+        geometryWidth = width
+        geometryLayout = layout
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        geometry()
+        canvas.drawColor(ui.background)
+        val radius = 8 * density
+        cells.forEach { cell ->
+            val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
+            val special = cell.key in SPECIAL
+            paint.color =
+                if (active) {
+                    ui.accent
+                } else if (special) {
+                    ui.modifier
+                } else {
+                    ui.surface
+                }
+            canvas.drawRoundRect(cell.rect, radius, radius, paint)
+            val foreground = if (active) ui.onAccent else ui.text
+            val drawable =
+                when (cell.key) {
+                    Keys.GLOBE -> {
+                        icons["globe"]
+                    }
+
+                    Keys.SHIFT -> {
+                        icons[
+                            if (capsLocked) {
+                                "locked"
+                            } else if (shifted) {
+                                "shifted"
+                            } else {
+                                "shift"
+                            },
+                        ]
+                    }
+
+                    Keys.BACKSPACE -> {
+                        icons["delete"]
+                    }
+
+                    Keys.ENTER -> {
+                        if (enterLabel == Keys.ENTER) icons["enter"] else null
+                    }
+
+                    else -> {
+                        null
+                    }
+                }
+            if (drawable !=
+                null
+            ) {
+                drawIcon(canvas, drawable, cell.rect, foreground)
+            } else {
+                drawLabel(canvas, label(cell.key), cell.rect, foreground)
+            }
+        }
+        // Accessibility's virtual focus is independent of the pressed key.
+        access.focusedBounds()?.let { bounds ->
+            paint.color = ui.accent
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 2 * density
+            canvas.drawRoundRect(bounds, radius, radius, paint)
+            paint.style = Paint.Style.FILL
+        }
+        popup?.takeIf { showPreview && alts.isEmpty() }?.let { drawPreview(canvas, it, radius) }
+        if (alts.isNotEmpty()) {
+            paint.color = ui.modifier
+            altStrip.set(altRects.first().left, altRects.first().top, altRects.last().right, altRects.last().bottom)
+            canvas.drawRoundRect(
+                altStrip,
+                radius,
+                radius,
+                paint,
+            )
+            alts.forEachIndexed { i, value ->
+                if (i == altSelected) {
+                    paint.color = ui.accent
+                    canvas.drawRoundRect(altRects[i], radius, radius, paint)
+                }
+                drawLabel(canvas, value, altRects[i], if (i == altSelected) ui.onAccent else ui.text, 23f)
             }
         }
     }
 
-    override fun onDraw(canvas: Canvas) {
-        layoutKeys()
-        canvas.drawColor(bgColor)
-        val radius = 6 * density
-        keys.forEach { (rect, key) ->
-            val printable = key.length == 1 && key != Keys.SHIFT && key != Keys.BACKSPACE && key != Keys.ENTER
-            canvas.drawRoundRect(rect, radius, radius, if (printable) keyPaint else modPaint)
-            val label =
-                when {
-                    key == Keys.SPACE -> if (layout == Layout.ARABIC) "العربية" else "English"
-                    key == Keys.SHIFT && shifted -> "⬆"
-                    shifted && printable -> key.uppercase()
-                    else -> key
+    private fun label(key: String) =
+        when (key) {
+            Keys.SPACE -> {
+                if (scrubbing) {
+                    "Move cursor"
+                } else if (layout == Layout.ARABIC) {
+                    "العربية"
+                } else {
+                    languageLabel
                 }
-            textPaint.textSize = (if (label.length > 1 && key != Keys.SPACE) 15 else 22) * density
-            if (key == Keys.SPACE) textPaint.textSize = 15 * density
-            val y = rect.centerY() - (textPaint.descent() + textPaint.ascent()) / 2
-            canvas.drawText(label, rect.centerX(), y, textPaint)
+            }
+
+            Keys.ENTER -> {
+                enterLabel
+            }
+
+            else -> {
+                if (shifted || capsLocked) key.uppercase(Locale.ROOT) else key
+            }
         }
-        drawPopup(canvas, radius)
-        drawAlternates(canvas, radius)
+
+    private fun drawLabel(
+        canvas: Canvas,
+        value: String,
+        rect: RectF,
+        foreground: Int,
+        size: Float? = null,
+    ) {
+        textPaint.color = foreground
+        textPaint.textSize = (size ?: if (value.length > 2) 14f else 22f) * density
+        val available = (rect.width() - 4 * density).coerceAtLeast(1f)
+        val measured = textPaint.measureText(value)
+        if (measured > available) textPaint.textSize *= available / measured
+        canvas.drawText(value, rect.centerX(), rect.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint)
     }
 
-    private fun drawAlternates(
+    private fun drawIcon(
         canvas: Canvas,
+        drawable: Drawable,
+        rect: RectF,
+        foreground: Int,
+    ) {
+        val size = minOf(24 * density, rect.width() - gap, rect.height() - gap).toInt()
+        drawable.setTint(foreground)
+        drawable.setBounds(
+            (rect.centerX() - size / 2).toInt(),
+            (rect.centerY() - size / 2).toInt(),
+            (rect.centerX() + size / 2).toInt(),
+            (
+                rect.centerY() +
+                    size / 2
+            ).toInt(),
+        )
+        drawable.draw(canvas)
+    }
+
+    private fun icon(res: Int): Drawable = resources.getDrawable(res, context.theme).mutate()
+
+    private fun drawPreview(
+        canvas: Canvas,
+        cell: Cell,
         radius: Float,
     ) {
-        if (alts.isEmpty()) return
-        val strip = RectF(altRects.first().left, altRects.first().top, altRects.last().right, altRects.last().bottom)
-        canvas.drawRoundRect(strip, radius * 1.5f, radius * 1.5f, popupPaint)
-        textPaint.textSize = 24 * density
-        alts.forEachIndexed { i, label ->
-            val cell = altRects[i]
-            if (i == altSelected) canvas.drawRoundRect(cell, radius, radius, altPaint)
-            val y = cell.centerY() - (textPaint.descent() + textPaint.ascent()) / 2
-            canvas.drawText(label, cell.centerX(), y, textPaint)
-        }
-    }
-
-    private fun clearAlternates() {
-        removeCallbacks(showAlternates)
-        alts = emptyList()
-        invalidate()
-    }
-
-    /** Enlarged bubble over the pressed letter key, like a key preview. */
-    private fun drawPopup(
-        canvas: Canvas,
-        radius: Float,
-    ) {
-        val (rect, key) = pressed ?: return
-        val label = if (shifted) key.uppercase() else key
-        val grow = rect.width() * 0.2f
+        val rect = cell.rect
         val bubble =
-            RectF(rect.left - grow, (rect.top - rowHeight * 0.55f).coerceAtLeast(0f), rect.right + grow, rect.bottom)
-        bubble.offset(-bubble.left.coerceAtMost(0f), 0f)
+            RectF(
+                rect.left - rect.width() * .2f,
+                (rect.top - rowHeight * .55f).coerceAtLeast(0f),
+                rect.right + rect.width() * .2f,
+                rect.bottom,
+            )
+        bubble.offset((-bubble.left).coerceAtLeast(0f), 0f)
         bubble.offset(-(bubble.right - width).coerceAtLeast(0f), 0f)
-        canvas.drawRoundRect(bubble, radius * 1.5f, radius * 1.5f, popupPaint)
-        textPaint.textSize = 26 * density
-        val cy = bubble.top + (rect.top - bubble.top) * 0.9f
-        canvas.drawText(label, bubble.centerX(), cy - (textPaint.descent() + textPaint.ascent()) / 2, textPaint)
+        paint.color = ui.modifier
+        canvas.drawRoundRect(bubble, radius, radius, paint)
+        drawLabel(canvas, label(cell.key), RectF(bubble.left, bubble.top, bubble.right, bubble.top + rowHeight * .65f), ui.text, 26f)
     }
 
     private fun keyAt(
         x: Float,
         y: Float,
-    ) = keys.firstOrNull { it.first.contains(x, y) }?.second
+    ): Cell? {
+        geometry()
+        if (x < 0 || x >= width || y < 0 || y >= rowHeight * rows.size + gap) return null
+        val row = (y / rowHeight).toInt().coerceAtMost(rows.lastIndex)
+        // Gaps are part of the closest key's target, but only within the same row.
+        val candidates = cells.filter { it.row == row }
+        return candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }
+            ?: candidates.minByOrNull { minOf(abs(it.rect.left - x), abs(it.rect.right - x)) }
+    }
 
-    private val repeatDelete =
-        object : Runnable {
-            override fun run() {
-                if (downKey != Keys.BACKSPACE) return
-                onKey(Keys.BACKSPACE)
-                postDelayed(this, REPEAT_INTERVAL_MS)
+    private fun showAlternates(base: Cell) {
+        val extra = ALTERNATES[base.key] ?: return
+        alts = (listOf(base.key) + extra).map { if (shifted || capsLocked) it.uppercase(Locale.ROOT) else it }
+        val cellWidth = minOf(maxOf(base.rect.width(), 32 * density), width.toFloat() / alts.size)
+        val left = (base.rect.centerX() - cellWidth / 2).coerceIn(0f, (width - cellWidth * alts.size).coerceAtLeast(0f))
+        val top = (base.rect.top - rowHeight).coerceAtLeast(0f)
+        altRects = alts.indices.map { RectF(left + it * cellWidth, top, left + (it + 1) * cellWidth, top + rowHeight) }
+        altSelected = 0
+        altOriginX = lastX
+        popup = null
+        invalidate()
+    }
+
+    private fun updatePressed(cell: Cell?) {
+        if (cell == current) return
+        removeCallbacks(hold)
+        removeCallbacks(repeatDelete)
+        current = cell
+        popup = cell?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE }
+        invalidate()
+    }
+
+    fun cancelTouch() {
+        removeCallbacks(hold)
+        removeCallbacks(repeatDelete)
+        removeCallbacks(hidePopup)
+        pointer = MotionEvent.INVALID_POINTER_ID
+        origin = null
+        current = null
+        popup = null
+        alts = emptyList()
+        altRects = emptyList()
+        scrubbing = false
+        spaceSwiped = false
+        invalidate()
+    }
+
+    private val access by lazy {
+        KeyboardAccessibility(this, {
+            geometry()
+            cells.map { AccessibleKey(it.rect, it.key, accessibleLabel(it.key), it.key in ALTERNATES) }
+        }, onKey, { key ->
+            val values = (listOf(key) + ALTERNATES[key].orEmpty()).map { if (shifted || capsLocked) it.uppercase(Locale.ROOT) else it }
+            android.widget.PopupMenu(context, this).apply {
+                values.forEach { menu.add(it) }
+                setOnMenuItemClickListener { item ->
+                    onKey(item.title.toString())
+                    true
+                }
+                show()
+            }
+        })
+    }
+
+    private fun accessibleLabel(key: String) =
+        when (key) {
+            Keys.SHIFT -> {
+                if (capsLocked) {
+                    "Caps lock on"
+                } else if (shifted) {
+                    "Shift on"
+                } else {
+                    "Shift"
+                }
+            }
+
+            Keys.GLOBE -> {
+                "Change language"
+            }
+
+            Keys.BACKSPACE -> {
+                "Backspace"
+            }
+
+            Keys.ENTER -> {
+                if (enterLabel == Keys.ENTER) "Enter" else enterLabel
+            }
+
+            Keys.SPACE -> {
+                "Space"
+            }
+
+            Keys.SYMBOLS -> {
+                "Numbers and symbols"
+            }
+
+            Keys.MORE_SYMBOLS -> {
+                "More symbols"
+            }
+
+            Keys.LETTERS -> {
+                "Letters"
+            }
+
+            else -> {
+                label(key)
             }
         }
 
+    override fun getAccessibilityNodeProvider(): android.view.accessibility.AccessibilityNodeProvider? = if (touchReady) access else null
+
+    override fun dispatchHoverEvent(event: MotionEvent): Boolean = access.hover(event) || super.dispatchHoverEvent(event)
+
+    private var touchReady = false
+
+    init {
+        touchReady = true
+    }
+
     override fun onDetachedFromWindow() {
-        removeCallbacks(repeatDelete)
+        cancelTouch()
         super.onDetachedFromWindow()
+    }
+
+    override fun onWindowVisibilityChanged(visibility: Int) {
+        super.onWindowVisibilityChanged(visibility)
+        if (touchReady &&
+            visibility != VISIBLE
+        ) {
+            cancelTouch()
+        }
+    }
+
+    override fun onVisibilityChanged(
+        changedView: View,
+        visibility: Int,
+    ) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (touchReady &&
+            visibility != VISIBLE
+        ) {
+            cancelTouch()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                downX = event.x
-                downKey = keyAt(event.x, event.y)
-                val hit = keys.firstOrNull { it.first.contains(event.x, event.y) }
-                removeCallbacks(hidePopup)
-                pressed = hit?.takeIf { (_, k) -> k.length == 1 && k != Keys.SPACE && k !in SPECIAL }
-                invalidate()
-                if (pressed != null && downKey in ALTERNATES) postDelayed(showAlternates, LONG_PRESS_MS)
-                if (downKey == Keys.BACKSPACE) {
-                    onKey(Keys.BACKSPACE)
-                    postDelayed(repeatDelete, REPEAT_START_MS)
+                beginTouch(event.x, event.y, event.getPointerId(0))
+            }
+
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                // Roll over to the new finger only after committing the prior ordinary tap.
+                // Its later UP is ignored, so fast two-thumb typing never emits it twice.
+                if (!scrubbing && alts.isEmpty()) {
+                    if (pointer != MotionEvent.INVALID_POINTER_ID) release(lastX, lastY)
+                    beginTouch(event.getX(event.actionIndex), event.getY(event.actionIndex), event.getPointerId(event.actionIndex))
                 }
             }
 
             MotionEvent.ACTION_MOVE -> {
-                if (alts.isNotEmpty()) {
-                    val i = altRects.indexOfFirst { event.x < it.right }
-                    val next = if (i < 0) alts.lastIndex else i
-                    if (next != altSelected) {
-                        altSelected = next
-                        invalidate()
+                val index = event.findPointerIndex(pointer)
+                if (index < 0) {
+                    cancelTouch()
+                    return true
+                }
+                val x = event.getX(index)
+                val y = event.getY(index)
+                lastX = x
+                lastY = y
+                when {
+                    alts.isNotEmpty() -> {
+                        // Staying over the original key keeps the base selected even if the strip was clamped.
+                        altSelected =
+                            if (abs(x - altOriginX) < touchSlop && y >= (origin?.rect?.top ?: 0f)) {
+                                0
+                            } else {
+                                ((x - altRects.first().left) / altRects.first().width()).toInt().coerceIn(0, alts.lastIndex)
+                            }
                     }
+
+                    scrubbing -> {
+                        val steps = ((x - scrubAnchor) / (18 * density)).toInt()
+                        if (steps != 0) {
+                            onCursorMove(steps)
+                            scrubAnchor += steps * 18 * density
+                        }
+                    }
+
+                    origin?.key == Keys.SPACE -> {
+                        if (abs(x - downX) > touchSlop || abs(y - downY) > touchSlop) removeCallbacks(hold)
+                        spaceSwiped = abs(x - downX) > 40 * density && abs(y - downY) < rowHeight
+                    }
+
+                    else -> {
+                        updatePressed(keyAt(x, y))
+                    }
+                }
+                invalidate()
+            }
+
+            MotionEvent.ACTION_POINTER_UP -> {
+                if (event.getPointerId(event.actionIndex) ==
+                    pointer
+                ) {
+                    release(event.getX(event.actionIndex), event.getY(event.actionIndex))
                 }
             }
 
             MotionEvent.ACTION_UP -> {
-                removeCallbacks(repeatDelete)
-                if (alts.isNotEmpty()) {
-                    val choice = alts[altSelected]
-                    clearAlternates()
-                    downKey = null
-                    onKey(choice)
-                    return true
-                }
-                removeCallbacks(showAlternates)
-                postDelayed(hidePopup, POPUP_LINGER_MS)
-                val key = downKey ?: return true
-                downKey = null
-                if (key == Keys.BACKSPACE) return true
-                if (key == Keys.SPACE && abs(event.x - downX) > 40 * density) {
-                    onSpaceSwipe()
-                } else {
-                    onKey(key)
+                if (event.getPointerId(event.actionIndex) ==
+                    pointer
+                ) {
+                    release(event.getX(event.actionIndex), event.getY(event.actionIndex))
                 }
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                removeCallbacks(repeatDelete)
-                hidePopup.run()
-                clearAlternates()
-                downKey = null
+                cancelTouch()
             }
         }
         return true
     }
 
+    private fun beginTouch(
+        x: Float,
+        y: Float,
+        id: Int,
+    ) {
+        cancelTouch()
+        pointer = id
+        downX = x
+        downY = y
+        lastX = x
+        lastY = y
+        origin = keyAt(x, y)
+        current = origin
+        popup = origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE }
+        val key = origin?.key
+        if (key == Keys.SPACE || key in ALTERNATES) postDelayed(hold, 250L)
+        if (key == Keys.BACKSPACE) {
+            onKey(Keys.BACKSPACE)
+            postDelayed(repeatDelete, 400L)
+        }
+        invalidate()
+    }
+
+    private fun release(
+        x: Float,
+        y: Float,
+    ) {
+        val base = origin
+        val picked = current
+        val alternate = alts.getOrNull(altSelected)
+        val wasScrubbing = scrubbing
+        val swipe = spaceSwiped
+        val deleteWasSent = base?.key == Keys.BACKSPACE
+        val releasedCell = keyAt(x, y)
+        val preview = popup
+        cancelTouch()
+        when {
+            alternate != null && releasedCell != null -> {
+                onKey(alternate)
+            }
+
+            wasScrubbing -> {
+                Unit
+            }
+
+            swipe && base?.key == Keys.SPACE -> {
+                onSpaceSwipe()
+            }
+
+            base?.key == Keys.SPACE && releasedCell?.key == Keys.SPACE -> {
+                onKey(Keys.SPACE)
+            }
+
+            releasedCell != null && picked != null && picked.key != Keys.SPACE -> {
+                if (picked.key != Keys.BACKSPACE || !deleteWasSent) onKey(picked.key)
+                if (showPreview && preview != null) {
+                    popup = preview
+                    postDelayed(hidePopup, 100L)
+                }
+            }
+        }
+    }
+
     private companion object {
-        const val POPUP_LINGER_MS = 100L
-        const val LONG_PRESS_MS = 250L
-        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE)
-        const val REPEAT_START_MS = 400L
-        const val REPEAT_INTERVAL_MS = 50L
+        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS)
     }
 }

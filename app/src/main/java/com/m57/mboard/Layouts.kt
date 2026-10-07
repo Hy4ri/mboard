@@ -5,13 +5,13 @@ object Keys {
     const val SHIFT = "⇧"
     const val BACKSPACE = "⌫"
     const val ENTER = "⏎"
-    const val GLOBE = "🌐"
+    const val GLOBE = "globe"
     const val SYMBOLS = "?123"
+    const val MORE_SYMBOLS = "=\\<"
     const val LETTERS = "ABC"
     const val SPACE = " "
 }
 
-/** Long-press alternates; the base key is shown first. */
 val ALTERNATES: Map<String, List<String>> =
     mapOf(
         "a" to "àáâäãåæ",
@@ -37,17 +37,22 @@ val ALTERNATES: Map<String, List<String>> =
         "7" to "٧",
         "8" to "٨",
         "9" to "٩",
-        "0" to "٠",
-    ).mapValues { (_, v) -> v.map(Char::toString) } + ("ل" to listOf("لا", "لأ", "لإ", "لآ"))
+        "0" to "٠+",
+        "." to "…·",
+        "-" to "+−–—",
+        "/" to "\\÷",
+        "*" to "×",
+    ).mapValues { (_, value) -> value.map(Char::toString) } +
+        ("ل" to listOf("لا", "لأ", "لإ", "لآ"))
 
-private val NUMBERS = "1234567890".map(Char::toString)
+private val digits = "1234567890".map(Char::toString)
 
 enum class Layout(
     val rows: List<List<String>>,
 ) {
     ENGLISH(
         listOf(
-            NUMBERS,
+            digits,
             "qwertyuiop".map(Char::toString),
             "asdfghjkl".map(Char::toString),
             listOf(Keys.SHIFT) + "zxcvbnm".map(Char::toString) + Keys.BACKSPACE,
@@ -56,7 +61,7 @@ enum class Layout(
     ),
     ARABIC(
         listOf(
-            NUMBERS,
+            digits,
             "ضصثقفغعهخحج".map(Char::toString),
             "شسيبلاتنمكط".map(Char::toString),
             "ذئءؤرىةوزظد".map(Char::toString) + Keys.BACKSPACE,
@@ -65,10 +70,31 @@ enum class Layout(
     ),
     SYMBOLS(
         listOf(
-            "1234567890".map(Char::toString),
-            "@#\$_&-+()/".map(Char::toString),
-            "*\"':;!?".map(Char::toString) + Keys.BACKSPACE,
-            listOf(Keys.LETTERS, Keys.GLOBE, ",", Keys.SPACE, ".", Keys.ENTER),
+            digits,
+            "@#\$_%-+()/".map(Char::toString),
+            "*\"':;!?,".map(Char::toString) + Keys.BACKSPACE,
+            listOf(Keys.LETTERS, Keys.MORE_SYMBOLS, Keys.GLOBE, Keys.SPACE, ".", Keys.ENTER),
         ),
     ),
+    SYMBOLS_MORE(
+        listOf(
+            "[]{}<>^\\|~".map(Char::toString),
+            "€£¥₹¢©®™°•".map(Char::toString),
+            "=&…¿¡·`'".map(Char::toString) + Keys.BACKSPACE,
+            listOf(Keys.LETTERS, Keys.SYMBOLS, Keys.GLOBE, Keys.SPACE, ".", Keys.ENTER),
+        ),
+    ),
+    NUMBER(
+        listOf(
+            listOf("1", "2", "3", Keys.BACKSPACE),
+            listOf("4", "5", "6", "-"),
+            listOf("7", "8", "9", "."),
+            listOf(Keys.LETTERS, "0", Keys.SPACE, Keys.ENTER),
+        ),
+    ),
+    ;
+
+    companion object {
+        val tallestRows = values().maxOf { it.rows.size }
+    }
 }
