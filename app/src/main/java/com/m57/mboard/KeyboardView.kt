@@ -69,14 +69,14 @@ class KeyboardView(
         }
     val backgroundColor get() = ui.background
     val keysHeight get() = (rowHeight * (if (showNumberRow) 5 else 4) + gap).toInt()
-    private val rows get() =
-        if (!showNumberRow &&
-            (layout == Layout.ENGLISH || layout == Layout.ARABIC)
-        ) {
-            layout.rows.drop(1)
-        } else {
-            layout.rows
+    private val visibleLayouts =
+        Layout.entries.associateWith { candidate ->
+            if (!showNumberRow && (candidate == Layout.ENGLISH || candidate == Layout.ARABIC)) candidate.rows.drop(1) else candidate.rows
         }
+    private val rows get() = visibleLayouts.getValue(layout)
+
+    // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
+    private val activeRowHeight get() = (keysHeight - gap) / rows.size
     private val altStrip = RectF()
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
@@ -170,7 +170,11 @@ class KeyboardView(
             row.forEach { key ->
                 val size = weight(key) * unit
                 cells.add(
-                    Cell(RectF(x + gap / 2, rowIndex * rowHeight + gap, x + size - gap / 2, (rowIndex + 1) * rowHeight), key, rowIndex),
+                    Cell(
+                        RectF(x + gap / 2, rowIndex * activeRowHeight + gap, x + size - gap / 2, (rowIndex + 1) * activeRowHeight),
+                        key,
+                        rowIndex,
+                    ),
                 )
                 x += size
             }
@@ -345,8 +349,8 @@ class KeyboardView(
         y: Float,
     ): Cell? {
         geometry()
-        if (x < 0 || x >= width || y < 0 || y >= rowHeight * rows.size + gap) return null
-        val row = (y / rowHeight).toInt().coerceAtMost(rows.lastIndex)
+        if (x < 0 || x >= width || y < 0 || y >= keysHeight) return null
+        val row = (y / activeRowHeight).toInt().coerceAtMost(rows.lastIndex)
         // Gaps are part of the closest key's target, but only within the same row.
         val candidates = cells.filter { it.row == row }
         return candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }
