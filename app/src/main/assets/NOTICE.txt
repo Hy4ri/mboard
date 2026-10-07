@@ -1,0 +1,26 @@
+mboard third-party credits
+
+Word frequency lists
+English and Arabic assets contain 25,000 selected entries each from FrequencyWords' 2018 50k lists, with non-word tokens filtered and space-separated fields converted to tabs.
+Author: Hermit Dave and FrequencyWords contributors.
+Source: https://github.com/hermitdave/FrequencyWords
+Upstream data: OpenSubtitles2018 via OPUS.
+Content license: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+https://creativecommons.org/licenses/by-sa/4.0/
+These word-list adaptations are distributed under CC BY-SA 4.0. This does not change the license of unrelated application code.
+Note: upstream's MIT license covers its generator code, not its word-list content.
+
+Material Symbols vector icons
+Copyright Google LLC. Licensed under the Apache License, Version 2.0.
+https://github.com/google/material-design-icons
+https://www.apache.org/licenses/LICENSE-2.0
+Vector assets are adapted for local names and tinting. No remote icon or font loading.
+
+Unicode emoji data
+Emoji names and characters derived from Unicode emoji-test data.
+https://unicode.org/Public/emoji/
+Copyright Unicode, Inc. Unicode License V3:
+https://www.unicode.org/license.txt
+Glyphs themselves are rendered by the device's system emoji font.
+
+All third-party assets are bundled locally. mboard has no INTERNET permission.
