@@ -136,7 +136,7 @@ class SetupActivity : Activity() {
                 setHintTextColor(ui.muted)
                 backgroundTintList =
                     android.content.res.ColorStateList
-                        .valueOf(ui.accent)
+                        .valueOf(ui.controlAccent)
                 minHeight = ui.dp(80)
                 maxLines = 4
                 filters = arrayOf(InputFilter.LengthFilter(4000))
@@ -166,10 +166,10 @@ class SetupActivity : Activity() {
         }
         dropdown(
             "Accent",
-            listOf("Violet", "Teal", "Amber"),
-            listOf("violet", "teal", "amber").indexOf(settings.accent).coerceAtLeast(0),
+            listOf("Violet", "Teal", "Amber", "Crimson · #990000"),
+            listOf("violet", "teal", "amber", "crimson").indexOf(settings.accent).coerceAtLeast(0),
         ) { index ->
-            val value = listOf("violet", "teal", "amber")[index]
+            val value = listOf("violet", "teal", "amber", "crimson")[index]
             if (settings.accent != value) {
                 settings.accent = value
                 render()
@@ -183,9 +183,19 @@ class SetupActivity : Activity() {
             settings.rowHeightDp =
                 listOf(44, 54, 64)[it]
         }
+        dropdown(
+            "Thumb mode",
+            listOf("Full width", "Left thumb", "Right thumb"),
+            listOf("full", "left", "right").indexOf(settings.oneHandMode).coerceAtLeast(0),
+        ) {
+            settings.oneHandMode = listOf("full", "left", "right")[it]
+        }
         toggle("Number row", "Keep digits above the letter keys", settings.numberRow) { settings.numberRow = it }
         toggle("Key previews", "A short bubble above the letter you touch", settings.keyPreview) { settings.keyPreview = it }
 
+        column.addView(
+            ui.label("Thumb mode uses real narrower keys, with Full/side controls. Below 300 dp it falls back to full width.", 13f, true),
+        )
         column.addView(ui.heading("Typing"))
         toggle("Word suggestions", "Tap-to-complete English and Arabic. Never autocorrects or learns your typing.", settings.suggestions) {
             settings.suggestions =
@@ -406,7 +416,7 @@ class SetupActivity : Activity() {
                 thumbTintList =
                     android.content.res.ColorStateList(
                         arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
-                        intArrayOf(ui.accent, ui.muted),
+                        intArrayOf(ui.controlAccent, ui.muted),
                     )
                 trackTintList =
                     android.content.res.ColorStateList

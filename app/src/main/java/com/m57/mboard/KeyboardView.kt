@@ -240,7 +240,7 @@ class KeyboardView(
         }
         // Accessibility's virtual focus is independent of the pressed key.
         access.focusedBounds()?.let { bounds ->
-            paint.color = ui.accent
+            paint.color = ui.controlAccent
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = 2 * density
             canvas.drawRoundRect(bounds, radius, radius, paint)

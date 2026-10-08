@@ -33,10 +33,14 @@ class BoardUi(
             when (settings.accent) {
                 "teal" -> if (dark) "#80D8CE" else "#006B61"
                 "amber" -> if (dark) "#F6CF80" else "#785300"
+                "crimson" -> "#990000"
                 else -> if (dark) "#C9B8FF" else "#6241A6"
             },
         )
-    val onAccent = color(if (dark) "#20202A" else "#FFFFFF")
+    val onAccent = color(if (dark && settings.accent != "crimson") "#20202A" else "#FFFFFF")
+
+    // Keep the requested crimson fill exact; lift only standalone dark-theme control ink.
+    val controlAccent = if (dark && settings.accent == "crimson") color("#FFB4AB") else accent
     val danger = color(if (dark) "#FFB4AB" else "#A32626")
 
     fun dp(value: Int) = (value * context.resources.displayMetrics.density).toInt()

@@ -38,11 +38,18 @@ class BoardSettings(
         get() = if (prefs.getString("language", "en") == "ar") Layout.ARABIC else Layout.ENGLISH
         set(value) = prefs.edit().putString("language", if (value == Layout.ARABIC) "ar" else "en").apply()
 
+    var oneHandMode: String
+        get() = (prefs.getString("one_hand", "full") ?: "full").takeIf { it in listOf("full", "left", "right") } ?: "full"
+        set(value) {
+            require(value in listOf("full", "left", "right"))
+            prefs.edit().putString("one_hand", value).apply()
+        }
+
     fun registerListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.registerOnSharedPreferenceChangeListener(listener)
 
     fun unregisterListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
-    fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview"
+    fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode"
 }
