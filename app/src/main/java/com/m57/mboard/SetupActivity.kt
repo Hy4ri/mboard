@@ -26,15 +26,21 @@ class SetupActivity : Activity() {
     private lateinit var ui: BoardUi
     private var content: LinearLayout? = null
     private var status: android.widget.TextView? = null
+    private var enableButton: android.widget.Button? = null
+    private var chooseButton: android.widget.Button? = null
     private var sandbox: EditText? = null
+    private var phraseEditor: EditText? = null
+    private var phraseDraft = ""
+    private var renderGeneration = 0L
+    private val passwordPlayground get() = SuggestionPolicy.classify(fieldType, 0).password
     private var draft = ""
     private var fieldType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         settings = BoardSettings(this)
-        draft = savedInstanceState?.getString("draft").orEmpty()
         fieldType = savedInstanceState?.getInt("field_type", fieldType) ?: fieldType
+        draft = if (passwordPlayground) "" else savedInstanceState?.getString("draft").orEmpty()
         render()
     }
 
@@ -46,9 +52,7 @@ class SetupActivity : Activity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(
             "draft",
-            if (fieldType and InputType.TYPE_MASK_VARIATION ==
-                InputType.TYPE_TEXT_VARIATION_PASSWORD
-            ) {
+            if (passwordPlayground) {
                 ""
             } else {
                 sandbox?.text?.toString().orEmpty()
@@ -59,7 +63,17 @@ class SetupActivity : Activity() {
     }
 
     private fun render() {
-        draft = sandbox?.text?.toString() ?: draft
+        val generation = ++renderGeneration
+        val playgroundFocused = sandbox?.hasFocus() == true
+        val phraseFocused = phraseEditor?.hasFocus() == true
+        val playgroundStart = if (passwordPlayground) 0 else sandbox?.selectionStart ?: 0
+        val playgroundEnd = if (passwordPlayground) 0 else sandbox?.selectionEnd ?: 0
+        val phraseStart = phraseEditor?.selectionStart ?: 0
+        val phraseEnd = phraseEditor?.selectionEnd ?: 0
+        val scrollPosition = (content?.parent as? ScrollView)?.scrollY ?: 0
+        val imeVisible = window.decorView.rootWindowInsets?.isVisible(WindowInsets.Type.ime()) == true
+        draft = if (passwordPlayground) "" else sandbox?.text?.toString() ?: draft
+        phraseDraft = phraseEditor?.text?.toString() ?: phraseDraft
         ui = BoardUi(this)
         window.decorView.windowInsetsController?.setSystemBarsAppearance(
             if (ui.dark) {
@@ -74,6 +88,8 @@ class SetupActivity : Activity() {
         val column =
             LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
+                isFocusableInTouchMode = true
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
                 setPadding(ui.dp(24), ui.dp(24), ui.dp(24), ui.dp(32))
             }
         content = column
@@ -90,14 +106,21 @@ class SetupActivity : Activity() {
             }
         setContentView(scroll)
         column.addView(ui.label("mboard", 36f).apply { typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL) })
-        column.addView(ui.label("Your words. Your device.\nEnglish + العربية, entirely offline.", 16f, true))
+        column.addView(ui.label("English + العربية · entirely offline", 15f, true))
         status = ui.label("", 14f).apply { setPadding(0, ui.dp(20), 0, ui.dp(12)) }
         column.addView(status)
-        column.addView(ui.button("Enable mboard") { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) })
-        column.addView(
-            ui.button("Choose keyboard", true) { getSystemService(InputMethodManager::class.java).showInputMethodPicker() },
-            spaced(),
+        enableButton = ui.button("Enable mboard") { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }
+        chooseButton = ui.button("Choose keyboard", true) { getSystemService(InputMethodManager::class.java).showInputMethodPicker() }
+        val setupActions = LinearLayout(this)
+        setupActions.addView(
+            enableButton,
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                rightMargin =
+                    ui.dp(8)
+            },
         )
+        setupActions.addView(chooseButton, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        column.addView(setupActions, spaced())
         updateStatus()
 
         column.addView(ui.heading("Typing playground"))
@@ -118,13 +141,18 @@ class SetupActivity : Activity() {
                 }
             },
         ) { index ->
-            fieldType =
+            val nextType =
                 when (index) {
                     1 -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                     2 -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                     3 -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                     else -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 }
+            if (SuggestionPolicy.clearPasswordTransition(fieldType, nextType)) {
+                draft = ""
+                sandbox?.text?.clear()
+            }
+            fieldType = nextType
             sandbox?.inputType = fieldType
         }
         sandbox =
@@ -141,12 +169,14 @@ class SetupActivity : Activity() {
                 maxLines = 4
                 filters = arrayOf(InputFilter.LengthFilter(4000))
                 importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+                isSaveEnabled = false
                 setText(draft)
+                setSelection(playgroundStart.coerceIn(0, text.length), playgroundEnd.coerceIn(0, text.length))
             }
         column.addView(sandbox)
         column.addView(
             ui.label(
-                "Swipe space to change language. Hold space, then slide to move the cursor. Double-tap Shift for caps lock. Hold letters for accents and Arabic variants.",
+                "Swipe space to switch language. Hold space to move the cursor. Double-tap Shift for caps lock. Password samples are cleared on field-type or appearance changes.",
                 14f,
                 true,
             ),
@@ -270,7 +300,15 @@ class SetupActivity : Activity() {
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 filters = arrayOf(InputFilter.LengthFilter(2000))
                 maxLines = 4
+                importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+                isSaveEnabled = false
+                backgroundTintList =
+                    android.content.res.ColorStateList
+                        .valueOf(ui.controlAccent)
+                setText(phraseDraft)
+                setSelection(phraseStart.coerceIn(0, text.length), phraseEnd.coerceIn(0, text.length))
             }
+        phraseEditor = phraseInput
         column.addView(phraseInput)
         val phraseList = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val phrases = PhraseStore(this)
@@ -336,12 +374,32 @@ class SetupActivity : Activity() {
             },
             spaced(),
         )
+        if (!playgroundFocused && !phraseFocused) column.requestFocus()
+        scroll.post {
+            if (generation != renderGeneration || isFinishing || isDestroyed) return@post
+            val editor =
+                when {
+                    playgroundFocused -> sandbox
+                    phraseFocused -> phraseEditor
+                    else -> null
+                }
+            if (editor != null) {
+                editor.requestFocus()
+                val start = if (playgroundFocused) playgroundStart else phraseStart
+                val end = if (playgroundFocused) playgroundEnd else phraseEnd
+                editor.setSelection(start.coerceIn(0, editor.length()), end.coerceIn(0, editor.length()))
+                if (imeVisible) editor.windowInsetsController?.show(WindowInsets.Type.ime())
+            }
+            scroll.scrollTo(0, scrollPosition)
+        }
     }
 
     private fun updateStatus() {
         val manager = getSystemService(InputMethodManager::class.java)
         val enabled = manager.enabledInputMethodList.any { it.packageName == packageName }
         val active = Settings.Secure.getString(contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)?.startsWith("$packageName/") == true
+        enableButton?.text = if (enabled) "Manage keyboards" else "Enable mboard"
+        chooseButton?.text = if (active) "Switch keyboard" else "Choose keyboard"
         status?.text =
             when {
                 active -> "mboard is your active keyboard"
@@ -357,6 +415,7 @@ class SetupActivity : Activity() {
         onSelect: (Int) -> Unit,
     ) {
         val column = content ?: return
+        val generation = renderGeneration
         column.addView(ui.label(label, 14f, true).apply { setPadding(0, ui.dp(12), 0, ui.dp(4)) })
         val spinner =
             Spinner(this).apply {
@@ -394,7 +453,7 @@ class SetupActivity : Activity() {
                     position: Int,
                     id: Long,
                 ) {
-                    onSelect(position)
+                    if (generation == renderGeneration) onSelect(position)
                 }
 
                 override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit

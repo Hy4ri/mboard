@@ -25,6 +25,11 @@ data class SuggestionPolicy(
     }
 
     companion object {
+        fun clearPasswordTransition(
+            previousType: Int,
+            nextType: Int,
+        ): Boolean = previousType != nextType && (classify(previousType, 0).password || classify(nextType, 0).password)
+
         fun classify(
             inputType: Int,
             imeOptions: Int,
