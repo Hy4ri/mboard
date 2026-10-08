@@ -56,15 +56,9 @@ class ClipStore(
     }
 
     fun restore(clip: Clip): Boolean {
-        val now = System.currentTimeMillis()
-        if (clip.text.isBlank() || clip.text.length > MAX_TEXT ||
-            (!clip.pinned && retentionMs != FOREVER && now - clip.time >= retentionMs)
-        ) {
-            return false
-        }
         val current = purgeExpired()
-        if (clip.pinned && current.count { it.pinned && it.text != clip.text } >= MAX_PINNED) return false
-        write(listOf(clip) + current.filterNot { it.text == clip.text })
+        if (!canRestore(clip, current, System.currentTimeMillis(), retentionMs)) return false
+        write(listOf(clip) + current)
         return true
     }
 
@@ -120,6 +114,23 @@ class ClipStore(
     }
 
     companion object {
+        /** Pure production admission policy; restore never alters a rejected current record. */
+        fun canRestore(
+            clip: Clip,
+            current: List<Clip>,
+            now: Long,
+            retention: Long,
+        ): Boolean {
+            if (clip.text.isBlank() || clip.text.length > MAX_TEXT ||
+                (!clip.pinned && retention != FOREVER && now - clip.time >= retention)
+            ) {
+                return false
+            }
+            if (current.any { it.text == clip.text }) return false
+            if (clip.pinned && current.count { it.pinned } >= MAX_PINNED) return false
+            return true
+        }
+
         private const val KEY_CLIPS = "clips"
         private const val KEY_RETENTION = "retention_ms"
         private const val MAX_UNPINNED = 30

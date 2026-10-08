@@ -77,7 +77,7 @@ class ClipboardPanel(
                             clip,
                         )
                     ) {
-                        Toast.makeText(context, "This clip expired or the pin limit was reached", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Clip changed, expired, or the pin limit was reached", Toast.LENGTH_SHORT).show()
                     }
                     deleted = null
                     refresh(false)

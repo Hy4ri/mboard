@@ -29,7 +29,7 @@ class EmojiPanel(
             gravity = Gravity.CENTER
             setPadding(ui.dp(20), ui.dp(16), ui.dp(20), ui.dp(16))
         }
-    private var active = "Recent"
+    private var active = "All"
     private var confirmingClear = false
     var recordingEnabled = true
     var loadFailed = false
@@ -126,7 +126,7 @@ class EmojiPanel(
         val values =
             when (active) {
                 "Favorites" -> history.favorites().mapNotNull(byText::get)
-                "Recent" -> history.recent().mapNotNull(byText::get).ifEmpty { all }
+                "Recent" -> history.recent().mapNotNull(byText::get)
                 "All" -> all
                 else -> all.filter { it.category == active }
             }
@@ -134,6 +134,7 @@ class EmojiPanel(
             when {
                 loadFailed -> "Emoji data is unavailable"
                 !Emojis.ready -> "Loading emoji…"
+                active == "Recent" -> "No recent emoji available. Pick one in All to start."
                 active == "Favorites" -> "Hold any emoji to save it here."
                 else -> "No emoji in this category on this device."
             }
