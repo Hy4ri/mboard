@@ -6,7 +6,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 
 - Number row; English and edge-to-edge Arabic letter layouts.
 - Tap suggestions to complete a word. At an empty whitespace boundary, the row offers frequency-derived common words (not learned next-word predictions). English and Arabic dictionaries are bundled locally; no automatic correction, cloud calls, or typing history.
-- The row explains loading, disabled, unsupported-editor, selection, mid-word, and no-match states instead of silently going blank.
+- The row explains loading, disabled, unsupported-editor, selection, mid-word, and no-match states instead of silently going blank. Common English choices respect Shift/caps lock. Typed-prefix replacement requires validated absolute cursor offsets and selection support; unsupported apps receive feedback instead of a destructive delete fallback.
 - Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
@@ -20,8 +20,8 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Clipboard: pinned and recent plain-text clips, deletion undo, explicit bulk-clear confirmation.
 - Emoji: type English names or common Arabic words; browse categories; hold an emoji to favorite it.
 - Text tools: arrows, line boundaries, select all, copy/cut/paste, host-app undo/redo, selected-text upper/lowercase, and Arabic mark removal.
-- More tools/settings: offline calculator, saved phrases, Text Lab, settings, and system keyboard picker.
-- Private: pauses clipboard recording, word suggestions, emoji recents and favorite changes. Existing saved items remain available locally. Password fields suppress suggestions/tools/capture. App-requested no-learning fields pause history and personalization but still permit stateless local dictionary completions; the toolbar says No learning, not Private on. You can turn on manual Private to suppress completions too. App-requested no-suggestions flags are always honored.
+- More tools/settings: text tools, offline calculator, saved phrases, Text Lab, settings, and system keyboard picker. In panels, Return replaces the text-tools slot instead of widening the toolbar.
+- Private: pauses clipboard recording, word suggestions, emoji recents and favorite changes. Existing saved items remain available locally. Password fields suppress suggestions/tools/capture. App-requested no-learning fields pause history and personalization but still permit stateless local dictionary completions; the shield status/toggle distinguishes protected fields, app no-learning, and manual private mode through selected state, tooltip and accessibility label. You can turn on manual Private to suppress completions too. App-requested no-suggestions flags are always honored.
 - Hide: dismiss the keyboard.
 
 Calculator supports +, -, *, /, decimal numbers (including Arabic digits), parentheses and postfix %. Percentage is mathematical division by 100: `50%` = `0.5`. It is not spreadsheet-style relative percentage. Tap an answer or Enter to insert it. Invalid/divide-by-zero expressions are not inserted. Results are rounded to eight decimal places; this is a convenience tool, not a high-precision financial calculator.
@@ -36,7 +36,7 @@ Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bo
 
 ## Settings
 
-Follow-system, dark or light appearance; Violet, Teal, Amber or exact Crimson #990000 accent; full-width/left/right thumb mode; compact/balanced/roomy key height; optional number row and previews; word suggestions; app-guided capitalization; double-space period; clipboard history and retention. A typing playground offers normal, numeric, email and password fields.
+Follow-system, dark or light appearance; Violet, Teal, Amber or exact Crimson #990000 accent; full-width/left/right thumb mode; compact/balanced/roomy key height; optional number row and previews; word suggestions; app-guided capitalization; double-space period; clipboard history and retention. A typing playground offers normal, numeric, email and password fields. Password samples clear when entering/leaving password mode or rebuilding appearance and never enter saved drafts. Unsaved phrase text survives appearance changes in memory only; both playground and phrase fields opt out of normal autofill/view autosave.
 
 ## Privacy and limits
 
@@ -44,8 +44,8 @@ Follow-system, dark or light appearance; Violet, Teal, Amber or exact Crimson #9
 - Clipboard capture runs only while mboard is visible, skips sensitive-marked clips/password/private fields, and reads text only (never resolves content URIs). Android's clipboard access rules still apply.
 - Up to 30 unpinned and 30 pinned clips. Clips larger than 20,000 characters are skipped, never silently truncated.
 - Expired clips are purged from storage when the store is opened/read or its retention changes. While the app process is stopped, expiry is enforced on the next access; this is not a background deletion scheduler.
-- Pinned clips do not expire; deleting a pin is explicit. Individual deletion has undo while the panel remains open; undo cannot revive an expired clip.
-- Recent emoji: 40; favorites: 60. Private mode does not delete existing history.
+- Pinned clips do not expire; deleting a pin is explicit. Individual deletion has undo while the panel remains open; undo cannot revive an expired clip or overwrite a newer copy of the same text.
+- Recent emoji: 40; favorites: 60. All is the default browsing category; an empty Recent tab stays empty rather than showing the whole catalogue. Private mode does not delete existing history.
 - App data is excluded from Android cloud backup and device transfer.
 - Text actions are routed through the active app's InputConnection. Some apps do not implement undo/redo or cursor key events; mboard reports unsupported context-menu actions instead of pretending success. Text-tool panels are disabled in password/app no-learning fields before reading selected text. Selection transforms recheck editor/observed selection versions and selected content; the host API does not offer an atomic compare-and-replace guarantee.
 

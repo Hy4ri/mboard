@@ -1,5 +1,37 @@
 # Luna's mboard morning read
 
+## Pass 3 — source cleanup verified and locally committed; device acceptance pending
+
+User requested bugs/issues and UI cleanup after installing Pass 2. A permission prompt for controlled phone-playground checks timed out, so this pass currently performs no phone interaction or deployment. Two initial read-only audits and two follow-up reviews are reconciled; none performed device work.
+
+- Locked the cleanup to existing native flat tokens, exact #990000, no new framework/features, 48dp targets and state-honest controls.
+- Toolbar now keeps six fixed slots in both key and panel modes: Return replaces the text-tools slot rather than appending another control. Text tools remain available in More. The wider text privacy control is replaced by an accessible vector status/toggle, with distinct protected/no-learning/manual-private descriptions and selected/disabled states.
+- Six 48dp targets occupy 288dp; even with a 16dp gutter budget they fit a 320dp logical viewport. This checks layout budget, not live-phone rendering.
+- Icon widgets now clear inherited background tints/elevation/animators, consistently with the already-flat native buttons.
+- Found and reproduced an actual capitalization mismatch: idle common-word suggestions ignored Shift/caps lock even while keys showed uppercase. Extracted the existing production case policy into the pure dictionary companion and exercised it before fixing: shifted/caps choices both returned `you` (expected `You`/`YOU`). The repaired production function now honors empty-prefix Shift/caps, preserves typed lowercase/title/uppercase behavior and leaves Arabic unchanged. Actual compiled probes returned those results; accepted suggestions consume one-shot Shift but preserve caps lock.
+- Clipboard/emoji audit returned and was checked against current source. Fixed the Recent tab falsely showing the whole catalogue when history is empty: browsing defaults to All, Recent is strictly recent items, and its empty state points to All.
+- Verified clipboard Undo admitted an older deleted record over a newly recopied identical record, replacing its timestamp/pin state. Extracted the real restore admission policy and ran it before/after: overwrite admission changed true → false; ordinary valid Undo stays true, while expiry and pin-limit cases stay false. Restore now returns before writing a replacement when the text already exists; rejection feedback includes changed-record cases. No user clipboard/history was read and no shared-preference/device behavior is claimed verified by this pure-policy execution.
+- Settings audit confirmed a password-origin leak on Password → Normal: the field kept text, which then became visible/eligible for saved Bundle draft. Actual compiled transition policy now clears on entering/leaving password, not same-type picker callbacks; password drafts are discarded across appearance rebuilds and excluded from view autosave and Bundle reads/writes.
+- Unsaved phrase text now survives theme/accent rebuilds in memory only, with selection/focus/scroll snapshots restored. Neither phrase draft nor password is added to keyboard storage. Phrase input opts out of normal autofill and view autosave, and uses the chosen control tint. Physical focus/IME restoration is not claimed verified.
+- Render-generation fences prevent detached spinner callbacks and stale posted focus/scroll work from acting on a newer content tree. The setup header is shorter, its two keyboard actions share one row, and their labels reflect enabled/active state instead of always saying Enable/Choose.
+- Removed the destructive deletion-before-commit path from completion acceptance. After validating bounded surrounding-text offsets/prefix, it selects the prefix non-destructively, rechecks selected text, and uses one commit to replace it. Rejected commits attempt to restore the original caret; unsupported offsets/selection produce honest feedback instead of a deletion fallback. The real pure range validator was exercised for valid offsets, selected/mismatched text, unknown offsets and overflow. AOSP InputConnection docs confirm selection/commit semantics; host-specific behavior still requires phone verification.
+- Both follow-up reviews returned no confirmed reachable regression in their repaired source scopes. This is source review, not native acceptance: selection→commit remains non-atomic IPC, and actual focus/keyboard restoration, 320dp visual layout, sensitive transitions, undo storage mutations and editor compatibility need authorized phone checks.
+- Final-source ktlint, assembleDebug, lintDebug, optimized assembleRelease, git diff --check, debug signature and zero-permission checks passed. 40 Android lint warnings remain; unrelated pre-existing unused drawable files were preserved. No production file is newer than the final APK. No test sources/dependencies, phone operations, pushes, PRs or merges in this cleanup pass.
+
+Pass 3 local receipts:
+- 7ec7cf7 — password transition/state protection and in-memory phrase/focus/scroll restoration.
+- 5653ad8 — no-overwrite clipboard Undo and truthful emoji Recent/All filters.
+- c6ff00e — compact controls/privacy icon, native flat icon styling, Shift/caps-aware words and non-destructive completion replacement.
+- Verified implementation source: c6ff00eed280b545f45a9e143d9a0dff3eacc9b5. A following docs-only commit records these receipts.
+
+Current debug SHA-256: 5d5de33bf1beadfc1597178307a88b57c620690d8c16b5bede7e8fb18cdf2930
+Current unsigned release SHA-256: b6c32979e2c741526efd525ea516a2ede6453222720ab2384353c002b88c47cb
+Current debug APK: app/build/outputs/apk/debug/app-debug.apk
+Current unsigned release APK: app/build/outputs/apk/release/app-release-unsigned.apk
+The output paths contain this cleanup, not archived Pass 2. The phone still has the previously authorized Pass 2 installation; this pass was not deployed.
+
+Procedural Android IME reference updated with password-origin state clearing, render-generation fences, no-overwrite Undo and validated non-destructive replacement. No Luna skill/live SOUL changes.
+
 ## Pass 2 — off-phone checkpoint verified and locally committed; device acceptance pending
 
 User requested continued autonomous development without phone access, exact #990000, and investigation of an empty suggestion row. No device commands, installs, emulator, test sources/dependencies, pushes, PRs, or merges in this pass. Code is locally committed, review findings reconciled, and the final source was rebuilt. No publication or device acceptance is claimed.
