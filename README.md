@@ -5,7 +5,9 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 ## Everyday typing
 
 - Number row; English and edge-to-edge Arabic letter layouts.
-- Tap suggestions to complete a word. English and Arabic dictionaries are bundled locally; no automatic correction, cloud calls, or typing history.
+- Tap suggestions to complete a word. At an empty whitespace boundary, the row offers frequency-derived common words (not learned next-word predictions). English and Arabic dictionaries are bundled locally; no automatic correction, cloud calls, or typing history.
+- The row explains loading, disabled, unsupported-editor, selection, mid-word, and no-match states instead of silently going blank.
+- Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
 - Hold backspace to repeat deletion; lifting, hiding, or changing keyboards stops the repeat.
@@ -18,17 +20,23 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Clipboard: pinned and recent plain-text clips, deletion undo, explicit bulk-clear confirmation.
 - Emoji: type English names or common Arabic words; browse categories; hold an emoji to favorite it.
 - Text tools: arrows, line boundaries, select all, copy/cut/paste, host-app undo/redo, selected-text upper/lowercase, and Arabic mark removal.
-- More tools/settings: offline calculator, saved phrases, settings, and system keyboard picker.
-- Private: pauses clipboard recording, word suggestions, emoji recents and favorite changes. Existing saved items remain available locally. Password and app-requested no-learning fields automatically enable stronger privacy safeguards.
+- More tools/settings: offline calculator, saved phrases, Text Lab, settings, and system keyboard picker.
+- Private: pauses clipboard recording, word suggestions, emoji recents and favorite changes. Existing saved items remain available locally. Password fields suppress suggestions/tools/capture. App-requested no-learning fields pause history and personalization but still permit stateless local dictionary completions; the toolbar says No learning, not Private on. You can turn on manual Private to suppress completions too. App-requested no-suggestions flags are always honored.
 - Hide: dismiss the keyboard.
 
 Calculator supports +, -, *, /, decimal numbers (including Arabic digits), parentheses and postfix %. Percentage is mathematical division by 100: `50%` = `0.5`. It is not spreadsheet-style relative percentage. Tap an answer or Enter to insert it. Invalid/divide-by-zero expressions are not inserted. Results are rounded to eight decimal places; this is a convenience tool, not a high-precision financial calculator.
 
 Saved phrases are explicitly added/deleted in the settings app, then inserted from the keyboard panel. Up to 40 phrases, 2,000 characters each. Nothing typed in another app is automatically turned into a phrase.
 
+## Text Lab
+
+Open More → Text Lab. Select text in the host app, choose a transform, check its preview, then explicitly replace the selection. Replacement checks the current editor and exact selection again; text is never added to keyboard storage. Maximum selected source: 20,000 characters. Leaving/hiding the panel clears preview views.
+
+Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bold/italic, whitespace cleanup, ASCII/Arabic digits, Latin↔Arabic keyboard-layout rescue, upside-down text, and fullwidth text. Keyboard rescue is approximate, especially Arabic lam–alef; check before replacing. Reversal operates on grapheme clusters, not individual emoji code points. Insertable palettes: kaomoji, symbols, Markdown snippets. Password/app no-learning fields block this panel.
+
 ## Settings
 
-Follow-system, dark or light appearance; Violet, Teal or Amber accent; compact/balanced/roomy key height; optional number row and previews; word suggestions; app-guided capitalization; double-space period; clipboard history and retention. A typing playground offers normal, numeric, email and password fields.
+Follow-system, dark or light appearance; Violet, Teal, Amber or exact Crimson #990000 accent; full-width/left/right thumb mode; compact/balanced/roomy key height; optional number row and previews; word suggestions; app-guided capitalization; double-space period; clipboard history and retention. A typing playground offers normal, numeric, email and password fields.
 
 ## Privacy and limits
 
@@ -39,7 +47,7 @@ Follow-system, dark or light appearance; Violet, Teal or Amber accent; compact/b
 - Pinned clips do not expire; deleting a pin is explicit. Individual deletion has undo while the panel remains open; undo cannot revive an expired clip.
 - Recent emoji: 40; favorites: 60. Private mode does not delete existing history.
 - App data is excluded from Android cloud backup and device transfer.
-- Text actions are routed through the active app's InputConnection. Some apps do not implement undo/redo or cursor key events; mboard reports unsupported context-menu actions instead of pretending success.
+- Text actions are routed through the active app's InputConnection. Some apps do not implement undo/redo or cursor key events; mboard reports unsupported context-menu actions instead of pretending success. Text-tool panels are disabled in password/app no-learning fields before reading selected text. Selection transforms recheck editor/observed selection versions and selected content; the host API does not offer an atomic compare-and-replace guarantee.
 
 ## Build
 

@@ -1,5 +1,68 @@
 # Luna's mboard morning read
 
+## Pass 2 — off-phone checkpoint verified and locally committed; device acceptance pending
+
+User requested continued autonomous development without phone access, exact #990000, and investigation of an empty suggestion row. No device commands, installs, emulator, test sources/dependencies, pushes, PRs, or merges in this pass. Code is locally committed, review findings reconciled, and the final source was rebuilt. No publication or device acceptance is claimed.
+
+1. Exact Crimson #990000 accent option. White text on that fill measures 8.919:1; dark standalone control ink is lifted separately without changing the fill.
+2. Stable three-target suggestion strip instead of reconstructing native buttons per keystroke. Explicit sizing and orientation, plus visible loading/disabled/unsupported/selection/mid-word/no-match states.
+3. Editor-generation and touch-down snapshots reject stale completion taps. Privacy/eligibility checks precede surrounding-text reads; hide/finish clears candidates and pending refresh callbacks.
+4. One debounced 30ms re-read accommodates asynchronously published editor text without continuous polling.
+5. Corrected a verified source overrestriction: IME_FLAG_NO_PERSONALIZED_LEARNING forbids personalized history/model updates, not stateless local completions (verified against AOSP EditorInfo.java). No-learning fields still block history/capture; static dictionary completions now work. Password/manual-private/no-suggestions restrictions remain. The toolbar distinguishes No learning, Private on, and Protected.
+6. Frequency-derived common words at empty whitespace boundaries, not learned/contextual next-word predictions. Source data is real bundled frequency lists; private/unsupported/selected/mid-token contexts are excluded. Completion avoids adding duplicate whitespace or a space before existing punctuation.
+7. Dictionary failure callbacks now actually notify the UI; zero-usable-entry data is an unavailable dictionary, not a successful empty search.
+8. Extracted the actual production WordDictionary into Android-independent logic; directly exercised compiled code against real assets. Both raw lists contain 25,000 valid TSV records; the production filters yield English 24,874 / Arabic 24,998 usable entries. Real English/Arabic prefixes return choices.
+9. Left/right thumb modes narrow the actual keyboard to 82%, with side-switch and Full controls, rather than painting an overlay. Below 300dp the keyboard falls back to full width; rail controls retain target width. All panels hide the whole surface, including its rail.
+10. Text Lab under More: choose a selected-text transform, preview, then explicitly replace. Rechecks editor generation and exact selection; disabled for protected/no-learning fields. No selected/generated text is saved by the keyboard; source bounded to 20,000 characters; leaving/hiding clears preview views.
+11. Text Lab casing: title case preserves separators, plus sentence case.
+12. Text Lab formatting: bullets and quotation, inline code and dynamically sized fenced code, Markdown bold/italic.
+13. Text Lab cleanup: whitespace/line ending cleanup, ASCII digits including Arabic/Persian/fullwidth inputs, Arabic digits.
+14. Best-effort Latin↔Arabic keyboard-layout rescue, with an explicit lam–alef ambiguity warning and preview.
+15. Wild text: upside-down and fullwidth styles. Grapheme-aware reversal preserves joined family emoji instead of splitting its characters.
+16. Insertable kaomoji, symbols, and Markdown palettes (6/10/9 choices), with labelled 48dp targets.
+17. Caught and repaired new-helper runtime defects before shipping: negative Kotlin split limits, dropped title-case separators, escaped pseudo-newlines, incomplete digit conversion, and an incorrect Char/String upside-down mapping. Exercised all 15 compiled transforms, with no exceptions and family emoji intact.
+18. Updated README and Android IME hardening skill reference with verified flag semantics and direct production-logic verification pitfalls. No Luna skill or live SOUL changes.
+
+Available checks passed: ktlint, assembleDebug, lintDebug, optimized assembleRelease, git diff --check, debug APK signature, and permission inspection (zero requested permissions). Android lint has 40 warnings / no errors: 29 unused resources, 5 programmatic ViewConstructor notices, 3 SetTextI18n, and one each AGP version/obsolete SDK/touch accessibility. No claim that warnings or device behavior are fixed.
+
+Current built debug SHA-256: 05081430efadd2282c89826b4fd928a55bb24d2157ae1bc6fca9c7a89775a2b3
+Current built unsigned release SHA-256: de7c3a5f80681404252fa259590513a117fc8c488638deed21ea90bdfe0fc3b3
+Debug APK: app/build/outputs/apk/debug/app-debug.apk
+Unsigned release APK: app/build/outputs/apk/release/app-release-unsigned.apk
+
+The exact phone/app blank-row symptom is NOT reproduced or confirmed fixed. The old no-learning suppression is proven from source/spec; attributing your phone symptom to that flag remains a hypothesis. Native measure/touch, actual InputConnection behavior, thumb-mode feel, Text Lab selection replacement, and TalkBack need authorized device acceptance. Both focused review handoffs have been reconciled against current source; repairs were applied and rebuilt. The remaining gate is authorized device/editor acceptance, not pending code-review delivery.
+
+Initial read-only blank-row investigation returned: the pre-refactor source always created either buttons or a fallback label; it found no proven branch leaving the row childless. Its eligibility/readiness/prefix/lifecycle hypotheses remain unconfirmed for the actual phone. Its line numbers describe the earlier source, not the now-built refactor. No additional speculative fix was applied from that report; focused reviews of the new implementation remain pending.
+
+OneHandSurface implementation handoff received and checked against the current file. It was already integrated and included in the passing builds; parent changes normalize invalid initial modes, remove rail padding that would shrink targets, and autosize Full within the rail. Re-read WordSuggestions after the shared-file warning: failure notification and empty-dictionary guards are intact. Filesystem comparison found no production files changed after the verified debug APK build. No additional feature or device acceptance is claimed from this delayed handoff.
+
+WordDictionary/WordSuggestions extraction handoff received and checked against the current production files. Parent had already exercised this exact compiled engine with actual assets, not a mock/reimplementation; common-word ranking is an added parent extension. Failed-load notification and zero-usable-entry rejection are parent repairs included in the passing build. The extraction handoff introduces no new edits or extra verification claim.
+
+Text Lab implementation handoff received. Its original lowercase object/example API and unrun runtime claims are superseded by the parent-repaired TextLab production implementation: correct object name, separator-preserving casing, legal split limits, real newline cleanup/fences, expanded digit conversion, and regex grapheme reversal. Rechecked those fixes in current source; actual compiled-transform execution/build receipts above are the evidence. All initial implementation handoffs are reconciled; the two focused reviews of the integrated code remain pending.
+
+Feature-integration review received and acted on:
+
+19. Ordinary UPPER/lower/Arabic-mark transforms now use a shared selection-replacement guard with Text Lab: current connection, editor generation, observed selection-change version, and exact selected-text recheck before commit. All Edit tool callbacks are gated against stale mode/editor/selection state; unsupported commits report failure. InputConnection provides no atomic compare-and-replace guarantee, so this reduces stale-action windows rather than claiming device-proven race immunity.
+20. Rail controls now rebuild only when the effective full/left/right mode changes. Child changes happen before child measurement, not from onSizeChanged/layout. The review's possible re-entry was not a proven layout loop; this removes avoidable resize churn without attributing a device bug.
+
+21. Reconciled the suggestion-review Paste report against the newer source: action guards already rejected sensitive-field edits, but the panel still exposed misleading enabled controls and could read selected text while constructing them. Sensitive fields can now open only the keys, the text-tools icon is disabled, and tool construction returns before selected-text reads. This is privacy/UI consistency hardening, not a proven clipboard leak; app-native explicit paste is outside this keyboard panel.
+22. All service dictionary-ready callbacks now capture editor generation and requested language, reject obsolete/hidden/non-key render targets, and render the real loading state immediately. Saved-phrase insertion also rejects obsolete editor/mode/private-field actions.
+23. Final contrast audit found crimson accessibility-focus strokes had only 1.723:1 against dark key surfaces. Focus now uses the separately lifted control ink (9.049:1); pressed-key/button fills remain exactly #990000 with white text. Physical TalkBack acceptance is still unverified.
+
+Final receipts:
+- 55d8ccf — offline suggestion loading, pure production dictionary, and field-policy/strip foundations.
+- 570afae — crimson palette, thumb-mode UI/settings/rail, used arrow vectors, and contrast-safe accessibility focus.
+- 1b0d4bc — service integration, Text Lab, guarded editor actions, privacy UI, and generation-fenced callbacks.
+- Verified implementation source: 1b0d4bc133de010123f25697c08ef93770aa95a8. A following documentation-only commit records this log and README.
+
+On that source: ktlint, assembleDebug, lintDebug, optimized assembleRelease, git diff --check, debug signature verification, and zero-permission inspection passed. Both dictionary files, NOTICE and all three bundled license texts were compared byte-for-byte against the packaged debug APK and match. No production file was newer than the final debug artifact. The final artifact hashes above supersede earlier in-progress hashes; 40 lint warnings remain. No tests, device checks, or external publication performed.
+
+AOSP reference: https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/android/view/inputmethod/EditorInfo.java (IME_FLAG_NO_PERSONALIZED_LEARNING documentation).
+
+## Pass 1 — archived checkpoint
+
+The following inventory and artifact hashes describe the first pass; build output paths will contain the newer APK after Pass 2 builds. The earlier installed phone artifact matched the Pass 1 debug SHA-256 exactly, and mboard was selected. No subsequent phone access is being used for Pass 2.
+
 Status: no-phone implementation pass complete; builds/lint passed. Physical-device acceptance is still pending.
 Base: bd8d2b0 on main. Verified source: 8f2a80086ab1b3b2af2907f0eb50513b65cb61ac.
 Everything is local. No push, PR, merge, phone install/control, emulator, test sources, or test dependencies.
