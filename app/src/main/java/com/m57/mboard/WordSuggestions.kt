@@ -3,9 +3,7 @@ package com.m57.mboard
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import java.io.IOException
-import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -13,16 +11,7 @@ import java.util.concurrent.Executors
 class WordSuggestions(
     context: Context,
 ) {
-    private data class Entry(
-        val normalized: String,
-        val original: String,
-        val frequency: Long,
-    )
-
-    private data class Dictionary(
-        val entries: List<Entry>,
-        val shortPrefixes: Map<String, List<String>>,
-    )
+    enum class State { UNLOADED, LOADING, READY, FAILED, CLOSED }
 
     private val assets = context.applicationContext.assets
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
@@ -31,13 +20,24 @@ class WordSuggestions(
 
     @Volatile private var closed = false
 
-    @Volatile private var english: Dictionary? = null
+    @Volatile private var english: WordDictionary? = null
 
-    @Volatile private var arabic: Dictionary? = null
-    private var englishLoading = false
-    private var arabicLoading = false
+    @Volatile private var arabic: WordDictionary? = null
+    private var englishState = State.UNLOADED
+    private var arabicState = State.UNLOADED
     private val englishCallbacks = ArrayList<() -> Unit>()
     private val arabicCallbacks = ArrayList<() -> Unit>()
+
+    fun state(language: Layout): State =
+        synchronized(lock) {
+            if (closed) {
+                State.CLOSED
+            } else if (language == Layout.ENGLISH) {
+                englishState
+            } else {
+                arabicState
+            }
+        }
 
     fun load(
         language: Layout,
@@ -50,31 +50,44 @@ class WordSuggestions(
                 mainHandler.post { if (!closed) onReady() }
                 return
             }
-            if (language == Layout.ENGLISH) {
-                englishCallbacks.add(onReady)
-                if (englishLoading) return
-                englishLoading = true
-            } else {
-                arabicCallbacks.add(onReady)
-                if (arabicLoading) return
-                arabicLoading = true
-            }
+            val callbacks = if (language == Layout.ENGLISH) englishCallbacks else arabicCallbacks
+            callbacks.add(onReady)
+            val loading = if (language == Layout.ENGLISH) englishState == State.LOADING else arabicState == State.LOADING
+            if (loading) return
+            if (language == Layout.ENGLISH) englishState = State.LOADING else arabicState = State.LOADING
             executor.execute {
-                val dictionary = readDictionary(if (language == Layout.ENGLISH) "words_en.tsv" else "words_ar.tsv", language)
-                val callbacks =
-                    synchronized(lock) {
-                        if (closed) return@execute
-                        if (language == Layout.ENGLISH) {
-                            english = dictionary
-                            englishLoading = false
-                            englishCallbacks.toList().also { englishCallbacks.clear() }
-                        } else {
-                            arabic = dictionary
-                            arabicLoading = false
-                            arabicCallbacks.toList().also { arabicCallbacks.clear() }
+                try {
+                    val dictionary =
+                        assets
+                            .open(if (language == Layout.ENGLISH) "words_en.tsv" else "words_ar.tsv")
+                            .bufferedReader()
+                            .use { WordDictionary.read(it, language) }
+                    if (dictionary.size == 0) throw IOException("No usable bundled word entries")
+                    val readyCallbacks =
+                        synchronized(lock) {
+                            if (closed) return@execute
+                            if (language ==
+                                Layout.ENGLISH
+                            ) {
+                                english = dictionary
+                                englishState = State.READY
+                            } else {
+                                arabic = dictionary
+                                arabicState =
+                                    State.READY
+                            }
+                            callbacks.toList().also { callbacks.clear() }
                         }
-                    }
-                mainHandler.post { if (!closed) callbacks.forEach { it() } }
+                    mainHandler.post { if (!closed) readyCallbacks.forEach { it() } }
+                } catch (_: IOException) {
+                    val failedCallbacks =
+                        synchronized(lock) {
+                            if (closed) return@execute
+                            if (language == Layout.ENGLISH) englishState = State.FAILED else arabicState = State.FAILED
+                            callbacks.toList().also { callbacks.clear() }
+                        }
+                    mainHandler.post { if (!closed) failedCallbacks.forEach { it() } }
+                }
             }
         }
     }
@@ -83,27 +96,13 @@ class WordSuggestions(
         prefix: String,
         language: Layout,
     ): List<String> {
-        if (closed || prefix.isEmpty() || prefix.length > 64) return emptyList()
-        val dictionary = (if (language == Layout.ENGLISH) english else arabic) ?: return emptyList()
-        val normalizedPrefix = normalize(prefix, language) ?: return emptyList()
-        if (normalizedPrefix.isEmpty()) return emptyList()
-        dictionary.shortPrefixes[normalizedPrefix]?.let { return it }
+        if (closed) return emptyList()
+        return (if (language == Layout.ENGLISH) english else arabic)?.suggest(prefix) ?: emptyList()
+    }
 
-        val entries = dictionary.entries
-        var low = 0
-        var high = entries.size
-        while (low < high) {
-            val mid = (low + high) ushr 1
-            if (entries[mid].normalized < normalizedPrefix) low = mid + 1 else high = mid
-        }
-        val best = ArrayList<Entry>(3)
-        var index = low
-        while (index < entries.size) {
-            val entry = entries[index++]
-            if (!entry.normalized.startsWith(normalizedPrefix)) break
-            insertBest(best, entry)
-        }
-        return best.map { it.original }
+    fun commonWords(language: Layout): List<String> {
+        if (closed) return emptyList()
+        return (if (language == Layout.ENGLISH) english else arabic)?.commonWords.orEmpty()
     }
 
     fun close() {
@@ -112,108 +111,12 @@ class WordSuggestions(
             closed = true
             english = null
             arabic = null
+            englishState = State.CLOSED
+            arabicState = State.CLOSED
             englishCallbacks.clear()
             arabicCallbacks.clear()
         }
         executor.shutdownNow()
         mainHandler.removeCallbacksAndMessages(null)
-    }
-
-    private fun readDictionary(
-        name: String,
-        language: Layout,
-    ): Dictionary? {
-        return try {
-            val entries =
-                assets
-                    .open(name)
-                    .bufferedReader()
-                    .useLines { lines ->
-                        lines
-                            .mapNotNull { line ->
-                                val tab = line.indexOf('\t')
-                                if (tab <= 0) return@mapNotNull null
-                                val original = line.substring(0, tab)
-                                val frequency = line.substring(tab + 1).trim().toLongOrNull() ?: return@mapNotNull null
-                                val normalized = normalize(original, language) ?: return@mapNotNull null
-                                if (normalized.isEmpty()) null else Entry(normalized, original, frequency)
-                            }.toList()
-                    }.sortedWith(compareBy<Entry> { it.normalized }.thenByDescending { it.frequency })
-            val short = HashMap<String, MutableList<Entry>>()
-            entries.forEach { entry ->
-                for (length in 1..minOf(4, entry.normalized.length)) {
-                    val key = entry.normalized.substring(0, length)
-                    val list = short.getOrPut(key) { ArrayList() }
-                    insertBest(list, entry)
-                }
-            }
-            Dictionary(entries, short.mapValues { it.value.map(Entry::original) })
-        } catch (_: IOException) {
-            Log.w(TAG, "Unable to load bundled word dictionary")
-            Dictionary(emptyList(), emptyMap())
-        }
-    }
-
-    private fun normalize(
-        value: String,
-        language: Layout,
-    ): String? {
-        if (language == Layout.ENGLISH) {
-            val result = value.lowercase(Locale.ROOT)
-            return if (result.firstOrNull() in 'a'..'z' && result.lastOrNull() in 'a'..'z' &&
-                result.all { it in 'a'..'z' || it == '\'' }
-            ) {
-                result
-            } else {
-                null
-            }
-        }
-        val result =
-            buildString(value.length) {
-                value.forEach { char ->
-                    when (char) {
-                        'أ', 'إ', 'آ', 'ٱ' -> {
-                            append('ا')
-                        }
-
-                        'ى' -> {
-                            append('ي')
-                        }
-
-                        'ـ' -> {
-                            Unit
-                        }
-
-                        in '\u064B'..'\u065F', '\u0670', in '\u06D6'..'\u06ED' -> {
-                            Unit
-                        }
-
-                        else -> {
-                            if (!char.isLetter() || Character.UnicodeScript.of(char.code) != Character.UnicodeScript.ARABIC) return null
-                            append(char)
-                        }
-                    }
-                }
-            }
-        return if (result.isNotEmpty() &&
-            result.all { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC }
-        ) {
-            result
-        } else {
-            null
-        }
-    }
-
-    private fun insertBest(
-        best: MutableList<Entry>,
-        entry: Entry,
-    ) {
-        val position = best.indexOfFirst { it.frequency < entry.frequency }
-        if (position < 0) best.add(entry) else best.add(position, entry)
-        if (best.size > 3) best.removeAt(3)
-    }
-
-    private companion object {
-        const val TAG = "WordSuggestions"
     }
 }
