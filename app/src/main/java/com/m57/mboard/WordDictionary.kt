@@ -41,6 +41,38 @@ class WordDictionary private constructor(
     }
 
     companion object {
+        fun displayWord(
+            word: String,
+            prefix: String,
+            language: Layout,
+            shifted: Boolean,
+            capsLocked: Boolean,
+        ): String =
+            when {
+                language != Layout.ENGLISH -> word
+                prefix.isEmpty() && capsLocked -> word.uppercase(Locale.ROOT)
+                prefix.isEmpty() && shifted -> word.replaceFirstChar { it.uppercaseChar() }
+                capsLocked && prefix.isNotEmpty() && prefix.all { !it.isLetter() || it.isUpperCase() } -> word.uppercase(Locale.ROOT)
+                prefix.length > 1 && prefix.all { !it.isLetter() || it.isUpperCase() } -> word.uppercase(Locale.ROOT)
+                prefix.firstOrNull()?.isUpperCase() == true -> word.replaceFirstChar { it.uppercaseChar() }
+                else -> word
+            }
+
+        /** Validate absolute UTF-16 prefix bounds without altering an editor. */
+        fun prefixRange(
+            text: String,
+            start: Int,
+            end: Int,
+            offset: Int,
+            prefix: String,
+        ): Pair<Int, Int>? {
+            if (prefix.isEmpty() || offset < 0 || start != end || start !in 0..text.length || prefix.length > start) return null
+            if (!text.regionMatches(start - prefix.length, prefix, 0, prefix.length)) return null
+            val cursor = offset.toLong() + start
+            if (cursor > Int.MAX_VALUE) return null
+            return (cursor.toInt() - prefix.length) to cursor.toInt()
+        }
+
         @JvmStatic
         @Throws(java.io.IOException::class)
         fun read(

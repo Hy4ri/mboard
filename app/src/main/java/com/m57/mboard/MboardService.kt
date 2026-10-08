@@ -230,13 +230,18 @@ class MboardService : InputMethodService() {
                 LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
             )
         }
-        if (mode != Mode.KEYS) icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
         icon(R.drawable.ic_content_paste, "Clipboard history", !sensitiveField) { togglePanel(Mode.CLIPBOARD) }
         icon(R.drawable.ic_mood, "Search emoji", !sensitiveField) { togglePanel(Mode.EMOJI_SEARCH) }
-        icon(R.drawable.ic_text_select_start, "Cursor and text tools", !sensitiveField) { togglePanel(Mode.EDIT) }
+        // Panels replace the text-tools slot with Return, so the toolbar never gains another slot.
+        if (mode != Mode.KEYS) {
+            icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
+        } else {
+            icon(R.drawable.ic_text_select_start, "Cursor and text tools", !sensitiveField) { togglePanel(Mode.EDIT) }
+        }
         val tools = ui.icon(R.drawable.ic_settings, "More tools and settings") {}
         tools.setOnClickListener {
             android.widget.PopupMenu(this, tools).apply {
+                menu.add("Cursor and text tools").isEnabled = !sensitiveField
                 menu.add("Calculator").isEnabled = !sensitiveField
                 menu.add("Saved phrases").isEnabled = !sensitiveField
                 menu.add("Text Lab").isEnabled = !sensitiveField
@@ -244,6 +249,10 @@ class MboardService : InputMethodService() {
                 menu.add("Choose another keyboard")
                 setOnMenuItemClickListener { item ->
                     when (item.title.toString()) {
+                        "Cursor and text tools" -> {
+                            togglePanel(Mode.EDIT)
+                        }
+
                         "Calculator" -> {
                             togglePanel(Mode.CALCULATOR)
                         }
@@ -272,25 +281,33 @@ class MboardService : InputMethodService() {
             }
         }
         bar.addView(tools, LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)))
+        val privacyLabel =
+            when {
+                fieldPolicy.password -> "Protected password field. Clipboard and text tools unavailable"
+                privateSession -> "Private session on. Tap to turn off"
+                sensitiveField -> "App requested no learning. Tap to enable full private mode"
+                else -> "Private session off. Tap to turn on"
+            }
         bar.addView(
             ui
-                .button(
-                    when {
-                        fieldPolicy.password -> "Protected"
-                        privateSession -> "Private on"
-                        sensitiveField -> "No learning"
-                        else -> "Private"
-                    },
-                ) {
-                    privateSession = !privateSession
-                    emojiPanel?.recordingEnabled = !privateSession && !sensitiveField
-                    if (!privateSession && suggestionsAllowed && settings.suggestions) loadWords()
-                    rebuildToolbar()
-                    updateAuxiliary()
+                .icon(R.drawable.ic_privacy, privacyLabel) {
+                    if (!fieldPolicy.password) {
+                        privateSession = !privateSession
+                        emojiPanel?.recordingEnabled = !privateSession && !sensitiveField
+                        if (!privateSession && suggestionsAllowed && settings.suggestions) loadWords()
+                        rebuildToolbar()
+                        updateAuxiliary()
+                    }
                 }.apply {
                     isEnabled = !fieldPolicy.password
                     isSelected = privateSession || sensitiveField
+                    imageTintList =
+                        android.content.res.ColorStateList
+                            .valueOf(if (isSelected) ui.onAccent else ui.text)
+                    background = ui.ripple(if (isSelected) ui.accent else android.graphics.Color.TRANSPARENT)
+                    alpha = if (isEnabled) 1f else .4f
                 },
+            LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
         )
         icon(R.drawable.ic_keyboard_hide, "Hide keyboard") { requestHideSelf(0) }
     }
@@ -629,13 +646,7 @@ class MboardService : InputMethodService() {
     private fun matchCase(
         word: String,
         source: String,
-    ): String =
-        when {
-            language != Layout.ENGLISH -> word
-            source.length > 1 && source.all { !it.isLetter() || it.isUpperCase() } -> word.uppercase(Locale.ROOT)
-            source.firstOrNull()?.isUpperCase() == true -> word.replaceFirstChar { it.uppercaseChar() }
-            else -> word
-        }
+    ): String = WordDictionary.displayWord(word, source, language, keyboard?.shifted == true, keyboard?.capsLocked == true)
 
     private fun acceptSuggestion(
         word: String,
@@ -650,12 +661,42 @@ class MboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         val context = prefixContext()
         if (context.prefix != expected || (expected.isEmpty() && !context.commonEligible)) return
+        val range =
+            if (expected.isEmpty()) {
+                null
+            } else {
+                val surrounding = ic.getSurroundingText(65, 1, 0)
+                val bounds =
+                    surrounding?.let {
+                        WordDictionary.prefixRange(it.text.toString(), it.selectionStart, it.selectionEnd, it.offset, expected)
+                    }
+                if (bounds == null) {
+                    message("This app does not expose a safe word-replacement position")
+                    return
+                }
+                bounds
+            }
+        val after = ic.getTextAfterCursor(1, 0)
+        val value = word + if (after.isNullOrEmpty()) " " else ""
         ic.beginBatchEdit()
         try {
-            if (expected.isEmpty() || ic.deleteSurroundingText(expected.length, 0)) {
-                val after = ic.getTextAfterCursor(1, 0)
-                val value = word + if (after.isNullOrEmpty()) " " else ""
-                if (!ic.commitText(value, 1)) message("This app did not accept the completion")
+            // Selecting is non-destructive. Never erase a prefix before knowing insertion succeeds.
+            if (range != null) {
+                if (!ic.setSelection(range.first, range.second)) {
+                    message("This app does not support safe word replacement")
+                    return
+                }
+                if (ic.getSelectedText(0)?.toString() != expected) {
+                    ic.setSelection(range.second, range.second)
+                    message("Word selection changed · try the completion again")
+                    return
+                }
+            }
+            if (!ic.commitText(value, 1)) {
+                range?.let { ic.setSelection(it.second, it.second) }
+                message("This app did not accept the completion")
+            } else if (keyboard?.capsLocked != true) {
+                keyboard?.shifted = false
             }
         } finally {
             ic.endBatchEdit()

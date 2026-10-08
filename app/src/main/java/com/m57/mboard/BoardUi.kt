@@ -104,6 +104,9 @@ class BoardUi(
         minimumHeight = dp(48)
         setPadding(dp(12), dp(12), dp(12), dp(12))
         background = ripple()
+        backgroundTintList = null
+        elevation = 0f
+        stateListAnimator = null
         setOnClickListener { action() }
     }
 
