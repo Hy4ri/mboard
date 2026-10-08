@@ -1,5 +1,33 @@
 # Luna's mboard morning read
 
+## Pass 4 — actual settings redesign verified and locally committed; device acceptance pending
+
+User asked for real settings cleanup, not another styling tweak. Compared retaining an accordion scroll-wall with a focused settings home; chose the home/subpage structure before implementation. Scope stays in SetupActivity and new settings-only components, plus the used chevron vector. Keyboard UI/preferences/features are not redesigned or reset.
+
+1. Replaced the entire kitchen-sink settings screen with a compact home and six real destinations: Appearance, Typing, Clipboard & privacy, Saved phrases, Try your keyboard, About.
+2. Sticky native page header with Back, Android system-back integration and a saved navigation stack; drill-ins return to their actual parent.
+3. Setup status stays honest. Enable/Choose actions appear only when needed, rather than occupying space when mboard is already active.
+4. Replaced permanently exposed spinners with two-line value rows and explicit native single-choice dialogs. Accent has a real color swatch and keeps exact Crimson #990000.
+5. Settings-only components provide consistent flat surfaces, spacing, 16sp titles/13sp supporting text, relative-size spans, native toggles, wrapping text and growing touch targets. No app-UI emoji icons, decorative gradients, FABs or new dependencies.
+6. Playground and phrase composition have their own focused pages instead of dominating ordinary settings. Existing password transition/discard policy, normal draft state and memory-only phrase drafts are preserved.
+7. Phrase page shows an actual saved count, explicit Save/Delete, empty-state guidance, and disabled Save for blank/full-capacity states. Drafts are not turned into persisted phrases or view-autosave data.
+8. Theme-aware dialogs, grouped privacy controls and visibly destructive clipboard clearing. Credits/keyboard management live in About, not the bottom of a giant form.
+9. Single root owns system-bar/IME padding; per-page scroll state and render-generation guards protect navigation and asynchronous dialog/restore work. Native insets/focus/large-font behavior remains device-gated.
+
+Lifecycle review disposition: unsaved phrase text intentionally stayed out of Bundles, but rotation no longer needs to lose it. Native Activity non-configuration retention now carries only the phrase draft/selection in memory through recreation, never into preferences, saved-state text or process-death restoration. Active dialogs are tracked and dismissed on rebuild/destruction; generation guards remain. Restored field types are defensively checked against the same four constants used by the picker; malformed bundles were not proven app-reachable. Latest repaired debug build and formatter pass; visual/UX review remains pending.
+
+Visual/UX review disposition: explicitly styled picker-row backgrounds/padding/ripple and multiline text were added. The proposed compound-drawable overlap defect was rejected after checking actual AOSP TextView: layout subtracts compound padding, including drawable width, from the text area. Off-thumb/track source contrast is 6.370:1 dark / 4.845:1 light, so the proposed weak separation was not confirmed; no speculative switch redesign applied. Those checks do not substitute for screenshots or large-font device acceptance.
+
+Final-source ktlint, assembleDebug, lintDebug, optimized assembleRelease, git diff --check, debug signature and zero-permission inspection pass. Android lint has 41 warnings / no errors. All review findings are reconciled. Native insets/keyboard resizing, dialog appearance, large fonts, Back and rotation still need authorized physical acceptance. No phone operations, installs, screenshots, tests, pushes, PRs or merges in this redesign. No settings/preferences were reset.
+
+Local implementation commit: 3577e0a — focused native settings pages, shared settings components, lifecycle retention/dialog cleanup, used chevron vector.
+Verified implementation source: 3577e0a23a0e415748922e075d146f87da4421d1. A following docs-only commit records the handoff.
+Current debug SHA-256: a485da1019a3390eaed26d5af6c60b6f07cc8d073679d83a6da569909dfe6786
+Current unsigned release SHA-256: ad88c7c74f62a6f6a27ae5d9a148245a9935ebbc4a69a84536bc20048190a19c
+Debug APK: app/build/outputs/apk/debug/app-debug.apk
+Unsigned release APK: app/build/outputs/apk/release/app-release-unsigned.apk
+These output paths contain the actual settings redesign, not archived versions below. It is not installed on the phone yet.
+
 ## Pass 3 — source cleanup verified and locally committed; device acceptance pending
 
 User requested bugs/issues and UI cleanup after installing Pass 2. A permission prompt for controlled phone-playground checks timed out, so this pass currently performs no phone interaction or deployment. Two initial read-only audits and two follow-up reviews are reconciled; none performed device work.

@@ -36,7 +36,16 @@ Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bo
 
 ## Settings
 
-Follow-system, dark or light appearance; Violet, Teal, Amber or exact Crimson #990000 accent; full-width/left/right thumb mode; compact/balanced/roomy key height; optional number row and previews; word suggestions; app-guided capitalization; double-space period; clipboard history and retention. A typing playground offers normal, numeric, email and password fields. Password samples clear when entering/leaving password mode or rebuilding appearance and never enter saved drafts. Unsaved phrase text survives appearance changes in memory only; both playground and phrase fields opt out of normal autofill/view autosave.
+A compact home opens focused pages instead of displaying every control, playground and phrase editor in one long form:
+
+- Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, number row and previews.
+- Typing: suggestions, capitalization and double-space period.
+- Clipboard & privacy: history, retention and confirmed local-data deletion.
+- Saved phrases: dedicated draft editor, actual saved count, explicit Save/Delete.
+- Try your keyboard: separate normal/numeric/email/password playground.
+- About: gestures, offline tools, credits and system keyboard management.
+
+Native single-choice dialogs replace inline spinners. The page header stays outside scrolling content, and Back returns to the actual parent page. Setup actions appear only when mboard needs enabling/selecting. Password samples clear on leaving the playground, changing password type or rebuilding appearance and never enter saved drafts. Unsaved phrase text remains only in the activity's memory; both editor fields opt out of normal autofill/view autosave.
 
 ## Privacy and limits
 
