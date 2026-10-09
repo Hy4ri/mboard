@@ -100,6 +100,14 @@ class WordSuggestions(
         return (if (language == Layout.ENGLISH) english else arabic)?.suggest(prefix) ?: emptyList()
     }
 
+    fun correction(
+        word: String,
+        language: Layout,
+    ): String? {
+        if (closed) return null
+        return (if (language == Layout.ENGLISH) english else arabic)?.correction(word)
+    }
+
     fun commonWords(language: Layout): List<String> {
         if (closed) return emptyList()
         return (if (language == Layout.ENGLISH) english else arabic)?.commonWords.orEmpty()

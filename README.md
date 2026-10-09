@@ -5,7 +5,8 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 ## Everyday typing
 
 - Number row; English and edge-to-edge Arabic letter layouts.
-- Tap suggestions to complete a word. At an empty whitespace boundary, the row offers frequency-derived common words (not learned next-word predictions). English and Arabic dictionaries are bundled locally; no automatic correction, cloud calls, or typing history.
+- Tap suggestions to complete a word. At an empty whitespace boundary, the row offers frequency-derived common words (not learned next-word predictions). English and Arabic dictionaries are bundled locally; no cloud calls or typing history.
+- Auto-correction (Settings → Typing) fixes the word on space/punctuation: English typos within one keyboard-aware edit plus contractions (dont → don't, i → I), Arabic hamza/taa-marbuta spellings (انا → أنا, مدرسه → مدرسة). The correction leads the strip in bold accent. Backspace right after a correction restores what you typed and stops correcting that word in the field. Off in password, private, email/URL and no-suggestion fields.
 - The row explains loading, disabled, unsupported-editor, selection, mid-word, and no-match states instead of silently going blank. Common English choices respect Shift/caps lock. Typed-prefix replacement requires validated absolute cursor offsets and selection support; unsupported apps receive feedback instead of a destructive delete fallback.
 - Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.

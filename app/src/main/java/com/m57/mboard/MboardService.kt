@@ -358,6 +358,8 @@ class MboardService : InputMethodService() {
     ) {
         super.onStartInput(info, restarting)
         editorGeneration++
+        lastCorrection = null
+        if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0, info?.imeOptions ?: 0)
         sensitiveField = fieldPolicy.sensitive
         suggestionsAllowed = fieldPolicy.allowed
@@ -404,6 +406,10 @@ class MboardService : InputMethodService() {
     ) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         if (oldSelStart != newSelStart || oldSelEnd != newSelEnd) selectionVersion++
+        // A caret jump (tap elsewhere) means backspace no longer refers to the correction.
+        lastCorrection?.let { last ->
+            if (newSelStart != newSelEnd || kotlin.math.abs(newSelStart - oldSelStart) > last.corrected.length + 2) lastCorrection = null
+        }
         if (mode == Mode.KEYS) {
             updateCapitalization()
             updateAuxiliary()
@@ -528,9 +534,91 @@ class MboardService : InputMethodService() {
             return
         }
         val context = prefixContext()
-        val choices = if (context.commonEligible) words.commonWords(language) else words.suggest(context.prefix, language)
-        val values = choices.map { matchCase(it, context.prefix) }
-        strip.render(values, context.prefix, editorGeneration, context.status)
+        if (context.commonEligible) {
+            strip.render(words.commonWords(language).map { matchCase(it, "") }, "", editorGeneration, context.status)
+            return
+        }
+        val typed = context.prefix
+        val correction =
+            words
+                .correction(typed, language)
+                ?.takeIf { settings.autoCorrect && typed !in rejectedCorrections }
+                ?.let { matchCase(it, typed) }
+        // The typed word itself is never a useful choice; the correction (if any) leads.
+        val values =
+            (listOfNotNull(correction) + words.suggest(typed, language).map { matchCase(it, typed) })
+                .filter { it != typed }
+                .distinctBy { it.lowercase(Locale.ROOT) }
+        strip.render(values, typed, editorGeneration, context.status, highlightFirst = correction != null)
+    }
+
+    private val separators = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
+
+    /** Typed word before the cursor replaced by auto-correction; backspace right after restores it. */
+    private data class Correction(
+        val original: String,
+        val corrected: String,
+        val separator: String,
+    )
+
+    private var lastCorrection: Correction? = null
+    private val rejectedCorrections = HashSet<String>()
+
+    /** Replace [expected] immediately before the caret, non-destructively validating its position first. */
+    private fun replaceBeforeCursor(
+        ic: InputConnection,
+        expected: String,
+        replacement: String,
+    ): Boolean {
+        val surrounding = ic.getSurroundingText(expected.length + 1, 1, 0) ?: return false
+        val range =
+            WordDictionary.prefixRange(
+                surrounding.text.toString(),
+                surrounding.selectionStart,
+                surrounding.selectionEnd,
+                surrounding.offset,
+                expected,
+            ) ?: return false
+        if (!ic.setSelection(range.first, range.second)) return false
+        if (ic.getSelectedText(0)?.toString() != expected || !ic.commitText(replacement, 1)) {
+            ic.setSelection(range.second, range.second)
+            return false
+        }
+        return true
+    }
+
+    private fun autoCorrectBefore(
+        ic: InputConnection,
+        separator: String,
+    ) {
+        val kv = keyboard ?: return
+        if (!settings.autoCorrect || mode != Mode.KEYS || kv.layout != language || fieldPolicy.password ||
+            privateSession || !suggestionsAllowed || words.state(language) != WordSuggestions.State.READY
+        ) {
+            return
+        }
+        val typed = prefixContext().prefix
+        if (typed.isEmpty() || typed in rejectedCorrections) return
+        val corrected = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return
+        if (corrected == typed) return
+        if (replaceBeforeCursor(ic, typed, corrected)) lastCorrection = Correction(typed, corrected, separator)
+    }
+
+    /** Backspace straight after an auto-correction puts the typed word back and stops correcting it. */
+    private fun undoCorrection(ic: InputConnection): Boolean {
+        val last = lastCorrection ?: return false
+        lastCorrection = null
+        val tail = last.corrected + last.separator
+        if (ic.getTextBeforeCursor(tail.length, 0)?.toString() != tail || !ic.getSelectedText(0).isNullOrEmpty()) return false
+        ic.beginBatchEdit()
+        try {
+            if (!ic.deleteSurroundingText(tail.length, 0)) return false
+            ic.commitText(last.original, 1)
+        } finally {
+            ic.endBatchEdit()
+        }
+        rejectedCorrections += last.original
+        return true
     }
 
     private fun updateAuxiliary() {
@@ -768,6 +856,13 @@ class MboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         val kv = keyboard ?: return
         if (key != Keys.SPACE) lastSpace = 0L
+        if (key == Keys.BACKSPACE && ic.getSelectedText(0).isNullOrEmpty() && undoCorrection(ic)) {
+            lastShift = 0L
+            updateAuxiliary()
+            return
+        }
+        if (key != Keys.SHIFT) lastCorrection = null
+        if (key in separators) autoCorrectBefore(ic, key)
         when (key) {
             Keys.SHIFT -> {
                 val now = SystemClock.uptimeMillis()

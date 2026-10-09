@@ -66,6 +66,7 @@ class SuggestionStrip(
         prefix: String,
         editor: Long,
         message: String,
+        highlightFirst: Boolean = false,
     ) {
         val visible = words.take(3)
         status.text = message
@@ -74,8 +75,18 @@ class SuggestionStrip(
         buttons.forEachIndexed { index, button ->
             val word = visible.getOrNull(index)
             choices[index] = word?.let { Choice(it, prefix, editor) }
+            val correction = highlightFirst && index == 0 && word != null
             button.text = word.orEmpty()
-            button.contentDescription = word?.let { if (prefix.isEmpty()) "Insert common word: $it" else "Complete word: $it" }
+            button.setTextColor(if (correction) ui.controlAccent else ui.text)
+            button.typeface = if (correction) android.graphics.Typeface.DEFAULT_BOLD else android.graphics.Typeface.DEFAULT
+            button.contentDescription =
+                word?.let {
+                    when {
+                        correction -> "Auto-correct to: $it"
+                        prefix.isEmpty() -> "Insert common word: $it"
+                        else -> "Complete word: $it"
+                    }
+                }
             button.visibility = if (word == null) GONE else VISIBLE
             button.isEnabled = word != null
             if (word == null) pressedChoices[index] = null

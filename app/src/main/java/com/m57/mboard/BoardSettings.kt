@@ -22,6 +22,9 @@ class BoardSettings(
     var suggestions: Boolean
         get() = prefs.getBoolean("suggestions", true)
         set(value) = prefs.edit().putBoolean("suggestions", value).apply()
+    var autoCorrect: Boolean
+        get() = prefs.getBoolean("autocorrect", true)
+        set(value) = prefs.edit().putBoolean("autocorrect", value).apply()
     var autoCapitalize: Boolean
         get() = prefs.getBoolean("capitalize", true)
         set(value) = prefs.edit().putBoolean("capitalize", value).apply()

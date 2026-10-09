@@ -362,12 +362,23 @@ class SetupActivity : Activity() {
     }
 
     private fun typing(column: LinearLayout) {
-        components.add(column, components.note("Helpful when you want it. No autocorrection or learning of your typing."))
+        components.add(column, components.note("Helpful when you want it. Uses bundled dictionaries only; nothing you type is learned."))
         column.addView(components.section("INPUT ASSISTANCE"))
         components.add(
             column,
             components.toggle("Word suggestions", "English and Arabic · tap to complete", settings.suggestions) {
                 settings.suggestions =
+                    it
+            },
+        )
+        components.add(
+            column,
+            components.toggle(
+                "Auto-correction",
+                "Fix misspellings on space or punctuation · backspace right after to undo",
+                settings.autoCorrect,
+            ) {
+                settings.autoCorrect =
                     it
             },
         )
