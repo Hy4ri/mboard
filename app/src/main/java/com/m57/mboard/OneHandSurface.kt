@@ -27,6 +27,7 @@ class OneHandSurface(
     private val onDialKey: (String) -> Unit,
     private val recentEmoji: () -> List<String>,
     private val onEmoji: (String) -> Unit,
+    private val onOpenEmoji: () -> Unit,
     private val onModeChange: (String) -> Unit,
 ) : FrameLayout(context) {
     private var mode = normalize(mode)
@@ -161,7 +162,7 @@ class OneHandSurface(
 
     private fun buildEmojiGrid() = panelColumn("Recent emoji").apply { setPadding(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1)) }
 
-    /** Rebuilt on every reveal so it always reflects the latest history: 2 columns by 4 rows. */
+    /** Rebuilt on every reveal so it always reflects the latest history: 2 columns by 4 rows plus an open-all button. */
     private fun fillEmojiGrid() {
         emojiGrid.removeAllViews()
         val recent = recentEmoji().take(EMOJI_COLUMNS * EMOJI_ROWS)
@@ -171,8 +172,9 @@ class OneHandSurface(
                     gravity = Gravity.CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 },
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f),
             )
+            addOpenEmojiButton()
             return
         }
         repeat(EMOJI_ROWS) { rowIndex ->
@@ -202,6 +204,26 @@ class OneHandSurface(
             }
             emojiGrid.addView(row, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         }
+        addOpenEmojiButton()
+    }
+
+    private fun addOpenEmojiButton() {
+        emojiGrid.addView(
+            ui
+                .icon(R.drawable.ic_mood, "Open all emoji") {
+                    panels.firstOrNull { it.view === emojiGrid }?.reveal(false)
+                    onOpenEmoji()
+                }.apply {
+                    scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                    minimumWidth = 0
+                    minimumHeight = 0
+                    setPadding(ui.dp(7), ui.dp(7), ui.dp(7), ui.dp(7))
+                    background = ui.ripple(ui.modifier)
+                },
+            LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ui.dp(OPEN_ROW_DP)).apply {
+                setMargins(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1))
+            },
+        )
     }
 
     private fun panelAt(edge: String) = panels.firstOrNull { it.edge == edge }
@@ -213,7 +235,10 @@ class OneHandSurface(
             else -> null
         }
 
-    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+    override fun onInterceptTouchEvent(event: MotionEvent) = track(event)
+
+    /** Shared by intercept and onTouchEvent: empty, non-clickable panel areas deliver moves here directly. */
+    private fun track(event: MotionEvent): Boolean {
         if (panels.isEmpty()) return false
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
@@ -267,9 +292,13 @@ class OneHandSurface(
         return false
     }
 
-    // Only consumes the rest of a gesture this surface intercepted.
+    // Claims a DOWN no child wanted (e.g. an empty panel's label) so the swipe can still be tracked.
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent) = event.actionMasked != MotionEvent.ACTION_DOWN
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.actionMasked == MotionEvent.ACTION_DOWN) return active != null
+        track(event)
+        return true
+    }
 
     private fun shownWidth(
         edge: String,
@@ -414,6 +443,7 @@ class OneHandSurface(
         const val EMOJI_FRACTION = 0.26f
         const val EMOJI_COLUMNS = 2
         const val EMOJI_ROWS = 4
+        const val OPEN_ROW_DP = 32
         const val EDGE_DP = 40
         const val SWIPE_DP = 32
         const val FLICK_DP = 14

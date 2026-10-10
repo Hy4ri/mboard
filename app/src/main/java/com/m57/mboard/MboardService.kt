@@ -200,6 +200,7 @@ class MboardService : InputMethodService() {
                 ::onKey,
                 { if (sensitiveField) emptyList() else emojiHistory.recent() },
                 ::pasteEmoji,
+                { setMode(Mode.EMOJI) },
             ) { settings.oneHandMode = it }
         body.addView(keyboardSurface, fill)
         body.addView(clipPanel, FrameLayout.LayoutParams(fill))
