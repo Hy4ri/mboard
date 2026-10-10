@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
@@ -98,47 +99,83 @@ class ClipboardPanel(
                     },
             )
         } else {
-            clips.forEach { clip ->
-                val row = LinearLayout(context).apply { gravity = Gravity.CENTER_VERTICAL }
-                row.addView(
-                    ui.button(clip.text) { onPaste(clip.text) }.apply {
-                        maxLines = 2
-                        ellipsize = TextUtils.TruncateAt.END
-                        gravity = Gravity.START or Gravity.CENTER_VERTICAL
-                        textDirection = View.TEXT_DIRECTION_FIRST_STRONG
-                        contentDescription = "Paste ${if (clip.pinned) "pinned " else ""}clip: ${clip.text.take(80)}"
-                    },
-                    LayoutParams(0, ui.dp(64), 1f),
-                )
-                row.addView(
-                    ui.icon(
-                        if (clip.pinned) R.drawable.ic_push_pin_fill1 else R.drawable.ic_push_pin,
-                        if (clip.pinned) "Unpin clip" else "Pin clip",
-                    ) {
-                        if (!store.togglePin(
-                                clip.text,
-                            )
-                        ) {
-                            Toast.makeText(context, "Maximum 30 pinned clips, or clip expired", Toast.LENGTH_SHORT).show()
-                        }
-                        confirmingClear = false
-                        refresh(false)
-                    },
-                    LayoutParams(ui.dp(48), ui.dp(64)),
-                )
-                row.addView(
-                    ui.icon(R.drawable.ic_close, "Delete clip") {
-                        store.remove(clip.text)
-                        deleted = clip
-                        confirmingClear = false
-                        refresh(false)
-                    },
-                    LayoutParams(ui.dp(48), ui.dp(64)),
-                )
-                list.addView(row, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(68)))
+            // Two half-width bubbles per row: pin in the top-left corner, delete in the top-right.
+            clips.chunked(2).forEach { pair ->
+                val row = LinearLayout(context)
+                pair.forEach { clip -> row.addView(bubble(clip), bubbleParams()) }
+                if (pair.size == 1) row.addView(View(context), bubbleParams())
+                // Rows hug their text: a one-line clip gets a short bubble, up to three lines when needed.
+                list.addView(row, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
             }
         }
         scroller.post { scroller.scrollTo(0, scroll) }
+    }
+
+    private fun bubbleParams() = LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply { setMargins(ui.dp(3), ui.dp(3), ui.dp(3), ui.dp(3)) }
+
+    private fun corner(
+        res: Int,
+        description: String,
+        gravity: Int,
+        action: () -> Unit,
+    ) = ui.icon(res, description, action).apply {
+        // ImageButton draws its vector at intrinsic 24dp unless told to scale: fit the glyph to ICON_DP.
+        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+        val inset = ui.dp((CORNER_DP - ICON_DP) / 2)
+        setPadding(inset, inset, inset, inset)
+        minimumWidth = 0
+        minimumHeight = 0
+        layoutParams = FrameLayout.LayoutParams(ui.dp(CORNER_DP), ui.dp(CORNER_DP), gravity)
+    }
+
+    private fun bubble(clip: Clip): FrameLayout {
+        val card =
+            FrameLayout(context).apply {
+                background = ui.ripple(ui.surface)
+                isClickable = true
+                setOnClickListener { onPaste(clip.text) }
+                contentDescription = "Paste ${if (clip.pinned) "pinned " else ""}clip: ${clip.text.take(80)}"
+            }
+        val preview = if (clip.text.length > PREVIEW_CHARS) clip.text.take(PREVIEW_CHARS).trimEnd() + "…" else clip.text
+        card.addView(
+            ui.label(preview, 13f).apply {
+                maxLines = 3
+                ellipsize = TextUtils.TruncateAt.END
+                gravity = Gravity.START or Gravity.TOP
+                textDirection = View.TEXT_DIRECTION_FIRST_STRONG
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                setPadding(ui.dp(10), ui.dp(CORNER_DP), ui.dp(10), ui.dp(4))
+            },
+            FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT),
+        )
+        card.addView(
+            corner(
+                if (clip.pinned) R.drawable.ic_push_pin_fill1 else R.drawable.ic_push_pin,
+                if (clip.pinned) "Unpin clip" else "Pin clip",
+                Gravity.TOP or Gravity.START,
+            ) {
+                if (!store.togglePin(clip.text)) {
+                    Toast.makeText(context, "Maximum 30 pinned clips, or clip expired", Toast.LENGTH_SHORT).show()
+                }
+                confirmingClear = false
+                refresh(false)
+            },
+        )
+        card.addView(
+            corner(R.drawable.ic_close, "Delete clip", Gravity.TOP or Gravity.END) {
+                store.remove(clip.text)
+                deleted = clip
+                confirmingClear = false
+                refresh(false)
+            },
+        )
+        return card
+    }
+
+    private companion object {
+        const val ICON_DP = 15
+        const val CORNER_DP = 23
+        const val PREVIEW_CHARS = 120
     }
 
     override fun onVisibilityChanged(
