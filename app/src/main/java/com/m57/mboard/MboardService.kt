@@ -37,6 +37,7 @@ class MboardService : InputMethodService() {
     private var labTransform = TextLab.Transform.TITLE_CASE
     private var labPalette = TextLab.Palette.KAOMOJI
     private var auxiliary: LinearLayout? = null
+    private var panelBody: FrameLayout? = null
     private var toolbar: LinearLayout? = null
     private lateinit var ui: BoardUi
     private lateinit var settings: BoardSettings
@@ -51,6 +52,7 @@ class MboardService : InputMethodService() {
     private var lastShift = 0L
     private var lastSpace = 0L
     private var privateSession = false
+    private var lastClipStamp = 0L
     private var sensitiveField = false
     private var suggestionsAllowed = false
     private var fieldPolicy = SuggestionPolicy.classify(0, 0)
@@ -155,6 +157,10 @@ class MboardService : InputMethodService() {
         try {
             val clip = clipboard.primaryClip ?: return
             if (clip.itemCount == 0 || clip.description.extras?.getBoolean(ClipDescription.EXTRA_IS_SENSITIVE) == true) return
+            // Each copy is saved once: a clip the user deleted from history is not re-added on the next open.
+            val stamp = clip.description.timestamp
+            if (stamp == lastClipStamp) return
+            lastClipStamp = stamp
             // Do not resolve arbitrary content URIs to read their contents.
             val text = clip.getItemAt(0).text?.toString() ?: return
             clips.add(text)
@@ -182,6 +188,7 @@ class MboardService : InputMethodService() {
             }
         suggestionStrip = SuggestionStrip(this, ::acceptSuggestion)
         val body = FrameLayout(this)
+        panelBody = body
         val fill = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
         keyboardSurface =
             OneHandSurface(
@@ -349,6 +356,15 @@ class MboardService : InputMethodService() {
                 else -> enterLabel(currentInputEditorInfo)
             }
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
+        // The clipboard drops the label bar and takes its height, so the window size never changes.
+        val clipboardOpen = next == Mode.CLIPBOARD
+        auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
+        panelBody?.let { body ->
+            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(48) else 0
+            if (body.layoutParams != null && body.layoutParams.height != height) {
+                body.layoutParams = body.layoutParams.apply { this.height = height }
+            }
+        }
         keyboardSurface?.visibility = if (keysVisible) View.VISIBLE else View.INVISIBLE
         keyboard?.visibility = if (keysVisible) View.VISIBLE else View.INVISIBLE
         clipPanel?.visibility = if (next == Mode.CLIPBOARD) View.VISIBLE else View.GONE
@@ -394,6 +410,8 @@ class MboardService : InputMethodService() {
         setMode(Mode.KEYS)
         updateCapitalization()
         if (suggestionsAllowed && settings.suggestions && !privateSession) loadWords()
+        // Copying usually happens while the keyboard is hidden: pick that clip up once mboard is on screen.
+        suggestionHandler.post { if (!destroyed) recordClip() }
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
