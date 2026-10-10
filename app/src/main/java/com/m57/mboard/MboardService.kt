@@ -564,6 +564,12 @@ class MboardService : InputMethodService() {
                 else -> null
             }
         if (blocked != null) {
+            // Email/URL fields skip dictionary words but still offer the user's saved email addresses.
+            val addresses = savedAddresses()
+            if (addresses != null && addresses.second.isNotEmpty()) {
+                strip.render(addresses.second, addresses.first, editorGeneration, blocked)
+                return
+            }
             strip.render(emptyList(), "", editorGeneration, blocked)
             return
         }
@@ -802,6 +808,20 @@ class MboardService : InputMethodService() {
         }
     }
 
+    /** In email fields: the text typed so far and saved email phrases that complete it. */
+    private fun savedAddresses(): Pair<String, List<String>>? {
+        if (fieldPolicy.reason != SuggestionPolicy.Reason.ADDRESS || privateSession || !settings.suggestions) return null
+        val ic = currentInputConnection ?: return null
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return null
+        val typed = ic.getTextBeforeCursor(100, 0)?.toString()?.takeLastWhile { !it.isWhitespace() && it != ',' } ?: return null
+        val matches =
+            phrases
+                .all()
+                .filter { '@' in it && it.none(Char::isWhitespace) && it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
+                .take(3)
+        return typed to matches
+    }
+
     /** Recent emoji while the query is empty, ranked matches once typing starts. */
     private fun emojiSearchResults(): List<Emoji> {
         if (query.isNotBlank()) return Emojis.search(this, query).take(40)
@@ -874,6 +894,14 @@ class MboardService : InputMethodService() {
         expected: String,
         generation: Long,
     ) {
+        if (generation == editorGeneration && mode == Mode.KEYS && fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
+            val ic = currentInputConnection ?: return
+            if (savedAddresses()?.first != expected) return updateAuxiliary()
+            val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
+            if (!done) message("This app did not accept the address")
+            updateAuxiliary()
+            return
+        }
         if (generation != editorGeneration || mode != Mode.KEYS || fieldPolicy.password || privateSession ||
             !settings.suggestions || !suggestionsAllowed
         ) {

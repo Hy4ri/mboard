@@ -548,6 +548,21 @@ class SetupActivity : Activity() {
                 }
             }
         components.add(column, save)
+        // Android hides device accounts from other apps; the system picker shares only the one the user taps.
+        components.add(
+            column,
+            ui.button("Add email from device accounts") {
+                try {
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(
+                        android.accounts.AccountManager.newChooseAccountIntent(null, null, null, null, null, null, null),
+                        PICK_ACCOUNT,
+                    )
+                } catch (_: android.content.ActivityNotFoundException) {
+                    toast("Account picker is not available on this device")
+                }
+            },
+        )
         column.addView(components.section("YOUR PHRASES"))
         components.add(column, count)
         column.addView(list)
@@ -808,6 +823,24 @@ class SetupActivity : Activity() {
 
     private fun onOff(value: Boolean) = if (value) "on" else "off"
 
+    @Deprecated("Activity result API")
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: android.content.Intent?,
+    ) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != PICK_ACCOUNT || resultCode != RESULT_OK) return
+        val name = data?.getStringExtra(android.accounts.AccountManager.KEY_ACCOUNT_NAME)?.trim()
+        when {
+            name.isNullOrEmpty() || '@' !in name -> toast("That account has no email address")
+            PhraseStore(this).add(name) -> toast("Added $name")
+            else -> toast("Already saved, or the 40-phrase limit was reached")
+        }
+        render()
+    }
+
     private fun dialName() = edgeName(settings.dialPadEdge)
 
     private fun opposite(edge: String) = if (edge == "left") "right" else "left"
@@ -822,6 +855,7 @@ class SetupActivity : Activity() {
     private fun toast(value: String) = Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
 
     private companion object {
+        const val PICK_ACCOUNT = 41
         const val NORMAL_INPUT = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
         val PLAYGROUND_TYPES =
             listOf(
