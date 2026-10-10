@@ -551,17 +551,7 @@ class SetupActivity : Activity() {
         // Android hides device accounts from other apps; the system picker shares only the one the user taps.
         components.add(
             column,
-            ui.button("Add email from device accounts") {
-                try {
-                    @Suppress("DEPRECATION")
-                    startActivityForResult(
-                        android.accounts.AccountManager.newChooseAccountIntent(null, null, null, null, null, null, null),
-                        PICK_ACCOUNT,
-                    )
-                } catch (_: android.content.ActivityNotFoundException) {
-                    toast("Account picker is not available on this device")
-                }
-            },
+            ui.button("Add emails from device accounts", action = ::pickAccount),
         )
         column.addView(components.section("YOUR PHRASES"))
         components.add(column, count)
@@ -823,6 +813,19 @@ class SetupActivity : Activity() {
 
     private fun onOff(value: Boolean) = if (value) "on" else "off"
 
+    /** The system chooser is single-choice and can't be restyled; reopening it after each pick lets the user add several. */
+    private fun pickAccount() {
+        try {
+            @Suppress("DEPRECATION")
+            startActivityForResult(
+                android.accounts.AccountManager.newChooseAccountIntent(null, null, null, null, null, null, null),
+                PICK_ACCOUNT,
+            )
+        } catch (_: android.content.ActivityNotFoundException) {
+            toast("Account picker is not available on this device")
+        }
+    }
+
     @Deprecated("Activity result API")
     override fun onActivityResult(
         requestCode: Int,
@@ -833,12 +836,15 @@ class SetupActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != PICK_ACCOUNT || resultCode != RESULT_OK) return
         val name = data?.getStringExtra(android.accounts.AccountManager.KEY_ACCOUNT_NAME)?.trim()
+        val store = PhraseStore(this)
         when {
             name.isNullOrEmpty() || '@' !in name -> toast("That account has no email address")
-            PhraseStore(this).add(name) -> toast("Added $name")
+            store.add(name) -> toast("Added $name · pick another, or press back when done")
             else -> toast("Already saved, or the 40-phrase limit was reached")
         }
         render()
+        // Back (RESULT_CANCELED) ends the loop; a full phrase list ends it too.
+        if (store.all().size < 40) pickAccount()
     }
 
     private fun dialName() = edgeName(settings.dialPadEdge)
