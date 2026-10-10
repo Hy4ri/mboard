@@ -356,8 +356,8 @@ class MboardService : InputMethodService() {
                 else -> enterLabel(currentInputEditorInfo)
             }
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
-        // The clipboard drops the label bar and takes its height, so the window size never changes.
-        val clipboardOpen = next == Mode.CLIPBOARD
+        // Clipboard and emoji drop the label bar and take its height, so the window size never changes.
+        val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
         auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
         panelBody?.let { body ->
             val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(48) else 0

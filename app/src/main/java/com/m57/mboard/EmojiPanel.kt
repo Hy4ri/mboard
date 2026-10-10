@@ -35,7 +35,7 @@ class EmojiPanel(
     var loadFailed = false
     private val adapter = EmojiAdapter(ui, history, { recordingEnabled }, onPick, ::updateItems)
     private val clear =
-        ui.button("Clear recent") {
+        ui.icon(R.drawable.ic_delete_sweep, "Clear recent emoji, keeps favorites") {
             if (confirmingClear) {
                 history.clearRecent()
                 confirmingClear = false
@@ -50,17 +50,18 @@ class EmojiPanel(
         orientation = VERTICAL
         layoutDirection = View.LAYOUT_DIRECTION_LTR
         setBackgroundColor(ui.background)
-        val head = LinearLayout(context).apply { gravity = Gravity.CENTER_VERTICAL }
-        head.addView(ui.button("Search emoji", action = onSearch), LayoutParams(0, ui.dp(48), 1f))
-        head.addView(clear, LayoutParams(LayoutParams.WRAP_CONTENT, ui.dp(48)))
-        addView(head)
-        addView(
+        // One compact icon row: search, categories (scrolling), and clear-recent; no header above it.
+        val bar = LinearLayout(context).apply { gravity = Gravity.CENTER_VERTICAL }
+        bar.addView(tab(R.drawable.ic_search, "Search emoji", false, onSearch), LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)))
+        bar.addView(
             HorizontalScrollView(context).apply {
                 isHorizontalScrollBarEnabled = false
                 addView(categories)
             },
-            LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(48)),
+            LayoutParams(0, ui.dp(TAB_DP), 1f),
         )
+        bar.addView(clear.apply { compact() }, LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)))
+        addView(bar, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(TAB_DP)))
         grid.numColumns = GridView.AUTO_FIT
         grid.columnWidth = ui.dp(48)
         grid.stretchMode = GridView.STRETCH_COLUMN_WIDTH
@@ -83,9 +84,12 @@ class EmojiPanel(
     }
 
     private fun updateClear() {
-        clear.text = if (confirmingClear) "Confirm clear" else "Clear recent"
         clear.isEnabled = history.recent().isNotEmpty()
         clear.alpha = if (clear.isEnabled) 1f else .4f
+        // Second tap confirms: the icon turns accent-filled while armed.
+        clear.background = ui.ripple(if (confirmingClear) ui.accent else android.graphics.Color.TRANSPARENT)
+        clear.imageTintList = ColorStateList.valueOf(if (confirmingClear) ui.onAccent else ui.text)
+        clear.tooltipText = if (confirmingClear) "Tap again to clear recent" else "Clear recent"
         clear.contentDescription = if (confirmingClear) "Confirm clearing recent emoji" else "Clear recent emoji, keeps favorites"
     }
 
@@ -93,34 +97,60 @@ class EmojiPanel(
         categories.removeAllViews()
         (listOf("Recent", "Favorites", "All") + all.map { it.category }.filter(String::isNotBlank).distinct()).forEach { name ->
             categories.addView(
-                ui
-                    .button(shortName(name)) {
-                        active = name
-                        confirmingClear = false
-                        updateClear()
-                        buildCategories()
-                        updateItems()
-                        grid.setSelection(0)
-                    }.apply {
-                        isSelected = active == name
-                        setTextColor(if (isSelected) ui.onAccent else ui.text)
-                        background = ui.ripple(if (isSelected) ui.accent else ui.background)
-                        contentDescription = name
-                    },
-                LayoutParams(LayoutParams.WRAP_CONTENT, ui.dp(48)),
+                tab(categoryIcon(name), name, active == name) {
+                    active = name
+                    confirmingClear = false
+                    updateClear()
+                    buildCategories()
+                    updateItems()
+                    grid.setSelection(0)
+                },
+                LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)),
             )
         }
     }
 
-    private fun shortName(name: String) =
+    private fun android.widget.ImageButton.compact() {
+        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+        minimumWidth = 0
+        minimumHeight = 0
+        val inset = ui.dp((TAB_DP - ICON_DP) / 2)
+        setPadding(inset, inset, inset, inset)
+    }
+
+    private fun tab(
+        res: Int,
+        name: String,
+        selected: Boolean,
+        action: () -> Unit,
+    ) = ui.icon(res, name, action).apply {
+        compact()
+        isSelected = selected
+        imageTintList = ColorStateList.valueOf(if (selected) ui.onAccent else ui.text)
+        background = ui.ripple(if (selected) ui.accent else android.graphics.Color.TRANSPARENT)
+    }
+
+    private fun categoryIcon(name: String) =
         when (name) {
-            "Smileys & Emotion" -> "Smileys"
-            "People & Body" -> "People"
-            "Animals & Nature" -> "Nature"
-            "Food & Drink" -> "Food"
-            "Travel & Places" -> "Travel"
-            else -> name
+            "Recent" -> R.drawable.ic_history
+            "Favorites" -> R.drawable.ic_star
+            "All" -> R.drawable.ic_apps
+            "Smileys & Emotion" -> R.drawable.ic_mood
+            "People & Body" -> R.drawable.ic_emoji_people
+            "Animals & Nature" -> R.drawable.ic_emoji_nature
+            "Food & Drink" -> R.drawable.ic_emoji_food_beverage
+            "Travel & Places" -> R.drawable.ic_emoji_transportation
+            "Activities" -> R.drawable.ic_emoji_events
+            "Objects" -> R.drawable.ic_emoji_objects
+            "Symbols" -> R.drawable.ic_emoji_symbols
+            "Flags" -> R.drawable.ic_emoji_flags
+            else -> R.drawable.ic_sentiment_satisfied
         }
+
+    private companion object {
+        const val TAB_DP = 36
+        const val ICON_DP = 20
+    }
 
     private fun updateItems() {
         val values =
