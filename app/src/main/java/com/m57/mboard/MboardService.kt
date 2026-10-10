@@ -599,9 +599,16 @@ class MboardService : InputMethodService() {
                 .correction(typed, language)
                 ?.takeIf { settings.autoCorrect && typed !in rejectedCorrections }
                 ?.let { matchCase(it, typed) }
+        // A saved phrase starting with the typed word follows the correction; tapping it replaces the word.
+        val phrase =
+            if (sensitiveField || typed.length < 2) {
+                null
+            } else {
+                phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
+            }
         // The typed word itself is never a useful choice; the correction (if any) leads.
         val wordChoices =
-            (listOfNotNull(correction) + words.suggest(typed, language).map { matchCase(it, typed) })
+            (listOfNotNull(correction, phrase) + words.suggest(typed, language).map { matchCase(it, typed) })
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // A matching emoji takes the last slot so the correction and best completion stay put.
