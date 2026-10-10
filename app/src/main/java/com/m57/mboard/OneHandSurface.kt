@@ -1,18 +1,32 @@
 package com.m57.mboard
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Rect
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import kotlin.math.abs
 
-/** Keyboard surface with an optional, accessible rail for one-handed placement. */
+/**
+ * Keyboard surface with an optional, accessible rail for one-handed placement and edge-swipe side
+ * panels (dial pad, recent emoji). Each panel owns one screen edge.
+ */
 class OneHandSurface(
     context: Context,
     private val keyboard: KeyboardView,
     mode: String,
+    dialEdge: String,
+    emojiEdge: String,
+    private val onDialKey: (String) -> Unit,
+    private val recentEmoji: () -> List<String>,
+    private val onEmoji: (String) -> Unit,
     private val onModeChange: (String) -> Unit,
 ) : FrameLayout(context) {
     private var mode = normalize(mode)
@@ -35,11 +49,74 @@ class OneHandSurface(
             setPadding(ui.dp(2), ui.dp(4), ui.dp(2), ui.dp(4))
         }
 
+    /** A panel that slides in from [edge] and pushes the keyboard aside by its visible width. */
+    private inner class SidePanel(
+        val edge: String,
+        val fraction: Float,
+        val view: LinearLayout,
+        val name: String,
+        val beforeShow: () -> Unit = {},
+    ) {
+        var shown = false
+        var amount = 0f
+        var animator: ValueAnimator? = null
+
+        fun fullWidth(total: Int) = (total * fraction).toInt()
+
+        fun visibleWidth(total: Int) = (fullWidth(total) * amount).toInt()
+
+        fun contains(x: Float): Boolean {
+            val visible = visibleWidth(width)
+            return if (edge == LEFT) x < visible else x > width - visible
+        }
+
+        fun reveal(show: Boolean) {
+            if (shown == show) return
+            shown = show
+            if (show) beforeShow()
+            keyboard.cancelTouch()
+            animator?.cancel()
+            view.visibility = View.VISIBLE
+            animator =
+                ValueAnimator.ofFloat(amount, if (show) 1f else 0f).apply {
+                    duration = 220L
+                    interpolator = DecelerateInterpolator()
+                    addUpdateListener {
+                        amount = it.animatedValue as Float
+                        // The first frame of a show animation is also 0: only a finished hide removes the panel.
+                        if (!shown && amount == 0f) view.visibility = View.GONE
+                        requestLayout()
+                    }
+                    start()
+                }
+            view.announceForAccessibility(if (show) "$name shown" else "$name hidden")
+        }
+    }
+
+    private val emojiGrid = buildEmojiGrid()
+    private val panels: List<SidePanel>
+    private var active: SidePanel? = null
+    private var startX = 0f
+    private var startY = 0f
+    private var startTime = 0L
+    private var swipePointer = MotionEvent.INVALID_POINTER_ID
+
     init {
         clipChildren = false
         clipToPadding = false
         addView(keyboard, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(rail, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        val list = ArrayList<SidePanel>(2)
+        if (dialEdge == LEFT || dialEdge == RIGHT) list += SidePanel(dialEdge, DIAL_FRACTION, buildDial(), "Dial pad")
+        // One panel per edge: the dial pad keeps its edge if both settings ever collide.
+        if ((emojiEdge == LEFT || emojiEdge == RIGHT) && list.none { it.edge == emojiEdge }) {
+            list += SidePanel(emojiEdge, EMOJI_FRACTION, emojiGrid, "Recent emoji", ::fillEmojiGrid)
+        }
+        panels = list
+        panels.forEach {
+            addView(it.view, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+            it.view.visibility = View.GONE
+        }
         rebuildRail(mode)
     }
 
@@ -51,16 +128,171 @@ class OneHandSurface(
         invalidate()
     }
 
+    private fun cellParams() =
+        LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
+            setMargins(ui.dp(2), ui.dp(2), ui.dp(2), ui.dp(2))
+        }
+
+    private fun panelColumn(description: String) =
+        LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(ui.background)
+            setPadding(ui.dp(2), ui.dp(4), ui.dp(2), ui.dp(2))
+            contentDescription = description
+        }
+
+    private fun buildDial(): LinearLayout {
+        val pad = panelColumn("Dial pad")
+        listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf(".", "0", Keys.BACKSPACE)).forEach { keys ->
+            val row = LinearLayout(context)
+            keys.forEach { key ->
+                val view =
+                    if (key == Keys.BACKSPACE) {
+                        ui.icon(R.drawable.ic_backspace, "Delete") { onDialKey(key) }.apply { background = ui.ripple(ui.modifier) }
+                    } else {
+                        ui.button(key) { onDialKey(key) }.apply { textSize = 20f }
+                    }
+                row.addView(view, cellParams())
+            }
+            pad.addView(row, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        }
+        return pad
+    }
+
+    private fun buildEmojiGrid() = panelColumn("Recent emoji").apply { setPadding(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1)) }
+
+    /** Rebuilt on every reveal so it always reflects the latest history: 2 columns by 4 rows. */
+    private fun fillEmojiGrid() {
+        emojiGrid.removeAllViews()
+        val recent = recentEmoji().take(EMOJI_COLUMNS * EMOJI_ROWS)
+        if (recent.isEmpty()) {
+            emojiGrid.addView(
+                ui.label("No recent emoji yet", 13f, secondary = true).apply {
+                    gravity = Gravity.CENTER
+                    textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                },
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
+            )
+            return
+        }
+        repeat(EMOJI_ROWS) { rowIndex ->
+            val row = LinearLayout(context)
+            repeat(EMOJI_COLUMNS) { column ->
+                val emoji = recent.getOrNull(rowIndex * EMOJI_COLUMNS + column)
+                val cell =
+                    if (emoji == null) {
+                        View(context)
+                    } else {
+                        ui.button(emoji) { onEmoji(emoji) }.apply {
+                            textSize = 22f
+                            contentDescription = "Insert $emoji"
+                            // Tight cells: the emoji glyph fills the tile instead of the default button padding.
+                            setPadding(0, 0, 0, 0)
+                            minHeight = 0
+                            minimumHeight = 0
+                            includeFontPadding = false
+                        }
+                    }
+                row.addView(
+                    cell,
+                    LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
+                        setMargins(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1))
+                    },
+                )
+            }
+            emojiGrid.addView(row, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        }
+    }
+
+    private fun panelAt(edge: String) = panels.firstOrNull { it.edge == edge }
+
+    private fun nearEdge(x: Float): SidePanel? =
+        when {
+            x < ui.dp(EDGE_DP) -> panelAt(LEFT)
+            x > width - ui.dp(EDGE_DP) -> panelAt(RIGHT)
+            else -> null
+        }
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        if (panels.isEmpty()) return false
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+                startTime = event.eventTime
+                swipePointer = event.getPointerId(0)
+                active = panels.firstOrNull { it.shown && it.contains(event.x) } ?: nearEdge(event.x)
+            }
+
+            // A second finger means typing, not a swipe.
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                active = null
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val panel = active ?: return false
+                val index = event.findPointerIndex(swipePointer)
+                if (index < 0) {
+                    active = null
+                    return false
+                }
+                val dx = event.getX(index) - startX
+                val dy = event.getY(index) - startY
+                // Mostly vertical drift means a key press or scroll, not a swipe.
+                if (abs(dy) > ui.dp(SLOP_DP) && abs(dy) > abs(dx)) {
+                    active = null
+                    return false
+                }
+                val elapsed = (event.eventTime - startTime).coerceAtLeast(1L)
+                val speed = abs(dx) / elapsed
+                val horizontal = abs(dx) > 1.5f * abs(dy)
+                // Either a full drag, or a short quick flick, triggers.
+                val far = abs(dx) > ui.dp(SWIPE_DP)
+                val flick = abs(dx) > ui.dp(FLICK_DP) && speed > ui.dp(1) * FLICK_DP_PER_MS
+                if (horizontal && (far || flick)) {
+                    active = null
+                    // Inward from the panel's edge shows it; back out toward that edge hides it.
+                    val inward = (panel.edge == LEFT) == (dx > 0)
+                    if (inward != panel.shown) {
+                        panel.reveal(inward)
+                        return true
+                    }
+                }
+            }
+
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                active = null
+            }
+        }
+        return false
+    }
+
+    // Only consumes the rest of a gesture this surface intercepted.
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent) = event.actionMasked != MotionEvent.ACTION_DOWN
+
+    private fun shownWidth(
+        edge: String,
+        total: Int,
+    ) = panelAt(edge)?.visibleWidth(total) ?: 0
+
     override fun onMeasure(
         widthMeasureSpec: Int,
         heightMeasureSpec: Int,
     ) {
-        val width = MeasureSpec.getSize(widthMeasureSpec)
+        val fullWidth = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
+        setMeasuredDimension(fullWidth, height)
+        panels.forEach {
+            it.view.measure(
+                MeasureSpec.makeMeasureSpec(it.fullWidth(fullWidth), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY),
+            )
+        }
+        val width = fullWidth - shownWidth(LEFT, fullWidth) - shownWidth(RIGHT, fullWidth)
         val compact = width < ui.dp(COMPACT_WIDTH_DP)
         val effectiveMode = if (compact) FULL else mode
         rebuildRail(effectiveMode)
-        setMeasuredDimension(width, height)
 
         if (effectiveMode == FULL) {
             keyboard.measure(
@@ -91,24 +323,49 @@ class OneHandSurface(
         right: Int,
         bottom: Int,
     ) {
-        val width = right - left
+        val fullWidth = right - left
         val height = bottom - top
+        val leftShown = shownWidth(LEFT, fullWidth)
+        val rightShown = shownWidth(RIGHT, fullWidth)
+        panels.forEach {
+            if (it.edge == LEFT) {
+                it.view.layout(leftShown - it.view.measuredWidth, 0, leftShown, height)
+            } else {
+                it.view.layout(fullWidth - rightShown, 0, fullWidth - rightShown + it.view.measuredWidth, height)
+            }
+        }
+        // Keep Android's back gesture from eating the edge swipes (the system caps this at 200 dp per edge).
+        val edgeWidth = ui.dp(EDGE_DP)
+        val exclusionTop = (height - ui.dp(200)).coerceAtLeast(0)
+        systemGestureExclusionRects =
+            panels.map {
+                val x = if (it.edge == LEFT) 0 else fullWidth - edgeWidth
+                Rect(x, exclusionTop, x + edgeWidth, height)
+            }
+        // Panels push the keyboard over by their visible width.
+        val offset = leftShown
+        val width = fullWidth - leftShown - rightShown
         val compact = width < ui.dp(COMPACT_WIDTH_DP)
         val effectiveMode = if (compact) FULL else mode
         if (effectiveMode == FULL) {
-            keyboard.layout(0, 0, width, height)
-            rail.layout(width, 0, width, height)
+            keyboard.layout(offset, 0, offset + width, height)
+            rail.layout(offset + width, 0, offset + width, height)
             return
         }
 
         val keyboardWidth = keyboard.measuredWidth
         if (effectiveMode == LEFT) {
-            keyboard.layout(0, 0, keyboardWidth, height)
-            rail.layout(keyboardWidth, 0, width, height)
+            keyboard.layout(offset, 0, offset + keyboardWidth, height)
+            rail.layout(offset + keyboardWidth, 0, offset + width, height)
         } else {
-            rail.layout(0, 0, width - keyboardWidth, height)
-            keyboard.layout(width - keyboardWidth, 0, width, height)
+            rail.layout(offset, 0, offset + width - keyboardWidth, height)
+            keyboard.layout(offset + width - keyboardWidth, 0, offset + width, height)
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        panels.forEach { it.animator?.cancel() }
+        super.onDetachedFromWindow()
     }
 
     private fun rebuildRail(effectiveMode: String) {
@@ -153,5 +410,14 @@ class OneHandSurface(
         const val COMPACT_WIDTH_DP = 300
         const val RAIL_MIN_DP = 48
         const val KEYBOARD_FRACTION = 0.82f
+        const val DIAL_FRACTION = 0.34f
+        const val EMOJI_FRACTION = 0.26f
+        const val EMOJI_COLUMNS = 2
+        const val EMOJI_ROWS = 4
+        const val EDGE_DP = 40
+        const val SWIPE_DP = 32
+        const val FLICK_DP = 14
+        const val FLICK_DP_PER_MS = 0.6f
+        const val SLOP_DP = 12
     }
 }

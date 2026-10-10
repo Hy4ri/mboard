@@ -61,6 +61,21 @@ object Emojis {
             }.map { it.emoji }
     }
 
+    /** Best emoji for a whole typed word ("fire" → 🔥), or null. Exact names win, then the shortest name. */
+    fun forWord(word: String): String? {
+        val key = tokenize(word).singleOrNull() ?: return null
+        // Short words only match through an explicit alias ("ok"), never by loose name tokens.
+        if ((key.length < 3 && key !in aliases) || key.all { it.isDigit() }) return null
+        val items = index ?: return null
+        val wanted = aliases[key] ?: listOf(key)
+        wanted.forEach { w -> items.firstOrNull { it.emoji.name == w }?.let { return it.emoji.text } }
+        return items
+            .filter { item -> wanted.any { it in item.tokens } }
+            .minByOrNull { it.emoji.name.length }
+            ?.emoji
+            ?.text
+    }
+
     private fun tokenize(value: String): List<String> =
         normalizeSearch(value)
             .lowercase(Locale.ROOT)
@@ -100,5 +115,18 @@ object Emojis {
             "laugh" to listOf("laugh", "joy", "rolling"),
             "coffee" to listOf("coffee", "beverage"),
             "قهوة" to listOf("coffee", "beverage"),
+            // Exact emoji names for common chat words, used by emoji suggestions.
+            "love" to listOf("red heart"),
+            "lol" to listOf("face with tears of joy"),
+            "haha" to listOf("face with tears of joy"),
+            "ok" to listOf("ok hand"),
+            "okay" to listOf("ok hand"),
+            "thanks" to listOf("folded hands"),
+            "please" to listOf("folded hands"),
+            "cool" to listOf("smiling face with sunglasses"),
+            "party" to listOf("party popper"),
+            "kiss" to listOf("face blowing a kiss"),
+            "شكرا" to listOf("folded hands"),
+            "هههه" to listOf("face with tears of joy"),
         ).mapKeys { normalizeSearch(it.key) }
 }

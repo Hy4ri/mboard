@@ -344,6 +344,32 @@ class SetupActivity : Activity() {
             render()
         }
         components.add(column, components.note("Thumb mode moves real keys. Narrow windows use full width to keep them usable."))
+        choice(
+            column,
+            "Dial pad swipe",
+            dialName(),
+            listOf("Off", "Swipe from left edge", "Swipe from right edge"),
+            listOf("off", "left", "right").indexOf(settings.dialPadEdge),
+        ) {
+            val edge = listOf("off", "left", "right")[it]
+            settings.dialPadEdge = edge
+            // Each edge holds one panel: the other panel moves to the opposite edge.
+            if (edge != "off" && settings.emojiEdge == edge) settings.emojiEdge = opposite(edge)
+            render()
+        }
+        choice(
+            column,
+            "Recent emoji swipe",
+            edgeName(settings.emojiEdge),
+            listOf("Off", "Swipe from left edge", "Swipe from right edge"),
+            listOf("off", "left", "right").indexOf(settings.emojiEdge),
+        ) {
+            val edge = listOf("off", "left", "right")[it]
+            settings.emojiEdge = edge
+            if (edge != "off" && settings.dialPadEdge == edge) settings.dialPadEdge = opposite(edge)
+            render()
+        }
+        components.add(column, components.note("Swipe in from an edge to show its panel; swipe back out to hide it."))
         column.addView(components.section("KEY DETAILS"))
         components.add(
             column,
@@ -380,6 +406,12 @@ class SetupActivity : Activity() {
             ) {
                 settings.autoCorrect =
                     it
+            },
+        )
+        components.add(
+            column,
+            components.toggle("Emoji suggestions", "Offer a matching emoji for words like fire or love", settings.emojiSuggestions) {
+                settings.emojiSuggestions = it
             },
         )
         components.add(
@@ -775,6 +807,17 @@ class SetupActivity : Activity() {
         }
 
     private fun onOff(value: Boolean) = if (value) "on" else "off"
+
+    private fun dialName() = edgeName(settings.dialPadEdge)
+
+    private fun opposite(edge: String) = if (edge == "left") "right" else "left"
+
+    private fun edgeName(edge: String) =
+        when (edge) {
+            "left" -> "Left edge"
+            "right" -> "Right edge"
+            else -> "Off"
+        }
 
     private fun toast(value: String) = Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
 

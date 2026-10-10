@@ -10,6 +10,11 @@ https://creativecommons.org/licenses/by-sa/4.0/
 These word-list adaptations are distributed under CC BY-SA 4.0. This does not change the license of unrelated application code.
 Note: upstream's MIT license covers its generator code, not its word-list content.
 
+Next-word predictions
+next_en.tsv and next_ar.tsv list up to three likely following words per dictionary word, counted from the first 120 MB (compressed) of the OpenSubtitles2018 monolingual corpora.
+Source: OPUS, https://opus.nlpl.eu/OpenSubtitles/corpus/version/OpenSubtitles (P. Lison and J. Tiedemann, 2016).
+Distributed under CC BY-SA 4.0 together with the word lists above.
+
 Material Symbols vector icons
 Copyright Google LLC. Licensed under the Apache License, Version 2.0.
 https://github.com/google/material-design-icons

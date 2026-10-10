@@ -4,6 +4,9 @@ package com.m57.mboard
 object Keys {
     const val SHIFT = "⇧"
     const val BACKSPACE = "⌫"
+
+    /** Sent only by a long backspace hold; never shown as a key. */
+    const val DELETE_WORD = "⌫word"
     const val ENTER = "⏎"
     const val GLOBE = "globe"
     const val SYMBOLS = "?123"

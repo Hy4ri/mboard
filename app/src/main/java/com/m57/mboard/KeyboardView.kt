@@ -126,10 +126,20 @@ class KeyboardView(
         object : Runnable {
             override fun run() {
                 if (pointer == MotionEvent.INVALID_POINTER_ID || current?.key != Keys.BACKSPACE || origin?.key != Keys.BACKSPACE) return
-                onKey(Keys.BACKSPACE)
-                postDelayed(this, 50L)
+                // Hold time picks the pace: letters, then word levels 1-3 that each delete faster.
+                val held = android.os.SystemClock.uptimeMillis() - deleteStart
+                val interval =
+                    when {
+                        held < 900L -> 50L
+                        held < 1_800L -> 200L
+                        held < 2_800L -> 120L
+                        else -> 70L
+                    }
+                onKey(if (held < 900L) Keys.BACKSPACE else Keys.DELETE_WORD)
+                postDelayed(this, interval)
             }
         }
+    private var deleteStart = 0L
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -589,6 +599,7 @@ class KeyboardView(
         val key = origin?.key
         if (key == Keys.SPACE || key in ALTERNATES) postDelayed(hold, 250L)
         if (key == Keys.BACKSPACE) {
+            deleteStart = android.os.SystemClock.uptimeMillis()
             onKey(Keys.BACKSPACE)
             postDelayed(repeatDelete, 400L)
         }

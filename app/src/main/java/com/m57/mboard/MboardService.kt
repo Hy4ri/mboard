@@ -183,7 +183,17 @@ class MboardService : InputMethodService() {
         suggestionStrip = SuggestionStrip(this, ::acceptSuggestion)
         val body = FrameLayout(this)
         val fill = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
-        keyboardSurface = OneHandSurface(this, kv, settings.oneHandMode) { settings.oneHandMode = it }
+        keyboardSurface =
+            OneHandSurface(
+                this,
+                kv,
+                settings.oneHandMode,
+                settings.dialPadEdge,
+                settings.emojiEdge,
+                ::onKey,
+                { if (sensitiveField) emptyList() else emojiHistory.recent() },
+                ::pasteEmoji,
+            ) { settings.oneHandMode = it }
         body.addView(keyboardSurface, fill)
         body.addView(clipPanel, FrameLayout.LayoutParams(fill))
         body.addView(emojiPanel, FrameLayout.LayoutParams(fill))
@@ -481,6 +491,8 @@ class MboardService : InputMethodService() {
         val prefix: String,
         val status: String,
         val commonEligible: Boolean = false,
+        val previousWord: String = "",
+        val recentWords: Set<String> = emptySet(),
     )
 
     private fun prefixContext(): PrefixContext {
@@ -496,10 +508,26 @@ class MboardService : InputMethodService() {
         val result = before.takeLastWhile(::wordChar)
         if (result.length > 64) return PrefixContext("", "Word is too long for completions")
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
+        // Only whitespace may sit between the caret and the previous word; punctuation ends the sentence chain.
+        val previous = if (idle) before.trimEnd().takeLastWhile(::wordChar) else ""
+        // Words already in the last few positions are never re-offered, so tapping predictions can't loop.
+        val recent =
+            if (idle) {
+                before
+                    .split(Regex("[^\\p{L}\\p{Mn}\\p{Nd}']+"))
+                    .filter { it.isNotEmpty() }
+                    .takeLast(4)
+                    .map { it.lowercase(Locale.ROOT) }
+                    .toSet()
+            } else {
+                emptySet()
+            }
         return PrefixContext(
             result,
             if (result.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
             idle,
+            previous,
+            recent,
         )
     }
 
@@ -535,7 +563,16 @@ class MboardService : InputMethodService() {
         }
         val context = prefixContext()
         if (context.commonEligible) {
-            strip.render(words.commonWords(language).map { matchCase(it, "") }, "", editorGeneration, context.status)
+            val fresh = { w: String -> w.lowercase(Locale.ROOT) !in context.recentWords }
+            val predicted =
+                (words.nextWords(context.previousWord, language).filter(fresh) + words.commonWords(language).filter(fresh))
+                    .distinctBy { it.lowercase(Locale.ROOT) }
+            strip.render(
+                predicted.map { matchCase(it, "") },
+                "",
+                editorGeneration,
+                context.status,
+            )
             return
         }
         val typed = context.prefix
@@ -545,10 +582,13 @@ class MboardService : InputMethodService() {
                 ?.takeIf { settings.autoCorrect && typed !in rejectedCorrections }
                 ?.let { matchCase(it, typed) }
         // The typed word itself is never a useful choice; the correction (if any) leads.
-        val values =
+        val wordChoices =
             (listOfNotNull(correction) + words.suggest(typed, language).map { matchCase(it, typed) })
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
+        // A matching emoji takes the last slot so the correction and best completion stay put.
+        val emoji = if (settings.emojiSuggestions && !sensitiveField) Emojis.forWord(typed) else null
+        val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji
         strip.render(values, typed, editorGeneration, context.status, highlightFirst = correction != null)
     }
 
@@ -564,25 +604,26 @@ class MboardService : InputMethodService() {
     private var lastCorrection: Correction? = null
     private val rejectedCorrections = HashSet<String>()
 
-    /** Replace [expected] immediately before the caret, non-destructively validating its position first. */
+    /**
+     * Replace [expected] immediately before the caret. Editors such as Instagram ignore or defer
+     * setSelection inside an IME edit, so delete-then-commit is used; a failed commit restores the word.
+     */
     private fun replaceBeforeCursor(
         ic: InputConnection,
         expected: String,
         replacement: String,
     ): Boolean {
-        val surrounding = ic.getSurroundingText(expected.length + 1, 1, 0) ?: return false
-        val range =
-            WordDictionary.prefixRange(
-                surrounding.text.toString(),
-                surrounding.selectionStart,
-                surrounding.selectionEnd,
-                surrounding.offset,
-                expected,
-            ) ?: return false
-        if (!ic.setSelection(range.first, range.second)) return false
-        if (ic.getSelectedText(0)?.toString() != expected || !ic.commitText(replacement, 1)) {
-            ic.setSelection(range.second, range.second)
-            return false
+        if (expected.isEmpty() || !ic.getSelectedText(0).isNullOrEmpty()) return false
+        if (ic.getTextBeforeCursor(expected.length, 0)?.toString() != expected) return false
+        ic.beginBatchEdit()
+        try {
+            if (!ic.deleteSurroundingText(expected.length, 0)) return false
+            if (!ic.commitText(replacement, 1)) {
+                ic.commitText(expected, 1)
+                return false
+            }
+        } finally {
+            ic.endBatchEdit()
         }
         return true
     }
@@ -748,46 +789,28 @@ class MboardService : InputMethodService() {
         }
         val ic = currentInputConnection ?: return
         val context = prefixContext()
-        if (context.prefix != expected || (expected.isEmpty() && !context.commonEligible)) return
-        val range =
-            if (expected.isEmpty()) {
-                null
-            } else {
-                val surrounding = ic.getSurroundingText(65, 1, 0)
-                val bounds =
-                    surrounding?.let {
-                        WordDictionary.prefixRange(it.text.toString(), it.selectionStart, it.selectionEnd, it.offset, expected)
-                    }
-                if (bounds == null) {
-                    message("This app does not expose a safe word-replacement position")
-                    return
-                }
-                bounds
-            }
+        if (context.prefix != expected || (expected.isEmpty() && !context.commonEligible)) {
+            updateAuxiliary()
+            return
+        }
         val after = ic.getTextAfterCursor(1, 0)
+        // An emoji goes after the typed word instead of replacing it: "fire" → "fire 🔥 ".
+        if (expected.isNotEmpty() && Emojis.cached().any { it.text == word }) {
+            if (ic.commitText(" $word" + if (after.isNullOrEmpty()) " " else "", 1)) {
+                if (!privateSession && !sensitiveField) emojiHistory.record(word)
+            } else {
+                message("This app did not accept the emoji")
+            }
+            lastSpace = 0L
+            updateAuxiliary()
+            return
+        }
         val value = word + if (after.isNullOrEmpty()) " " else ""
-        ic.beginBatchEdit()
-        try {
-            // Selecting is non-destructive. Never erase a prefix before knowing insertion succeeds.
-            if (range != null) {
-                if (!ic.setSelection(range.first, range.second)) {
-                    message("This app does not support safe word replacement")
-                    return
-                }
-                if (ic.getSelectedText(0)?.toString() != expected) {
-                    ic.setSelection(range.second, range.second)
-                    message("Word selection changed · try the completion again")
-                    return
-                }
-            }
-            if (!ic.commitText(value, 1)) {
-                range?.let { ic.setSelection(it.second, it.second) }
-                message("This app did not accept the completion")
-            } else if (keyboard?.capsLocked != true) {
-                keyboard?.shifted = false
-            }
-        } finally {
-            ic.endBatchEdit()
+        val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceBeforeCursor(ic, expected, value)
+        if (!done) {
+            message("This app did not accept the completion")
+        } else if (keyboard?.capsLocked != true) {
+            keyboard?.shifted = false
         }
         lastSpace = 0L
         updateAuxiliary()
@@ -809,6 +832,10 @@ class MboardService : InputMethodService() {
         when (key) {
             Keys.BACKSPACE -> {
                 if (query.isNotEmpty()) query = query.substring(0, query.offsetByCodePoints(query.length, -1))
+            }
+
+            Keys.DELETE_WORD -> {
+                query = query.dropLast(wordDeleteLength(query))
             }
 
             Keys.ENTER -> {
@@ -888,6 +915,20 @@ class MboardService : InputMethodService() {
                 if (!ic.getSelectedText(0).isNullOrEmpty()) ic.commitText("", 1) else sendKey(ic, KeyEvent.KEYCODE_DEL)
             }
 
+            Keys.DELETE_WORD -> {
+                if (!ic.getSelectedText(0).isNullOrEmpty()) {
+                    ic.commitText("", 1)
+                } else {
+                    val before = ic.getTextBeforeCursor(64, 0)?.toString()
+                    val count = before?.let(::wordDeleteLength) ?: 0
+                    // Editors that hide their text still get a plain backspace.
+                    when {
+                        count > 0 -> ic.deleteSurroundingText(count, 0)
+                        before == null -> sendKey(ic, KeyEvent.KEYCODE_DEL)
+                    }
+                }
+            }
+
             Keys.ENTER -> {
                 val info = currentInputEditorInfo
                 val action = info?.imeOptions?.and(EditorInfo.IME_MASK_ACTION) ?: EditorInfo.IME_ACTION_NONE
@@ -951,6 +992,16 @@ class MboardService : InputMethodService() {
         // Re-read once after editors publish an asynchronously committed surrounding-text update.
         suggestionHandler.removeCallbacks(refreshSuggestions)
         suggestionHandler.postDelayed(refreshSuggestions, 30L)
+    }
+
+    /** UTF-16 length of trailing whitespace plus the word (or punctuation/emoji run) before it. */
+    private fun wordDeleteLength(text: String): Int {
+        fun wordChar(char: Char) = char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
+        val spaces = text.length - text.trimEnd().length
+        val rest = text.dropLast(spaces)
+        val last = rest.lastOrNull() ?: return spaces
+        val run = if (wordChar(last)) rest.takeLastWhile(::wordChar) else rest.takeLastWhile { !wordChar(it) && !it.isWhitespace() }
+        return spaces + run.length
     }
 
     private fun sendKey(

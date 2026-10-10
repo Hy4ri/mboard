@@ -25,6 +25,9 @@ class BoardSettings(
     var autoCorrect: Boolean
         get() = prefs.getBoolean("autocorrect", true)
         set(value) = prefs.edit().putBoolean("autocorrect", value).apply()
+    var emojiSuggestions: Boolean
+        get() = prefs.getBoolean("emoji_suggestions", false)
+        set(value) = prefs.edit().putBoolean("emoji_suggestions", value).apply()
     var autoCapitalize: Boolean
         get() = prefs.getBoolean("capitalize", true)
         set(value) = prefs.edit().putBoolean("capitalize", value).apply()
@@ -48,11 +51,27 @@ class BoardSettings(
             prefs.edit().putString("one_hand", value).apply()
         }
 
+    /** Screen edge a swipe starts from to reveal the dial pad: off, left, or right. */
+    var dialPadEdge: String
+        get() = (prefs.getString("dial_edge", "off") ?: "off").takeIf { it in listOf("off", "left", "right") } ?: "off"
+        set(value) {
+            require(value in listOf("off", "left", "right"))
+            prefs.edit().putString("dial_edge", value).apply()
+        }
+
+    /** Screen edge a swipe starts from to reveal recent emoji: off, left, or right. */
+    var emojiEdge: String
+        get() = (prefs.getString("emoji_edge", "off") ?: "off").takeIf { it in listOf("off", "left", "right") } ?: "off"
+        set(value) {
+            require(value in listOf("off", "left", "right"))
+            prefs.edit().putString("emoji_edge", value).apply()
+        }
+
     fun registerListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.registerOnSharedPreferenceChangeListener(listener)
 
     fun unregisterListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
-    fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode"
+    fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge"
 }

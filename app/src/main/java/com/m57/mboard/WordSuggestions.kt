@@ -23,6 +23,10 @@ class WordSuggestions(
     @Volatile private var english: WordDictionary? = null
 
     @Volatile private var arabic: WordDictionary? = null
+
+    @Volatile private var englishNext: Map<String, List<String>> = emptyMap()
+
+    @Volatile private var arabicNext: Map<String, List<String>> = emptyMap()
     private var englishState = State.UNLOADED
     private var arabicState = State.UNLOADED
     private val englishCallbacks = ArrayList<() -> Unit>()
@@ -63,6 +67,23 @@ class WordSuggestions(
                             .bufferedReader()
                             .use { WordDictionary.read(it, language) }
                     if (dictionary.size == 0) throw IOException("No usable bundled word entries")
+                    // Next-word table is optional: a missing asset only loses predictions, not completions.
+                    val next =
+                        try {
+                            assets
+                                .open(if (language == Layout.ENGLISH) "next_en.tsv" else "next_ar.tsv")
+                                .bufferedReader()
+                                .use { reader ->
+                                    reader
+                                        .lineSequence()
+                                        .mapNotNull { line ->
+                                            val parts = line.split('\t')
+                                            if (parts.size < 2) null else parts[0] to parts.drop(1)
+                                        }.toMap()
+                                }
+                        } catch (_: IOException) {
+                            emptyMap()
+                        }
                     val readyCallbacks =
                         synchronized(lock) {
                             if (closed) return@execute
@@ -70,9 +91,11 @@ class WordSuggestions(
                                 Layout.ENGLISH
                             ) {
                                 english = dictionary
+                                englishNext = next
                                 englishState = State.READY
                             } else {
                                 arabic = dictionary
+                                arabicNext = next
                                 arabicState =
                                     State.READY
                             }
@@ -113,12 +136,29 @@ class WordSuggestions(
         return (if (language == Layout.ENGLISH) english else arabic)?.commonWords.orEmpty()
     }
 
+    /** Likely words after [previous], or empty when the bundled table has nothing for it. */
+    fun nextWords(
+        previous: String,
+        language: Layout,
+    ): List<String> {
+        if (closed || previous.isEmpty()) return emptyList()
+        val key =
+            if (language == Layout.ENGLISH) {
+                previous.lowercase(java.util.Locale.ROOT)
+            } else {
+                previous.filterNot { it in '\u064B'..'\u065F' || it == '\u0670' || it == '\u0640' }
+            }
+        return (if (language == Layout.ENGLISH) englishNext else arabicNext)[key].orEmpty()
+    }
+
     fun close() {
         synchronized(lock) {
             if (closed) return
             closed = true
             english = null
             arabic = null
+            englishNext = emptyMap()
+            arabicNext = emptyMap()
             englishState = State.CLOSED
             arabicState = State.CLOSED
             englishCallbacks.clear()
