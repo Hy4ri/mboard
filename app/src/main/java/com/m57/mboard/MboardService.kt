@@ -713,32 +713,31 @@ class MboardService : InputMethodService() {
             }
 
             Mode.EMOJI_SEARCH -> {
-                val row = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
-                row.addView(
-                    ui.label(query.ifBlank { "Type an emoji name" }, 14f, true).apply {
-                        maxLines = 1
-                        maxWidth = ui.dp(132)
-                        ellipsize = android.text.TextUtils.TruncateAt.START
-                        tooltipText = query
-                        setPadding(ui.dp(12), 0, ui.dp(8), 0)
-                    },
+                bar.addView(
+                    emojiSearchField(),
+                    LinearLayout.LayoutParams(ui.dp(150), ui.dp(38)).apply { setMargins(ui.dp(8), 0, ui.dp(4), 0) },
                 )
-                row.addView(ui.icon(R.drawable.ic_mood, "Browse all emoji") { setMode(Mode.EMOJI) })
-                val matches = Emojis.search(this, query).take(40)
+                val row = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
+                val matches = emojiSearchResults()
                 if (matches.isEmpty()) {
                     val status =
                         when {
                             emojiLoadFailed -> "Emoji unavailable"
                             !Emojis.ready -> "Loading emoji…"
                             query.isNotBlank() -> "No matches"
-                            else -> ""
+                            else -> "Type to search"
                         }
-                    if (status.isNotEmpty()) row.addView(ui.label(status, 14f, true))
+                    row.addView(ui.label(status, 14f, true).apply { setPadding(ui.dp(8), 0, ui.dp(8), 0) })
                 }
-                matches.forEach { emoji ->
+                matches.forEachIndexed { index, emoji ->
                     row.addView(
                         ui.button(emoji.text) { pasteEmoji(emoji.text) }.apply {
-                            textSize = 26f
+                            textSize = 24f
+                            setPadding(ui.dp(6), 0, ui.dp(6), 0)
+                            includeFontPadding = false
+                            // The first result is what the Pick key inserts, so it is visibly selected.
+                            background =
+                                ui.ripple(if (index == 0 && query.isNotBlank()) ui.modifier else android.graphics.Color.TRANSPARENT)
                             contentDescription = emoji.name
                             setOnLongClickListener {
                                 if (!privateSession) emojiHistory.toggleFavorite(emoji.text)
@@ -754,6 +753,7 @@ class MboardService : InputMethodService() {
                                 true
                             }
                         },
+                        LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ui.dp(42)),
                     )
                 }
                 bar.addView(
@@ -761,6 +761,11 @@ class MboardService : InputMethodService() {
                         isHorizontalScrollBarEnabled = false
                         addView(row)
                     },
+                    LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                )
+                bar.addView(
+                    ui.icon(R.drawable.ic_mood, "Browse all emoji") { setMode(Mode.EMOJI) },
+                    LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
                 )
             }
 
@@ -788,6 +793,68 @@ class MboardService : InputMethodService() {
                 )
             }
         }
+    }
+
+    /** Recent emoji while the query is empty, ranked matches once typing starts. */
+    private fun emojiSearchResults(): List<Emoji> {
+        if (query.isNotBlank()) return Emojis.search(this, query).take(40)
+        if (privateSession) return emptyList()
+        val catalogue = Emojis.cached().associateBy { it.text }
+        return emojiHistory.recent().take(40).map { catalogue[it] ?: Emoji(it, it) }
+    }
+
+    /** Looks like a real search box: icon, typed text with a caret, and a clear button. */
+    private fun emojiSearchField(): LinearLayout {
+        val field =
+            LinearLayout(this).apply {
+                gravity = Gravity.CENTER_VERTICAL
+                background = ui.shape(ui.surface, 19)
+                setPadding(ui.dp(10), 0, ui.dp(2), 0)
+            }
+        field.addView(
+            android.widget.ImageView(this).apply {
+                setImageResource(R.drawable.ic_search)
+                imageTintList =
+                    android.content.res.ColorStateList
+                        .valueOf(ui.muted)
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            },
+            LinearLayout.LayoutParams(ui.dp(18), ui.dp(18)),
+        )
+        val text =
+            if (query.isEmpty()) {
+                android.text.SpannableString("Search emoji")
+            } else {
+                android.text.SpannableString("$query|").apply {
+                    setSpan(android.text.style.ForegroundColorSpan(ui.accent), query.length, query.length + 1, 0)
+                }
+            }
+        field.addView(
+            ui.label("", 15f, query.isEmpty()).apply {
+                setText(text)
+                maxLines = 1
+                ellipsize = android.text.TextUtils.TruncateAt.START
+                contentDescription = if (query.isEmpty()) "Emoji search, empty" else "Emoji search: $query"
+                setPadding(ui.dp(6), 0, ui.dp(4), 0)
+            },
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
+        )
+        if (query.isNotEmpty()) {
+            field.addView(
+                ui
+                    .icon(R.drawable.ic_close, "Clear search") {
+                        query = ""
+                        updateAuxiliary()
+                    }.apply {
+                        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                        minimumWidth = 0
+                        minimumHeight = 0
+                        setPadding(ui.dp(9), ui.dp(9), ui.dp(9), ui.dp(9))
+                    },
+                LinearLayout.LayoutParams(ui.dp(34), ui.dp(34)),
+            )
+        }
+        return field
     }
 
     private fun matchCase(

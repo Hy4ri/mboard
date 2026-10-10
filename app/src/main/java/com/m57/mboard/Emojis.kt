@@ -53,11 +53,24 @@ object Emojis {
         val words = tokenize(query).map { aliases[it] ?: listOf(it) }
         val all = cache ?: return emptyList()
         if (words.isEmpty()) return if (query.isBlank()) emptyList() else all.filter { it.text == query.trim() }
+        val phrase = tokenize(query).joinToString(" ")
+        val first = words.first()
         // Each query word is required; its synonym translations are alternatives, not extra requirements.
         return index
             .orEmpty()
             .filter { item ->
                 words.all { alternatives -> alternatives.any { w -> item.tokens.any { it.startsWith(w) } } }
+            }.sortedBy { item ->
+                // Best first: exact name, name prefix, whole-word hit, then partial; skin-tone variants last.
+                val name = item.emoji.name
+                val rank =
+                    when {
+                        name == phrase -> 0
+                        name.startsWith(phrase) -> 1
+                        first.any { it in item.tokens } -> 2
+                        else -> 3
+                    }
+                rank + if ("skin tone" in name && "skin" !in phrase) 4 else 0
             }.map { it.emoji }
     }
 
