@@ -47,13 +47,15 @@ data class SuggestionPolicy(
                 ) || (inputClass == InputType.TYPE_CLASS_NUMBER && variation == InputType.TYPE_NUMBER_VARIATION_PASSWORD)
             val noLearning = imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0
             val numeric = inputClass in setOf(InputType.TYPE_CLASS_NUMBER, InputType.TYPE_CLASS_PHONE, InputType.TYPE_CLASS_DATETIME)
+            // Apps like Instagram set NO_SUGGESTIONS together with AUTO_CORRECT; the explicit request wins.
+            val requestsHelp = inputType and (InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE) != 0
             val reason =
                 when {
                     password -> Reason.PASSWORD
 
                     inputClass != InputType.TYPE_CLASS_TEXT -> Reason.NON_TEXT
 
-                    inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0 -> Reason.APP_BLOCKED
+                    inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0 && !requestsHelp -> Reason.APP_BLOCKED
 
                     variation in
                         setOf(
