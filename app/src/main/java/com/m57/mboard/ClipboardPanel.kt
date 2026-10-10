@@ -24,16 +24,22 @@ class ClipboardPanel(
     private var deleted: Clip? = null
     private var confirmingClear = false
     private val clear =
-        ui.button("Clear unpinned") {
-            if (confirmingClear) {
-                deleted = null
-                store.clearUnpinned()
-                confirmingClear = false
-            } else {
-                confirmingClear = true
+        ui
+            .button("Clear unpinned") {
+                if (confirmingClear) {
+                    deleted = null
+                    store.clearUnpinned()
+                    confirmingClear = false
+                } else {
+                    confirmingClear = true
+                }
+                refresh(false)
+            }.apply {
+                // Compact header button: no 48dp minimum, slim vertical padding.
+                minHeight = 0
+                minimumHeight = 0
+                setPadding(ui.dp(12), ui.dp(2), ui.dp(12), ui.dp(2))
             }
-            refresh(false)
-        }
 
     init {
         orientation = VERTICAL
@@ -52,7 +58,7 @@ class ClipboardPanel(
             },
             LayoutParams(ui.dp(48), ui.dp(48)),
         )
-        header.addView(clear, LayoutParams(LayoutParams.WRAP_CONTENT, ui.dp(48)))
+        header.addView(clear, LayoutParams(LayoutParams.WRAP_CONTENT, ui.dp(34)))
         addView(header)
         addView(undoRow)
         addView(scroller, LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f))
