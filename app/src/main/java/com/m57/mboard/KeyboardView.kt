@@ -80,7 +80,18 @@ class KeyboardView(
     private val rows
         get() =
             visibleLayouts.getValue(layout).map { row ->
-                row.map { key -> if (key == "?" && languageLabel == "العربية") "؟" else key }
+                row.map { key ->
+                    if (languageLabel == "العربية") {
+                        when (key) {
+                            "?" -> "؟"
+                            "," -> "،"
+                            ";" -> "؛"
+                            else -> key
+                        }
+                    } else {
+                        key
+                    }
+                }
             }
 
     // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
@@ -286,6 +297,14 @@ class KeyboardView(
 
     private fun label(key: String) =
         when (key) {
+            Keys.LETTERS -> {
+                if (languageLabel == "العربية") "أبج" else Keys.LETTERS
+            }
+
+            Keys.SYMBOLS -> {
+                if (languageLabel == "العربية") "؟123" else Keys.SYMBOLS
+            }
+
             Keys.SPACE -> {
                 if (scrubbing) {
                     "Move cursor"
