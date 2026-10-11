@@ -945,7 +945,8 @@ class MboardService : InputMethodService() {
             updateAuxiliary()
             return
         }
-        val value = word + if (after.isNullOrEmpty()) " " else ""
+        // Leave the caret after a separator even when editing before existing text.
+        val value = word.trimEnd() + " "
         val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceBeforeCursor(ic, expected, value)
         if (!done) {
             message("This app did not accept the completion")
@@ -954,6 +955,9 @@ class MboardService : InputMethodService() {
         }
         lastSpace = 0L
         updateAuxiliary()
+        // Some editors publish surrounding text after commitText returns, just like ordinary typing.
+        suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.postDelayed(refreshSuggestions, 30L)
     }
 
     private fun paste(text: String) {
