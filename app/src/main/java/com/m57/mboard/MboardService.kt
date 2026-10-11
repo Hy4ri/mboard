@@ -249,6 +249,20 @@ class MboardService : InputMethodService() {
                 LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
             )
         }
+        val pasteEnabled = !fieldPolicy.password
+        bar.addView(
+            ui.icon(R.drawable.ic_paste, "Paste") { pasteClipboard() }.apply {
+                isEnabled = pasteEnabled
+                alpha = if (pasteEnabled) 1f else 0.35f
+                minimumWidth = 0
+                minimumHeight = 0
+                setPadding(ui.dp(8), ui.dp(6), ui.dp(8), ui.dp(6))
+                background = ui.ripple(ui.surface)
+            },
+            LinearLayout.LayoutParams(ui.dp(40), ui.dp(36)).apply {
+                setMargins(ui.dp(4), ui.dp(6), ui.dp(4), ui.dp(6))
+            },
+        )
         icon(R.drawable.ic_content_paste, "Clipboard history", !fieldPolicy.password) { togglePanel(Mode.CLIPBOARD) }
         icon(R.drawable.ic_mood, "Search emoji", !fieldPolicy.password) { togglePanel(Mode.EMOJI_SEARCH) }
         // Panels replace the text-tools slot with Return, so the toolbar never gains another slot.
@@ -946,6 +960,37 @@ class MboardService : InputMethodService() {
         // Some editors publish surrounding text after commitText returns, just like ordinary typing.
         suggestionHandler.removeCallbacks(refreshSuggestions)
         suggestionHandler.postDelayed(refreshSuggestions, 30L)
+    }
+
+    private fun pasteClipboard() {
+        if (fieldPolicy.password) return
+        val raw =
+            try {
+                val clip = clipboard.primaryClip
+                if (clip != null && clip.itemCount > 0) clip.getItemAt(0).coerceToText(this)?.toString() else null
+            } catch (_: SecurityException) {
+                null
+            }
+        if (mode == Mode.CALCULATOR || mode == Mode.EMOJI_SEARCH) {
+            if (!raw.isNullOrEmpty()) {
+                if (query.length + raw.length <= 200) query += raw
+                updateAuxiliary()
+            } else {
+                message("Nothing to paste")
+            }
+            return
+        }
+        if (!raw.isNullOrEmpty()) {
+            paste(raw)
+            return
+        }
+        val ic = currentInputConnection
+        if (ic?.performContextMenuAction(android.R.id.paste) == true) {
+            lastSpace = 0L
+            if (mode == Mode.KEYS) updateAuxiliary()
+        } else {
+            message("Nothing to paste")
+        }
     }
 
     private fun paste(text: String) {

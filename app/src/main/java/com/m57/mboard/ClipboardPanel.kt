@@ -47,7 +47,7 @@ class ClipboardPanel(
         setPadding(ui.dp(8), ui.dp(4), ui.dp(8), 0)
         header.addView(title, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
         header.addView(
-            ui.icon(R.drawable.ic_content_paste, "Paste current system clipboard") {
+            ui.icon(R.drawable.ic_paste, "Paste current system clipboard") {
                 try {
                     val clip = context.getSystemService(android.content.ClipboardManager::class.java).primaryClip
                     val text = if (clip != null && clip.itemCount > 0) clip.getItemAt(0).text?.toString() else null
