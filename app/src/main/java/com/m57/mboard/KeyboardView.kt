@@ -64,7 +64,11 @@ class KeyboardView(
         }
     var languageLabel = "English"
         set(value) {
+            if (field == value) return
+            cancelTouch()
             field = value
+            geometryLayout = null
+            if (touchReady) access.resetLayout()
             invalidate()
         }
     val backgroundColor get() = ui.background
@@ -73,7 +77,11 @@ class KeyboardView(
         Layout.entries.associateWith { candidate ->
             if (!showNumberRow && (candidate == Layout.ENGLISH || candidate == Layout.ARABIC)) candidate.rows.drop(1) else candidate.rows
         }
-    private val rows get() = visibleLayouts.getValue(layout)
+    private val rows
+        get() =
+            visibleLayouts.getValue(layout).map { row ->
+                row.map { key -> if (key == "?" && languageLabel == "العربية") "؟" else key }
+            }
 
     // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
     private val activeRowHeight get() = (keysHeight - gap) / rows.size
