@@ -95,9 +95,4 @@ enum class Layout(
             listOf(Keys.LETTERS, "0", Keys.SPACE, Keys.ENTER),
         ),
     ),
-    ;
-
-    companion object {
-        val tallestRows = values().maxOf { it.rows.size }
-    }
 }

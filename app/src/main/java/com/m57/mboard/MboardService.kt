@@ -53,9 +53,7 @@ class MboardService : InputMethodService() {
     private var lastSpace = 0L
     private var privateSession = false
     private var lastClipStamp = 0L
-    private var sensitiveField = false
-    private var suggestionsAllowed = false
-    private var fieldPolicy = SuggestionPolicy.classify(0, 0)
+    private var fieldPolicy = SuggestionPolicy.classify(0)
     private var editorGeneration = 0L
     private var selectionVersion = 0L
     private var suggestionStrip: SuggestionStrip? = null
@@ -129,19 +127,24 @@ class MboardService : InputMethodService() {
             keyboard?.capsLocked = previousCaps
         }
         if (key == "capitalize" && !settings.autoCapitalize && keyboard?.capsLocked != true) keyboard?.shifted = false
-        if (key == "suggestions" && settings.suggestions && suggestionsAllowed) {
+        if (key == "suggestions" && settings.suggestions) {
             loadWords()
         }
         updateAuxiliary()
     }
 
-    override fun onFinishInput() {
+    private fun resetEditorState() {
         editorGeneration++
         toolsPanel?.removeAllViews()
         suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
         query = ""
+        lastCorrection = null
+    }
+
+    override fun onFinishInput() {
+        resetEditorState()
         lastSpace = 0L
         lastShift = 0L
         super.onFinishInput()
@@ -151,7 +154,7 @@ class MboardService : InputMethodService() {
 
     private fun recordClip() {
         // Notifications also arrive while a living IME is hidden: never collect in the background.
-        if (!isInputViewShown || sensitiveField || privateSession || !settings.clipboardHistory) return
+        if (!isInputViewShown || fieldPolicy.password || privateSession || !settings.clipboardHistory) return
         try {
             val clip = clipboard.primaryClip ?: return
             if (clip.itemCount == 0 || clip.description.extras?.getBoolean(ClipDescription.EXTRA_IS_SENSITIVE) == true) return
@@ -196,7 +199,7 @@ class MboardService : InputMethodService() {
                 settings.dialPadEdge,
                 settings.emojiEdge,
                 ::onKey,
-                { if (sensitiveField) emptyList() else emojiHistory.recent() },
+                { if (fieldPolicy.password) emptyList() else emojiHistory.recent() },
                 ::pasteEmoji,
                 { setMode(Mode.EMOJI) },
             ) { settings.oneHandMode = it }
@@ -246,21 +249,21 @@ class MboardService : InputMethodService() {
                 LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
             )
         }
-        icon(R.drawable.ic_content_paste, "Clipboard history", !sensitiveField) { togglePanel(Mode.CLIPBOARD) }
-        icon(R.drawable.ic_mood, "Search emoji", !sensitiveField) { togglePanel(Mode.EMOJI_SEARCH) }
+        icon(R.drawable.ic_content_paste, "Clipboard history", !fieldPolicy.password) { togglePanel(Mode.CLIPBOARD) }
+        icon(R.drawable.ic_mood, "Search emoji", !fieldPolicy.password) { togglePanel(Mode.EMOJI_SEARCH) }
         // Panels replace the text-tools slot with Return, so the toolbar never gains another slot.
         if (mode != Mode.KEYS) {
             icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
         } else {
-            icon(R.drawable.ic_text_select_start, "Cursor and text tools", !sensitiveField) { togglePanel(Mode.EDIT) }
+            icon(R.drawable.ic_text_select_start, "Cursor and text tools", !fieldPolicy.password) { togglePanel(Mode.EDIT) }
         }
         val tools = ui.icon(R.drawable.ic_settings, "More tools and settings") {}
         tools.setOnClickListener {
             android.widget.PopupMenu(this, tools).apply {
-                menu.add("Cursor and text tools").isEnabled = !sensitiveField
-                menu.add("Calculator").isEnabled = !sensitiveField
-                menu.add("Saved phrases").isEnabled = !sensitiveField
-                menu.add("Text Lab").isEnabled = !sensitiveField
+                menu.add("Cursor and text tools").isEnabled = !fieldPolicy.password
+                menu.add("Calculator").isEnabled = !fieldPolicy.password
+                menu.add("Saved phrases").isEnabled = !fieldPolicy.password
+                menu.add("Text Lab").isEnabled = !fieldPolicy.password
                 menu.add("Settings")
                 menu.add("Choose another keyboard")
                 setOnMenuItemClickListener { item ->
@@ -308,14 +311,14 @@ class MboardService : InputMethodService() {
                 .icon(R.drawable.ic_privacy, privacyLabel) {
                     if (!fieldPolicy.password) {
                         privateSession = !privateSession
-                        emojiPanel?.recordingEnabled = !privateSession && !sensitiveField
-                        if (suggestionsAllowed && settings.suggestions) loadWords()
+                        emojiPanel?.recordingEnabled = !privateSession && !fieldPolicy.password
+                        if (settings.suggestions) loadWords()
                         rebuildToolbar()
                         updateAuxiliary()
                     }
                 }.apply {
                     isEnabled = !fieldPolicy.password
-                    isSelected = privateSession || sensitiveField
+                    isSelected = privateSession || fieldPolicy.password
                     imageTintList =
                         android.content.res.ColorStateList
                             .valueOf(if (isSelected) ui.onAccent else ui.text)
@@ -334,7 +337,7 @@ class MboardService : InputMethodService() {
     private fun setMode(next: Mode) {
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
-        if (sensitiveField && next != Mode.KEYS) return
+        if (fieldPolicy.password && next != Mode.KEYS) return
         val previous = mode
         if (previous == Mode.TEXT_LAB && next != Mode.TEXT_LAB) toolsPanel?.removeAllViews()
         mode = next
@@ -369,7 +372,7 @@ class MboardService : InputMethodService() {
         emojiPanel?.visibility = if (next == Mode.EMOJI) View.VISIBLE else View.GONE
         toolsPanel?.visibility = if (next == Mode.EDIT || next == Mode.PHRASES || next == Mode.TEXT_LAB) View.VISIBLE else View.GONE
         if (next == Mode.CLIPBOARD) clipPanel?.refresh()
-        emojiPanel?.recordingEnabled = !privateSession && !sensitiveField
+        emojiPanel?.recordingEnabled = !privateSession && !fieldPolicy.password
         if (next == Mode.EMOJI) emojiPanel?.refresh()
         if (next == Mode.EDIT || next == Mode.PHRASES || next == Mode.TEXT_LAB) rebuildTools()
         rebuildToolbar()
@@ -384,9 +387,7 @@ class MboardService : InputMethodService() {
         editorGeneration++
         lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
-        fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0, info?.imeOptions ?: 0)
-        sensitiveField = fieldPolicy.sensitive
-        suggestionsAllowed = fieldPolicy.allowed
+        fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
         defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language
         lastSpace = 0L
         lastShift = 0L
@@ -407,18 +408,13 @@ class MboardService : InputMethodService() {
         keyboard?.enterLabel = enterLabel(info)
         setMode(Mode.KEYS)
         updateCapitalization()
-        if (suggestionsAllowed && settings.suggestions) loadWords()
+        if (settings.suggestions) loadWords()
         // Copying usually happens while the keyboard is hidden: pick that clip up once mboard is on screen.
         suggestionHandler.post { if (!destroyed) recordClip() }
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
-        editorGeneration++
-        toolsPanel?.removeAllViews()
-        suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
-        suggestionHandler.removeCallbacks(refreshSuggestions)
-        keyboard?.cancelTouch()
-        query = ""
+        resetEditorState()
         super.onFinishInputView(finishingInput)
     }
 
@@ -486,7 +482,7 @@ class MboardService : InputMethodService() {
                 Mode.EMOJI_SEARCH -> language
                 else -> defaultLayout
             }
-        if (mode == Mode.KEYS && suggestionsAllowed && settings.suggestions) loadWords()
+        if (mode == Mode.KEYS && settings.suggestions) loadWords()
         updateAuxiliary()
     }
 
@@ -508,6 +504,7 @@ class MboardService : InputMethodService() {
         val status: String,
         val commonEligible: Boolean = false,
         val contextWords: List<String> = emptyList(),
+        val sentenceStart: Boolean = false,
     )
 
     private fun prefixContext(): PrefixContext {
@@ -518,11 +515,12 @@ class MboardService : InputMethodService() {
             ic.getTextBeforeCursor(65, 0)?.toString()
                 ?: return PrefixContext("", "App does not expose text for completions")
 
-        fun wordChar(char: Char) = char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
         if (after.firstOrNull()?.let(::wordChar) == true) return PrefixContext("", "Move cursor to the end of a word for completions")
         val result = before.takeLastWhile(::wordChar)
         if (result.length > 64) return PrefixContext("", "Word is too long for completions")
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
+        val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
+        val sentenceStart = beforeWord.isEmpty() || beforeWord.last() in ".!?؟\n"
         // Only the current sentence contributes context; punctuation and line breaks reset it.
         val recent =
             before
@@ -537,6 +535,7 @@ class MboardService : InputMethodService() {
             if (result.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
             idle,
             recent,
+            sentenceStart,
         )
     }
 
@@ -546,12 +545,7 @@ class MboardService : InputMethodService() {
             bar.removeAllViews()
             bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)))
         }
-        val blocked =
-            when {
-                !settings.suggestions -> "Word suggestions off · enable them in Settings"
-                !suggestionsAllowed -> fieldPolicy.explanation
-                else -> null
-            }
+        val blocked = if (!settings.suggestions) "Word suggestions off · enable them in Settings" else null
         if (blocked != null) {
             // Email/URL fields skip dictionary words but still offer the user's saved email addresses.
             val addresses = savedAddresses()
@@ -595,37 +589,41 @@ class MboardService : InputMethodService() {
             return
         }
         val typed = context.prefix
-        val correction =
-            words
-                .correction(typed, language)
-                ?.takeIf { settings.autoCorrect && typed !in rejectedCorrections }
-                ?.let { matchCase(it, typed) }
+        val autoCorrection = autoCorrection(typed, context.sentenceStart)
+        val hint =
+            if (autoCorrection == null && settings.autoCorrect) {
+                words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
+            } else {
+                null
+            }
+        val leading = autoCorrection ?: hint
         // A saved phrase starting with the typed word follows the correction; tapping it replaces the word.
         val phrase =
-            if (sensitiveField || typed.length < 2) {
+            if (fieldPolicy.password || typed.length < 2) {
                 null
             } else {
                 phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
             }
-        // The typed word itself is never a useful choice; the correction (if any) leads.
-        val local = if (language == Layout.ARABIC && settings.jordanianArabic) JordanianArabic.suggest(typed) else emptyList()
-        val contextual =
-            words
-                .predict(
-                    context.contextWords,
-                    language,
-                    settings.jordanianArabic,
-                ).filter { it.startsWith(typed, ignoreCase = true) }
+        val ranked = words.rank(typed, context.contextWords, language, settings.jordanianArabic).map { matchCase(it, typed) }
         val wordChoices =
-            (
-                listOfNotNull(correction, phrase) + local + contextual.map { matchCase(it, typed) } +
-                    words.suggest(typed, language).map { matchCase(it, typed) }
-            ).filter { it != typed }
+            (listOfNotNull(leading, phrase) + ranked)
+                .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // A matching emoji takes the last slot so the correction and best completion stay put.
-        val emoji = if (settings.emojiSuggestions && !sensitiveField) Emojis.forWord(typed) else null
+        val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji
-        strip.render(values, typed, editorGeneration, context.status, highlightFirst = correction != null)
+        strip.render(values, typed, editorGeneration, context.status, highlightFirst = autoCorrection != null)
+    }
+
+    private fun autoCorrection(
+        typed: String,
+        wordStart: Boolean,
+    ): String? {
+        if (!settings.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || fieldPolicy.password) return null
+        if (words.state(language) != WordSuggestions.State.READY) return null
+        if (language == Layout.ENGLISH && typed.first().isUpperCase() && !wordStart && typed != "i") return null
+        val correction = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return null
+        return if (correction == typed) null else correction
     }
 
     private val separators = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
@@ -669,15 +667,10 @@ class MboardService : InputMethodService() {
         separator: String,
     ) {
         val kv = keyboard ?: return
-        if (!settings.autoCorrect || mode != Mode.KEYS || kv.layout != language || fieldPolicy.password ||
-            !suggestionsAllowed || words.state(language) != WordSuggestions.State.READY
-        ) {
-            return
-        }
-        val typed = prefixContext().prefix
-        if (typed.isEmpty() || typed in rejectedCorrections) return
-        val corrected = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return
-        if (corrected == typed) return
+        if (mode != Mode.KEYS || kv.layout != language) return
+        val context = prefixContext()
+        val typed = context.prefix
+        val corrected = autoCorrection(typed, context.sentenceStart) ?: return
         if (replaceBeforeCursor(ic, typed, corrected)) lastCorrection = Correction(typed, corrected, separator)
     }
 
@@ -911,7 +904,7 @@ class MboardService : InputMethodService() {
             if (expected.isEmpty() && word in words.commonWords(language)) currentInputConnection?.commitText(word, 1)
             return
         }
-        if (generation == editorGeneration && mode == Mode.KEYS && fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
+        if (fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
             val ic = currentInputConnection ?: return
             val addresses = savedAddresses()
             if (addresses != null && word in addresses.second) {
@@ -922,11 +915,6 @@ class MboardService : InputMethodService() {
                 return
             }
         }
-        if (generation != editorGeneration || mode != Mode.KEYS || fieldPolicy.password ||
-            !settings.suggestions || !suggestionsAllowed
-        ) {
-            return
-        }
         val ic = currentInputConnection ?: return
         val context = prefixContext()
         if (context.prefix != expected || (expected.isEmpty() && !context.commonEligible)) {
@@ -935,9 +923,9 @@ class MboardService : InputMethodService() {
         }
         val after = ic.getTextAfterCursor(1, 0)
         // An emoji goes after the typed word instead of replacing it: "fire" → "fire 🔥 ".
-        if (expected.isNotEmpty() && Emojis.cached().any { it.text == word }) {
+        if (expected.isNotEmpty() && Emojis.isEmoji(word)) {
             if (ic.commitText(" $word" + if (after.isNullOrEmpty()) " " else "", 1)) {
-                if (!privateSession && !sensitiveField) emojiHistory.record(word)
+                if (!privateSession && !fieldPolicy.password) emojiHistory.record(word)
             } else {
                 message("This app did not accept the emoji")
             }
@@ -967,7 +955,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun pasteEmoji(text: String) {
-        if (currentInputConnection?.commitText(text, 1) == true && !privateSession && !sensitiveField) emojiHistory.record(text)
+        if (currentInputConnection?.commitText(text, 1) == true && !privateSession && !fieldPolicy.password) emojiHistory.record(text)
         lastSpace = 0L
     }
 
@@ -1106,7 +1094,7 @@ class MboardService : InputMethodService() {
                 val now = SystemClock.uptimeMillis()
                 val before = ic.getTextBeforeCursor(3, 0)?.toString().orEmpty()
                 val canPeriod =
-                    settings.doubleSpacePeriod && !sensitiveField && suggestionsAllowed && lastSpace != 0L &&
+                    settings.doubleSpacePeriod && !fieldPolicy.password && lastSpace != 0L &&
                         now - lastSpace < 600 &&
                         before.endsWith(
                             " ",
@@ -1140,13 +1128,15 @@ class MboardService : InputMethodService() {
 
     /** UTF-16 length of trailing whitespace plus the word (or punctuation/emoji run) before it. */
     private fun wordDeleteLength(text: String): Int {
-        fun wordChar(char: Char) = char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
         val spaces = text.length - text.trimEnd().length
         val rest = text.dropLast(spaces)
         val last = rest.lastOrNull() ?: return spaces
         val run = if (wordChar(last)) rest.takeLastWhile(::wordChar) else rest.takeLastWhile { !wordChar(it) && !it.isWhitespace() }
         return spaces + run.length
     }
+
+    private fun wordChar(char: Char): Boolean =
+        char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
 
     private fun sendKey(
         ic: InputConnection,
@@ -1179,7 +1169,7 @@ class MboardService : InputMethodService() {
     private fun rebuildTools() {
         val panel = toolsPanel ?: return
         panel.removeAllViews()
-        if (sensitiveField) return
+        if (fieldPolicy.password) return
         val list =
             LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
@@ -1206,7 +1196,7 @@ class MboardService : InputMethodService() {
                 list.addView(
                     ui
                         .button(phrase) {
-                            if (mode == Mode.PHRASES && generation == editorGeneration && !sensitiveField) paste(phrase)
+                            if (mode == Mode.PHRASES && generation == editorGeneration && !fieldPolicy.password) paste(phrase)
                         }.apply {
                             gravity = Gravity.START
                             textDirection =
@@ -1225,7 +1215,7 @@ class MboardService : InputMethodService() {
         val selected = !selectedText.isNullOrEmpty()
 
         fun editAction(action: () -> Unit) {
-            if (mode == Mode.EDIT && generation == editorGeneration && version == selectionVersion && !sensitiveField) action()
+            if (mode == Mode.EDIT && generation == editorGeneration && version == selectionVersion && !fieldPolicy.password) action()
         }
 
         fun row(vararg actions: Pair<String, () -> Unit>) {
@@ -1247,7 +1237,7 @@ class MboardService : InputMethodService() {
         listOf("Copy" to android.R.id.copy, "Cut" to android.R.id.cut).forEach { (label, id) ->
             selectRow.addView(
                 ui.button(label) { editAction { contextAction(id) } }.apply {
-                    isEnabled = selected && !sensitiveField
+                    isEnabled = selected && !fieldPolicy.password
                     alpha =
                         if (isEnabled) 1f else 0.4f
                 },
@@ -1276,7 +1266,7 @@ class MboardService : InputMethodService() {
                             snapshot?.let { replaceSelection(it, transform(it), generation, version, Mode.EDIT) }
                         }
                     }.apply {
-                        isEnabled = snapshot != null && !sensitiveField
+                        isEnabled = snapshot != null && !fieldPolicy.password
                         alpha = if (isEnabled) 1f else 0.4f
                     },
                 LinearLayout.LayoutParams(0, ui.dp(52), 1f),
@@ -1286,7 +1276,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun renderTextLab(list: LinearLayout) {
-        if (sensitiveField) return
+        if (fieldPolicy.password) return
         val generation = editorGeneration
         val version = selectionVersion
         val selected = currentInputConnection?.getSelectedText(0)?.toString()
@@ -1369,7 +1359,7 @@ class MboardService : InputMethodService() {
             list.addView(
                 ui
                     .button("$name  $value") {
-                        if (mode == Mode.TEXT_LAB && generation == editorGeneration && !sensitiveField) paste(value)
+                        if (mode == Mode.TEXT_LAB && generation == editorGeneration && !fieldPolicy.password) paste(value)
                     }.apply {
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         maxLines = 1
@@ -1388,7 +1378,7 @@ class MboardService : InputMethodService() {
         version: Long,
         expectedMode: Mode,
     ) {
-        if (mode != expectedMode || generation != editorGeneration || version != selectionVersion || sensitiveField) {
+        if (mode != expectedMode || generation != editorGeneration || version != selectionVersion || fieldPolicy.password) {
             message("Selection changed · select the text again")
             return
         }

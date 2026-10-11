@@ -10,19 +10,30 @@ class PhraseStore(
 ) {
     private val prefs = context.getSharedPreferences("phrases", Context.MODE_PRIVATE)
 
-    fun all(): List<String> =
-        try {
-            val array = JSONArray(prefs.getString("items", "[]"))
-            (0 until array.length())
-                .mapNotNull {
-                    array.optString(it).takeIf { s ->
-                        s.isNotBlank() && s.length <= 2000
-                    }
-                }.distinct()
-                .take(40)
-        } catch (_: JSONException) {
-            emptyList()
-        }
+    @Volatile private var cachedRaw: String? = null
+    private var cachedList: List<String> = emptyList()
+
+    @Synchronized
+    fun all(): List<String> {
+        val raw = prefs.getString("items", "[]") ?: "[]"
+        if (raw == cachedRaw) return cachedList
+        val list =
+            try {
+                val array = JSONArray(raw)
+                (0 until array.length())
+                    .mapNotNull {
+                        array.optString(it).takeIf { s ->
+                            s.isNotBlank() && s.length <= 2000
+                        }
+                    }.distinct()
+                    .take(40)
+            } catch (_: JSONException) {
+                emptyList()
+            }
+        cachedRaw = raw
+        cachedList = list
+        return list
+    }
 
     fun add(text: String): Boolean {
         val clean = text.trim()

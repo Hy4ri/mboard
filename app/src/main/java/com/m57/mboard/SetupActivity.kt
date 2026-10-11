@@ -68,7 +68,7 @@ class SetupActivity : Activity() {
     private var renderGeneration = 0L
     private val scrollPositions = mutableMapOf<Page, Int>()
     private val navigation = mutableListOf<Page>()
-    private val passwordPlayground get() = SuggestionPolicy.classify(fieldType, 0).password
+    private val passwordPlayground get() = SuggestionPolicy.classify(fieldType).password
     private val backAction = OnBackInvokedCallback { if (page == Page.HOME) finish() else goBack() }
 
     override fun onCreate(savedInstanceState: Bundle?) {

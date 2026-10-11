@@ -21,9 +21,13 @@ object Emojis {
 
     @Volatile private var index: List<Indexed>? = null
 
+    @Volatile private var emojiTexts: Set<String> = emptySet()
+
     val ready get() = cache != null
 
     fun cached(): List<Emoji> = cache.orEmpty()
+
+    fun isEmoji(text: String): Boolean = text in emojiTexts
 
     /** Called by the service's background loader, never by the rendering path. */
     fun all(context: Context): List<Emoji> =
@@ -41,6 +45,7 @@ object Emojis {
                     }.toList()
                     .also { list ->
                         index = list.map { Indexed(it, tokenize(it.name).toSet()) }
+                        emojiTexts = list.mapTo(HashSet(list.size)) { it.text }
                         cache = list
                     }
             }

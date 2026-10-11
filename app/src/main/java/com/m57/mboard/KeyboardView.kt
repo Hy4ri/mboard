@@ -77,26 +77,38 @@ class KeyboardView(
         Layout.entries.associateWith { candidate ->
             if (!showNumberRow && (candidate == Layout.ENGLISH || candidate == Layout.ARABIC)) candidate.rows.drop(1) else candidate.rows
         }
-    private val rows
-        get() =
-            visibleLayouts.getValue(layout).map { row ->
-                row.map { key ->
-                    if (languageLabel == "العربية") {
-                        when (key) {
-                            "?" -> "؟"
-                            "," -> "،"
-                            ";" -> "؛"
-                            else -> key
+    private var cachedRowsKey: Pair<Layout, String>? = null
+    private var cachedRows: List<List<String>> = emptyList()
+
+    private val rows: List<List<String>>
+        get() {
+            val key = layout to languageLabel
+            if (cachedRowsKey == key) return cachedRows
+            val computed =
+                visibleLayouts.getValue(layout).map { row ->
+                    row.map { keyChar ->
+                        if (languageLabel == "العربية") {
+                            when (keyChar) {
+                                "?" -> "؟"
+                                "," -> "،"
+                                ";" -> "؛"
+                                else -> keyChar
+                            }
+                        } else {
+                            keyChar
                         }
-                    } else {
-                        key
                     }
                 }
-            }
+            cachedRowsKey = key
+            cachedRows = computed
+            return computed
+        }
 
     // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
     private val activeRowHeight get() = (keysHeight - gap) / rows.size
     private val altStrip = RectF()
+    private val previewBubble = RectF()
+    private val previewLabelBounds = RectF()
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
     private val icons =
@@ -367,18 +379,18 @@ class KeyboardView(
         radius: Float,
     ) {
         val rect = cell.rect
-        val bubble =
-            RectF(
-                rect.left - rect.width() * .2f,
-                (rect.top - rowHeight * .55f).coerceAtLeast(0f),
-                rect.right + rect.width() * .2f,
-                rect.bottom,
-            )
-        bubble.offset((-bubble.left).coerceAtLeast(0f), 0f)
-        bubble.offset(-(bubble.right - width).coerceAtLeast(0f), 0f)
+        previewBubble.set(
+            rect.left - rect.width() * .2f,
+            (rect.top - rowHeight * .55f).coerceAtLeast(0f),
+            rect.right + rect.width() * .2f,
+            rect.bottom,
+        )
+        previewBubble.offset((-previewBubble.left).coerceAtLeast(0f), 0f)
+        previewBubble.offset(-(previewBubble.right - width).coerceAtLeast(0f), 0f)
         paint.color = ui.modifier
-        canvas.drawRoundRect(bubble, radius, radius, paint)
-        drawLabel(canvas, label(cell.key), RectF(bubble.left, bubble.top, bubble.right, bubble.top + rowHeight * .65f), ui.text, 26f)
+        canvas.drawRoundRect(previewBubble, radius, radius, paint)
+        previewLabelBounds.set(previewBubble.left, previewBubble.top, previewBubble.right, previewBubble.top + rowHeight * .65f)
+        drawLabel(canvas, label(cell.key), previewLabelBounds, ui.text, 26f)
     }
 
     private fun keyAt(

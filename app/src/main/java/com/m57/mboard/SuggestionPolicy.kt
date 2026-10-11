@@ -4,33 +4,20 @@ import android.text.InputType
 
 /** Apps' NO_SUGGESTIONS flags never override the user's keyboard preferences. */
 data class SuggestionPolicy(
-    val sensitive: Boolean,
-    val allowed: Boolean,
     val numeric: Boolean,
     val reason: Reason,
 ) {
-    val explanation get() = reason.explanation
     val password get() = reason == Reason.PASSWORD
 
-    enum class Reason(
-        val explanation: String,
-    ) {
-        PASSWORD("Protected password field · static suggestions only"),
-        ADDRESS("Address suggestions available"),
-        AVAILABLE("Word completions available"),
-    }
+    enum class Reason { PASSWORD, ADDRESS, AVAILABLE }
 
     companion object {
         fun clearPasswordTransition(
             previousType: Int,
             nextType: Int,
-        ): Boolean = previousType != nextType && (classify(previousType, 0).password || classify(nextType, 0).password)
+        ): Boolean = previousType != nextType && (classify(previousType).password || classify(nextType).password)
 
-        @Suppress("UNUSED_PARAMETER")
-        fun classify(
-            inputType: Int,
-            imeOptions: Int,
-        ): SuggestionPolicy {
+        fun classify(inputType: Int): SuggestionPolicy {
             val inputClass = inputType and InputType.TYPE_MASK_CLASS
             val variation = inputType and InputType.TYPE_MASK_VARIATION
             val password =
@@ -57,7 +44,7 @@ data class SuggestionPolicy(
 
                     else -> Reason.AVAILABLE
                 }
-            return SuggestionPolicy(password, true, numeric, reason)
+            return SuggestionPolicy(numeric, reason)
         }
     }
 }

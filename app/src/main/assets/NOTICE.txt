@@ -13,7 +13,7 @@ Note: upstream's MIT license covers its generator code, not its word-list conten
 Next-word predictions
 next_en.tsv and next_ar.tsv list up to six likely following words per dictionary word, counted from the first 120 MB (compressed) of the OpenSubtitles2018 monolingual corpora.
 context_en.tsv and context_ar.tsv list up to six following words for two-word contexts, counted from the first 30 MB (compressed) of the same corpora. Candidates require at least three occurrences; contexts are ranked by observed count, keeping at most 30,000 rows.
-JordanianArabic.kt contains original hand-curated chat vocabulary and illustrative continuation rules, not corpus frequency measurements.
+jordanian.tsv / jordanian_next.tsv are original hand-curated Jordanian chat vocabulary and continuations for mboard, not corpus measurements.
 Source: OPUS, https://opus.nlpl.eu/OpenSubtitles/corpus/version/OpenSubtitles (P. Lison and J. Tiedemann, 2016).
 Distributed under CC BY-SA 4.0 together with the word lists above.
 

@@ -48,25 +48,25 @@ class BoardSettings(
         set(value) = prefs.edit().putString("language", if (value == Layout.ARABIC) "ar" else "en").apply()
 
     var oneHandMode: String
-        get() = (prefs.getString("one_hand", "full") ?: "full").takeIf { it in listOf("full", "left", "right") } ?: "full"
+        get() = (prefs.getString("one_hand", "full") ?: "full").takeIf { it in THUMB_MODES } ?: "full"
         set(value) {
-            require(value in listOf("full", "left", "right"))
+            require(value in THUMB_MODES)
             prefs.edit().putString("one_hand", value).apply()
         }
 
     /** Screen edge a swipe starts from to reveal the dial pad: off, left, or right. */
     var dialPadEdge: String
-        get() = (prefs.getString("dial_edge", "off") ?: "off").takeIf { it in listOf("off", "left", "right") } ?: "off"
+        get() = (prefs.getString("dial_edge", "off") ?: "off").takeIf { it in EDGE_MODES } ?: "off"
         set(value) {
-            require(value in listOf("off", "left", "right"))
+            require(value in EDGE_MODES)
             prefs.edit().putString("dial_edge", value).apply()
         }
 
     /** Screen edge a swipe starts from to reveal recent emoji: off, left, or right. */
     var emojiEdge: String
-        get() = (prefs.getString("emoji_edge", "off") ?: "off").takeIf { it in listOf("off", "left", "right") } ?: "off"
+        get() = (prefs.getString("emoji_edge", "off") ?: "off").takeIf { it in EDGE_MODES } ?: "off"
         set(value) {
-            require(value in listOf("off", "left", "right"))
+            require(value in EDGE_MODES)
             prefs.edit().putString("emoji_edge", value).apply()
         }
 
@@ -77,4 +77,9 @@ class BoardSettings(
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
     fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge"
+
+    private companion object {
+        val THUMB_MODES = setOf("full", "left", "right")
+        val EDGE_MODES = setOf("off", "left", "right")
+    }
 }
