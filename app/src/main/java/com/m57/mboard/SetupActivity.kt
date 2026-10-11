@@ -410,6 +410,12 @@ class SetupActivity : Activity() {
         )
         components.add(
             column,
+            components.toggle("Jordanian Arabic", "Add local chat words like كيفك، بدي، هسا", settings.jordanianArabic) {
+                settings.jordanianArabic = it
+            },
+        )
+        components.add(
+            column,
             components.toggle("Emoji suggestions", "Offer a matching emoji for words like fire or love", settings.emojiSuggestions) {
                 settings.emojiSuggestions = it
             },

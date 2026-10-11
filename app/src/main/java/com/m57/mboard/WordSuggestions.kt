@@ -27,6 +27,10 @@ class WordSuggestions(
     @Volatile private var englishNext: Map<String, List<String>> = emptyMap()
 
     @Volatile private var arabicNext: Map<String, List<String>> = emptyMap()
+
+    @Volatile private var englishContext: Map<String, List<String>> = emptyMap()
+
+    @Volatile private var arabicContext: Map<String, List<String>> = emptyMap()
     private var englishState = State.UNLOADED
     private var arabicState = State.UNLOADED
     private val englishCallbacks = ArrayList<() -> Unit>()
@@ -84,6 +88,22 @@ class WordSuggestions(
                         } catch (_: IOException) {
                             emptyMap()
                         }
+                    val contextTable =
+                        try {
+                            assets
+                                .open(if (language == Layout.ENGLISH) "context_en.tsv" else "context_ar.tsv")
+                                .bufferedReader()
+                                .use { reader ->
+                                    reader
+                                        .lineSequence()
+                                        .mapNotNull { line ->
+                                            val parts = line.split('\t')
+                                            if (parts.size < 2) null else parts[0] to parts.drop(1)
+                                        }.toMap()
+                                }
+                        } catch (_: IOException) {
+                            emptyMap()
+                        }
                     val readyCallbacks =
                         synchronized(lock) {
                             if (closed) return@execute
@@ -91,10 +111,12 @@ class WordSuggestions(
                                 Layout.ENGLISH
                             ) {
                                 english = dictionary
+                                englishContext = contextTable
                                 englishNext = next
                                 englishState = State.READY
                             } else {
                                 arabic = dictionary
+                                arabicContext = contextTable
                                 arabicNext = next
                                 arabicState =
                                     State.READY
@@ -151,6 +173,40 @@ class WordSuggestions(
         return (if (language == Layout.ENGLISH) englishNext else arabicNext)[key].orEmpty()
     }
 
+    /** Two-word context wins; unseen contexts fall back to the existing one-word table. */
+    fun predict(
+        context: List<String>,
+        language: Layout,
+        jordanian: Boolean,
+    ): List<String> {
+        if (closed) return emptyList()
+        val normalized =
+            context.map {
+                it.lowercase(java.util.Locale.ROOT).filterNot { c ->
+                    c in '\u064B'..'\u065F' || c == '\u0670' ||
+                        c == '\u0640'
+                }
+            }
+        val pair = normalized.takeLast(2).joinToString(" ")
+        val table = if (language == Layout.ENGLISH) englishContext else arabicContext
+        val local = if (language == Layout.ARABIC && jordanian) JordanianArabic.next(normalized) else emptyList()
+        val candidates =
+            (
+                local + table[pair].orEmpty() +
+                    nextWords(
+                        normalized.lastOrNull().orEmpty(),
+                        language,
+                    ) + commonWords(language)
+            ).distinctBy {
+                it.lowercase(java.util.Locale.ROOT)
+            }
+        // Reject only a repeated multi-word cycle, not every recently used word.
+        return candidates.filter { candidate ->
+            val tail = normalized + candidate.lowercase(java.util.Locale.ROOT)
+            (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) }
+        }
+    }
+
     fun close() {
         synchronized(lock) {
             if (closed) return
@@ -159,6 +215,8 @@ class WordSuggestions(
             arabic = null
             englishNext = emptyMap()
             arabicNext = emptyMap()
+            englishContext = emptyMap()
+            arabicContext = emptyMap()
             englishState = State.CLOSED
             arabicState = State.CLOSED
             englishCallbacks.clear()

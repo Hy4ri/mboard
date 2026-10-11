@@ -22,6 +22,9 @@ class BoardSettings(
     var suggestions: Boolean
         get() = prefs.getBoolean("suggestions", true)
         set(value) = prefs.edit().putBoolean("suggestions", value).apply()
+    var jordanianArabic: Boolean
+        get() = prefs.getBoolean("jordanian_arabic", false)
+        set(value) = prefs.edit().putBoolean("jordanian_arabic", value).apply()
     var autoCorrect: Boolean
         get() = prefs.getBoolean("autocorrect", true)
         set(value) = prefs.edit().putBoolean("autocorrect", value).apply()

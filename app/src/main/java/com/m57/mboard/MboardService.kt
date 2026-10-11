@@ -129,9 +129,7 @@ class MboardService : InputMethodService() {
             keyboard?.capsLocked = previousCaps
         }
         if (key == "capitalize" && !settings.autoCapitalize && keyboard?.capsLocked != true) keyboard?.shifted = false
-        if (key == "suggestions" && settings.suggestions && suggestionsAllowed &&
-            !privateSession
-        ) {
+        if (key == "suggestions" && settings.suggestions && suggestionsAllowed) {
             loadWords()
         }
         updateAuxiliary()
@@ -301,10 +299,9 @@ class MboardService : InputMethodService() {
         bar.addView(tools, LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)))
         val privacyLabel =
             when {
-                fieldPolicy.password -> "Protected password field. Clipboard and text tools unavailable"
-                privateSession -> "Private session on. Tap to turn off"
-                sensitiveField -> "App requested no learning. Tap to enable full private mode"
-                else -> "Private session off. Tap to turn on"
+                fieldPolicy.password -> "Shield on for password field. No history recording; static suggestions available"
+                privateSession -> "Shield on. History recording paused; suggestions available. Tap to turn off"
+                else -> "Shield off. Tap to pause history recording without disabling suggestions"
             }
         bar.addView(
             ui
@@ -312,7 +309,7 @@ class MboardService : InputMethodService() {
                     if (!fieldPolicy.password) {
                         privateSession = !privateSession
                         emojiPanel?.recordingEnabled = !privateSession && !sensitiveField
-                        if (!privateSession && suggestionsAllowed && settings.suggestions) loadWords()
+                        if (suggestionsAllowed && settings.suggestions) loadWords()
                         rebuildToolbar()
                         updateAuxiliary()
                     }
@@ -410,7 +407,7 @@ class MboardService : InputMethodService() {
         keyboard?.enterLabel = enterLabel(info)
         setMode(Mode.KEYS)
         updateCapitalization()
-        if (suggestionsAllowed && settings.suggestions && !privateSession) loadWords()
+        if (suggestionsAllowed && settings.suggestions) loadWords()
         // Copying usually happens while the keyboard is hidden: pick that clip up once mboard is on screen.
         suggestionHandler.post { if (!destroyed) recordClip() }
     }
@@ -489,7 +486,7 @@ class MboardService : InputMethodService() {
                 Mode.EMOJI_SEARCH -> language
                 else -> defaultLayout
             }
-        if (mode == Mode.KEYS && suggestionsAllowed && !privateSession && settings.suggestions) loadWords()
+        if (mode == Mode.KEYS && suggestionsAllowed && settings.suggestions) loadWords()
         updateAuxiliary()
     }
 
@@ -510,8 +507,7 @@ class MboardService : InputMethodService() {
         val prefix: String,
         val status: String,
         val commonEligible: Boolean = false,
-        val previousWord: String = "",
-        val recentWords: Set<String> = emptySet(),
+        val contextWords: List<String> = emptyList(),
     )
 
     private fun prefixContext(): PrefixContext {
@@ -527,25 +523,19 @@ class MboardService : InputMethodService() {
         val result = before.takeLastWhile(::wordChar)
         if (result.length > 64) return PrefixContext("", "Word is too long for completions")
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
-        // Only whitespace may sit between the caret and the previous word; punctuation ends the sentence chain.
-        val previous = if (idle) before.trimEnd().takeLastWhile(::wordChar) else ""
-        // Words already in the last few positions are never re-offered, so tapping predictions can't loop.
+        // Only the current sentence contributes context; punctuation and line breaks reset it.
         val recent =
-            if (idle) {
-                before
-                    .split(Regex("[^\\p{L}\\p{Mn}\\p{Nd}']+"))
-                    .filter { it.isNotEmpty() }
-                    .takeLast(4)
-                    .map { it.lowercase(Locale.ROOT) }
-                    .toSet()
-            } else {
-                emptySet()
-            }
+            before
+                .dropLast(result.length)
+                .takeLastWhile { wordChar(it) || it == ' ' || it == '\t' }
+                .trim()
+                .split(Regex("\\s+"))
+                .filter { it.isNotEmpty() }
+                .takeLast(8)
         return PrefixContext(
             result,
             if (result.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
             idle,
-            previous,
             recent,
         )
     }
@@ -558,8 +548,6 @@ class MboardService : InputMethodService() {
         }
         val blocked =
             when {
-                fieldPolicy.password -> fieldPolicy.explanation
-                privateSession -> "Private session · word suggestions paused"
                 !settings.suggestions -> "Word suggestions off · enable them in Settings"
                 !suggestionsAllowed -> fieldPolicy.explanation
                 else -> null
@@ -586,12 +574,18 @@ class MboardService : InputMethodService() {
             strip.render(emptyList(), "", editorGeneration, message)
             return
         }
+        if (fieldPolicy.password) {
+            strip.render(words.commonWords(language), "", editorGeneration, "Static suggestions · shield on")
+            return
+        }
+        val addresses = savedAddresses()
+        if (addresses != null && addresses.second.isNotEmpty()) {
+            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses")
+            return
+        }
         val context = prefixContext()
         if (context.commonEligible) {
-            val fresh = { w: String -> w.lowercase(Locale.ROOT) !in context.recentWords }
-            val predicted =
-                (words.nextWords(context.previousWord, language).filter(fresh) + words.commonWords(language).filter(fresh))
-                    .distinctBy { it.lowercase(Locale.ROOT) }
+            val predicted = words.predict(context.contextWords, language, settings.jordanianArabic)
             strip.render(
                 predicted.map { matchCase(it, "") },
                 "",
@@ -614,9 +608,19 @@ class MboardService : InputMethodService() {
                 phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
             }
         // The typed word itself is never a useful choice; the correction (if any) leads.
+        val local = if (language == Layout.ARABIC && settings.jordanianArabic) JordanianArabic.suggest(typed) else emptyList()
+        val contextual =
+            words
+                .predict(
+                    context.contextWords,
+                    language,
+                    settings.jordanianArabic,
+                ).filter { it.startsWith(typed, ignoreCase = true) }
         val wordChoices =
-            (listOfNotNull(correction, phrase) + words.suggest(typed, language).map { matchCase(it, typed) })
-                .filter { it != typed }
+            (
+                listOfNotNull(correction, phrase) + local + contextual.map { matchCase(it, typed) } +
+                    words.suggest(typed, language).map { matchCase(it, typed) }
+            ).filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !sensitiveField) Emojis.forWord(typed) else null
@@ -666,7 +670,7 @@ class MboardService : InputMethodService() {
     ) {
         val kv = keyboard ?: return
         if (!settings.autoCorrect || mode != Mode.KEYS || kv.layout != language || fieldPolicy.password ||
-            privateSession || !suggestionsAllowed || words.state(language) != WordSuggestions.State.READY
+            !suggestionsAllowed || words.state(language) != WordSuggestions.State.READY
         ) {
             return
         }
@@ -811,7 +815,14 @@ class MboardService : InputMethodService() {
 
     /** In email fields: the text typed so far and saved email phrases that complete it. */
     private fun savedAddresses(): Pair<String, List<String>>? {
-        if (fieldPolicy.reason != SuggestionPolicy.Reason.ADDRESS || privateSession || !settings.suggestions) return null
+        if (fieldPolicy.reason != SuggestionPolicy.Reason.ADDRESS || !settings.suggestions) return null
+        // Browser omniboxes use URI variation: they need word predictions, not an email-only strip.
+        val variation = (currentInputEditorInfo?.inputType ?: 0) and android.text.InputType.TYPE_MASK_VARIATION
+        if (variation != android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS &&
+            variation != android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
+        ) {
+            return null
+        }
         val ic = currentInputConnection ?: return null
         if (!ic.getSelectedText(0).isNullOrEmpty()) return null
         val typed = ic.getTextBeforeCursor(100, 0)?.toString()?.takeLastWhile { !it.isWhitespace() && it != ',' } ?: return null
@@ -895,15 +906,23 @@ class MboardService : InputMethodService() {
         expected: String,
         generation: Long,
     ) {
-        if (generation == editorGeneration && mode == Mode.KEYS && fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
-            val ic = currentInputConnection ?: return
-            if (savedAddresses()?.first != expected) return updateAuxiliary()
-            val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
-            if (!done) message("This app did not accept the address")
-            updateAuxiliary()
+        if (generation != editorGeneration || mode != Mode.KEYS || !settings.suggestions) return
+        if (fieldPolicy.password) {
+            if (expected.isEmpty() && word in words.commonWords(language)) currentInputConnection?.commitText(word, 1)
             return
         }
-        if (generation != editorGeneration || mode != Mode.KEYS || fieldPolicy.password || privateSession ||
+        if (generation == editorGeneration && mode == Mode.KEYS && fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
+            val ic = currentInputConnection ?: return
+            val addresses = savedAddresses()
+            if (addresses != null && word in addresses.second) {
+                if (addresses.first != expected) return updateAuxiliary()
+                val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
+                if (!done) message("This app did not accept the address")
+                updateAuxiliary()
+                return
+            }
+        }
+        if (generation != editorGeneration || mode != Mode.KEYS || fieldPolicy.password ||
             !settings.suggestions || !suggestionsAllowed
         ) {
             return
