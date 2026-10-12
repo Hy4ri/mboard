@@ -18,6 +18,8 @@ class KeyboardView(
     private val onKey: (String) -> Unit,
     private val onSpaceSwipe: () -> Unit,
     private val onCursorMove: (Int) -> Unit = {},
+    private val onDeleteSwipe: (Int) -> Unit = {},
+    private val onDeleteSwipeEnd: (Boolean) -> Unit = {},
 ) : View(context) {
     private val ui = BoardUi(context)
     private val settings = BoardSettings(context)
@@ -119,6 +121,7 @@ class KeyboardView(
             "locked" to icon(R.drawable.ic_shift_lock_fill1),
             "delete" to icon(R.drawable.ic_backspace),
             "enter" to icon(R.drawable.ic_keyboard_return),
+            "pad" to icon(R.drawable.ic_dialpad),
         )
     private var pointer = MotionEvent.INVALID_POINTER_ID
     private var origin: Cell? = null
@@ -128,6 +131,11 @@ class KeyboardView(
     private var lastX = 0f
     private var lastY = 0f
     private var spaceSwiped = false
+
+    // Sliding left from backspace marks whole words; release deletes them, sliding back un-marks.
+    private var deleteSwiping = false
+    private var deleteSteps = 0
+    private var deleteRepeated = false
     private var scrubbing = false
     private var scrubAnchor = 0f
     private var popup: Cell? = null
@@ -140,6 +148,36 @@ class KeyboardView(
             popup = null
             invalidate()
         }
+
+    // Released keys ease back to rest instead of snapping, which reads as smoother during fast typing.
+    private val releasedAt = HashMap<Cell, Long>()
+    private var previewStart = 0L
+
+    private fun now() = android.os.SystemClock.uptimeMillis()
+
+    private fun setPopup(cell: Cell?) {
+        if (cell != null && cell != popup) previewStart = now()
+        popup = cell
+    }
+
+    private fun fadeOut(cell: Cell?) {
+        if (cell != null) releasedAt[cell] = now()
+    }
+
+    private fun pressAmount(
+        cell: Cell,
+        active: Boolean,
+    ): Float {
+        if (active) return 1f
+        val at = releasedAt[cell] ?: return 0f
+        val t = (now() - at) / RELEASE_FADE_MS.toFloat()
+        if (t >= 1f) {
+            releasedAt.remove(cell)
+            return 0f
+        }
+        return 1f - t * t
+    }
+
     private val hold =
         Runnable {
             val base = origin ?: return@Runnable
@@ -166,6 +204,7 @@ class KeyboardView(
                         held < 2_800L -> 120L
                         else -> 70L
                     }
+                deleteRepeated = true
                 onKey(if (held < 900L) Keys.BACKSPACE else Keys.DELETE_WORD)
                 postDelayed(this, interval)
             }
@@ -192,21 +231,45 @@ class KeyboardView(
 
     private fun weight(key: String) =
         when (key) {
-            Keys.SPACE -> if (layout == Layout.NUMBER) 1f else 4f
-            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> if (layout == Layout.NUMBER) 1f else 1.5f
-            Keys.SYMBOLS, Keys.LETTERS -> 1.5f
-            else -> 1f
+            Keys.SPACE -> {
+                when (layout) {
+                    in GRID_LAYOUTS -> 1f
+
+                    // Symbols gains the pad toggle; a narrower space keeps the row width unchanged.
+                    Layout.SYMBOLS -> 3f
+
+                    else -> 4f
+                }
+            }
+
+            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> {
+                if (layout in GRID_LAYOUTS) 1f else 1.5f
+            }
+
+            Keys.PAD -> {
+                1f
+            }
+
+            // Pads are grids: every key is one column wide so the rows line up.
+            Keys.SYMBOLS, Keys.LETTERS -> {
+                if (layout in GRID_LAYOUTS) 1f else 1.5f
+            }
+
+            else -> {
+                1f
+            }
         }
 
     private fun geometry() {
         if (geometryWidth == width && geometryLayout == layout) return
         cells.clear()
+        releasedAt.clear()
         if (width <= 0) return
         val visibleRows = rows
         val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
         visibleRows.forEachIndexed { rowIndex, row ->
             val units = row.sumOf { weight(it).toDouble() }.toFloat()
-            val unit = width / (if (layout == Layout.ARABIC || layout == Layout.NUMBER) units else maxUnits)
+            val unit = width / (if (layout == Layout.ARABIC || layout in GRID_LAYOUTS) units else maxUnits)
             var x = (width - units * unit) / 2
             row.forEach { key ->
                 val size = weight(key) * unit
@@ -228,19 +291,28 @@ class KeyboardView(
         geometry()
         canvas.drawColor(ui.background)
         val radius = 8 * density
+        val edge = density
         cells.forEach { cell ->
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
-            val special = cell.key in SPECIAL
-            paint.color =
-                if (active) {
-                    ui.accent
-                } else if (special) {
-                    ui.modifier
-                } else {
-                    ui.surface
+            val calc = layout == Layout.CALC
+            val equals = calc && cell.key == Keys.ENTER
+            val special = cell.key in SPECIAL || (calc && cell.key in CALC_OPERATORS)
+            val base =
+                when {
+                    equals -> ui.accent
+                    special -> ui.modifier
+                    else -> ui.surface
                 }
+            val amount = pressAmount(cell, active)
+            // The edge sits under the key and the pressed key sinks onto it, like a real keycap.
+            paint.color = ui.keyEdge
+            canvas.drawRoundRect(cell.rect.left, cell.rect.top + edge, cell.rect.right, cell.rect.bottom + edge, radius, radius, paint)
+            paint.color = ui.mix(base, ui.pressed(base), amount)
+            val sink = edge * amount
+            canvas.save()
+            canvas.translate(0f, sink)
             canvas.drawRoundRect(cell.rect, radius, radius, paint)
-            val foreground = if (active) ui.onAccent else ui.text
+            val foreground = if (equals) ui.onAccent else ui.text
             val drawable =
                 when (cell.key) {
                     Keys.GLOBE -> {
@@ -263,6 +335,10 @@ class KeyboardView(
                         icons["delete"]
                     }
 
+                    Keys.PAD -> {
+                        icons["pad"]
+                    }
+
                     Keys.ENTER -> {
                         if (enterLabel == Keys.ENTER) icons["enter"] else null
                     }
@@ -278,7 +354,9 @@ class KeyboardView(
             } else {
                 drawLabel(canvas, label(cell.key), cell.rect, foreground)
             }
+            canvas.restore()
         }
+        if (releasedAt.isNotEmpty()) postInvalidateOnAnimation()
         // Accessibility's virtual focus is independent of the pressed key.
         access.focusedBounds()?.let { bounds ->
             paint.color = ui.controlAccent
@@ -289,8 +367,10 @@ class KeyboardView(
         }
         popup?.takeIf { showPreview && alts.isEmpty() }?.let { drawPreview(canvas, it, radius) }
         if (alts.isNotEmpty()) {
-            paint.color = ui.modifier
             altStrip.set(altRects.first().left, altRects.first().top, altRects.last().right, altRects.last().bottom)
+            paint.color = ui.keyEdge
+            canvas.drawRoundRect(altStrip.left, altStrip.top + 2 * edge, altStrip.right, altStrip.bottom + 2 * edge, radius, radius, paint)
+            paint.color = ui.modifier
             canvas.drawRoundRect(
                 altStrip,
                 radius,
@@ -387,10 +467,28 @@ class KeyboardView(
         )
         previewBubble.offset((-previewBubble.left).coerceAtLeast(0f), 0f)
         previewBubble.offset(-(previewBubble.right - width).coerceAtLeast(0f), 0f)
+        // A short ease-out grow from the key gives the bubble motion without delaying the letter.
+        val t = ((now() - previewStart) / PREVIEW_POP_MS.toFloat()).coerceIn(0f, 1f)
+        val eased = 1f - (1f - t) * (1f - t)
+        val scale = .82f + .18f * eased
+        canvas.save()
+        canvas.scale(scale, scale, previewBubble.centerX(), rect.bottom)
+        paint.color = ui.keyEdge
+        canvas.drawRoundRect(
+            previewBubble.left,
+            previewBubble.top + 2 * density,
+            previewBubble.right,
+            previewBubble.bottom + density,
+            radius,
+            radius,
+            paint,
+        )
         paint.color = ui.modifier
         canvas.drawRoundRect(previewBubble, radius, radius, paint)
         previewLabelBounds.set(previewBubble.left, previewBubble.top, previewBubble.right, previewBubble.top + rowHeight * .65f)
         drawLabel(canvas, label(cell.key), previewLabelBounds, ui.text, 26f)
+        canvas.restore()
+        if (t < 1f) postInvalidateOnAnimation()
     }
 
     private fun keyAt(
@@ -415,7 +513,7 @@ class KeyboardView(
         altRects = alts.indices.map { RectF(left + it * cellWidth, top, left + (it + 1) * cellWidth, top + rowHeight) }
         altSelected = 0
         altOriginX = lastX
-        popup = null
+        setPopup(null)
         invalidate()
     }
 
@@ -423,8 +521,9 @@ class KeyboardView(
         if (cell == current) return
         removeCallbacks(hold)
         removeCallbacks(repeatDelete)
+        fadeOut(current)
         current = cell
-        popup = cell?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE }
+        setPopup(cell?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         invalidate()
     }
 
@@ -432,6 +531,12 @@ class KeyboardView(
         removeCallbacks(hold)
         removeCallbacks(repeatDelete)
         removeCallbacks(hidePopup)
+        if (deleteSwiping) {
+            deleteSwiping = false
+            deleteSteps = 0
+            onDeleteSwipeEnd(false)
+        }
+        if (pointer != MotionEvent.INVALID_POINTER_ID) fadeOut(current)
         pointer = MotionEvent.INVALID_POINTER_ID
         origin = null
         current = null
@@ -494,6 +599,10 @@ class KeyboardView(
 
             Keys.MORE_SYMBOLS -> {
                 "More symbols"
+            }
+
+            Keys.PAD -> {
+                "Number pad"
             }
 
             Keys.LETTERS -> {
@@ -586,6 +695,18 @@ class KeyboardView(
                         }
                     }
 
+                    origin?.key == Keys.BACKSPACE && (deleteSwiping || startsDeleteSwipe(x)) -> {
+                        if (!deleteSwiping) {
+                            deleteSwiping = true
+                            removeCallbacks(repeatDelete)
+                        }
+                        val steps = ((downX - x) / (DELETE_SWIPE_STEP_DP * density)).toInt().coerceAtLeast(0)
+                        if (steps != deleteSteps) {
+                            deleteSteps = steps
+                            onDeleteSwipe(steps)
+                        }
+                    }
+
                     origin?.key == Keys.SPACE -> {
                         if (abs(x - downX) > touchSlop || abs(y - downY) > touchSlop) removeCallbacks(hold)
                         spaceSwiped = abs(x - downX) > 40 * density && abs(y - downY) < rowHeight
@@ -621,6 +742,8 @@ class KeyboardView(
         return true
     }
 
+    private fun startsDeleteSwipe(x: Float) = !deleteRepeated && downX - x > DELETE_SWIPE_START_DP * density
+
     private fun beginTouch(
         x: Float,
         y: Float,
@@ -634,11 +757,12 @@ class KeyboardView(
         lastY = y
         origin = keyAt(x, y)
         current = origin
-        popup = origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE }
+        setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         val key = origin?.key
         if (key == Keys.SPACE || key in ALTERNATES) postDelayed(hold, 250L)
         if (key == Keys.BACKSPACE) {
             deleteStart = android.os.SystemClock.uptimeMillis()
+            deleteRepeated = false
             onKey(Keys.BACKSPACE)
             postDelayed(repeatDelete, 400L)
         }
@@ -649,6 +773,14 @@ class KeyboardView(
         x: Float,
         y: Float,
     ) {
+        if (deleteSwiping) {
+            val commit = deleteSteps > 0
+            deleteSwiping = false
+            deleteSteps = 0
+            cancelTouch()
+            onDeleteSwipeEnd(commit)
+            return
+        }
         val base = origin
         val picked = current
         val alternate = alts.getOrNull(altSelected)
@@ -686,6 +818,12 @@ class KeyboardView(
     }
 
     private companion object {
-        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS)
+        const val DELETE_SWIPE_START_DP = 20
+        const val DELETE_SWIPE_STEP_DP = 28
+        const val RELEASE_FADE_MS = 140L
+        const val PREVIEW_POP_MS = 70L
+        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
+        val GRID_LAYOUTS = setOf(Layout.NUMBER, Layout.NUMPAD, Layout.CALC)
+        val CALC_OPERATORS = setOf("÷", "×", "−", "+", "(", ")", "%")
     }
 }

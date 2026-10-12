@@ -31,11 +31,14 @@ class SuggestionStrip(
             accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
         }
     private val buttons = ArrayList<Button>(3)
+    private var shown = emptyList<String>()
 
     init {
         orientation = HORIZONTAL
-        gravity = Gravity.CENTER_VERTICAL
-        addView(status, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(48)))
+        // Chips sit low in the bar so they read as part of the keyboard, not a separate strip.
+        gravity = Gravity.BOTTOM
+        setPadding(ui.dp(3), 0, ui.dp(3), ui.dp(2))
+        addView(status, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         repeat(3) { index ->
             val button =
                 ui
@@ -53,11 +56,17 @@ class SuggestionStrip(
                         }
                         maxLines = 1
                         ellipsize = TextUtils.TruncateAt.END
-                        setAutoSizeTextTypeUniformWithConfiguration(12, 17, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
+                        // Slim key-style chips: same fill and edge as the letter keys, tight padding.
+                        minHeight = 0
+                        minimumHeight = 0
+                        setPadding(ui.dp(6), 0, ui.dp(6), 0)
+                        includeFontPadding = false
+                        setAutoSizeTextTypeUniformWithConfiguration(11, 15, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
+                        background = ui.keyChip(ui.surface)
                         visibility = GONE
                     }
             buttons.add(button)
-            addView(button, LayoutParams(0, ui.dp(48), 1f))
+            addView(button, LayoutParams(0, ui.dp(34), 1f).apply { setMargins(ui.dp(3), 0, ui.dp(3), 0) })
         }
     }
 
@@ -69,6 +78,9 @@ class SuggestionStrip(
         highlightFirst: Boolean = false,
     ) {
         val visible = words.take(3)
+        // Only a real change of words animates; rerenders with the same list stay still while typing.
+        val changed = visible != shown
+        shown = visible
         status.text = message
         status.tooltipText = message
         status.visibility = if (visible.isEmpty()) VISIBLE else GONE
@@ -79,6 +91,18 @@ class SuggestionStrip(
             button.text = word.orEmpty()
             button.setTextColor(if (correction) ui.controlAccent else ui.text)
             button.typeface = if (correction) android.graphics.Typeface.DEFAULT_BOLD else android.graphics.Typeface.DEFAULT
+            button.background = ui.keyChip(if (correction) ui.mix(ui.surface, ui.accent, .16f) else ui.surface)
+            if (changed && word != null) {
+                button.animate().cancel()
+                button.alpha = .35f
+                button.translationY = ui.dp(3).toFloat()
+                button
+                    .animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(110L)
+                    .start()
+            }
             button.contentDescription =
                 word?.let {
                     when {

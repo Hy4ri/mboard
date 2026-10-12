@@ -24,6 +24,8 @@ class SettingsUi(
     fun section(title: String): TextView =
         ui.label(title, 12f, true).apply {
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            setTextColor(ui.controlAccent)
+            letterSpacing = .08f
             setPadding(ui.dp(4), ui.dp(24), ui.dp(4), ui.dp(8))
             isAccessibilityHeading = true
         }
@@ -41,10 +43,11 @@ class SettingsUi(
             gravity = Gravity.START or Gravity.CENTER_VERTICAL
             isSingleLine = false
             maxLines = Int.MAX_VALUE
-            minHeight = ui.dp(76)
-            minimumHeight = ui.dp(76)
+            minHeight = ui.dp(68)
+            minimumHeight = ui.dp(68)
             setPadding(ui.dp(16), ui.dp(12), ui.dp(16), ui.dp(12))
-            compoundDrawablePadding = ui.dp(12)
+            compoundDrawablePadding = ui.dp(14)
+            background = ui.ripple(ui.surface, CARD_RADII.map { it * ui.dp(1) }.toFloatArray())
             val arrow =
                 context.getDrawable(R.drawable.ic_keyboard_arrow_right)?.mutate()?.apply {
                     setTint(if (destructive) ui.danger else ui.muted)
@@ -76,13 +79,14 @@ class SettingsUi(
             maxLines = Int.MAX_VALUE
             text = lines(title, detail)
             setTextColor(ui.text)
-            minHeight = ui.dp(80)
+            minHeight = ui.dp(72)
             setPadding(ui.dp(16), ui.dp(12), ui.dp(16), ui.dp(12))
             switchPadding = ui.dp(16)
-            background = ui.shape(ui.surface)
-            thumbTintList =
-                ColorStateList(arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()), intArrayOf(ui.controlAccent, ui.muted))
-            trackTintList = ColorStateList.valueOf(ui.modifier)
+            background = ui.ripple(ui.surface, CARD_RADII.map { it * ui.dp(1) }.toFloatArray())
+            val checkedState = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
+            thumbTintList = ColorStateList(checkedState, intArrayOf(ui.controlAccent, ui.muted))
+            // A tinted track makes on/off readable at a glance instead of relying on thumb position alone.
+            trackTintList = ColorStateList(checkedState, intArrayOf(ui.mix(ui.surface, ui.controlAccent, .45f), ui.modifier))
             isChecked = checked
             contentDescription = "$title. $detail"
             setOnCheckedChangeListener { _, value -> changed(value) }
@@ -101,7 +105,7 @@ class SettingsUi(
         column.addView(
             view,
             LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-                bottomMargin = ui.dp(8)
+                bottomMargin = ui.dp(6)
             },
         )
     }
@@ -116,5 +120,9 @@ class SettingsUi(
             setSpan(RelativeSizeSpan(13f / 16f), title.length + 1, value.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             setSpan(ForegroundColorSpan(ui.muted), title.length + 1, value.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+    }
+
+    private companion object {
+        val CARD_RADII = FloatArray(8) { 16f }
     }
 }

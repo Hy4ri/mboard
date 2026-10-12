@@ -37,12 +37,28 @@ class BoardSettings(
     var doubleSpacePeriod: Boolean
         get() = prefs.getBoolean("double_space", true)
         set(value) = prefs.edit().putBoolean("double_space", value).apply()
+    var learnWords: Boolean
+        get() = prefs.getBoolean("learn_words", true)
+        set(value) = prefs.edit().putBoolean("learn_words", value).apply()
+
+    /** Bumped when learned words are deleted so a running keyboard drops its cached copy. */
+    fun markLearnedReset() = prefs.edit().putLong(LEARNED_RESET, System.currentTimeMillis()).apply()
+
     var keyPreview: Boolean
         get() = prefs.getBoolean("preview", true)
         set(value) = prefs.edit().putBoolean("preview", value).apply()
     var clipboardHistory: Boolean
         get() = prefs.getBoolean("clipboard_history", true)
         set(value) = prefs.edit().putBoolean("clipboard_history", value).apply()
+
+    /** User color overrides by role; null keeps the theme's own color. */
+    fun customColor(role: String): Int? = if (prefs.contains("color_$role")) prefs.getInt("color_$role", 0) else null
+
+    fun setCustomColor(
+        role: String,
+        value: Int?,
+    ) = prefs.edit().apply { if (value == null) remove("color_$role") else putInt("color_$role", value) }.apply()
+
     var language: Layout
         get() = if (prefs.getString("language", "en") == "ar") Layout.ARABIC else Layout.ENGLISH
         set(value) = prefs.edit().putString("language", if (value == Layout.ARABIC) "ar" else "en").apply()
@@ -76,10 +92,19 @@ class BoardSettings(
     fun unregisterListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
-    fun visualKey() = "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge"
+    fun visualKey() =
+        "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge:" +
+            COLOR_ROLES.joinToString(",") { customColor(it)?.toString() ?: "-" }
 
-    private companion object {
-        val THUMB_MODES = setOf("full", "left", "right")
-        val EDGE_MODES = setOf("off", "left", "right")
+    companion object {
+        private val THUMB_MODES = setOf("full", "left", "right")
+        private val EDGE_MODES = setOf("off", "left", "right")
+        const val LEARNED_RESET = "learned_reset"
+        const val ACCENT = "accent"
+        const val BACKGROUND = "background"
+        const val KEYS = "keys"
+        const val SPECIAL_KEYS = "special_keys"
+        const val TEXT = "text"
+        val COLOR_ROLES = listOf(ACCENT, BACKGROUND, KEYS, SPECIAL_KEYS, TEXT)
     }
 }

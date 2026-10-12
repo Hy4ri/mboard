@@ -23,13 +23,19 @@ class BoardUi(
             "light" -> false
             else -> context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         }
-    val background = color(if (dark) "#14141A" else "#F1F0F7")
-    val surface = color(if (dark) "#24242E" else "#FFFFFF")
-    val modifier = color(if (dark) "#353540" else "#E0DEEA")
-    val text = color(if (dark) "#F4F2FA" else "#21212C")
-    val muted = color(if (dark) "#BDBACB" else "#605C70")
+
+    private fun custom(role: String) = settings.customColor(role)
+
+    val background = custom(BoardSettings.BACKGROUND) ?: color(if (dark) "#14141A" else "#F1F0F7")
+    val surface = custom(BoardSettings.KEYS) ?: color(if (dark) "#24242E" else "#FFFFFF")
+    val modifier = custom(BoardSettings.SPECIAL_KEYS) ?: color(if (dark) "#353540" else "#E0DEEA")
+    val text = custom(BoardSettings.TEXT) ?: color(if (dark) "#F4F2FA" else "#21212C")
+
+    // Secondary ink follows a custom text color so labels stay in the same family.
+    val muted = custom(BoardSettings.TEXT)?.let { mix(it, background, .35f) } ?: color(if (dark) "#BDBACB" else "#605C70")
+    private val customAccent = custom(BoardSettings.ACCENT)
     val accent =
-        color(
+        customAccent ?: color(
             when (settings.accent) {
                 "teal" -> if (dark) "#80D8CE" else "#006B61"
                 "amber" -> if (dark) "#F6CF80" else "#785300"
@@ -37,10 +43,15 @@ class BoardUi(
                 else -> if (dark) "#C9B8FF" else "#6241A6"
             },
         )
-    val onAccent = color(if (dark && settings.accent != "crimson") "#20202A" else "#FFFFFF")
+    val onAccent =
+        if (customAccent != null) {
+            if (luminance(customAccent) > .5f) color("#20202A") else color("#FFFFFF")
+        } else {
+            color(if (dark && settings.accent != "crimson") "#20202A" else "#FFFFFF")
+        }
 
     // Keep the requested crimson fill exact; lift only standalone dark-theme control ink.
-    val controlAccent = if (dark && settings.accent == "crimson") color("#FFB4AB") else accent
+    val controlAccent = if (customAccent == null && dark && settings.accent == "crimson") color("#FFB4AB") else accent
     val danger = color(if (dark) "#FFB4AB" else "#A32626")
 
     fun dp(value: Int) = (value * context.resources.displayMetrics.density).toInt()
@@ -53,12 +64,47 @@ class BoardUi(
         cornerRadius = dp(radius).toFloat()
     }
 
-    fun ripple(fill: Int = Color.TRANSPARENT) =
-        RippleDrawable(
+    fun ripple(
+        fill: Int = Color.TRANSPARENT,
+        radii: FloatArray? = null,
+    ) = RippleDrawable(
+        ColorStateList.valueOf((accent and 0x00FFFFFF) or 0x30000000),
+        shape(fill).apply { radii?.let { cornerRadii = it } },
+        shape(Color.WHITE).apply { radii?.let { cornerRadii = it } },
+    )
+
+    /** Same fill, radius and lower edge as a keyboard key, with a press ripple. */
+    fun keyChip(fill: Int): RippleDrawable {
+        val radius = dp(8)
+        val body =
+            android.graphics.drawable.LayerDrawable(arrayOf(shape(keyEdge, 8), shape(fill, 8))).apply {
+                setLayerInset(0, 0, dp(1), 0, 0)
+                setLayerInset(1, 0, 0, 0, dp(1))
+            }
+        return RippleDrawable(
             ColorStateList.valueOf((accent and 0x00FFFFFF) or 0x30000000),
-            shape(fill),
-            shape(Color.WHITE),
+            body,
+            shape(Color.WHITE, 8).apply { cornerRadius = radius.toFloat() },
         )
+    }
+
+    /** Linear blend of two opaque colors; [t] = 0 gives [from], 1 gives [to]. */
+    fun mix(
+        from: Int,
+        to: Int,
+        t: Float,
+    ): Int {
+        val k = t.coerceIn(0f, 1f)
+
+        fun channel(shift: Int) = (((from shr shift) and 0xFF) + (((to shr shift) and 0xFF) - ((from shr shift) and 0xFF)) * k).toInt()
+        return Color.rgb(channel(16), channel(8), channel(0))
+    }
+
+    /** Pressed keys tint toward the accent instead of flashing it, so fast typing doesn't strobe. */
+    fun pressed(base: Int) = mix(base, accent, if (dark) .32f else .22f)
+
+    /** A thin lower edge that gives keys depth without a real shadow pass. */
+    val keyEdge = mix(background, Color.BLACK, if (dark) .35f else .12f)
 
     fun label(
         value: String,
@@ -118,4 +164,6 @@ class BoardUi(
         }
 
     private fun color(value: String) = Color.parseColor(value)
+
+    private fun luminance(value: Int) = Color.luminance(value)
 }
