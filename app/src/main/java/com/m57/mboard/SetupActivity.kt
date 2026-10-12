@@ -153,8 +153,20 @@ class SetupActivity : Activity() {
             draft = ""
         }
         window.decorView.windowInsetsController?.hide(WindowInsets.Type.ime())
+        val forward = remember && next != Page.HOME
         page = next
         render(captureState = false)
+        // A short slide-and-fade tells forward from back without slowing navigation down.
+        scroller?.apply {
+            alpha = 0f
+            translationX = ui.dp(if (forward) 24 else -24).toFloat()
+            animate()
+                .alpha(1f)
+                .translationX(0f)
+                .setDuration(160L)
+                .setInterpolator(android.view.animation.DecelerateInterpolator())
+                .start()
+        }
     }
 
     private fun render(captureState: Boolean = true) {
@@ -259,8 +271,9 @@ class SetupActivity : Activity() {
         components.add(column, components.note("English + العربية. Entirely offline."))
         val statusView =
             ui.label("", 15f).apply {
+                typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
                 setPadding(ui.dp(16), ui.dp(16), ui.dp(16), ui.dp(16))
-                background = ui.shape(ui.surface)
+                background = ui.shape(ui.mix(ui.surface, ui.accent, .12f), 16)
             }
         status = statusView
         components.add(column, statusView)
@@ -322,6 +335,24 @@ class SetupActivity : Activity() {
             settings.accent = listOf("violet", "teal", "amber", "crimson")[it]
             render()
         }
+        column.addView(components.section("CUSTOM COLORS"))
+        COLOR_ROLES.forEach { (role, title) ->
+            val custom = settings.customColor(role)
+            components.add(
+                column,
+                components.row(title, custom?.let(::hex) ?: "Theme default", custom ?: themeColor(role)) { colorDialog(role, title) },
+            )
+        }
+        if (BoardSettings.COLOR_ROLES.any { settings.customColor(it) != null }) {
+            components.add(
+                column,
+                components.row("Reset custom colors", "Go back to the theme and accent above", destructive = true) {
+                    BoardSettings.COLOR_ROLES.forEach { settings.setCustomColor(it, null) }
+                    render()
+                },
+            )
+        }
+        components.add(column, components.note("Custom colors override the theme and accent. Text on accent keys adjusts for contrast."))
         column.addView(components.section("KEYBOARD LAYOUT"))
         choice(
             column,
@@ -388,7 +419,10 @@ class SetupActivity : Activity() {
     }
 
     private fun typing(column: LinearLayout) {
-        components.add(column, components.note("Helpful when you want it. Uses bundled dictionaries only; nothing you type is learned."))
+        components.add(
+            column,
+            components.note("Helpful when you want it. Bundled dictionaries plus, if you allow it, words you type, kept on this device."),
+        )
         column.addView(components.section("INPUT ASSISTANCE"))
         components.add(
             column,
@@ -406,6 +440,16 @@ class SetupActivity : Activity() {
             ) {
                 settings.autoCorrect =
                     it
+            },
+        )
+        components.add(
+            column,
+            components.toggle(
+                "Learn my words",
+                "Suggest words you type often and stop correcting them · paused by the shield, passwords and email fields",
+                settings.learnWords,
+            ) {
+                settings.learnWords = it
             },
         )
         components.add(
@@ -438,7 +482,7 @@ class SetupActivity : Activity() {
         components.add(
             column,
             components.note(
-                "Swipe space to switch language.\nHold space, then slide to move the cursor.\nDouble-tap Shift for caps lock.\nHold letters for accents and Arabic variants.",
+                "Swipe space to switch language.\nHold space, then slide to move the cursor.\nSlide left from backspace to delete words; slide back to keep them.\nDouble-tap Shift for caps lock.\nHold letters for accents and Arabic variants.",
             ),
         )
         components.add(column, components.row("Try these gestures", "Open the keyboard playground") { navigate(Page.PLAYGROUND) })
@@ -473,10 +517,21 @@ class SetupActivity : Activity() {
         components.add(
             column,
             components.note(
-                "The keyboard's shield toggles a private session: clipboard recording and word suggestions pause. Password fields are protected automatically. App no-learning flags stop capture and history; static word completions can still work.",
+                "The keyboard's shield toggles a private session: clipboard recording and word learning pause. Password fields are protected automatically. App no-learning flags stop capture and history; static word completions can still work.",
             ),
         )
         column.addView(components.section("CLEAR LOCAL DATA"))
+        components.add(
+            column,
+            components.row("Delete learned words", "${UserWords(this).size()} words learned from your typing", destructive = true) {
+                confirm("Delete learned words?", "Suggestions go back to the bundled dictionaries only.") {
+                    UserWords(this).clear()
+                    settings.markLearnedReset()
+                    toast("Learned words deleted")
+                    render()
+                }
+            },
+        )
         components.add(
             column,
             components.row("Delete clipboard history", "Includes pinned clips · asks for confirmation", destructive = true) {
@@ -620,7 +675,7 @@ class SetupActivity : Activity() {
         components.add(
             column,
             components.note(
-                "Swipe space: switch language\nHold space: move cursor\nDouble-tap Shift: caps lock\nHold a letter: alternates\nMore: calculator, phrases and Text Lab",
+                "Swipe space: switch language\nHold space: move cursor\nSlide left from backspace: delete words\nDouble-tap Shift: caps lock\nHold a letter: alternates",
             ),
         )
     }
@@ -631,14 +686,14 @@ class SetupActivity : Activity() {
         components.add(
             column,
             components.note(
-                "No network permission. No sound or vibration. No cloud calls or automatic word learning. App data is excluded from Android cloud backup and device transfer.",
+                "No network permission. No sound or vibration. No cloud calls. Learned words stay on this device and can be deleted any time. App data is excluded from Android cloud backup and device transfer.",
             ),
         )
         column.addView(components.section("KEYBOARD TOOLS"))
         components.add(
             column,
             components.note(
-                "Emoji: categories, favorites and Arabic/English search.\nText tools: cursor movement, selection and case changes.\nText Lab: preview-first formatting and styles.\nCalculator: expressions with Arabic digits and percentages. 50% means 0.5.",
+                "Emoji: categories, favorites and Arabic/English search.\nSaved phrases: suggested when you start typing them.\nNumber pad: tap the dial pad key on the symbols page.\nCalculator: a math pad; = inserts the result.\nPercent: 50% means 0.5.",
             ),
         )
         column.addView(components.section("CREDITS"))
@@ -739,6 +794,119 @@ class SetupActivity : Activity() {
         )
     }
 
+    private fun themeColor(role: String) =
+        when (role) {
+            BoardSettings.ACCENT -> ui.accent
+            BoardSettings.BACKGROUND -> ui.background
+            BoardSettings.KEYS -> ui.surface
+            BoardSettings.SPECIAL_KEYS -> ui.modifier
+            else -> ui.text
+        }
+
+    private fun hex(value: Int) = String.format("#%06X", value and 0xFFFFFF)
+
+    /** Swatches for quick picks plus a hex field for exact colors; the live chip previews either. */
+    private fun colorDialog(
+        role: String,
+        title: String,
+    ) {
+        val generation = renderGeneration
+        var picked = settings.customColor(role) ?: themeColor(role)
+        val body =
+            LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(ui.dp(20), ui.dp(8), ui.dp(20), 0)
+            }
+        val preview = View(this)
+        val field =
+            EditText(this).apply {
+                setText(hex(picked))
+                hint = "#RRGGBB"
+                isSingleLine = true
+                textSize = 16f
+                setTextColor(ui.text)
+                setHintTextColor(ui.muted)
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                filters = arrayOf(InputFilter.LengthFilter(7))
+                importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+            }
+
+        fun show(value: Int) {
+            picked = value
+            preview.background = ui.shape(value or 0xFF000000.toInt(), 12).apply { setStroke(ui.dp(1), ui.muted) }
+        }
+        show(picked)
+        field.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) = Unit
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) = Unit
+
+                override fun afterTextChanged(s: Editable?) {
+                    val raw =
+                        s
+                            ?.toString()
+                            ?.trim()
+                            ?.removePrefix("#")
+                            .orEmpty()
+                    if (raw.length == 6) raw.toIntOrNull(16)?.let { show(it or 0xFF000000.toInt()) }
+                }
+            },
+        )
+        val top =
+            LinearLayout(this).apply {
+                gravity = Gravity.CENTER_VERTICAL
+                addView(preview, LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)))
+                addView(field, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = ui.dp(12) })
+            }
+        body.addView(top)
+        SWATCHES.chunked(6).forEach { rowValues ->
+            val row = LinearLayout(this).apply { setPadding(0, ui.dp(8), 0, 0) }
+            rowValues.forEach { value ->
+                val color = android.graphics.Color.parseColor(value)
+                row.addView(
+                    View(this).apply {
+                        background = ui.shape(color, 20).apply { setStroke(ui.dp(1), ui.modifier) }
+                        contentDescription = value
+                        setOnClickListener {
+                            field.setText(value)
+                            show(color)
+                        }
+                    },
+                    LinearLayout.LayoutParams(0, ui.dp(40), 1f).apply { setMargins(ui.dp(3), 0, ui.dp(3), 0) },
+                )
+            }
+            body.addView(row)
+        }
+        AlertDialog
+            .Builder(dialogContext())
+            .setTitle(title)
+            .setView(body)
+            .setPositiveButton("Apply") { _, _ ->
+                if (generation == renderGeneration) {
+                    settings.setCustomColor(role, picked or 0xFF000000.toInt())
+                    render()
+                }
+            }.setNeutralButton("Default") { _, _ ->
+                if (generation == renderGeneration) {
+                    settings.setCustomColor(role, null)
+                    render()
+                }
+            }.setNegativeButton("Cancel", null)
+            .create()
+            .let(::showDialog)
+    }
+
     private fun textEditor(
         hintValue: String,
         description: String,
@@ -791,6 +959,7 @@ class SetupActivity : Activity() {
             dialog.window?.setBackgroundDrawable(ui.shape(ui.surface, 20))
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ui.controlAccent)
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ui.controlAccent)
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setTextColor(ui.controlAccent)
         }
         dialog.show()
     }
@@ -868,6 +1037,41 @@ class SetupActivity : Activity() {
 
     private companion object {
         const val PICK_ACCOUNT = 41
+        val COLOR_ROLES =
+            listOf(
+                BoardSettings.ACCENT to "Accent",
+                BoardSettings.BACKGROUND to "Keyboard background",
+                BoardSettings.KEYS to "Letter keys",
+                BoardSettings.SPECIAL_KEYS to "Function keys",
+                BoardSettings.TEXT to "Text & icons",
+            )
+        val SWATCHES =
+            listOf(
+                "#000000",
+                "#14141A",
+                "#24242E",
+                "#353540",
+                "#606070",
+                "#FFFFFF",
+                "#F1F0F7",
+                "#E0DEEA",
+                "#F4F2FA",
+                "#21212C",
+                "#990000",
+                "#E53935",
+                "#FB8C00",
+                "#FDD835",
+                "#43A047",
+                "#00897B",
+                "#1E88E5",
+                "#3949AB",
+                "#8E24AA",
+                "#D81B60",
+                "#6241A6",
+                "#C9B8FF",
+                "#80D8CE",
+                "#F6CF80",
+            )
         const val NORMAL_INPUT = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
         val PLAYGROUND_TYPES =
             listOf(
