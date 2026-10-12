@@ -12,6 +12,9 @@ object Keys {
     const val SYMBOLS = "?123"
     const val MORE_SYMBOLS = "=\\<"
     const val LETTERS = "ABC"
+
+    /** Symbols ⇄ number pad toggle. */
+    const val PAD = "pad"
     const val SPACE = " "
 }
 
@@ -76,7 +79,7 @@ enum class Layout(
             digits,
             "@#\$_%-+()/".map(Char::toString),
             "*\"':;!?,".map(Char::toString) + Keys.BACKSPACE,
-            listOf(Keys.LETTERS, Keys.MORE_SYMBOLS, Keys.GLOBE, Keys.SPACE, ".", Keys.ENTER),
+            listOf(Keys.LETTERS, Keys.PAD, Keys.MORE_SYMBOLS, Keys.SPACE, ".", Keys.ENTER),
         ),
     ),
     SYMBOLS_MORE(
@@ -85,6 +88,22 @@ enum class Layout(
             "€£¥₹¢©®™°•".map(Char::toString),
             "=&…¿¡·`'".map(Char::toString) + Keys.BACKSPACE,
             listOf(Keys.LETTERS, Keys.SYMBOLS, Keys.GLOBE, Keys.SPACE, ".", Keys.ENTER),
+        ),
+    ),
+    NUMPAD(
+        listOf(
+            listOf("+", "1", "2", "3", "/"),
+            listOf("-", "4", "5", "6", "%"),
+            listOf("*", "7", "8", "9", Keys.BACKSPACE),
+            listOf(Keys.SYMBOLS, ",", "0", ".", Keys.ENTER),
+        ),
+    ),
+    CALC(
+        listOf(
+            listOf("7", "8", "9", "÷", Keys.BACKSPACE),
+            listOf("4", "5", "6", "×", "("),
+            listOf("1", "2", "3", "−", ")"),
+            listOf(".", "0", "%", "+", Keys.ENTER),
         ),
     ),
     NUMBER(
