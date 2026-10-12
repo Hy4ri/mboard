@@ -14,12 +14,11 @@ import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.Toast
 import java.util.Locale
 
 class MboardService : InputMethodService() {
-    private enum class Mode { KEYS, CLIPBOARD, EMOJI, EMOJI_SEARCH, EDIT, PHRASES, CALCULATOR, TEXT_LAB }
+    private enum class Mode { KEYS, CLIPBOARD, EMOJI, EMOJI_SEARCH, CALCULATOR }
 
     private var mode = Mode.KEYS
     private val emojiLoader =
@@ -32,10 +31,7 @@ class MboardService : InputMethodService() {
     private var keyboard: KeyboardView? = null
     private var clipPanel: ClipboardPanel? = null
     private var emojiPanel: EmojiPanel? = null
-    private var toolsPanel: ScrollView? = null
     private var keyboardSurface: OneHandSurface? = null
-    private var labTransform = TextLab.Transform.TITLE_CASE
-    private var labPalette = TextLab.Palette.KAOMOJI
     private var auxiliary: LinearLayout? = null
     private var panelBody: FrameLayout? = null
     private var toolbar: LinearLayout? = null
@@ -45,6 +41,13 @@ class MboardService : InputMethodService() {
     private lateinit var phrases: PhraseStore
     private lateinit var emojiHistory: EmojiHistory
     private lateinit var words: WordSuggestions
+    private lateinit var userWords: UserWords
+
+    // Backspace fires on touch-down; a swipe that follows puts that character back first.
+    private var pressDeleted: String? = null
+    private var swipeCursor = -1
+    private var swipeBefore: String? = null
+    private var swipeLength = 0
     private lateinit var clipboard: ClipboardManager
     private var language = Layout.ENGLISH
     private var visualKey = ""
@@ -55,7 +58,6 @@ class MboardService : InputMethodService() {
     private var lastClipStamp = 0L
     private var fieldPolicy = SuggestionPolicy.classify(0)
     private var editorGeneration = 0L
-    private var selectionVersion = 0L
     private var suggestionStrip: SuggestionStrip? = null
     private val suggestionHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private val refreshSuggestions =
@@ -74,6 +76,7 @@ class MboardService : InputMethodService() {
         phrases = PhraseStore(this)
         emojiHistory = EmojiHistory(this)
         words = WordSuggestions(this)
+        userWords = UserWords(this)
         clipboard = getSystemService(ClipboardManager::class.java)
         clipboard.addPrimaryClipChangedListener(clipListener)
         settings.registerListener(settingsListener)
@@ -106,11 +109,13 @@ class MboardService : InputMethodService() {
         clipboard.removePrimaryClipChangedListener(clipListener)
         settings.unregisterListener(settingsListener)
         suggestionHandler.removeCallbacksAndMessages(null)
+        userWords.save()
         words.close()
         super.onDestroy()
     }
 
     private fun settingsChanged(key: String?) {
+        if (key == BoardSettings.LEARNED_RESET) userWords = UserWords(this)
         val previous = keyboard ?: return
         if (!isInputViewShown) return // onStartInputView applies hidden-view changes before it is shown again.
         if (visualKey != settings.visualKey()) {
@@ -135,7 +140,6 @@ class MboardService : InputMethodService() {
 
     private fun resetEditorState() {
         editorGeneration++
-        toolsPanel?.removeAllViews()
         suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
@@ -174,13 +178,12 @@ class MboardService : InputMethodService() {
     override fun onCreateInputView(): View {
         ui = BoardUi(this)
         visualKey = settings.visualKey()
-        val kv = KeyboardView(this, ::onKey, ::toggleLanguage, ::moveCursor)
+        val kv = KeyboardView(this, ::onKey, ::toggleLanguage, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
         keyboard = kv
         kv.layout = defaultLayout
         kv.languageLabel = if (language == Layout.ARABIC) "العربية" else "English"
         clipPanel = ClipboardPanel(this, clips, ::paste)
         emojiPanel = EmojiPanel(this, { setMode(Mode.EMOJI_SEARCH) }, ::pasteEmoji).apply { loadFailed = emojiLoadFailed }
-        toolsPanel = ScrollView(this).apply { setBackgroundColor(ui.background) }
         toolbar = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
         auxiliary =
             LinearLayout(this).apply {
@@ -206,20 +209,29 @@ class MboardService : InputMethodService() {
         body.addView(keyboardSurface, fill)
         body.addView(clipPanel, FrameLayout.LayoutParams(fill))
         body.addView(emojiPanel, FrameLayout.LayoutParams(fill))
-        body.addView(toolsPanel, FrameLayout.LayoutParams(fill))
         val root =
             LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 layoutDirection = View.LAYOUT_DIRECTION_LTR
                 setBackgroundColor(ui.background)
                 addView(
-                    HorizontalScrollView(this@MboardService).apply {
-                        isHorizontalScrollBarEnabled = false
-                        addView(toolbar)
+                    LinearLayout(this@MboardService).apply {
+                        gravity = Gravity.CENTER_VERTICAL
+                        addView(
+                            HorizontalScrollView(this@MboardService).apply {
+                                isHorizontalScrollBarEnabled = false
+                                addView(toolbar)
+                            },
+                            LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                        )
+                        addView(
+                            ui.icon(R.drawable.ic_settings, "Settings") { openSettings() },
+                            LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                        )
                     },
                     LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)),
                 )
-                addView(auxiliary, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)))
+                addView(auxiliary, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(AUX_DP)))
                 addView(body, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, kv.keysHeight))
                 setOnApplyWindowInsetsListener { target, insets ->
                     val bars = insets.getInsets(WindowInsets.Type.navigationBars())
@@ -250,70 +262,11 @@ class MboardService : InputMethodService() {
             )
         }
         val pasteEnabled = !fieldPolicy.password
-        bar.addView(
-            ui.icon(R.drawable.ic_paste, "Paste") { pasteClipboard() }.apply {
-                isEnabled = pasteEnabled
-                alpha = if (pasteEnabled) 1f else 0.35f
-                minimumWidth = 0
-                minimumHeight = 0
-                setPadding(ui.dp(8), ui.dp(6), ui.dp(8), ui.dp(6))
-                background = ui.ripple(ui.surface)
-            },
-            LinearLayout.LayoutParams(ui.dp(40), ui.dp(36)).apply {
-                setMargins(ui.dp(4), ui.dp(6), ui.dp(4), ui.dp(6))
-            },
-        )
+        icon(R.drawable.ic_paste, "Paste", !fieldPolicy.password) { pasteClipboard() }
         icon(R.drawable.ic_content_paste, "Clipboard history", !fieldPolicy.password) { togglePanel(Mode.CLIPBOARD) }
         icon(R.drawable.ic_mood, "Search emoji", !fieldPolicy.password) { togglePanel(Mode.EMOJI_SEARCH) }
-        // Panels replace the text-tools slot with Return, so the toolbar never gains another slot.
-        if (mode != Mode.KEYS) {
-            icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
-        } else {
-            icon(R.drawable.ic_text_select_start, "Cursor and text tools", !fieldPolicy.password) { togglePanel(Mode.EDIT) }
-        }
-        val tools = ui.icon(R.drawable.ic_settings, "More tools and settings") {}
-        tools.setOnClickListener {
-            android.widget.PopupMenu(this, tools).apply {
-                menu.add("Cursor and text tools").isEnabled = !fieldPolicy.password
-                menu.add("Calculator").isEnabled = !fieldPolicy.password
-                menu.add("Saved phrases").isEnabled = !fieldPolicy.password
-                menu.add("Text Lab").isEnabled = !fieldPolicy.password
-                menu.add("Settings")
-                menu.add("Choose another keyboard")
-                setOnMenuItemClickListener { item ->
-                    when (item.title.toString()) {
-                        "Cursor and text tools" -> {
-                            togglePanel(Mode.EDIT)
-                        }
-
-                        "Calculator" -> {
-                            togglePanel(Mode.CALCULATOR)
-                        }
-
-                        "Saved phrases" -> {
-                            togglePanel(Mode.PHRASES)
-                        }
-
-                        "Text Lab" -> {
-                            togglePanel(Mode.TEXT_LAB)
-                        }
-
-                        "Settings" -> {
-                            openSettings()
-                        }
-
-                        "Choose another keyboard" -> {
-                            getSystemService(
-                                android.view.inputmethod.InputMethodManager::class.java,
-                            ).showInputMethodPicker()
-                        }
-                    }
-                    true
-                }
-                show()
-            }
-        }
-        bar.addView(tools, LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)))
+        icon(R.drawable.ic_calculate, "Calculator", !fieldPolicy.password) { togglePanel(Mode.CALCULATOR) }
+        if (mode != Mode.KEYS) icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
         val privacyLabel =
             when {
                 fieldPolicy.password -> "Shield on for password field. No history recording; static suggestions available"
@@ -353,12 +306,11 @@ class MboardService : InputMethodService() {
         keyboard?.cancelTouch()
         if (fieldPolicy.password && next != Mode.KEYS) return
         val previous = mode
-        if (previous == Mode.TEXT_LAB && next != Mode.TEXT_LAB) toolsPanel?.removeAllViews()
         mode = next
         lastSpace = 0L
         if (next == Mode.EMOJI_SEARCH || next == Mode.CALCULATOR) {
             if (previous != next) query = ""
-            keyboard?.layout = if (next == Mode.CALCULATOR) Layout.SYMBOLS else language
+            keyboard?.layout = if (next == Mode.CALCULATOR) Layout.CALC else language
             keyboard?.shifted = false
             keyboard?.capsLocked = false
         } else if (previous == Mode.EMOJI_SEARCH || previous == Mode.CALCULATOR) {
@@ -366,7 +318,7 @@ class MboardService : InputMethodService() {
         }
         keyboard?.enterLabel =
             when (next) {
-                Mode.CALCULATOR -> "Insert"
+                Mode.CALCULATOR -> "="
                 Mode.EMOJI_SEARCH -> "Pick"
                 else -> enterLabel(currentInputEditorInfo)
             }
@@ -375,7 +327,7 @@ class MboardService : InputMethodService() {
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
         auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
         panelBody?.let { body ->
-            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(48) else 0
+            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(AUX_DP) else 0
             if (body.layoutParams != null && body.layoutParams.height != height) {
                 body.layoutParams = body.layoutParams.apply { this.height = height }
             }
@@ -384,11 +336,9 @@ class MboardService : InputMethodService() {
         keyboard?.visibility = if (keysVisible) View.VISIBLE else View.INVISIBLE
         clipPanel?.visibility = if (next == Mode.CLIPBOARD) View.VISIBLE else View.GONE
         emojiPanel?.visibility = if (next == Mode.EMOJI) View.VISIBLE else View.GONE
-        toolsPanel?.visibility = if (next == Mode.EDIT || next == Mode.PHRASES || next == Mode.TEXT_LAB) View.VISIBLE else View.GONE
         if (next == Mode.CLIPBOARD) clipPanel?.refresh()
         emojiPanel?.recordingEnabled = !privateSession && !fieldPolicy.password
         if (next == Mode.EMOJI) emojiPanel?.refresh()
-        if (next == Mode.EDIT || next == Mode.PHRASES || next == Mode.TEXT_LAB) rebuildTools()
         rebuildToolbar()
         updateAuxiliary()
     }
@@ -428,6 +378,7 @@ class MboardService : InputMethodService() {
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
+        userWords.save()
         resetEditorState()
         super.onFinishInputView(finishingInput)
     }
@@ -441,7 +392,6 @@ class MboardService : InputMethodService() {
         candidatesEnd: Int,
     ) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
-        if (oldSelStart != newSelStart || oldSelEnd != newSelEnd) selectionVersion++
         // A caret jump (tap elsewhere) means backspace no longer refers to the correction.
         lastCorrection?.let { last ->
             if (newSelStart != newSelEnd || kotlin.math.abs(newSelStart - oldSelStart) > last.corrected.length + 2) lastCorrection = null
@@ -450,7 +400,6 @@ class MboardService : InputMethodService() {
             updateCapitalization()
             updateAuxiliary()
         }
-        if (mode == Mode.EDIT || mode == Mode.TEXT_LAB) rebuildTools()
     }
 
     private fun loadWords() {
@@ -492,7 +441,7 @@ class MboardService : InputMethodService() {
         keyboard?.languageLabel = if (language == Layout.ARABIC) "العربية" else "English"
         keyboard?.layout =
             when (mode) {
-                Mode.CALCULATOR -> Layout.SYMBOLS
+                Mode.CALCULATOR -> Layout.CALC
                 Mode.EMOJI_SEARCH -> language
                 else -> defaultLayout
             }
@@ -557,7 +506,7 @@ class MboardService : InputMethodService() {
         val strip = suggestionStrip ?: return
         if (bar.childCount != 1 || bar.getChildAt(0) !== strip) {
             bar.removeAllViews()
-            bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)))
+            bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
         }
         val blocked = if (!settings.suggestions) "Word suggestions off · enable them in Settings" else null
         if (blocked != null) {
@@ -605,7 +554,7 @@ class MboardService : InputMethodService() {
         val typed = context.prefix
         val autoCorrection = autoCorrection(typed, context.sentenceStart)
         val hint =
-            if (autoCorrection == null && settings.autoCorrect) {
+            if (autoCorrection == null && settings.autoCorrect && !userWords.knows(typed, language)) {
                 words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
             } else {
                 null
@@ -619,8 +568,10 @@ class MboardService : InputMethodService() {
                 phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
             }
         val ranked = words.rank(typed, context.contextWords, language, settings.jordanianArabic).map { matchCase(it, typed) }
+        // Learned words lead the completions, but never push out a correction or the best dictionary match.
+        val learned = if (privateSession) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
         val wordChoices =
-            (listOfNotNull(leading, phrase) + ranked)
+            (listOfNotNull(leading, phrase) + ranked.take(1) + learned + ranked.drop(1))
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // A matching emoji takes the last slot so the correction and best completion stay put.
@@ -634,6 +585,7 @@ class MboardService : InputMethodService() {
         wordStart: Boolean,
     ): String? {
         if (!settings.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || fieldPolicy.password) return null
+        if (userWords.knows(typed, language)) return null
         if (words.state(language) != WordSuggestions.State.READY) return null
         if (language == Layout.ENGLISH && typed.first().isUpperCase() && !wordStart && typed != "i") return null
         val correction = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return null
@@ -702,6 +654,7 @@ class MboardService : InputMethodService() {
             ic.endBatchEdit()
         }
         rejectedCorrections += last.original
+        learn(last.original)
         return true
     }
 
@@ -722,7 +675,7 @@ class MboardService : InputMethodService() {
                         tooltipText = query
                         setPadding(ui.dp(12), 0, ui.dp(8), 0)
                     },
-                    LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
                 )
                 bar.addView(
                     ui.button(answer?.let { "= $it" } ?: "No result", primary = answer != null) { answer?.let(::paste) }.apply {
@@ -733,14 +686,14 @@ class MboardService : InputMethodService() {
                         tooltipText = answer
                         setAutoSizeTextTypeUniformWithConfiguration(10, 14, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
                     },
-                    LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
                 )
             }
 
             Mode.EMOJI_SEARCH -> {
                 bar.addView(
                     emojiSearchField(),
-                    LinearLayout.LayoutParams(ui.dp(150), ui.dp(38)).apply { setMargins(ui.dp(8), 0, ui.dp(4), 0) },
+                    LinearLayout.LayoutParams(ui.dp(150), ui.dp(32)).apply { setMargins(ui.dp(8), 0, ui.dp(4), 0) },
                 )
                 val row = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
                 val matches = emojiSearchResults()
@@ -778,7 +731,7 @@ class MboardService : InputMethodService() {
                                 true
                             }
                         },
-                        LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ui.dp(42)),
+                        LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT),
                     )
                 }
                 bar.addView(
@@ -786,11 +739,11 @@ class MboardService : InputMethodService() {
                         isHorizontalScrollBarEnabled = false
                         addView(row)
                     },
-                    LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
                 )
                 bar.addView(
                     ui.icon(R.drawable.ic_mood, "Browse all emoji") { setMode(Mode.EMOJI) },
-                    LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                    LinearLayout.LayoutParams(ui.dp(44), LinearLayout.LayoutParams.MATCH_PARENT),
                 )
             }
 
@@ -807,9 +760,6 @@ class MboardService : InputMethodService() {
                             when (mode) {
                                 Mode.CLIPBOARD -> "Clipboard · saved on this device"
                                 Mode.EMOJI -> "Emoji · hold an emoji to favorite it"
-                                Mode.EDIT -> "Text tools · actions apply to the active app"
-                                Mode.PHRASES -> "Phrases · tap to insert, manage in settings"
-                                Mode.TEXT_LAB -> "Text Lab · preview first, replace only on tap"
                                 else -> ""
                             },
                             14f,
@@ -952,8 +902,9 @@ class MboardService : InputMethodService() {
         val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceBeforeCursor(ic, expected, value)
         if (!done) {
             message("This app did not accept the completion")
-        } else if (keyboard?.capsLocked != true) {
-            keyboard?.shifted = false
+        } else {
+            if (' ' !in word.trim()) learn(word.trim())
+            if (keyboard?.capsLocked != true) keyboard?.shifted = false
         }
         lastSpace = 0L
         updateAuxiliary()
@@ -1041,6 +992,10 @@ class MboardService : InputMethodService() {
                 kv.layout = Layout.SYMBOLS_MORE
             }
 
+            Keys.PAD -> {
+                kv.layout = Layout.NUMPAD
+            }
+
             Keys.LETTERS -> {
                 kv.layout = language
             }
@@ -1060,13 +1015,18 @@ class MboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         val kv = keyboard ?: return
         if (key != Keys.SPACE) lastSpace = 0L
+        pressDeleted = null
         if (key == Keys.BACKSPACE && ic.getSelectedText(0).isNullOrEmpty() && undoCorrection(ic)) {
             lastShift = 0L
             updateAuxiliary()
             return
         }
         if (key != Keys.SHIFT) lastCorrection = null
-        if (key in separators) autoCorrectBefore(ic, key)
+        if (key in separators) {
+            val typed = prefixContext().prefix
+            autoCorrectBefore(ic, key)
+            learn(lastCorrection?.corrected ?: typed)
+        }
         when (key) {
             Keys.SHIFT -> {
                 val now = SystemClock.uptimeMillis()
@@ -1089,7 +1049,16 @@ class MboardService : InputMethodService() {
             }
 
             Keys.BACKSPACE -> {
-                if (!ic.getSelectedText(0).isNullOrEmpty()) ic.commitText("", 1) else sendKey(ic, KeyEvent.KEYCODE_DEL)
+                pressDeleted = null
+                if (!ic.getSelectedText(0).isNullOrEmpty()) {
+                    ic.commitText("", 1)
+                } else {
+                    val before = ic.getTextBeforeCursor(2, 0)?.toString()
+                    if (!before.isNullOrEmpty()) {
+                        pressDeleted = before.substring(before.offsetByCodePoints(before.length, -1))
+                    }
+                    sendKey(ic, KeyEvent.KEYCODE_DEL)
+                }
             }
 
             Keys.DELETE_WORD -> {
@@ -1129,6 +1098,10 @@ class MboardService : InputMethodService() {
 
             Keys.MORE_SYMBOLS -> {
                 kv.layout = Layout.SYMBOLS_MORE
+            }
+
+            Keys.PAD -> {
+                kv.layout = Layout.NUMPAD
             }
 
             Keys.LETTERS -> {
@@ -1171,6 +1144,55 @@ class MboardService : InputMethodService() {
         suggestionHandler.postDelayed(refreshSuggestions, 30L)
     }
 
+    /** Learns only in ordinary fields, with learning on, outside the shield and apps' no-learning flag. */
+    private fun learn(word: String) {
+        if (word.isEmpty() || !settings.learnWords || privateSession || fieldPolicy.reason != SuggestionPolicy.Reason.AVAILABLE) return
+        if ((currentInputEditorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
+        if (keyboard?.layout != language || mode != Mode.KEYS) return
+        userWords.record(word, language)
+    }
+
+    /** Slide left from backspace: [steps] whole words get selected so the user sees what release deletes. */
+    private fun deleteSwipe(steps: Int) {
+        val ic = currentInputConnection ?: return
+        if (swipeCursor < 0 && swipeBefore == null) {
+            // The press already removed one character; give it back so the swipe owns the deletion.
+            pressDeleted?.let { ic.commitText(it, 1) }
+            pressDeleted = null
+            swipeBefore = ic.getTextBeforeCursor(400, 0)?.toString() ?: ""
+            val extracted = ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0)
+            swipeCursor = extracted?.let { it.startOffset + it.selectionStart } ?: -1
+        }
+        var text = swipeBefore.orEmpty()
+        var length = 0
+        repeat(steps) {
+            val run = wordDeleteLength(text)
+            length += run
+            text = text.dropLast(run)
+        }
+        swipeLength = length
+        if (swipeCursor >= 0) ic.setSelection(swipeCursor - length, swipeCursor)
+    }
+
+    private fun deleteSwipeEnd(commit: Boolean) {
+        val ic = currentInputConnection
+        val cursor = swipeCursor
+        val length = swipeLength
+        val started = swipeBefore != null
+        swipeCursor = -1
+        swipeBefore = null
+        swipeLength = 0
+        if (ic == null || !started) return
+        when {
+            commit && length > 0 && cursor >= 0 -> ic.commitText("", 1)
+            commit && length > 0 -> ic.deleteSurroundingText(length, 0)
+            cursor >= 0 -> ic.setSelection(cursor, cursor)
+        }
+        lastCorrection = null
+        lastSpace = 0L
+        updateAuxiliary()
+    }
+
     /** UTF-16 length of trailing whitespace plus the word (or punctuation/emoji run) before it. */
     private fun wordDeleteLength(text: String): Int {
         val spaces = text.length - text.trimEnd().length
@@ -1194,7 +1216,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun moveCursor(steps: Int) {
-        if (mode != Mode.KEYS && mode != Mode.EDIT) return
+        if (mode != Mode.KEYS) return
         val ic = currentInputConnection ?: return
         repeat(kotlin.math.abs(steps).coerceAtMost(20)) {
             sendKey(
@@ -1211,233 +1233,9 @@ class MboardService : InputMethodService() {
         lastSpace = 0L
     }
 
-    private fun rebuildTools() {
-        val panel = toolsPanel ?: return
-        panel.removeAllViews()
-        if (fieldPolicy.password) return
-        val list =
-            LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(ui.dp(12), ui.dp(8), ui.dp(12), ui.dp(12))
-            }
-        panel.addView(list)
-        if (mode == Mode.TEXT_LAB) {
-            renderTextLab(list)
-            return
-        }
-        if (mode == Mode.PHRASES) {
-            val generation = editorGeneration
-            val saved = phrases.all()
-            if (saved.isEmpty()) {
-                list.addView(
-                    ui.label(
-                        "Save often-used replies, addresses, or signatures in settings. Nothing you type is saved automatically.",
-                        15f,
-                        true,
-                    ),
-                )
-            }
-            saved.forEach { phrase ->
-                list.addView(
-                    ui
-                        .button(phrase) {
-                            if (mode == Mode.PHRASES && generation == editorGeneration && !fieldPolicy.password) paste(phrase)
-                        }.apply {
-                            gravity = Gravity.START
-                            textDirection =
-                                View.TEXT_DIRECTION_FIRST_STRONG
-                        },
-                )
-            }
-            list.addView(ui.button("Manage phrases") { openSettings() })
-            return
-        }
-        val ic = currentInputConnection ?: return
-        val generation = editorGeneration
-        val version = selectionVersion
-        val selectedText = ic.getSelectedText(0)?.toString()
-        val snapshot = selectedText?.takeIf { it.isNotEmpty() && it.length <= 20_000 }
-        val selected = !selectedText.isNullOrEmpty()
-
-        fun editAction(action: () -> Unit) {
-            if (mode == Mode.EDIT && generation == editorGeneration && version == selectionVersion && !fieldPolicy.password) action()
-        }
-
-        fun row(vararg actions: Pair<String, () -> Unit>) {
-            val r = LinearLayout(this)
-            actions.forEach { (label, action) ->
-                r.addView(ui.button(label) { editAction(action) }, LinearLayout.LayoutParams(0, ui.dp(52), 1f))
-            }
-            list.addView(r)
-        }
-        row(
-            "Left" to { moveCursor(-1) },
-            "Up" to { sendKey(ic, KeyEvent.KEYCODE_DPAD_UP) },
-            "Down" to { sendKey(ic, KeyEvent.KEYCODE_DPAD_DOWN) },
-            "Right" to { moveCursor(1) },
-        )
-        row("Line start" to { sendKey(ic, KeyEvent.KEYCODE_MOVE_HOME) }, "Line end" to { sendKey(ic, KeyEvent.KEYCODE_MOVE_END) })
-        row("Select all" to { contextAction(android.R.id.selectAll) }, "Paste" to { contextAction(android.R.id.paste) })
-        val selectRow = LinearLayout(this)
-        listOf("Copy" to android.R.id.copy, "Cut" to android.R.id.cut).forEach { (label, id) ->
-            selectRow.addView(
-                ui.button(label) { editAction { contextAction(id) } }.apply {
-                    isEnabled = selected && !fieldPolicy.password
-                    alpha =
-                        if (isEnabled) 1f else 0.4f
-                },
-                LinearLayout.LayoutParams(0, ui.dp(52), 1f),
-            )
-        }
-        list.addView(selectRow)
-        row("Undo" to { contextAction(android.R.id.undo) }, "Redo" to { contextAction(android.R.id.redo) })
-        list.addView(
-            ui.label("Select text in the app to change case or remove Arabic marks.", 13f, true).apply {
-                setPadding(0, ui.dp(12), 0, ui.dp(8))
-            },
-        )
-        val transformRow = LinearLayout(this)
-        listOf(
-            "UPPER" to { s: String -> s.uppercase(Locale.ROOT) },
-            "lower" to { s: String -> s.lowercase(Locale.ROOT) },
-            "بلا تشكيل" to { s: String ->
-                s.filterNot { it in '\u064B'..'\u065F' || it == '\u0670' || it == '\u0640' }
-            },
-        ).forEach { (label, transform) ->
-            transformRow.addView(
-                ui
-                    .button(label) {
-                        editAction {
-                            snapshot?.let { replaceSelection(it, transform(it), generation, version, Mode.EDIT) }
-                        }
-                    }.apply {
-                        isEnabled = snapshot != null && !fieldPolicy.password
-                        alpha = if (isEnabled) 1f else 0.4f
-                    },
-                LinearLayout.LayoutParams(0, ui.dp(52), 1f),
-            )
-        }
-        list.addView(transformRow)
-    }
-
-    private fun renderTextLab(list: LinearLayout) {
-        if (fieldPolicy.password) return
-        val generation = editorGeneration
-        val version = selectionVersion
-        val selected = currentInputConnection?.getSelectedText(0)?.toString()
-        val source = selected?.takeIf { it.isNotEmpty() && it.length <= 20_000 }
-        val preview = source?.let { TextLab.transform(it, labTransform) }
-        val chooser = ui.button("Transform: ${labTransform.label}") {}
-        chooser.setOnClickListener {
-            android.widget.PopupMenu(this, chooser).apply {
-                TextLab.Transform.entries.forEach { menu.add(0, it.ordinal + 1, 0, it.label) }
-                setOnMenuItemClickListener { item ->
-                    if (mode == Mode.TEXT_LAB && generation == editorGeneration) {
-                        labTransform = TextLab.Transform.entries[item.itemId - 1]
-                        rebuildTools()
-                    }
-                    true
-                }
-                show()
-            }
-        }
-        list.addView(chooser, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)))
-        list.addView(
-            ui
-                .label(
-                    when {
-                        selected != null && selected.length > 20_000 -> "Select a smaller piece of text (maximum 20,000 characters)."
-                        source == null -> "Select text in the app to preview a transformation. No text is saved here."
-                        else -> "Preview · your selection stays unchanged until Replace"
-                    },
-                    13f,
-                    true,
-                ).apply { setPadding(0, ui.dp(8), 0, ui.dp(8)) },
-        )
-        if (preview != null) {
-            list.addView(
-                ui.label(preview, 15f).apply {
-                    maxLines = 4
-                    ellipsize = android.text.TextUtils.TruncateAt.END
-                    textDirection = View.TEXT_DIRECTION_FIRST_STRONG
-                    setPadding(ui.dp(12), ui.dp(8), ui.dp(12), ui.dp(8))
-                    background = ui.shape(ui.surface)
-                },
-            )
-        }
-        if (labTransform == TextLab.Transform.KEYBOARD_TO_ARABIC || labTransform == TextLab.Transform.KEYBOARD_TO_ENGLISH) {
-            list.addView(
-                ui.label(
-                    "Keyboard rescue is approximate: Arabic lam–alef cannot identify the original keystrokes. Check the preview.",
-                    13f,
-                    true,
-                ),
-            )
-        }
-        list.addView(
-            ui
-                .button("Replace selection", true) {
-                    if (source != null && preview != null) replaceSelection(source, preview, generation, version, Mode.TEXT_LAB)
-                }.apply {
-                    isEnabled = source != null && preview != source
-                    alpha = if (isEnabled) 1f else .4f
-                },
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)),
-        )
-        list.addView(ui.heading("Insert a little chaos"))
-        val paletteChooser = ui.button("Palette: ${labPalette.label}") {}
-        paletteChooser.setOnClickListener {
-            android.widget.PopupMenu(this, paletteChooser).apply {
-                TextLab.Palette.entries.forEach { menu.add(0, it.ordinal + 1, 0, it.label) }
-                setOnMenuItemClickListener { item ->
-                    if (mode == Mode.TEXT_LAB && generation == editorGeneration) {
-                        labPalette = TextLab.Palette.entries[item.itemId - 1]
-                        rebuildTools()
-                    }
-                    true
-                }
-                show()
-            }
-        }
-        list.addView(paletteChooser, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)))
-        TextLab.palette(labPalette).forEach { (name, value) ->
-            list.addView(
-                ui
-                    .button("$name  $value") {
-                        if (mode == Mode.TEXT_LAB && generation == editorGeneration && !fieldPolicy.password) paste(value)
-                    }.apply {
-                        gravity = Gravity.START or Gravity.CENTER_VERTICAL
-                        maxLines = 1
-                        ellipsize = android.text.TextUtils.TruncateAt.END
-                        contentDescription = "Insert $name: $value"
-                    },
-                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)),
-            )
-        }
-    }
-
-    private fun replaceSelection(
-        source: String,
-        replacement: String,
-        generation: Long,
-        version: Long,
-        expectedMode: Mode,
-    ) {
-        if (mode != expectedMode || generation != editorGeneration || version != selectionVersion || fieldPolicy.password) {
-            message("Selection changed · select the text again")
-            return
-        }
-        val ic = currentInputConnection ?: return
-        if (ic.getSelectedText(0)?.toString() != source) {
-            message("Selection changed · select the text again")
-        } else if (!ic.commitText(replacement, 1)) {
-            message("This app did not accept the replacement")
-        }
-    }
-
-    private fun contextAction(id: Int) {
-        if (currentInputConnection?.performContextMenuAction(id) != true) message("This app does not support that text action")
-    }
-
     private fun message(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+
+    private companion object {
+        const val AUX_DP = 40
+    }
 }
