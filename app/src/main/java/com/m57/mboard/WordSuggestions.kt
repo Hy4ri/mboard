@@ -301,6 +301,15 @@ class WordSuggestions(
             }
         }
 
+        // 2b. Arabic words behind an attached و/ف/ب/ل/ك/لل, which the word list rarely contains.
+        if (language == Layout.ARABIC && typed.length >= 3) {
+            for (c in model.dictionary.cliticCompletions(typed, 6, dialect)) {
+                if (matchKey(c.word) in exactWords) continue
+                val score = ln(c.score + 1.0) - 2.5 + contextBonus(c.word)
+                scores[c.word] = maxOf(scores[c.word] ?: Double.NEGATIVE_INFINITY, score)
+            }
+        }
+
         // 3. Context-only completions
         val contextSources = ArrayList<List<String>>()
         if (language == Layout.ARABIC && jordanian) {

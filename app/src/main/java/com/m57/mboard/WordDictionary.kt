@@ -11,7 +11,7 @@ class WordDictionary private constructor(
     private val language: Layout,
     val commonWords: List<String>,
     private val exact: Map<String, Entry>,
-    private val loose: Map<String, Entry>,
+    private val spellings: Map<String, List<Spelling>>,
     private val originals: Map<String, Long>,
     private val dialectSpellings: Set<String>,
 ) {
@@ -25,6 +25,13 @@ class WordDictionary private constructor(
         val original: String,
         val frequency: Long,
         val isDialectOnly: Boolean = false,
+        /** A listed misspelling (ذالك): known, so never "corrected" into, but never offered either. */
+        val hidden: Boolean = false,
+    )
+
+    private class Spelling(
+        val original: String,
+        val frequency: Long,
     )
 
     val size: Int get() = entries.size
@@ -70,8 +77,33 @@ class WordDictionary private constructor(
             val entry = entries[index++]
             scanned++
             if (!entry.normalized.startsWith(normalizedPrefix)) break
-            if (!dialect && entry.isDialectOnly) continue
+            if ((!dialect && entry.isDialectOnly) || entry.hidden) continue
             insertBestCandidate(best, Candidate(entry.original, entry.frequency.toDouble()), limit)
+        }
+        return best
+    }
+
+    /**
+     * Arabic completions behind an attached conjunction or preposition: وبالبي → وبالبيت, للمدر → للمدرسة.
+     * Score is the bare word's frequency; the clitic form is rarer, so callers should discount it.
+     */
+    fun cliticCompletions(
+        prefix: String,
+        limit: Int,
+        dialect: Boolean,
+    ): List<Candidate> {
+        if (language != Layout.ARABIC || prefix.length < 3 || prefix.length > 64) return emptyList()
+        val best = ArrayList<Candidate>(limit)
+        val seen = HashSet<String>()
+        for ((clitic, stemStart) in ARABIC_CLITIC_PREFIXES) {
+            if (!prefix.startsWith(clitic)) continue
+            // ل + ال is written لل: complete the ال-word and write it back with one alef dropped.
+            val stem = stemStart + prefix.substring(clitic.length)
+            if (stem.length < 2 + stemStart.length) continue
+            for (c in completions(stem, limit, dialect)) {
+                val word = clitic + c.word.substring(stemStart.length)
+                if (seen.add(word)) insertBestCandidate(best, Candidate(word, c.score), limit)
+            }
         }
         return best
     }
@@ -170,7 +202,7 @@ class WordDictionary private constructor(
 
     /** Suggest-only fix for KNOWN rare English words, else null. */
     fun likelyIntended(word: String): String? {
-        if (language != Layout.ENGLISH) return null
+        if (language == Layout.ARABIC) return arabicIntended(word)
         if (word.length < 4 || word.length > 32) return null
         if (word.drop(1).any { it.isUpperCase() }) return null
         val lower = word.lowercase(Locale.ROOT)
@@ -368,86 +400,184 @@ class WordDictionary private constructor(
         if (word.length < 2 || word.length > 32) return null
         // Curated dialect spellings are deliberate: هلأ is "now", not a misspelt هلا.
         if (word in dialectSpellings) return null
+        ARABIC_MISSPELLINGS[word]?.let { return it }
         val normalized = normalize(word, language) ?: return null
         val typedFrequency = originals[word] ?: 0L
 
-        // Loose-key spelling-variant rule
-        val variant = loose[looseKey(normalized)]
-        if (variant != null) {
-            val yaaOnly = typedFrequency > 0 && word.dropLast(1) == variant.original.dropLast(1) && word.last() in "يى"
-            if (!yaaOnly && variant.original != word && variant.frequency >= 3 * typedFrequency) {
-                return variant.original
-            }
+        lazySpelling(word, normalized, typedFrequency)?.let { return it }
+        // Final hamza on a seat: شيئ → شيء, بطئ → بطء.
+        if (word.length >= 3 && word.last() in "ئؤ") {
+            val bare = word.dropLast(1) + 'ء'
+            val bareFrequency = originals[bare] ?: 0L
+            if (bareFrequency >= 1000L && bareFrequency >= 3 * typedFrequency) return bare
         }
-
-        // If known, no autocorrection
         if (exact.containsKey(normalized)) return null
+        // Laughter and held single letters (هههههه, ممممم) are deliberate.
+        if (ELONGATION.replace(normalized, "$1").length < 3) return null
+        if (looksInflected(normalized)) return null
 
-        // Clitic decomposition
-        if (isCliticDecomposable(normalized)) return null
+        // Tanween typed as noon: شكرن → شكرا, جدن → جدا.
+        if (word.endsWith('ن') && word.length >= 3) {
+            exact[normalized.dropLast(1) + 'ا']?.let { if (it.frequency >= 1000L) return it.original }
+        }
 
-        // Tanween typed as noon
-        if (word.endsWith('ن') && word.length >= 4) {
-            val tanweenCand = normalize(word.dropLast(1) + "ا", language)
-            if (tanweenCand != null) {
-                val entry = exact[tanweenCand]
-                if (entry != null && entry.frequency >= 1000L) {
-                    return entry.original
+        val candidates = arabicEdits(normalized)
+        val best = candidates.firstOrNull() ?: return null
+        // Two plausible different words means a guess, so leave the choice to the suggestion strip.
+        val runnerUp = candidates.getOrNull(1)
+        if (runnerUp != null && runnerUp.second * 3 > best.second) return null
+        val elongated = ELONGATION.containsMatchIn(normalized)
+        if (!elongated && (normalized.length < 4 || best.second < 4_000.0)) return null
+        return if (midWord(normalized, best.first)) null else best.first.original
+    }
+
+    /**
+     * The common spelling of the same word when [word] only differs by a lazily typed letter:
+     * bare alef for hamza (انا → أنا), final ه for ة (مدرسه → مدرسة), ى for ي (فى → في), ئ for ء (شيئ → شيء).
+     * Letters the user typed deliberately (أ إ آ, or a known word ending in ي/ه) are kept.
+     */
+    private fun lazySpelling(
+        word: String,
+        normalized: String,
+        typedFrequency: Long,
+        strict: Boolean = true,
+    ): String? {
+        val group = spellings[looseKey(normalized)] ?: return null
+        val top = group.first()
+        if (top.original == word || top.original.length != word.length) return null
+        val rival = group.firstOrNull { it !== top && it.original != word }?.frequency ?: 0L
+        var ratio = 3L
+        for (i in word.indices) {
+            val typed = word[i]
+            val wanted = top.original[i]
+            if (typed == wanted) continue
+            val last = i == word.lastIndex
+            when {
+                typed == 'ا' && wanted in "أإآ" -> {
+                    // انه could be أنه or إنه: only fill a hamza that is clearly the usual one.
+                    if (top.frequency < 2 * rival) return null
+                    ratio = maxOf(ratio, 2L)
+                }
+
+                last && typed == 'ى' && wanted == 'ي' -> {
+                    Unit
+                }
+
+                // علي and الي are real words, not misspelt على and إلى.
+                last && typed == 'ي' && wanted == 'ى' -> {
+                    if (typedFrequency > 0) return null
+                }
+
+                // كتابه is "his book", not a misspelt كتابة; an ال- word cannot take that pronoun.
+                last && typed == 'ه' && wanted == 'ة' -> {
+                    val stem = normalized.dropLast(1)
+                    if (strict && typedFrequency > 0 && !word.startsWith("ال") && exact.containsKey(stem)) ratio = maxOf(ratio, 20L)
+                }
+
+                last && typed == 'ة' && wanted == 'ه' -> {
+                    Unit
+                }
+
+                last && typed in "ئؤ" && wanted == 'ء' -> {
+                    Unit
+                }
+
+                else -> {
+                    return null
                 }
             }
         }
+        return if (top.frequency >= ratio * typedFrequency) top.original else null
+    }
 
-        // Unknown word, length >= 3: single substitution or adjacent transposition
-        if (normalized.length >= 3) {
-            var bestEntry: Entry? = null
-            var bestScore = 0.0
-            val n = normalized.length
+    /** Suggest-only Arabic fix for an unknown word whose correction was not certain enough to apply. */
+    private fun arabicIntended(word: String): String? {
+        if (word.length < 3 || word.length > 32 || word in dialectSpellings) return null
+        if (word.any { it in '\u064B'..'\u065F' || it == '\u0670' || it == 'ـ' }) return null
+        val normalized = normalize(word, language) ?: return null
+        // مدرسه stays as typed (it can mean "his teacher") but مدرسة is offered first.
+        lazySpelling(word, normalized, originals[word] ?: 0L, strict = false)?.let { return it }
+        if (exact.containsKey(normalized) || looksInflected(normalized)) return null
+        val best = arabicEdits(normalized).firstOrNull() ?: return null
+        return if (best.second >= 500.0) best.first.original else null
+    }
 
-            fun considerArabic(
-                cand: String,
-                weight: Double,
-            ) {
-                val entry = exact[cand] ?: return
-                val score = entry.frequency * weight
-                if (score > bestScore) {
-                    bestScore = score
-                    bestEntry = entry
-                }
-            }
+    /** Known words one keyboard slip away from [normalized], best first, scored by frequency * edit weight. */
+    private fun arabicEdits(normalized: String): List<Pair<Entry, Double>> {
+        if (normalized.length < 3) return emptyList()
+        val scores = HashMap<String, Pair<Entry, Double>>()
 
-            // Adjacent transposition: 1.0
-            for (i in 0 until n - 1) {
-                val cand = normalized.substring(0, i) + normalized[i + 1] + normalized[i] + normalized.substring(i + 2)
-                considerArabic(cand, 1.0)
-            }
-
-            // Arabic-adjacent substitution: 0.85
-            for (i in 0 until n) {
-                val orig = normalized[i]
-                for (c in ARABIC_ALPHABET) {
-                    if (c != orig && adjacentArabic(orig, c) && !isDialectSensitive(orig, c)) {
-                        val cand = normalized.substring(0, i) + c + normalized.substring(i + 1)
-                        considerArabic(cand, 0.85)
-                    }
-                }
-            }
-
-            val best = bestEntry
-            if (best != null && best.frequency >= 50 * maxOf(1L, typedFrequency) && bestScore >= 500.0 &&
-                !midWord(normalized, best)
-            ) {
-                return best.original
-            }
+        fun consider(
+            cand: String,
+            weight: Double,
+        ) {
+            if (cand.length < 2 || cand == normalized) return
+            val entry = exact[cand] ?: return
+            if (entry.hidden) return
+            val score = entry.frequency * weight
+            val old = scores[entry.normalized]
+            if (old == null || score > old.second) scores[entry.normalized] = entry to score
         }
 
-        return null
+        val n = normalized.length
+        // Held keys: حلوووو → حلو, تماام → تمام.
+        if (ELONGATION.containsMatchIn(normalized)) {
+            consider(ELONGATION.replace(normalized, "$1"), 1.0)
+            consider(ELONGATION.replace(normalized, "$1$1"), 0.8)
+        }
+        for (i in 0 until n - 1) {
+            consider(normalized.substring(0, i) + normalized[i + 1] + normalized[i] + normalized.substring(i + 2), 1.0)
+            if (normalized[i] == normalized[i + 1]) consider(normalized.removeRange(i, i + 1), 0.9)
+        }
+        for (i in 0 until n) {
+            val orig = normalized[i]
+            // A final ة/ت swap is usually a different word (noun vs verb), not a slip.
+            val last = i == n - 1
+            for (c in ARABIC_ALPHABET) {
+                if (c != orig && adjacentArabic(orig, c) && !isDialectSensitive(orig, c) && !(last && orig in "ةت" && c in "ةت")) {
+                    consider(normalized.substring(0, i) + c + normalized.substring(i + 1), 0.85)
+                }
+            }
+            // A stray neighbouring key pressed with the intended one.
+            val stray = (i > 0 && adjacentArabic(normalized[i - 1], orig)) || (i + 1 < n && adjacentArabic(normalized[i + 1], orig))
+            if (stray && n >= 4) consider(normalized.removeRange(i, i + 1), 0.6)
+        }
+        // A missed letter inside a longer word: حبيي → حبيبي.
+        if (n >= 4) {
+            for (i in 1 until n) {
+                for (c in ARABIC_ALPHABET) consider(normalized.substring(0, i) + c + normalized.substring(i), 0.5)
+            }
+        }
+        return scores.values.sortedByDescending { it.second }
+    }
+
+    /**
+     * A valid but unlisted form of a known word: clitics (وبسيارته), conjugations (تقبض beside يقبض)
+     * or inflection suffixes (ضروريا beside ضروري). Most Arabic words are such forms, so they stay as typed.
+     */
+    private fun looksInflected(normalized: String): Boolean {
+        if (isCliticDecomposable(normalized)) return true
+        val verb = if (normalized.startsWith('س') && normalized.length >= 4) normalized.drop(1) else normalized
+        if (verb.length >= 3 && verb[0] in VERB_PREFIXES) {
+            val rest = verb.substring(1)
+            if (VERB_PREFIXES.any { it != verb[0] && exact.containsKey(it + rest) }) return true
+        }
+        for (suffix in ARABIC_SUFFIXES) {
+            if (normalized.length - suffix.length >= 2 && normalized.endsWith(suffix)) {
+                val stem = normalized.dropLast(suffix.length)
+                if (exact.containsKey(stem) || exact.containsKey(stem + 'ة')) return true
+                if (stem.endsWith('ت') && exact.containsKey(stem.dropLast(1) + 'ة')) return true
+            }
+        }
+        return false
     }
 
     private fun isCliticDecomposable(normalizedWord: String): Boolean {
-        // Enclitic only
+        // Enclitic only; a doubled final ي/و (حبيي) is a slip, not a pronoun.
         for (e in ARABIC_ENCLITICS) {
             if (normalizedWord.endsWith(e) && normalizedWord.length - e.length >= 2) {
                 val stem = normalizedWord.substring(0, normalizedWord.length - e.length)
+                if (e.length == 1 && e[0] in "يو" && stem.last() == e[0]) continue
                 if (exact.containsKey(stem)) return true
                 if (stem.endsWith('ت') && exact.containsKey(stem.dropLast(1) + 'ة')) return true
             }
@@ -612,6 +742,49 @@ class WordDictionary private constructor(
                 "و",
             )
 
+        /** Frequent misspellings that the subtitle corpus lists as words, so edit rules cannot catch them. */
+        private val ARABIC_MISSPELLINGS: Map<String, String> =
+            mapOf(
+                "ذالك" to "ذلك",
+                "كذالك" to "كذلك",
+                "بذالك" to "بذلك",
+                "لذالك" to "لذلك",
+                "هاذه" to "هذه",
+                "هاكذا" to "هكذا",
+                "لاكن" to "لكن",
+                "ولاكن" to "ولكن",
+                "اللة" to "الله",
+                "مسؤل" to "مسؤول",
+                "مسئول" to "مسؤول",
+                "لاكنه" to "لكنه",
+                "لاكني" to "لكني",
+            )
+
+        /** Clitic prefix as typed, and what the bare word starts with in its place. */
+        private val ARABIC_CLITIC_PREFIXES =
+            listOf(
+                "ولل" to "ال",
+                "فلل" to "ال",
+                "لل" to "ال",
+                "وب" to "",
+                "ول" to "",
+                "فب" to "",
+                "فل" to "",
+                "و" to "",
+                "ف" to "",
+                "ب" to "",
+                "ل" to "",
+                "ك" to "",
+            )
+
+        /** The same letter held three or more times. */
+        private val ELONGATION = Regex("(.)\\1{2,}")
+
+        /** Imperfect-verb person prefixes: يقبض / تقبض / نقبض / اقبض are one verb. */
+        private const val VERB_PREFIXES = "يتنا"
+
+        private val ARABIC_SUFFIXES = listOf("ات", "ون", "ين", "ان", "تان", "تين", "ا", "ة")
+
         private val QWERTY = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
         private val QWERTY_ROW_OFFSET = doubleArrayOf(0.0, 0.5, 1.5)
 
@@ -751,9 +924,25 @@ class WordDictionary private constructor(
                                 val original = line.substring(0, tab)
                                 val frequency = line.substring(tab + 1).trim().toLongOrNull() ?: return@mapNotNull null
                                 val normalized = normalize(original, language) ?: return@mapNotNull null
-                                if (normalized.isEmpty()) null else Entry(normalized, original, frequency, isDialectOnly = false)
+                                if (normalized.isEmpty()) {
+                                    null
+                                } else {
+                                    Entry(normalized, original, frequency, hidden = original in ARABIC_MISSPELLINGS)
+                                }
                             }.toList()
                     }
+
+            // Every listed surface spelling, since normalizing merges انا into أنا and علي into على.
+            val originals = HashMap<String, Long>(fileEntries.size * 2)
+            val spellings = HashMap<String, MutableList<Spelling>>()
+            if (language == Layout.ARABIC) {
+                for (entry in fileEntries) {
+                    if ('ـ' in entry.original || entry.original in ARABIC_MISSPELLINGS) continue
+                    originals.merge(entry.original, entry.frequency, ::maxOf)
+                    spellings.getOrPut(looseKey(entry.normalized)) { ArrayList() } += Spelling(entry.original, entry.frequency)
+                }
+                spellings.values.forEach { group -> group.sortByDescending { it.frequency } }
+            }
 
             val mergedMap = HashMap<String, Entry>(fileEntries.size + dialect.size)
             for (entry in fileEntries) {
@@ -780,19 +969,16 @@ class WordDictionary private constructor(
 
             val short = HashMap<String, MutableList<Entry>>()
             val exact = HashMap<String, Entry>(entries.size * 2)
-            val loose = HashMap<String, Entry>()
-            val originals = HashMap<String, Long>(entries.size * 2)
 
             entries.forEach { entry ->
-                for (length in 1..minOf(3, entry.normalized.length)) {
-                    val key = entry.normalized.substring(0, length)
-                    insertBestEntry(short.getOrPut(key) { ArrayList() }, entry, limit = 8)
+                if (!entry.hidden) {
+                    for (length in 1..minOf(3, entry.normalized.length)) {
+                        val key = entry.normalized.substring(0, length)
+                        insertBestEntry(short.getOrPut(key) { ArrayList() }, entry, limit = 8)
+                    }
                 }
                 exact.merge(entry.normalized, entry) { a, b -> if (b.frequency > a.frequency) b else a }
-                originals.merge(entry.original, entry.frequency, ::maxOf)
-                if (language == Layout.ARABIC) {
-                    loose.merge(looseKey(entry.normalized), entry) { a, b -> if (b.frequency > a.frequency) b else a }
-                }
+                if (language == Layout.ENGLISH) originals.merge(entry.original, entry.frequency, ::maxOf)
             }
 
             val common = ArrayList<Entry>(3)
@@ -808,7 +994,7 @@ class WordDictionary private constructor(
                 language = language,
                 commonWords = common.map { it.original },
                 exact = exact,
-                loose = loose,
+                spellings = spellings,
                 originals = originals,
                 dialectSpellings = if (language == Layout.ARABIC) dialect.keys else emptySet(),
             )
