@@ -1,0 +1,5 @@
+data/raw/
+build/
+results/
+.gradle/
+.kotlin/

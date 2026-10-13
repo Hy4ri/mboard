@@ -1,0 +1,772 @@
+context	typed	intended	kind
+	انا	أنا	hamza
+هل	انت	أنت	hamza
+كيف حالكم	انتم	أنتم	hamza
+سافر	اخي	أخي	hamza
+تدرس	اختي	أختي	hamza
+تحدثت مع	ابي	أبي	hamza
+رضا	امي	أمي	hamza
+وصلنا	الى	إلى	hamza
+اتصل بي	اذا	إذا	hamza
+	ان	إن	hamza
+أريد	ان	أن	hamza
+أعرف	انه	إنه	hamza
+سمعت	انها	إنها	hamza
+قالوا	انهم	إنهم	hamza
+أقدم	اليكم	إليكم	hamza
+مرت عدة	ايام	أيام	hamza
+هذا	اول	أول	hamza
+الخطوة الأولى صعبة	اولى	أولى	hamza
+هو	اكبر	أكبر	hamza
+الولد	اصغر	أصغر	hamza
+هذا خيار	افضل	أفضل	hamza
+قدم	احسن	أحسن	hamza
+أريد وقتا	اكثر	أكثر	hamza
+السعر	اقل	أقل	hamza
+	اكل	أكل	hamza
+	اخذ	أخذ	hamza
+هذا	امر	أمر	hamza
+لدينا	امل	أمل	hamza
+	اهل	أهل	hamza
+	اين	أين	hamza
+في	اي	أي	hamza
+هو	ايضا	أيضا	hamza
+نحن هنا	الان	الآن	hamza
+في موعد	اخر	آخر	hamza
+فكرة	اخرى	أخرى	hamza
+أنا	اسف	آسف	hamza
+	امل	آمل	hamza
+حضر	الاف	آلاف	hamza
+ترك	اثار	آثار	hamza
+استمع إلى	اراء	آراء	hamza
+	انسان	إنسان	hamza
+	اسلام	إسلام	hamza
+	ايمان	إيمان	hamza
+	احسان	إحسان	hamza
+	انجاز	إنجاز	hamza
+	انترنت	إنترنت	hamza
+	ارسال	إرسال	hamza
+	اعادة	إعادة	hamza
+	ادارة	إدارة	hamza
+	امكانية	إمكانية	hamza
+	اعلان	إعلان	hamza
+	اذن	إذن	hamza
+	اصلاح	إصلاح	hamza
+	انهاء	إنهاء	hamza
+	انشاء	إنشاء	hamza
+	اجراء	إجراء	hamza
+	ايقاف	إيقاف	hamza
+	الغاء	إلغاء	hamza
+	اضافة	إضافة	hamza
+	اجابة	إجابة	hamza
+	شيئ	شيء	hamza
+	بطئ	بطء	hamza
+	جزئ	جزء	hamza
+	بدئ	بدء	hamza
+	دفئ	دفء	hamza
+	ضوئ	ضوء	hamza
+	عبئ	عبء	hamza
+	ملئ	ملء	hamza
+	سوئ	سوء	hamza
+	مسئول	مسؤول	hamza
+	مسئولية	مسؤولية	hamza
+	رءيس	رئيس	hamza
+	مئه	مئة	hamza
+	سوءال	سؤال	hamza
+	سؤل	سؤال	hamza
+	مسئلة	مسألة	hamza
+	تفاول	تفاؤل	hamza
+	تشاوم	تشاؤم	hamza
+	موتمر	مؤتمر	hamza
+	مومن	مؤمن	hamza
+ذهبت إلى	مدرسه	مدرسة	taa
+يدرس في	جامعه	جامعة	taa
+اشترى	سياره	سيارة	taa
+جلس قرب	طاوله	طاولة	taa
+زرع	شجره	شجرة	taa
+نظف	غرفه	غرفة	taa
+انتظرت مدة	ساعه	ساعة	taa
+زار	مدينه	مدينة	taa
+يسكن في	قريه	قرية	taa
+انتظر	دقيقه	دقيقة	taa
+التقط	صوره	صورة	taa
+قرأ	قصه	قصة	taa
+عندي	فكره	فكرة	taa
+حدثت	مشكله	مشكلة	taa
+يعمل في	شركه	شركة	taa
+وصلتني	رساله	رسالة	taa
+مستوى	خدمه	خدمة	taa
+لسنا في	حاجه	حاجة	taa
+هذه	طريقه	طريقة	taa
+يتحدث	لغه	لغة	taa
+عاش	حياه	حياة	taa
+أقام	صلاه	صلاة	taa
+أخرج	زكاه	زكاة	taa
+رأيت	فتاه	فتاة	taa
+حضرنا	حفله	حفلة	taa
+كانت	رحله	رحلة	taa
+طلب	وجبه	وجبة	taa
+شرب فنجان	قهوه	قهوة	taa
+وقف في	شرفه	شرفة	taa
+وفر	طاقه	طاقة	taa
+كتب على	ورقه	ورقة	taa
+حمل	حقيبه	حقيبة	taa
+هذه	فرصه	فرصة	taa
+اقرأ أول	صفحه	صفحة	taa
+قال	كلمه	كلمة	taa
+عقدوا	جلسه	جلسة	taa
+وضع	خطه	خطة	taa
+وصل إلى	نقطه	نقطة	taa
+أهل	حاره	حارة	taa
+يسكن في	عماره	عمارة	taa
+	شاشه	شاشة	taa
+	مكالمه	مكالمة	taa
+	فرشاه	فرشاة	taa
+	مراه	مرآة	taa
+	صيغه	صيغة	taa
+	بطاقه	بطاقة	taa
+	رخصه	رخصة	taa
+	شقه	شقة	taa
+	حديقه	حديقة	taa
+	مكتبه	مكتبة	taa
+	صيدليه	صيدلية	taa
+	بقاله	بقالة	taa
+	ملعقه	ملعقة	taa
+	شوكه	شوكة	taa
+	طائره	طائرة	taa
+	سفينه	سفينة	taa
+	حافله	حافلة	taa
+	دراجه	دراجة	taa
+	لوحه	لوحة	taa
+	محطه	محطة	taa
+	نافذه	نافذة	taa
+	ستاره	ستارة	taa
+	سجاده	سجادة	taa
+	وساده	وسادة	taa
+	زجاجه	زجاجة	taa
+	علبه	علبة	taa
+	قطعه	قطعة	taa
+	نظاره	نظارة	taa
+	سلطه	سلطة	taa
+	شربه	شربة	taa
+	وجوة	وجوه	taa
+	مياة	مياه	taa
+	فواكة	فواكه	taa
+	اشتباة	اشتباه	taa
+	تشابة	تشابه	taa
+	انتباة	انتباه	taa
+	سفاهه	سفاهة	taa
+	نزاهه	نزاهة	taa
+	كراهيه	كراهية	taa
+	إلاة	إله	taa
+سلمت	علي	على	yaa
+سافرت	إلي	إلى	yaa
+انتظر	حتي	حتى	yaa
+أخبرني	متي	متى	yaa
+ليس	لدي	لدى	yaa
+أجاب وقال	بلي	بلى	yaa
+نقل إلى	مستشفي	مستشفى	yaa
+جلسنا في	مقهي	مقهى	yaa
+بحث عن	مأوي	مأوى	yaa
+ما	معني	معنى	yaa
+دخل	مبني	مبنى	yaa
+ارتفع	مستوي	مستوى	yaa
+صنع	محتوي	محتوى	yaa
+شارك في	منتدي	منتدى	yaa
+تغير	مجري	مجرى	yaa
+فهم	مغزي	مغزى	yaa
+خرج إلى	مرعي	مرعى	yaa
+تحدث مع	مصطفي	مصطفى	yaa
+نبي الله	موسي	موسى	yaa
+نبي الله	عيسي	عيسى	yaa
+التقيت بالأخ	يحيي	يحيى	yaa
+حقق	كبري	كبرى	yaa
+نال درجة	صغري	صغرى	yaa
+دولة	عظمي	عظمى	yaa
+في مرتبة	أولي	أولى	yaa
+وجهة نظر	أخري	أخرى	yaa
+مرت	ذكري	ذكرى	yaa
+زف	بشري	بشرى	yaa
+طلب	فتوي	فتوى	yaa
+قدم	شكوي	شكوى	yaa
+رفع	دعوي	دعوى	yaa
+زاد في	تقوي	تقوى	yaa
+استمع إلى	نجوي	نجوى	yaa
+قرأت شعر	فدوي	فدوى	yaa
+وجد	سلوي	سلوى	yaa
+نالت	مني	منى	yaa
+سار على	هدي	هدى	yaa
+قطرات	ندي	ندى	yaa
+تبادلوا	رؤي	رؤى	yaa
+زار	قري	قرى	yaa
+	خطي	خطى	yaa
+	قوي	قوى	yaa
+	هوي	هوى	yaa
+	نوي	نوى	yaa
+	رمي	رمى	yaa
+	جري	جرى	yaa
+	مشي	مشى	yaa
+	بكي	بكى	yaa
+	رأي	رأى	yaa
+	شكي	شكى	yaa
+	روي	روى	yaa
+	طوي	طوى	yaa
+	لوي	لوى	yaa
+	كوي	كوى	yaa
+	سعي	سعى	yaa
+	رعي	رعى	yaa
+	وعي	وعى	yaa
+	ألقي	ألقى	yaa
+	أمضي	أمضى	yaa
+	أعطي	أعطى	yaa
+	أبقي	أبقى	yaa
+	أخفي	أخفى	yaa
+	أهدي	أهدى	yaa
+	أنهي	أنهى	yaa
+	أرضي	أرضى	yaa
+	أغني	أغنى	yaa
+	أوفي	أوفى	yaa
+	استلقي	استلقى	yaa
+	اشتكي	اشتكى	yaa
+	اختفي	اختفى	yaa
+	التقي	التقى	yaa
+	اهتدي	اهتدى	yaa
+	اعتني	اعتنى	yaa
+	اقتني	اقتنى	yaa
+	ارتدي	ارتدى	yaa
+	ادعي	ادعى	yaa
+	احتسي	احتسى	yaa
+	انتهي	انتهى	yaa
+	ارتقي	ارتقى	yaa
+	استغني	استغنى	yaa
+	ضل	ظل	phonetic
+	ضن	ظن	phonetic
+حرم الله الظلم	ضلم	ظلم	phonetic
+أمر	ضاهر	ظاهر	phonetic
+	ضهر	ظهر	phonetic
+بحكم	ضروف	ظروف	phonetic
+كان	حض	حظ	phonetic
+أتم	حفض	حفظ	phonetic
+ألقى	نضر	نظر	phonetic
+	نضام	نظام	phonetic
+أجر	عضيم	عظيم	phonetic
+أصيب في	عضم	عظم	phonetic
+انتظر	لحضة	لحظة	phonetic
+أنت شخص	محضوض	محظوظ	phonetic
+حصل على	وضيفة	وظيفة	phonetic
+ساد	ضلام	ظلام	phonetic
+قص	ضفر	ظفر	phonetic
+أخذ ماله	ضلما	ظلما	phonetic
+	منضر	منظر	phonetic
+طال	انتضار	انتظار	phonetic
+	استيقض	استيقظ	phonetic
+حمل	مضلة	مظلة	phonetic
+غزال مثل	ضبي	ظبي	phonetic
+وضع النقود في	ضرف	ظرف	phonetic
+قام بضبط الوقت	ظبط	ضبط	phonetic
+يعاني من	ظغط	ضغط	phonetic
+رتبة	ظابط	ضابط	phonetic
+	ظرب	ضرب	phonetic
+لا	ظرر	ضرر	phonetic
+مشروع	ظخم	ضخم	phonetic
+جسمه	ظعيف	ضعيف	phonetic
+خوفا من	ظياع	ضياع	phonetic
+غفر الله	زنب	ذنب	phonetic
+	زكر	ذكر	phonetic
+طالب	زكي	ذكي	phonetic
+خاتم من	زهب	ذهب	phonetic
+صاحب	زوق	ذوق	phonetic
+حبة	زرة	ذرة	phonetic
+الكذب عادة ذميمة	كزب	كذب	phonetic
+طعام	لزيز	لذيذ	phonetic
+	جزب	جذب	phonetic
+	مزكرات	مذكرات	phonetic
+	تزكر	تذكر	phonetic
+	حزر	حذر	phonetic
+	بزر	بذر	phonetic
+	نزر	نذر	phonetic
+	مزياع	مذياع	phonetic
+	زئب	ذئب	phonetic
+	زيل	ذيل	phonetic
+	سانية	ثانية	phonetic
+	سلاثة	ثلاثة	phonetic
+	سعلب	ثعلب	phonetic
+	سوب	ثوب	phonetic
+	سلاجة	ثلاجة	phonetic
+	سابت	ثابت	phonetic
+	سروة	ثروة	phonetic
+	أكسر	أكثر	phonetic
+	كسير	كثير	phonetic
+	مسل	مثل	phonetic
+	أسر	أثر	phonetic
+	حديس	حديث	phonetic
+	بحس	بحث	phonetic
+	حادس	حادث	phonetic
+	مسلس	مثلث	phonetic
+	سلج	ثلج	phonetic
+	قرفة	غرفة	phonetic
+	قالي	غالي	phonetic
+	قير	غير	phonetic
+	قريب	غريب	phonetic
+	صندوء	صندوق	phonetic
+	ئال	قال	phonetic
+	ئلت	قلت	phonetic
+	ئريب	قريب	phonetic
+	ئهوة	قهوة	phonetic
+	طريء	طريق	phonetic
+	دئائق	دقائق	phonetic
+	ئدر	قدر	phonetic
+	ئمر	قمر	phonetic
+	ئلبي	قلبي	phonetic
+	ئلق	قلق	phonetic
+دخلنا	ليت	بيت	adjacent
+بنى	نبت	بيت	adjacent
+قرأت	كتان	كتاب	adjacent
+عليكم	شلام	سلام	adjacent
+تأجل	شفر	سفر	adjacent
+أغلق	ياب	باب	adjacent
+من كل	فلب	قلب	adjacent
+كتب بواسطة	فلم	قلم	adjacent
+يبحث عن	غمل	عمل	adjacent
+طلب	غلم	علم	adjacent
+سمع	حبر	خبر	adjacent
+صباح	حير	خير	adjacent
+أخذ قسط	توم	نوم	adjacent
+في وضح	تهار	نهار	adjacent
+أكل حبة	نمر	تمر	adjacent
+جلس في	نكتب	مكتب	adjacent
+منظر	حميل	جميل	adjacent
+اشترى جوال	حديد	جديد	adjacent
+قطف	زد	ورد	adjacent
+حان	زقت	وقت	adjacent
+هو	وجل	رجل	adjacent
+رفع	ؤأس	رأس	adjacent
+زار	ضديق	صديق	adjacent
+في	ضباح	صباح	adjacent
+فاز	قريق	فريق	adjacent
+حل	قصل	فصل	adjacent
+سار في	كريق	طريق	adjacent
+هو	كالب	طالب	adjacent
+مرت	شاعة	ساعة	adjacent
+ذهب إلى	شوق	سوق	adjacent
+رأى بعين نفسه	غين	عين	adjacent
+تناول	غسل	عسل	adjacent
+اشترى	حيار	خيار	adjacent
+وقت	حروج	خروج	adjacent
+حقق	جلم	حلم	adjacent
+آثار	جرب	حرب	adjacent
+أشرق	مور	نور	adjacent
+أشعل	مار	نار	adjacent
+شرب	ناء	ماء	adjacent
+وصل إلى	تكان	مكان	adjacent
+	طلمة	كلمة	adjacent
+	طبير	كبير	adjacent
+	يحر	بحر	adjacent
+	يلد	بلد	adjacent
+	سارع	شارع	adjacent
+	سمس	شمس	adjacent
+	ساي	شاي	adjacent
+	ضوت	صوت	adjacent
+	ضيف	صيف	adjacent
+	عداء	غداء	adjacent
+	عرفة	غرفة	adjacent
+	عابة	غابة	adjacent
+	خاتف	هاتف	adjacent
+	خواء	هواء	adjacent
+	خدف	هدف	adjacent
+	ثمر	قمر	adjacent
+	ثهوة	قهوة	adjacent
+	فدر	قدر	adjacent
+	بيل	ليل	adjacent
+	يحم	لحم	adjacent
+	يبن	لبن	adjacent
+	بوم	يوم	adjacent
+	بد	يد	adjacent
+	ويت	زيت	adjacent
+	ور	زر	adjacent
+	وهرة	زهرة	adjacent
+	وزر	وزن	adjacent
+	وز	رز	adjacent
+	ومح	رمح	adjacent
+	ذرس	درس	adjacent
+	ذرهم	درهم	adjacent
+	ذفتر	دفتر	adjacent
+	ذلو	دلو	adjacent
+	حبل	جبل	adjacent
+	حدار	جدار	adjacent
+	حمل	جمل	adjacent
+	حوز	جوز	adjacent
+	حبن	جبن	adjacent
+	حريدة	جريدة	adjacent
+	ينت	بنت	adjacent
+وعليكم	اسلام	السلام	omission
+خرج من	مدرسة	المدرسة	omission
+أعاد	كتاب	الكتاب	omission
+وصل إلى	جامعة	الجامعة	omission
+نلتقي في	صباح	الصباح	omission
+ما خطتك	يوم	اليوم	omission
+لم يسعفنا	وقت	الوقت	omission
+ازدحم	طريق	الطريق	omission
+رجع إلى	بيت	البيت	omission
+ذهب إلى	عمل	العمل	omission
+	حمد	الحمد	omission
+طلعت	شمس	الشمس	omission
+انشق	قمر	القمر	omission
+أضواء	مدينة	المدينة	omission
+اشترى من	سوق	السوق	omission
+	شكر	شكرا	omission
+	عفو	عفوا	omission
+	أهل	أهلا	omission
+	مرحب	مرحبا	omission
+هذا عمل	جمل	جميل	omission
+قطار	سرع	سريع	omission
+طريق	طول	طويل	omission
+وقت	قصر	قصير	omission
+بيت	كبر	كبير	omission
+طفل	صغر	صغير	omission
+كلام	كثر	كثير	omission
+نام وقت	قلل	قليل	omission
+اشترى هاتف	جدد	جديد	omission
+هذا أثر	قدم	قديم	omission
+هو شخص	سعد	سعيد	omission
+خبر	حزن	حزين	omission
+فحص الطبيب عين	طبب	طبيب	omission
+شرح المعلم درسه	ملم	معلم	omission
+اجتهد كل	طلب	طالب	omission
+وقع	مدي	مدير	omission
+قاد	ساق	سائق	omission
+باع	تجر	تاجر	omission
+أتقن كل	عمل	عامل	omission
+صمم	مهند	مهندس	omission
+صرح	وزر	وزير	omission
+	ريس	رئيس	omission
+	علم	عالم	omission
+	شعر	شاعر	omission
+	كتب	كاتب	omission
+	تلفز	تلفاز	omission
+	حاسب	حاسوب	omission
+	مفتح	مفتاح	omission
+	قل	قفل	omission
+	شبك	شباك	omission
+	كري	كرسي	omission
+	سير	سرير	omission
+	دلب	دولاب	omission
+	طبخ	مطبخ	omission
+	حمم	حمام	omission
+	شرع	شارع	omission
+	رصف	رصيف	omission
+	حدقه	حديقة	omission
+	شجر	شجرة	omission
+	زهر	زهرة	omission
+	نه	نهر	omission
+	بح	بحر	omission
+	سما	سماء	omission
+	شتا	شتاء	omission
+	صف	صيف	omission
+	ربع	ربيع	omission
+	خرف	خريف	omission
+	مط	مطر	omission
+	ثل	ثلج	omission
+	رح	ريح	omission
+	سحب	سحاب	omission
+	نج	نجم	omission
+	ككب	كوكب	omission
+	أض	أرض	omission
+	جب	جبل	omission
+	صحرا	صحراء	omission
+	جزير	جزيرة	omission
+	بحير	بحيرة	omission
+	ودي	وادي	omission
+	طماط	طماطم	omission
+	بطاط	بطاطا	omission
+	شكراء	شكرا	insertion
+	عفوان	عفوا	insertion
+	أهلان	أهلا	insertion
+	مرحبان	مرحبا	insertion
+قرأ	كتئاب	كتاب	insertion
+كتب بواسطة	قلام	قلم	insertion
+سجل في	دفتور	دفتر	insertion
+فتح	شبايك	شباك	insertion
+جلس فوق	كراسي	كرسي	insertion
+نظف	مطابخ	مطبخ	insertion
+سار في	شوارع	شارع	insertion
+جلس قرب	شجيرة	شجرة	insertion
+نظر إلى	بحار	بحر	insertion
+نزل	ماطر	مطر	insertion
+سقط	ثلوج	ثلج	insertion
+لمع	نجوم	نجم	insertion
+صعد	جبال	جبل	insertion
+انحدر نحو	وديان	وادي	insertion
+نلتقي	غدوا	غدا	insertion
+أشرق	صبائح	صباح	insertion
+نراكم	مساءا	مساء	insertion
+انتظر	سواعة	ساعة	insertion
+انتظر	شهور	شهر	insertion
+فهم	دروس	درس	insertion
+نشر	علوم	علم	insertion
+سلك	طرايق	طريق	insertion
+شوى	لحوم	لحم	insertion
+أهدى	ورود	ورد	insertion
+دخل	بيوت	بيت	insertion
+	رجال	رجل	insertion
+	بنات	بنت	insertion
+	عيون	عين	insertion
+	رؤوس	رأس	insertion
+	قلوب	قلب	insertion
+	أنفس	نفس	insertion
+	أيوم	يوم	insertion
+	أليل	ليل	insertion
+	أفجر	فجر	insertion
+	أظهر	ظهر	insertion
+	أعصر	عصر	insertion
+	أمغرب	مغرب	insertion
+	أعشاء	عشاء	insertion
+	طيور	طير	insertion
+	وحوش	وحش	insertion
+	سيوف	سيف	insertion
+	رماح	رمح	insertion
+	سهام	سهم	insertion
+	دروع	درع	insertion
+	حصون	حصن	insertion
+	قصور	قصر	insertion
+	آثار	أثر	insertion
+رد	سلاام	سلام	doubled
+تصفح	كتتاب	كتاب	doubled
+أرسل	رساللة	رسالة	doubled
+رد على	هااتف	هاتف	doubled
+نظف	شااشة	شاشة	doubled
+رسم	لووحة	لوحة	doubled
+حفظ	صوورة	صورة	doubled
+شاهد	فييديو	فيديو	doubled
+حمل	بررنامج	برنامج	doubled
+تصفح	مووقع	موقع	doubled
+أرسل	راابط	رابط	doubled
+حمل	مللف	ملف	doubled
+راجع	بياننات	بيانات	doubled
+كتب	تقررير	تقرير	doubled
+فتح	حسااب	حساب	doubled
+سجل	رققم	رقم	doubled
+كتب	اسسم	اسم	doubled
+أعطاني	عنووان	عنوان	doubled
+حدد	تارييخ	تاريخ	doubled
+ضبط	ساععة	ساعة	doubled
+بقي	دقيققة	دقيقة	doubled
+مرت	ثانيية	ثانية	doubled
+في	صبباح	صباح	doubled
+نلتقي	مسساء	مساء	doubled
+سهر	لييل	ليل	doubled
+أمضى	نههار	نهار	doubled
+صلى	فججر	فجر	doubled
+خرج	ظههر	ظهر	doubled
+جلس وقت	عصصر	عصر	doubled
+عاد وقت	مغررب	مغرب	doubled
+تناول	عشااء	عشاء	doubled
+هذا	ييووم	يوم	doubled
+خلال	أسبووع	أسبوع	doubled
+مضى	شههر	شهر	doubled
+قبل	سننة	سنة	doubled
+في	فصصل	فصل	doubled
+حر	صييف	صيف	doubled
+برد	شتتاء	شتاء	doubled
+جمال	ربييع	ربيع	doubled
+نسيم	خرييف	خريف	doubled
+	شممس	شمس	doubled
+	قممر	قمر	doubled
+	نججم	نجم	doubled
+	سمماء	سماء	doubled
+	غييمة	غيمة	doubled
+	مططر	مطر	doubled
+	ثللج	ثلج	doubled
+	رييح	ريح	doubled
+	هوواء	هواء	doubled
+	بححر	بحر	doubled
+	نههر	نهر	doubled
+	شاططئ	شاطئ	doubled
+	مووج	موج	doubled
+	رممل	رمل	doubled
+	جببل	جبل	doubled
+	واادي	وادي	doubled
+	صححراء	صحراء	doubled
+	غاابة	غابة	doubled
+	شججرة	شجرة	doubled
+	ورردة	وردة	doubled
+	زههرة	زهرة	doubled
+	طاائر	طائر	doubled
+	عصفوور	عصفور	doubled
+	حماامة	حمامة	doubled
+	صققر	صقر	doubled
+	نسسر	نسر	doubled
+	سمككة	سمكة	doubled
+	حصصان	حصان	doubled
+	جممل	جمل	doubled
+	خرووف	خروف	doubled
+	قطط	قط	doubled
+	كللب	كلب	doubled
+	بييت	بيت	doubled
+	داار	دار	doubled
+	قصصر	قصر	doubled
+	غررفة	غرفة	doubled
+	بااب	باب	doubled
+	سوور	سور	doubled
+	طرييق	طريق	doubled
+	شاارع	شارع	doubled
+قرأ	كابت	كتاب	transposition
+جلس خلف	مبتك	مكتب	transposition
+رأيت	بتن	بنت	transposition
+أكل	تفحا	تفاح	transposition
+أضاع	مفتحا	مفتاح	transposition
+وضع	ناظم	نظام	transposition
+أشرقت	سمش	شمس	transposition
+سطع	قرم	قمر	transposition
+رأى	نمج	نجم	transposition
+سبح في	برح	بحر	transposition
+جرى ماء	نره	نهر	transposition
+صعد قمة	جلب	جبل	transposition
+غرس	شرج	شجر	transposition
+سار في	طيرق	طريق	transposition
+تسوق من	سقو	سوق	transposition
+مشينا في	شراع	شارع	transposition
+هو	رلج	رجل	transposition
+ساعد	ودل	ولد	transposition
+اشترى	خزب	خبز	transposition
+شرب كاس	لنب	لبن	transposition
+أكل شطيرة	جنب	جبن	transposition
+تذوق	علس	عسل	transposition
+تناول	ترم	تمر	transposition
+طبخت	لمح	لحم	transposition
+أكل	سكم	سمك	transposition
+قلى	بضي	بيض	transposition
+طلب كاس	شيا	شاي	transposition
+شرب	قوهة	قهوة	transposition
+شرب	عصري	عصير	transposition
+أغلق	شكاب	شباك	transposition
+كتب بقلم رصاص	قمل	قلم	transposition
+طبع على	وقر	ورق	transposition
+دون في	دفرت	دفتر	transposition
+طلب	عمل	علم	transposition
+	فمه	فهم	transposition
+أتم	حظف	حفظ	transposition
+	كبت	كتب	transposition
+	قأر	قرأ	transposition
+	ذبه	ذهب	transposition
+	رعج	رجع	transposition
+	خجر	خرج	transposition
+	دلح	دخل	transposition
+	وفق	وقف	transposition
+	ميش	مشى	transposition
+	جير	جرى	transposition
+	نما	نام	transposition
+	صاح	صحا	transposition
+	ألك	أكل	transposition
+	شبر	شرب	transposition
+	صما	صام	transposition
+	داع	دعا	transposition
+	قلا	قال	transposition
+	حيك	حكى	transposition
+	فحر	فرح	transposition
+	حنز	حزن	transposition
+	ضكح	ضحك	transposition
+	بيك	بكى	transposition
+	صرب	صبر	transposition
+	شرك	شكر	transposition
+	حدم	حمد	transposition
+	محد	مدح	transposition
+	صقد	صدق	transposition
+	كبذ	كذب	transposition
+	ودع	وعد	transposition
+	ويف	وفى	transposition
+	خنا	خان	transposition
+	سمل	سلم	transposition
+	حبر	حرب	transposition
+	أنم	أمن	transposition
+	خفو	خوف	transposition
+	وتق	وقت	transposition
+	صتو	صوت	transposition
+	متو	موت	transposition
+	فتو	فوت	transposition
+	تتو	توت	transposition
+	حتو	حوت	transposition
+	زتي	زيت	transposition
+	بتي	بيت	transposition
+	صتم	صمت	transposition
+	نتب	نبت	transposition
+عدت سريعا	لبيت	للبيت	other
+توجه صباحا	لعمل	للعمل	other
+ذهب مسرعا	لجامعة	للجامعة	other
+وصل الطلاب	لمدرسة	للمدرسة	other
+قدم الخير	لناس	للناس	other
+الحمد	له	لله	other
+سلم التقرير	لمدير	للمدير	other
+قدم هدية	لمعلم	للمعلم	other
+شرح المسألة	لطالب	للطالب	other
+راجع العيادة	لطبيب	للطبيب	other
+قدم طلبا	لشركة	للشركة	other
+ذهب توا	لمكتب	للمكتب	other
+اشترى وقود	لسيارة	للسيارة	other
+وضع شاحن	لهاتف	للهاتف	other
+انتمى بكل فخر	لاردن	للأردن	other
+قدم خدمات جليلة	لبلد	للبلد	other
+ضحى بنفسه	لوطن	للوطن	other
+تقدم خطوة	لامام	للأمام	other
+تراجع خطوة	لخلف	للخلف	other
+انعطف فورا	ليمين	لليمين	other
+انحرف قليلا	ليسار	لليسار	other
+نظر بدهشة	لاعلى	للأعلى	other
+هبط بسرعة	لاسفل	للأسفل	other
+دخل سريعا	لداخل	للداخل	other
+خرج مسرعا	لخارج	للخارج	other
+أقسم صادقا	بلاه	بالله	other
+نطق القاضي	بلحق	بالحق	other
+تفاءلوا دائما	بلخير	بالخير	other
+أتمنى لك	بلسلامة	بالسلامة	other
+دعوت له	بلتوفيق	بالتوفيق	other
+تمتع دائما	بلصحة	بالصحة	other
+حدث هذا	بلفعل	بالفعل	other
+الساعة العاشرة	بلضبط	بالضبط	other
+أنا موافق	بلتاكيد	بالتأكيد	other
+سأحضر معكم	بلطبع	بالطبع	other
+وصل الخبر	بلامس	بالأمس	other
+لا نرضى	بليوم	باليوم	other
+قاد سيارته	بلسرعة	بالسرعة	other
+لا تؤخذ الأمور	بلقوة	بالقوة	other
+فكر مليا	بلعقل	بالعقل	other
+	فليوم	فاليوم	other
+	فلعمل	فالعمل	other
+	فلعلم	فالعلم	other
+	فلصبر	فالصبر	other
+	فلنصر	فالنصر	other
+	كاسد	كالأسد	other
+	كلبدر	كالبدر	other
+	كلشمس	كالشمس	other
+	كلقمر	كالقمر	other
+	كلذهب	كالذهب	other
+	الذى	الذي	other
+	التى	التي	other
+	اللواتى	اللواتي	other
+	الائى	اللائي	other
+	ذالك	ذلك	other
+	هاذا	هذا	other
+	هاذه	هذه	other
+	هاؤلاء	هؤلاء	other
+	هاذان	هذان	other
+	اولائك	أولئك	other
+	لاكن	لكن	other
+	لاكنه	لكنه	other
+	لاكنها	لكنها	other
+	لاكنهم	لكنهم	other
+	الرحمان	الرحمن	other
+	طاها	طه	other
+	ياسين	يس	other
+	عما	عم	other
+	مما	مم	other
+	فيما	فيم	other
+	علاما	علام	other
+	إلاما	إلام	other
+	حتاما	حتام	other
+	بما	بم	other
+	عمر	عمرو	other
+	ماة	مائة	other
+	اولو	أولو	other
+	اولات	أولات	other
+	اولاء	أولاء	other
+	داوود	داود	other
