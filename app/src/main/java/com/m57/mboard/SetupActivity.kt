@@ -450,7 +450,7 @@ class SetupActivity : Activity() {
             column,
             components.toggle(
                 "Learn my words",
-                "Suggest words you type often and stop correcting them · paused by the shield, passwords and email fields",
+                "Suggest words you type often and the words you usually type next, and stop correcting them · paused by the shield, passwords and email fields",
                 settings.learnWords,
             ) {
                 settings.learnWords = it
@@ -529,7 +529,11 @@ class SetupActivity : Activity() {
         column.addView(components.section("CLEAR LOCAL DATA"))
         components.add(
             column,
-            components.row("Delete learned words", "${UserWords(this).size()} words learned from your typing", destructive = true) {
+            components.row(
+                "Delete learned words",
+                "${UserWords(this).size()} words learned from your typing, plus their next-word pairs",
+                destructive = true,
+            ) {
                 confirm("Delete learned words?", "Suggestions go back to the bundled dictionaries only.") {
                     UserWords(this).clear()
                     settings.markLearnedReset()

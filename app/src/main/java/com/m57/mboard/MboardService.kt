@@ -542,7 +542,8 @@ class MboardService : InputMethodService() {
         }
         val context = prefixContext()
         if (context.commonEligible) {
-            val predicted = words.predict(context.contextWords, language, settings.dialectEnabled(language.dialect))
+            val predicted =
+                words.predict(context.contextWords, language, settings.dialectEnabled(language.dialect), learnedNext(context.contextWords))
             strip.render(
                 predicted.map { matchCase(it, "") },
                 "",
@@ -574,6 +575,7 @@ class MboardService : InputMethodService() {
                     context.contextWords,
                     language,
                     settings.dialectEnabled(language.dialect),
+                    learnedNext(context.contextWords),
                 ).map { matchCase(it, typed) }
         // Learned words lead the completions, but never push out a correction or the best dictionary match.
         val learned = if (privateSession) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
@@ -661,7 +663,7 @@ class MboardService : InputMethodService() {
             ic.endBatchEdit()
         }
         rejectedCorrections += last.original
-        learn(last.original)
+        learn(last.original, null)
         return true
     }
 
@@ -860,6 +862,10 @@ class MboardService : InputMethodService() {
         return field
     }
 
+    /** Words the user has typed after the last context word; nothing in a private session. */
+    private fun learnedNext(contextWords: List<String>): List<String> =
+        if (privateSession) emptyList() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
+
     private fun matchCase(
         word: String,
         source: String,
@@ -910,7 +916,7 @@ class MboardService : InputMethodService() {
         if (!done) {
             message("This app did not accept the completion")
         } else {
-            if (' ' !in word.trim()) learn(word.trim())
+            if (' ' !in word.trim()) learn(word.trim(), context.contextWords.lastOrNull())
             if (keyboard?.capsLocked != true) keyboard?.shifted = false
         }
         lastSpace = 0L
@@ -1030,9 +1036,9 @@ class MboardService : InputMethodService() {
         }
         if (key != Keys.SHIFT) lastCorrection = null
         if (key in separators) {
-            val typed = prefixContext().prefix
+            val before = prefixContext()
             autoCorrectBefore(ic, key)
-            learn(lastCorrection?.corrected ?: typed)
+            learn(lastCorrection?.corrected ?: before.prefix, before.contextWords.lastOrNull())
         }
         when (key) {
             Keys.SHIFT -> {
@@ -1152,11 +1158,14 @@ class MboardService : InputMethodService() {
     }
 
     /** Learns only in ordinary fields, with learning on, outside the shield and apps' no-learning flag. */
-    private fun learn(word: String) {
+    private fun learn(
+        word: String,
+        previous: String?,
+    ) {
         if (word.isEmpty() || !settings.learnWords || privateSession || fieldPolicy.reason != SuggestionPolicy.Reason.AVAILABLE) return
         if ((currentInputEditorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
         if (keyboard?.layout != language.layout || mode != Mode.KEYS) return
-        userWords.record(word, language)
+        userWords.record(word, previous, language)
     }
 
     /** Slide left from backspace: [steps] whole words get selected so the user sees what release deletes. */

@@ -141,11 +141,38 @@ class WordSuggestions(
             emptyMap()
         }
 
-    /** One comparison key for table keys, context words and candidates: lowercase, no harakat/tatweel. */
+    /**
+     * One comparison key for table keys, context words and candidates: lowercase, no harakat/tatweel and
+     * no apostrophes. The corpus tables were built without apostrophes, so "don't" must find "dont".
+     */
     private fun matchKey(word: String): String =
         word.lowercase(Locale.ROOT).filterNot { c ->
-            c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640'
+            c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640' || c == '\'' || c == '\u2019'
         }
+
+    /** Row for the last word; Arabic falls back to the word behind attached و/ف/ب/ل/ك/ع (والله → الله). */
+    private fun row(
+        table: Map<String, List<String>>,
+        last: String,
+        language: Language,
+    ): List<String>? {
+        table[last]?.let { return it }
+        if (language.script != Script.ARABIC) return null
+        var word = last
+        repeat(2) {
+            if (word.length < 4 || word[0] !in ARABIC_PROCLITICS) return null
+            // لل and عال keep the article: للبيت → البيت, عالبيت → البيت.
+            word = if (word.startsWith("لل")) "ا" + word.substring(1) else word.substring(1)
+            table[word]?.let { return it }
+        }
+        return null
+    }
+
+    /** Table words in their written form: dont → don't, i → I. */
+    private fun written(
+        word: String,
+        language: Language,
+    ): String = language.contractions[word] ?: word
 
     fun correction(
         word: String,
@@ -168,11 +195,15 @@ class WordSuggestions(
         return model(language)?.dictionary?.commonWords.orEmpty()
     }
 
-    /** Two-word context wins; unseen contexts fall back to the existing one-word table. */
+    /**
+     * The user's own next words lead, then the two-word context, then the one-word table.
+     * [learned] are words the user typed after the last context word, best first.
+     */
     fun predict(
         context: List<String>,
         language: Language,
         dialectOn: Boolean,
+        learned: List<String> = emptyList(),
     ): List<String> {
         if (closed) return emptyList()
         val model = model(language) ?: return emptyList()
@@ -184,21 +215,20 @@ class WordSuggestions(
 
         val dialectPredictions =
             if (dialect) {
-                model.dialectNext[pair] ?: model.dialectNext[last].orEmpty()
+                model.dialectNext[pair] ?: row(model.dialectNext, last, language).orEmpty()
             } else {
                 emptyList()
             }
 
         val candidates =
             (
-                dialectPredictions + model.context[pair].orEmpty() +
-                    model.next[last].orEmpty() + model.dictionary.commonWords
-            ).distinctBy {
-                it.lowercase(Locale.ROOT)
-            }
+                learned + dialectPredictions + model.context[pair].orEmpty() +
+                    row(model.next, last, language).orEmpty() + model.dictionary.commonWords
+            ).map { written(it, language) }
+                .distinctBy(::matchKey)
         // Reject only a repeated multi-word cycle, not every recently used word.
         return candidates.filter { candidate ->
-            val tail = normalized + candidate.lowercase(Locale.ROOT)
+            val tail = normalized + matchKey(candidate)
             (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) }
         }
     }
@@ -209,6 +239,7 @@ class WordSuggestions(
         context: List<String>,
         language: Language,
         dialectOn: Boolean,
+        learned: List<String> = emptyList(),
     ): List<String> {
         if (closed || typed.isEmpty()) return emptyList()
         val model =
@@ -224,6 +255,8 @@ class WordSuggestions(
 
         fun contextBonus(word: String): Double {
             val normWord = matchKey(word)
+            val learnedIdx = learned.indexOfFirst { matchKey(it) == normWord }
+            if (learnedIdx != -1) return 4.5 - 0.4 * learnedIdx
             if (dialect) {
                 val dialectPairList = model.dialectNext[pair]
                 if (dialectPairList != null) {
@@ -237,13 +270,13 @@ class WordSuggestions(
                 if (idx != -1) return 4.0 - 0.4 * idx
             }
             if (dialect) {
-                val dialectLastList = model.dialectNext[last]
+                val dialectLastList = row(model.dialectNext, last, language)
                 if (dialectLastList != null) {
                     val idx = dialectLastList.indexOfFirst { matchKey(it) == normWord }
                     if (idx != -1) return 3.0 - 0.3 * idx
                 }
             }
-            val nextLastList = model.next[last]
+            val nextLastList = row(model.next, last, language)
             if (nextLastList != null) {
                 val idx = nextLastList.indexOfFirst { matchKey(it) == normWord }
                 if (idx != -1) return 2.5 - 0.3 * idx
@@ -282,20 +315,23 @@ class WordSuggestions(
 
         // 3. Context-only completions
         val contextSources = ArrayList<List<String>>()
+        if (learned.isNotEmpty()) contextSources.add(learned)
         if (dialect) {
             model.dialectNext[pair]?.let { contextSources.add(it) }
         }
         model.context[pair]?.let { contextSources.add(it) }
         if (dialect) {
-            model.dialectNext[last]?.let { contextSources.add(it) }
+            row(model.dialectNext, last, language)?.let { contextSources.add(it) }
         }
-        model.next[last]?.let { contextSources.add(it) }
+        row(model.next, last, language)?.let { contextSources.add(it) }
 
+        val typedKey = matchKey(typed)
         for (source in contextSources) {
-            for (w in source) {
+            for (tableWord in source) {
+                val w = written(tableWord, language)
                 val startsWithTyped =
                     if (language.cased) {
-                        w.startsWith(typed, ignoreCase = true)
+                        matchKey(w).startsWith(typedKey)
                     } else {
                         w.startsWith(typed)
                     }
@@ -313,6 +349,10 @@ class WordSuggestions(
             .sortedByDescending { it.value }
             .take(3)
             .map { it.key }
+    }
+
+    private companion object {
+        const val ARABIC_PROCLITICS = "وفبلكع"
     }
 
     fun close() {
