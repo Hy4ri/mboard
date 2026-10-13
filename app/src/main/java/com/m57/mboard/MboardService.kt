@@ -902,9 +902,9 @@ class MboardService : InputMethodService() {
             return
         }
         val after = ic.getTextAfterCursor(1, 0)
-        // An emoji goes after the typed word instead of replacing it: "fire" → "fire 🔥 ".
+        // An emoji replaces the typed word: "fire" → "🔥 ".
         if (expected.isNotEmpty() && Emojis.isEmoji(word)) {
-            if (ic.commitText(" $word" + if (after.isNullOrEmpty()) " " else "", 1)) {
+            if (replaceBeforeCursor(ic, expected, word + if (after.isNullOrEmpty()) " " else "")) {
                 if (!privateSession && !fieldPolicy.password) emojiHistory.record(word)
             } else {
                 message("This app did not accept the emoji")
