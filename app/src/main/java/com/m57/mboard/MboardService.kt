@@ -49,7 +49,7 @@ class MboardService : InputMethodService() {
     private var swipeBefore: String? = null
     private var swipeLength = 0
     private lateinit var clipboard: ClipboardManager
-    private var language = Layout.ENGLISH
+    private var language = Languages.ALL.first()
     private var visualKey = ""
     private var query = ""
     private var lastShift = 0L
@@ -64,7 +64,7 @@ class MboardService : InputMethodService() {
         Runnable {
             if (!destroyed && mode == Mode.KEYS && isInputViewShown) updateAuxiliary()
         }
-    private var defaultLayout = Layout.ENGLISH
+    private var defaultLayout = language.layout
     private val clipListener = ClipboardManager.OnPrimaryClipChangedListener { recordClip() }
     private val settingsListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key -> settingsChanged(key) }
 
@@ -180,8 +180,8 @@ class MboardService : InputMethodService() {
         visualKey = settings.visualKey()
         val kv = KeyboardView(this, ::onKey, ::toggleLanguage, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
         keyboard = kv
+        kv.language = language
         kv.layout = defaultLayout
-        kv.languageLabel = if (language == Layout.ARABIC) "العربية" else "English"
         clipPanel = ClipboardPanel(this, clips, ::paste)
         emojiPanel = EmojiPanel(this, { setMode(Mode.EMOJI_SEARCH) }, ::pasteEmoji).apply { loadFailed = emojiLoadFailed }
         toolbar = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
@@ -310,7 +310,7 @@ class MboardService : InputMethodService() {
         lastSpace = 0L
         if (next == Mode.EMOJI_SEARCH || next == Mode.CALCULATOR) {
             if (previous != next) query = ""
-            keyboard?.layout = if (next == Mode.CALCULATOR) Layout.CALC else language
+            keyboard?.layout = if (next == Mode.CALCULATOR) Layout.CALC else language.layout
             keyboard?.shifted = false
             keyboard?.capsLocked = false
         } else if (previous == Mode.EMOJI_SEARCH || previous == Mode.CALCULATOR) {
@@ -352,7 +352,7 @@ class MboardService : InputMethodService() {
         lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
-        defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language
+        defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language.layout
         lastSpace = 0L
         lastShift = 0L
         query = ""
@@ -433,16 +433,16 @@ class MboardService : InputMethodService() {
     }
 
     private fun toggleLanguage() {
-        language = if (language == Layout.ENGLISH) Layout.ARABIC else Layout.ENGLISH
+        language = Languages.next(language)
         settings.language = language
-        if (defaultLayout != Layout.NUMBER) defaultLayout = language
+        if (defaultLayout != Layout.NUMBER) defaultLayout = language.layout
         keyboard?.capsLocked = false
         keyboard?.shifted = false
-        keyboard?.languageLabel = if (language == Layout.ARABIC) "العربية" else "English"
+        keyboard?.language = language
         keyboard?.layout =
             when (mode) {
                 Mode.CALCULATOR -> Layout.CALC
-                Mode.EMOJI_SEARCH -> language
+                Mode.EMOJI_SEARCH -> language.layout
                 else -> defaultLayout
             }
         if (mode == Mode.KEYS && settings.suggestions) loadWords()
@@ -451,7 +451,7 @@ class MboardService : InputMethodService() {
 
     private fun updateCapitalization() {
         val kv = keyboard ?: return
-        if (mode != Mode.KEYS || kv.layout != Layout.ENGLISH || kv.capsLocked ||
+        if (mode != Mode.KEYS || kv.layout != language.layout || !language.cased || kv.capsLocked ||
             fieldPolicy.password
         ) {
             return
@@ -523,7 +523,7 @@ class MboardService : InputMethodService() {
         if (state != WordSuggestions.State.READY) {
             val message =
                 when (state) {
-                    WordSuggestions.State.LOADING -> "Loading ${if (language == Layout.ARABIC) "Arabic" else "English"} dictionary…"
+                    WordSuggestions.State.LOADING -> "Loading ${language.name} dictionary…"
                     WordSuggestions.State.FAILED -> "Dictionary unavailable · reopen keyboard to retry"
                     WordSuggestions.State.CLOSED -> "Word suggestions unavailable"
                     else -> "Preparing word completions…"
@@ -542,7 +542,7 @@ class MboardService : InputMethodService() {
         }
         val context = prefixContext()
         if (context.commonEligible) {
-            val predicted = words.predict(context.contextWords, language, settings.jordanianArabic)
+            val predicted = words.predict(context.contextWords, language, settings.dialectEnabled(language.dialect))
             strip.render(
                 predicted.map { matchCase(it, "") },
                 "",
@@ -567,7 +567,14 @@ class MboardService : InputMethodService() {
             } else {
                 phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
             }
-        val ranked = words.rank(typed, context.contextWords, language, settings.jordanianArabic).map { matchCase(it, typed) }
+        val ranked =
+            words
+                .rank(
+                    typed,
+                    context.contextWords,
+                    language,
+                    settings.dialectEnabled(language.dialect),
+                ).map { matchCase(it, typed) }
         // Learned words lead the completions, but never push out a correction or the best dictionary match.
         val learned = if (privateSession) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
         val wordChoices =
@@ -587,7 +594,7 @@ class MboardService : InputMethodService() {
         if (!settings.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || fieldPolicy.password) return null
         if (userWords.knows(typed, language)) return null
         if (words.state(language) != WordSuggestions.State.READY) return null
-        if (language == Layout.ENGLISH && typed.first().isUpperCase() && !wordStart && typed != "i") return null
+        if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
         val correction = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return null
         return if (correction == typed) null else correction
     }
@@ -633,7 +640,7 @@ class MboardService : InputMethodService() {
         separator: String,
     ) {
         val kv = keyboard ?: return
-        if (mode != Mode.KEYS || kv.layout != language) return
+        if (mode != Mode.KEYS || kv.layout != language.layout) return
         val context = prefixContext()
         val typed = context.prefix
         val corrected = autoCorrection(typed, context.sentenceStart) ?: return
@@ -997,7 +1004,7 @@ class MboardService : InputMethodService() {
             }
 
             Keys.LETTERS -> {
-                kv.layout = language
+                kv.layout = language.layout
             }
 
             else -> {
@@ -1105,7 +1112,7 @@ class MboardService : InputMethodService() {
             }
 
             Keys.LETTERS -> {
-                kv.layout = language
+                kv.layout = language.layout
             }
 
             Keys.SPACE -> {
@@ -1148,7 +1155,7 @@ class MboardService : InputMethodService() {
     private fun learn(word: String) {
         if (word.isEmpty() || !settings.learnWords || privateSession || fieldPolicy.reason != SuggestionPolicy.Reason.AVAILABLE) return
         if ((currentInputEditorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
-        if (keyboard?.layout != language || mode != Mode.KEYS) return
+        if (keyboard?.layout != language.layout || mode != Mode.KEYS) return
         userWords.record(word, language)
     }
 

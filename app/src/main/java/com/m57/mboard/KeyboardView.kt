@@ -39,7 +39,7 @@ class KeyboardView(
     private val cells = mutableListOf<Cell>()
     private var geometryLayout: Layout? = null
     private var geometryWidth = -1
-    var layout = Layout.ENGLISH
+    var layout = Languages.ALL.first().layout
         set(value) {
             if (field == value) return
             cancelTouch()
@@ -64,7 +64,7 @@ class KeyboardView(
             field = value
             invalidate()
         }
-    var languageLabel = "English"
+    var language = Languages.ALL.first()
         set(value) {
             if (field == value) return
             cancelTouch()
@@ -75,32 +75,15 @@ class KeyboardView(
         }
     val backgroundColor get() = ui.background
     val keysHeight get() = (rowHeight * (if (showNumberRow) 5 else 4) + gap).toInt()
-    private val visibleLayouts =
-        Layout.entries.associateWith { candidate ->
-            if (!showNumberRow && (candidate == Layout.ENGLISH || candidate == Layout.ARABIC)) candidate.rows.drop(1) else candidate.rows
-        }
-    private var cachedRowsKey: Pair<Layout, String>? = null
+    private var cachedRowsKey: Pair<Layout, Language>? = null
     private var cachedRows: List<List<String>> = emptyList()
 
     private val rows: List<List<String>>
         get() {
-            val key = layout to languageLabel
+            val key = layout to language
             if (cachedRowsKey == key) return cachedRows
-            val computed =
-                visibleLayouts.getValue(layout).map { row ->
-                    row.map { keyChar ->
-                        if (languageLabel == "العربية") {
-                            when (keyChar) {
-                                "?" -> "؟"
-                                "," -> "،"
-                                ";" -> "؛"
-                                else -> keyChar
-                            }
-                        } else {
-                            keyChar
-                        }
-                    }
-                }
+            val visible = if (!showNumberRow && layout.letters) layout.rows.drop(1) else layout.rows
+            val computed = visible.map { row -> row.map { language.punctuation[it] ?: it } }
             cachedRowsKey = key
             cachedRows = computed
             return computed
@@ -232,18 +215,18 @@ class KeyboardView(
     private fun weight(key: String) =
         when (key) {
             Keys.SPACE -> {
-                when (layout) {
-                    in GRID_LAYOUTS -> 1f
+                when {
+                    layout.grid -> 1f
 
                     // Symbols gains the pad toggle; a narrower space keeps the row width unchanged.
-                    Layout.SYMBOLS -> 3f
+                    layout == Layout.SYMBOLS -> 3f
 
                     else -> 4f
                 }
             }
 
             Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> {
-                if (layout in GRID_LAYOUTS) 1f else 1.5f
+                if (layout.grid) 1f else 1.5f
             }
 
             Keys.PAD -> {
@@ -252,7 +235,7 @@ class KeyboardView(
 
             // Pads are grids: every key is one column wide so the rows line up.
             Keys.SYMBOLS, Keys.LETTERS -> {
-                if (layout in GRID_LAYOUTS) 1f else 1.5f
+                if (layout.grid) 1f else 1.5f
             }
 
             else -> {
@@ -269,7 +252,7 @@ class KeyboardView(
         val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
         visibleRows.forEachIndexed { rowIndex, row ->
             val units = row.sumOf { weight(it).toDouble() }.toFloat()
-            val unit = width / (if (layout == Layout.ARABIC || layout in GRID_LAYOUTS) units else maxUnits)
+            val unit = width / (if (layout.stretch || layout.grid) units else maxUnits)
             var x = (width - units * unit) / 2
             row.forEach { key ->
                 val size = weight(key) * unit
@@ -390,21 +373,15 @@ class KeyboardView(
     private fun label(key: String) =
         when (key) {
             Keys.LETTERS -> {
-                if (languageLabel == "العربية") "أبج" else Keys.LETTERS
+                language.lettersLabel
             }
 
             Keys.SYMBOLS -> {
-                if (languageLabel == "العربية") "؟123" else Keys.SYMBOLS
+                language.symbolsLabel
             }
 
             Keys.SPACE -> {
-                if (scrubbing) {
-                    "Move cursor"
-                } else if (layout == Layout.ARABIC) {
-                    "العربية"
-                } else {
-                    languageLabel
-                }
+                if (scrubbing) "Move cursor" else language.label
             }
 
             Keys.ENTER -> {
@@ -505,7 +482,7 @@ class KeyboardView(
     }
 
     private fun showAlternates(base: Cell) {
-        val extra = ALTERNATES[base.key] ?: return
+        val extra = language.alternatesFor(base.key) ?: return
         alts = (listOf(base.key) + extra).map { if (shifted || capsLocked) it.uppercase(Locale.ROOT) else it }
         val cellWidth = minOf(maxOf(base.rect.width(), 32 * density), width.toFloat() / alts.size)
         val left = (base.rect.centerX() - cellWidth / 2).coerceIn(0f, (width - cellWidth * alts.size).coerceAtLeast(0f))
@@ -551,9 +528,18 @@ class KeyboardView(
     private val access by lazy {
         KeyboardAccessibility(this, {
             geometry()
-            cells.map { AccessibleKey(it.rect, it.key, accessibleLabel(it.key), it.key in ALTERNATES) }
+            cells.map { AccessibleKey(it.rect, it.key, accessibleLabel(it.key), language.alternatesFor(it.key) != null) }
         }, onKey, { key ->
-            val values = (listOf(key) + ALTERNATES[key].orEmpty()).map { if (shifted || capsLocked) it.uppercase(Locale.ROOT) else it }
+            val values =
+                (listOf(key) + language.alternatesFor(key).orEmpty()).map {
+                    if (shifted ||
+                        capsLocked
+                    ) {
+                        it.uppercase(Locale.ROOT)
+                    } else {
+                        it
+                    }
+                }
             android.widget.PopupMenu(context, this).apply {
                 values.forEach { menu.add(it) }
                 setOnMenuItemClickListener { item ->
@@ -759,7 +745,7 @@ class KeyboardView(
         current = origin
         setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         val key = origin?.key
-        if (key == Keys.SPACE || key in ALTERNATES) postDelayed(hold, 250L)
+        if (key == Keys.SPACE || (key != null && language.alternatesFor(key) != null)) postDelayed(hold, 250L)
         if (key == Keys.BACKSPACE) {
             deleteStart = android.os.SystemClock.uptimeMillis()
             deleteRepeated = false
@@ -823,7 +809,6 @@ class KeyboardView(
         const val RELEASE_FADE_MS = 140L
         const val PREVIEW_POP_MS = 70L
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
-        val GRID_LAYOUTS = setOf(Layout.NUMBER, Layout.NUMPAD, Layout.CALC)
         val CALC_OPERATORS = setOf("÷", "×", "−", "+", "(", ")", "%")
     }
 }

@@ -268,7 +268,7 @@ class SetupActivity : Activity() {
     }
 
     private fun home(column: LinearLayout) {
-        components.add(column, components.note("English + العربية. Entirely offline."))
+        components.add(column, components.note("${Languages.labels}. Entirely offline."))
         val statusView =
             ui.label("", 15f).apply {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
@@ -426,7 +426,11 @@ class SetupActivity : Activity() {
         column.addView(components.section("INPUT ASSISTANCE"))
         components.add(
             column,
-            components.toggle("Word suggestions", "English and Arabic · tap to complete", settings.suggestions) {
+            components.toggle(
+                "Word suggestions",
+                "${Languages.ALL.joinToString(" and ") { it.name }} · tap to complete",
+                settings.suggestions,
+            ) {
                 settings.suggestions =
                     it
             },
@@ -452,12 +456,14 @@ class SetupActivity : Activity() {
                 settings.learnWords = it
             },
         )
-        components.add(
-            column,
-            components.toggle("Jordanian Arabic", "Add local chat words like كيفك، بدي، هسا", settings.jordanianArabic) {
-                settings.jordanianArabic = it
-            },
-        )
+        Languages.ALL.mapNotNull { it.dialect }.forEach { dialect ->
+            components.add(
+                column,
+                components.toggle(dialect.title, dialect.summary, settings.dialectEnabled(dialect)) {
+                    settings.setDialectEnabled(dialect, it)
+                },
+            )
+        }
         components.add(
             column,
             components.toggle("Emoji suggestions", "Offer a matching emoji for words like fire or love", settings.emojiSuggestions) {
@@ -681,7 +687,7 @@ class SetupActivity : Activity() {
     }
 
     private fun about(column: LinearLayout) {
-        components.add(column, components.note("English + العربية. Built for local, quiet typing."))
+        components.add(column, components.note("${Languages.labels}. Built for local, quiet typing."))
         column.addView(components.section("OFFLINE BY DESIGN"))
         components.add(
             column,

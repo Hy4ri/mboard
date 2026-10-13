@@ -22,9 +22,15 @@ class BoardSettings(
     var suggestions: Boolean
         get() = prefs.getBoolean("suggestions", true)
         set(value) = prefs.edit().putBoolean("suggestions", value).apply()
-    var jordanianArabic: Boolean
-        get() = prefs.getBoolean("jordanian_arabic", false)
-        set(value) = prefs.edit().putBoolean("jordanian_arabic", value).apply()
+
+    /** Whether [dialect]'s extra vocabulary is on; off by default. */
+    fun dialectEnabled(dialect: Dialect?) = dialect != null && prefs.getBoolean(dialect.settingKey, false)
+
+    fun setDialectEnabled(
+        dialect: Dialect,
+        value: Boolean,
+    ) = prefs.edit().putBoolean(dialect.settingKey, value).apply()
+
     var autoCorrect: Boolean
         get() = prefs.getBoolean("autocorrect", true)
         set(value) = prefs.edit().putBoolean("autocorrect", value).apply()
@@ -59,9 +65,9 @@ class BoardSettings(
         value: Int?,
     ) = prefs.edit().apply { if (value == null) remove("color_$role") else putInt("color_$role", value) }.apply()
 
-    var language: Layout
-        get() = if (prefs.getString("language", "en") == "ar") Layout.ARABIC else Layout.ENGLISH
-        set(value) = prefs.edit().putString("language", if (value == Layout.ARABIC) "ar" else "en").apply()
+    var language: Language
+        get() = Languages.byCode(prefs.getString("language", null))
+        set(value) = prefs.edit().putString("language", value.code).apply()
 
     var oneHandMode: String
         get() = (prefs.getString("one_hand", "full") ?: "full").takeIf { it in THUMB_MODES } ?: "full"

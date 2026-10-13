@@ -29,87 +29,61 @@ class WordSuggestions(
 
     @Volatile private var closed = false
 
-    @Volatile private var englishModel: Model? = null
+    private val models = java.util.concurrent.ConcurrentHashMap<String, Model>()
+    private val states = HashMap<String, State>()
+    private val callbacks = HashMap<String, ArrayList<() -> Unit>>()
 
-    @Volatile private var arabicModel: Model? = null
+    private fun model(language: Language): Model? = models[language.code]
 
-    private var englishState = State.UNLOADED
-    private var arabicState = State.UNLOADED
-    private val englishCallbacks = ArrayList<() -> Unit>()
-    private val arabicCallbacks = ArrayList<() -> Unit>()
-
-    fun state(language: Layout): State =
+    fun state(language: Language): State =
         synchronized(lock) {
-            if (closed) {
-                State.CLOSED
-            } else if (language == Layout.ENGLISH) {
-                englishState
-            } else {
-                arabicState
-            }
+            if (closed) State.CLOSED else states[language.code] ?: State.UNLOADED
         }
 
     fun load(
-        language: Layout,
+        language: Language,
         onReady: () -> Unit,
     ) {
         synchronized(lock) {
             if (closed) return
-            val loaded = if (language == Layout.ENGLISH) englishModel else arabicModel
-            if (loaded != null) {
+            if (model(language) != null) {
                 mainHandler.post { if (!closed) onReady() }
                 return
             }
-            val callbacks = if (language == Layout.ENGLISH) englishCallbacks else arabicCallbacks
-            callbacks.add(onReady)
-            val loading = if (language == Layout.ENGLISH) englishState == State.LOADING else arabicState == State.LOADING
-            if (loading) return
-            if (language == Layout.ENGLISH) englishState = State.LOADING else arabicState = State.LOADING
+            val waiting = callbacks.getOrPut(language.code) { ArrayList() }
+            waiting.add(onReady)
+            if (states[language.code] == State.LOADING) return
+            states[language.code] = State.LOADING
             executor.execute {
                 try {
-                    val dialect =
-                        if (language == Layout.ARABIC) {
-                            readDialectVocabulary("jordanian.tsv")
-                        } else {
-                            emptyMap()
-                        }
+                    val dialect = language.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
                     val dictionary =
                         assets
-                            .open(if (language == Layout.ENGLISH) "words_en.tsv" else "words_ar.tsv")
+                            .open(language.wordsAsset)
                             .bufferedReader()
                             .use { WordDictionary.read(it, language, dialect) }
                     if (dictionary.size == 0) throw IOException("No usable bundled word entries")
 
-                    val next = readTable(if (language == Layout.ENGLISH) "next_en.tsv" else "next_ar.tsv")
-                    val contextTable = readTable(if (language == Layout.ENGLISH) "context_en.tsv" else "context_ar.tsv")
-                    val dialectNext =
-                        if (language == Layout.ARABIC) {
-                            readTable("jordanian_next.tsv")
-                        } else {
-                            emptyMap()
-                        }
+                    val next = readTable(language.nextAsset)
+                    val contextTable = readTable(language.contextAsset)
+                    val dialectNext = language.dialect?.let { readTable(it.nextAsset) }.orEmpty()
 
                     val model = Model(dictionary, next, contextTable, dialectNext)
 
                     val readyCallbacks =
                         synchronized(lock) {
                             if (closed) return@execute
-                            if (language == Layout.ENGLISH) {
-                                englishModel = model
-                                englishState = State.READY
-                            } else {
-                                arabicModel = model
-                                arabicState = State.READY
-                            }
-                            callbacks.toList().also { callbacks.clear() }
+                            models[language.code] = model
+                            states[language.code] = State.READY
+                            waiting.toList().also { waiting.clear() }
                         }
                     mainHandler.post { if (!closed) readyCallbacks.forEach { it() } }
                 } catch (_: IOException) {
                     val failedCallbacks =
                         synchronized(lock) {
                             if (closed) return@execute
-                            if (language == Layout.ENGLISH) englishState = State.FAILED else arabicState = State.FAILED
-                            callbacks.toList().also { callbacks.clear() }
+                            states[language.code] = State.FAILED
+                            waiting.toList().also { waiting.clear() }
                         }
                     mainHandler.post { if (!closed) failedCallbacks.forEach { it() } }
                 }
@@ -175,40 +149,41 @@ class WordSuggestions(
 
     fun correction(
         word: String,
-        language: Layout,
+        language: Language,
     ): String? {
         if (closed) return null
-        return (if (language == Layout.ENGLISH) englishModel else arabicModel)?.dictionary?.correction(word)
+        return model(language)?.dictionary?.correction(word)
     }
 
     fun likelyIntended(
         word: String,
-        language: Layout,
+        language: Language,
     ): String? {
         if (closed) return null
-        return (if (language == Layout.ENGLISH) englishModel else arabicModel)?.dictionary?.likelyIntended(word)
+        return model(language)?.dictionary?.likelyIntended(word)
     }
 
-    fun commonWords(language: Layout): List<String> {
+    fun commonWords(language: Language): List<String> {
         if (closed) return emptyList()
-        return (if (language == Layout.ENGLISH) englishModel else arabicModel)?.dictionary?.commonWords.orEmpty()
+        return model(language)?.dictionary?.commonWords.orEmpty()
     }
 
     /** Two-word context wins; unseen contexts fall back to the existing one-word table. */
     fun predict(
         context: List<String>,
-        language: Layout,
-        jordanian: Boolean,
+        language: Language,
+        dialectOn: Boolean,
     ): List<String> {
         if (closed) return emptyList()
-        val model = (if (language == Layout.ENGLISH) englishModel else arabicModel) ?: return emptyList()
+        val model = model(language) ?: return emptyList()
 
+        val dialect = dialectOn && language.dialect != null
         val normalized = context.map(::matchKey)
         val pair = normalized.takeLast(2).joinToString(" ")
         val last = normalized.lastOrNull().orEmpty()
 
         val dialectPredictions =
-            if (language == Layout.ARABIC && jordanian) {
+            if (dialect) {
                 model.dialectNext[pair] ?: model.dialectNext[last].orEmpty()
             } else {
                 emptyList()
@@ -232,28 +207,24 @@ class WordSuggestions(
     fun rank(
         typed: String,
         context: List<String>,
-        language: Layout,
-        jordanian: Boolean,
+        language: Language,
+        dialectOn: Boolean,
     ): List<String> {
         if (closed || typed.isEmpty()) return emptyList()
         val model =
             synchronized(lock) {
-                if (language == Layout.ENGLISH) {
-                    if (englishState != State.READY) return emptyList()
-                    englishModel
-                } else {
-                    if (arabicState != State.READY) return emptyList()
-                    arabicModel
-                }
+                if (states[language.code] != State.READY) return emptyList()
+                model(language)
             } ?: return emptyList()
 
+        val dialect = dialectOn && language.dialect != null
         val normalized = context.map(::matchKey)
         val pair = normalized.takeLast(2).joinToString(" ")
         val last = normalized.lastOrNull().orEmpty()
 
         fun contextBonus(word: String): Double {
             val normWord = matchKey(word)
-            if (language == Layout.ARABIC && jordanian) {
+            if (dialect) {
                 val dialectPairList = model.dialectNext[pair]
                 if (dialectPairList != null) {
                     val idx = dialectPairList.indexOfFirst { matchKey(it) == normWord }
@@ -265,7 +236,7 @@ class WordSuggestions(
                 val idx = contextPairList.indexOfFirst { matchKey(it) == normWord }
                 if (idx != -1) return 4.0 - 0.4 * idx
             }
-            if (language == Layout.ARABIC && jordanian) {
+            if (dialect) {
                 val dialectLastList = model.dialectNext[last]
                 if (dialectLastList != null) {
                     val idx = dialectLastList.indexOfFirst { matchKey(it) == normWord }
@@ -280,7 +251,6 @@ class WordSuggestions(
             return 0.0
         }
 
-        val dialect = language == Layout.ARABIC && jordanian
         val scores = LinkedHashMap<String, Double>()
 
         // 1. Exact prefix completions
@@ -302,7 +272,7 @@ class WordSuggestions(
         }
 
         // 2b. Arabic words behind an attached و/ف/ب/ل/ك/لل, which the word list rarely contains.
-        if (language == Layout.ARABIC && typed.length >= 3) {
+        if (language.script == Script.ARABIC && typed.length >= 3) {
             for (c in model.dictionary.cliticCompletions(typed, 6, dialect)) {
                 if (matchKey(c.word) in exactWords) continue
                 val score = ln(c.score + 1.0) - 2.5 + contextBonus(c.word)
@@ -312,11 +282,11 @@ class WordSuggestions(
 
         // 3. Context-only completions
         val contextSources = ArrayList<List<String>>()
-        if (language == Layout.ARABIC && jordanian) {
+        if (dialect) {
             model.dialectNext[pair]?.let { contextSources.add(it) }
         }
         model.context[pair]?.let { contextSources.add(it) }
-        if (language == Layout.ARABIC && jordanian) {
+        if (dialect) {
             model.dialectNext[last]?.let { contextSources.add(it) }
         }
         model.next[last]?.let { contextSources.add(it) }
@@ -324,7 +294,7 @@ class WordSuggestions(
         for (source in contextSources) {
             for (w in source) {
                 val startsWithTyped =
-                    if (language == Layout.ENGLISH) {
+                    if (language.cased) {
                         w.startsWith(typed, ignoreCase = true)
                     } else {
                         w.startsWith(typed)
@@ -349,12 +319,9 @@ class WordSuggestions(
         synchronized(lock) {
             if (closed) return
             closed = true
-            englishModel = null
-            arabicModel = null
-            englishState = State.CLOSED
-            arabicState = State.CLOSED
-            englishCallbacks.clear()
-            arabicCallbacks.clear()
+            models.clear()
+            states.clear()
+            callbacks.clear()
         }
         executor.shutdownNow()
         mainHandler.removeCallbacksAndMessages(null)

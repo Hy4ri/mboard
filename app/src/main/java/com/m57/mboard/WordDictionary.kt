@@ -2,13 +2,12 @@ package com.m57.mboard
 
 import java.io.Reader
 import java.util.Locale
-import kotlin.math.abs
 
 /** Pure Kotlin, read-only word completion and correction dictionary. */
 class WordDictionary private constructor(
     private val entries: List<Entry>,
     private val shortPrefixes: Map<String, List<Entry>>,
-    private val language: Layout,
+    private val language: Language,
     val commonWords: List<String>,
     private val exact: Map<String, Entry>,
     private val spellings: Map<String, List<Spelling>>,
@@ -92,7 +91,7 @@ class WordDictionary private constructor(
         limit: Int,
         dialect: Boolean,
     ): List<Candidate> {
-        if (language != Layout.ARABIC || prefix.length < 3 || prefix.length > 64) return emptyList()
+        if (language.script != Script.ARABIC || prefix.length < 3 || prefix.length > 64) return emptyList()
         val best = ArrayList<Candidate>(limit)
         val seen = HashSet<String>()
         for ((clitic, stemStart) in ARABIC_CLITIC_PREFIXES) {
@@ -153,12 +152,12 @@ class WordDictionary private constructor(
             if (trans != prefix) out += trans to 0.95
         }
 
-        if (language == Layout.ENGLISH) {
+        if (language.script == Script.LATIN) {
             // Adjacent substitution: 0.8
             for (i in 0 until n) {
                 val orig = prefix[i]
-                for (c in ENGLISH_ALPHABET) {
-                    if (c != orig && adjacentQwerty(orig, c)) {
+                for (c in language.alphabet) {
+                    if (c != orig && language.adjacent(orig, c)) {
                         out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to 0.8
                     }
                 }
@@ -177,8 +176,8 @@ class WordDictionary private constructor(
             // Arabic: adjacent substitution: 0.8 (excluding dialect-sensitive pairs)
             for (i in 0 until n) {
                 val orig = prefix[i]
-                for (c in ARABIC_ALPHABET) {
-                    if (c != orig && adjacentArabic(orig, c) && !isDialectSensitive(orig, c)) {
+                for (c in language.alphabet) {
+                    if (c != orig && language.adjacent(orig, c) && !isDialectSensitive(orig, c)) {
                         out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to 0.8
                     }
                 }
@@ -195,14 +194,14 @@ class WordDictionary private constructor(
     fun correction(word: String): String? {
         if (word.isEmpty() || word.length > 32) return null
         synchronized(cache) { if (cache.containsKey(word)) return cache[word] }
-        val result = if (language == Layout.ENGLISH) englishCorrection(word) else arabicCorrection(word)
+        val result = if (language.script == Script.LATIN) latinCorrection(word) else arabicCorrection(word)
         synchronized(cache) { cache[word] = result }
         return result
     }
 
-    /** Suggest-only fix for KNOWN rare English words, else null. */
+    /** Suggest-only fix for KNOWN rare words, else null. */
     fun likelyIntended(word: String): String? {
-        if (language == Layout.ARABIC) return arabicIntended(word)
+        if (language.script == Script.ARABIC) return arabicIntended(word)
         if (word.length < 4 || word.length > 32) return null
         if (word.drop(1).any { it.isUpperCase() }) return null
         val lower = word.lowercase(Locale.ROOT)
@@ -228,8 +227,8 @@ class WordDictionary private constructor(
         }
         for (i in 0 until n) {
             val orig = lower[i]
-            for (c in ENGLISH_ALPHABET) {
-                if (c != orig && adjacentQwerty(orig, c)) {
+            for (c in language.alphabet) {
+                if (c != orig && language.adjacent(orig, c)) {
                     check(lower.substring(0, i) + c + lower.substring(i + 1))
                 }
             }
@@ -251,14 +250,14 @@ class WordDictionary private constructor(
             override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String?>?) = size > 128
         }
 
-    private fun englishCorrection(word: String): String? {
+    private fun latinCorrection(word: String): String? {
         val lower = word.lowercase(Locale.ROOT)
-        CONTRACTIONS[lower]?.let { return it }
+        language.contractions[lower]?.let { return it }
         if (word.length < 3 || word.length > 32) return null
         // A typed apostrophe is deliberate (he's, i've); the list has no apostrophe forms, so edits would mangle them.
         if (word.any { !it.isLetter() }) return null
         if (word.drop(1).any { it.isUpperCase() }) return null
-        if (lower in SLANG) return null
+        if (lower in language.keepAsTyped) return null
         val normalized = normalize(word, language) ?: return null
         if (exact.containsKey(normalized)) return null
 
@@ -288,11 +287,11 @@ class WordDictionary private constructor(
         // Substitution
         for (i in 0 until n) {
             val orig = lower[i]
-            for (c in ENGLISH_ALPHABET) {
+            for (c in language.alphabet) {
                 if (c != orig) {
                     val weight =
                         when {
-                            adjacentQwerty(orig, c) -> 0.9
+                            language.adjacent(orig, c) -> 0.9
                             orig in VOWELS && c in VOWELS -> 0.4
                             else -> 0.15
                         }
@@ -303,8 +302,8 @@ class WordDictionary private constructor(
         // Deletion
         for (i in 0 until n) {
             val stray =
-                (i > 0 && (lower[i - 1] == lower[i] || adjacentQwerty(lower[i - 1], lower[i]))) ||
-                    (i + 1 < n && (lower[i + 1] == lower[i] || adjacentQwerty(lower[i + 1], lower[i])))
+                (i > 0 && (lower[i - 1] == lower[i] || language.adjacent(lower[i - 1], lower[i]))) ||
+                    (i + 1 < n && (lower[i + 1] == lower[i] || language.adjacent(lower[i + 1], lower[i])))
             if (stray) {
                 consider(lower.substring(0, i) + lower.substring(i + 1), 0.7)
             }
@@ -312,7 +311,7 @@ class WordDictionary private constructor(
         // Insertion
         for (i in 0..n) {
             val prev = if (i > 0) lower[i - 1] else null
-            for (d in ENGLISH_ALPHABET) {
+            for (d in language.alphabet) {
                 val weight =
                     when {
                         prev != null && d == prev -> 0.9
@@ -400,7 +399,7 @@ class WordDictionary private constructor(
         if (word.length < 2 || word.length > 32) return null
         // Curated dialect spellings are deliberate: هلأ is "now", not a misspelt هلا.
         if (word in dialectSpellings) return null
-        ARABIC_MISSPELLINGS[word]?.let { return it }
+        language.misspellings[word]?.let { return it }
         val normalized = normalize(word, language) ?: return null
         val typedFrequency = originals[word] ?: 0L
 
@@ -533,19 +532,19 @@ class WordDictionary private constructor(
             val orig = normalized[i]
             // A final ة/ت swap is usually a different word (noun vs verb), not a slip.
             val last = i == n - 1
-            for (c in ARABIC_ALPHABET) {
-                if (c != orig && adjacentArabic(orig, c) && !isDialectSensitive(orig, c) && !(last && orig in "ةت" && c in "ةت")) {
+            for (c in language.alphabet) {
+                if (c != orig && language.adjacent(orig, c) && !isDialectSensitive(orig, c) && !(last && orig in "ةت" && c in "ةت")) {
                     consider(normalized.substring(0, i) + c + normalized.substring(i + 1), 0.85)
                 }
             }
             // A stray neighbouring key pressed with the intended one.
-            val stray = (i > 0 && adjacentArabic(normalized[i - 1], orig)) || (i + 1 < n && adjacentArabic(normalized[i + 1], orig))
+            val stray = (i > 0 && language.adjacent(normalized[i - 1], orig)) || (i + 1 < n && language.adjacent(normalized[i + 1], orig))
             if (stray && n >= 4) consider(normalized.removeRange(i, i + 1), 0.6)
         }
         // A missed letter inside a longer word: حبيي → حبيبي.
         if (n >= 4) {
             for (i in 1 until n) {
-                for (c in ARABIC_ALPHABET) consider(normalized.substring(0, i) + c + normalized.substring(i), 0.5)
+                for (c in language.alphabet) consider(normalized.substring(0, i) + c + normalized.substring(i), 0.5)
             }
         }
         return scores.values.sortedByDescending { it.second }
@@ -610,105 +609,8 @@ class WordDictionary private constructor(
 
     companion object {
         private const val MAX_PREFIX_SCAN = 400
-        private const val ENGLISH_ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-        private const val ARABIC_ALPHABET = "ضصثقفغعهخحجشسيبلاتنمكطذئءؤرىةوزظد"
         private val VOWELS = setOf('a', 'e', 'i', 'o', 'u')
         private val VOWELS_Y = setOf('a', 'e', 'i', 'o', 'u', 'y')
-
-        private val SLANG: Set<String> =
-            setOf(
-                "lol",
-                "lmao",
-                "lmfao",
-                "rofl",
-                "ngl",
-                "tbh",
-                "wtf",
-                "idk",
-                "idc",
-                "lmk",
-                "brb",
-                "imo",
-                "imho",
-                "btw",
-                "sus",
-                "bruh",
-                "tho",
-                "rn",
-                "smh",
-                "ikr",
-                "hbu",
-                "wyd",
-                "wbu",
-                "ofc",
-                "pls",
-                "plz",
-                "np",
-                "gg",
-                "thx",
-                "tx",
-                "bcz",
-                "cuz",
-                "cus",
-                "ty",
-                "yeet",
-                "rizz",
-                "okk",
-                "okey",
-                "wifi",
-                "omg",
-                "omw",
-                "ttyl",
-                "gtg",
-                "nvm",
-                "jk",
-                "fyi",
-                "asap",
-                "dm",
-                "dms",
-                "ppl",
-                "msg",
-                "pic",
-                "pics",
-                "vid",
-                "vids",
-                "tmrw",
-                "tmr",
-                "tbf",
-                "afaik",
-                "iirc",
-                "irl",
-                "af",
-                "ur",
-                "kk",
-                "yup",
-                "yep",
-                "nope",
-                "nah",
-                "ya",
-                "yea",
-                "yeah",
-                "hmm",
-                "hmmm",
-                "ugh",
-                "aww",
-                "haha",
-                "hahaha",
-                "hehe",
-                "xd",
-                "xoxo",
-                "yalla",
-                "habibi",
-                "habibti",
-                "inshallah",
-                "wallah",
-                "mashallah",
-                "khalas",
-                "yani",
-                "walla",
-                "shu",
-                "wen",
-            )
 
         private val ARABIC_PROCLITICS =
             listOf(
@@ -742,24 +644,6 @@ class WordDictionary private constructor(
                 "و",
             )
 
-        /** Frequent misspellings that the subtitle corpus lists as words, so edit rules cannot catch them. */
-        private val ARABIC_MISSPELLINGS: Map<String, String> =
-            mapOf(
-                "ذالك" to "ذلك",
-                "كذالك" to "كذلك",
-                "بذالك" to "بذلك",
-                "لذالك" to "لذلك",
-                "هاذه" to "هذه",
-                "هاكذا" to "هكذا",
-                "لاكن" to "لكن",
-                "ولاكن" to "ولكن",
-                "اللة" to "الله",
-                "مسؤل" to "مسؤول",
-                "مسئول" to "مسؤول",
-                "لاكنه" to "لكنه",
-                "لاكني" to "لكني",
-            )
-
         /** Clitic prefix as typed, and what the bare word starts with in its place. */
         private val ARABIC_CLITIC_PREFIXES =
             listOf(
@@ -785,82 +669,6 @@ class WordDictionary private constructor(
 
         private val ARABIC_SUFFIXES = listOf("ات", "ون", "ين", "ان", "تان", "تين", "ا", "ة")
 
-        private val QWERTY = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
-        private val QWERTY_ROW_OFFSET = doubleArrayOf(0.0, 0.5, 1.5)
-
-        private val ARABIC_ROWS =
-            listOf(
-                "ضصثقفغعهخحج",
-                "شسيبلاتنمكط",
-                "ذئءؤرىةوزظد",
-            )
-
-        private val CONTRACTIONS =
-            mapOf(
-                "i" to "I",
-                "im" to "I'm",
-                "ive" to "I've",
-                "dont" to "don't",
-                "cant" to "can't",
-                "wont" to "won't",
-                "didnt" to "didn't",
-                "doesnt" to "doesn't",
-                "isnt" to "isn't",
-                "wasnt" to "wasn't",
-                "arent" to "aren't",
-                "werent" to "weren't",
-                "couldnt" to "couldn't",
-                "wouldnt" to "wouldn't",
-                "shouldnt" to "shouldn't",
-                "havent" to "haven't",
-                "hasnt" to "hasn't",
-                "youre" to "you're",
-                "theyre" to "they're",
-                "thats" to "that's",
-                "whats" to "what's",
-                "theres" to "there's",
-                "youve" to "you've",
-                "youll" to "you'll",
-                "theyve" to "they've",
-                "wouldve" to "would've",
-                "couldve" to "could've",
-                "shouldve" to "should've",
-            )
-
-        private fun adjacentQwerty(
-            a: Char,
-            b: Char,
-        ): Boolean {
-            val pa = keyPositionQwerty(a) ?: return false
-            val pb = keyPositionQwerty(b) ?: return false
-            return abs(pa.first - pb.first) <= 1 && abs(pa.second - pb.second) <= 1.01
-        }
-
-        private fun keyPositionQwerty(c: Char): Pair<Int, Double>? {
-            QWERTY.forEachIndexed { row, keys ->
-                val col = keys.indexOf(c)
-                if (col >= 0) return row to col + QWERTY_ROW_OFFSET[row]
-            }
-            return null
-        }
-
-        private fun adjacentArabic(
-            a: Char,
-            b: Char,
-        ): Boolean {
-            val pa = keyPositionArabic(a) ?: return false
-            val pb = keyPositionArabic(b) ?: return false
-            return abs(pa.first - pb.first) <= 1 && abs(pa.second - pb.second) <= 1
-        }
-
-        private fun keyPositionArabic(c: Char): Pair<Int, Int>? {
-            ARABIC_ROWS.forEachIndexed { row, keys ->
-                val col = keys.indexOf(c)
-                if (col >= 0) return row to col
-            }
-            return null
-        }
-
         private fun isDialectSensitive(
             a: Char,
             b: Char,
@@ -876,12 +684,12 @@ class WordDictionary private constructor(
         fun displayWord(
             word: String,
             prefix: String,
-            language: Layout,
+            language: Language,
             shifted: Boolean,
             capsLocked: Boolean,
         ): String =
             when {
-                language != Layout.ENGLISH -> word
+                !language.cased -> word
                 prefix.isEmpty() && capsLocked -> word.uppercase(Locale.ROOT)
                 prefix.isEmpty() && shifted -> word.replaceFirstChar { it.uppercaseChar() }
                 capsLocked && prefix.isNotEmpty() && prefix.all { !it.isLetter() || it.isUpperCase() } -> word.uppercase(Locale.ROOT)
@@ -910,7 +718,7 @@ class WordDictionary private constructor(
         @Throws(java.io.IOException::class)
         fun read(
             reader: Reader,
-            language: Layout,
+            language: Language,
             dialect: Map<String, Long> = emptyMap(),
         ): WordDictionary {
             val fileEntries =
@@ -927,7 +735,7 @@ class WordDictionary private constructor(
                                 if (normalized.isEmpty()) {
                                     null
                                 } else {
-                                    Entry(normalized, original, frequency, hidden = original in ARABIC_MISSPELLINGS)
+                                    Entry(normalized, original, frequency, hidden = original in language.misspellings)
                                 }
                             }.toList()
                     }
@@ -935,9 +743,9 @@ class WordDictionary private constructor(
             // Every listed surface spelling, since normalizing merges انا into أنا and علي into على.
             val originals = HashMap<String, Long>(fileEntries.size * 2)
             val spellings = HashMap<String, MutableList<Spelling>>()
-            if (language == Layout.ARABIC) {
+            if (language.script == Script.ARABIC) {
                 for (entry in fileEntries) {
-                    if ('ـ' in entry.original || entry.original in ARABIC_MISSPELLINGS) continue
+                    if ('ـ' in entry.original || entry.original in language.misspellings) continue
                     originals.merge(entry.original, entry.frequency, ::maxOf)
                     spellings.getOrPut(looseKey(entry.normalized)) { ArrayList() } += Spelling(entry.original, entry.frequency)
                 }
@@ -978,7 +786,7 @@ class WordDictionary private constructor(
                     }
                 }
                 exact.merge(entry.normalized, entry) { a, b -> if (b.frequency > a.frequency) b else a }
-                if (language == Layout.ENGLISH) originals.merge(entry.original, entry.frequency, ::maxOf)
+                if (language.script == Script.LATIN) originals.merge(entry.original, entry.frequency, ::maxOf)
             }
 
             val common = ArrayList<Entry>(3)
@@ -996,18 +804,19 @@ class WordDictionary private constructor(
                 exact = exact,
                 spellings = spellings,
                 originals = originals,
-                dialectSpellings = if (language == Layout.ARABIC) dialect.keys else emptySet(),
+                dialectSpellings = if (language.script == Script.ARABIC) dialect.keys else emptySet(),
             )
         }
 
         private fun normalize(
             value: String,
-            language: Layout,
+            language: Language,
         ): String? {
-            if (language == Layout.ENGLISH) {
+            if (language.script == Script.LATIN) {
                 val result = value.lowercase(Locale.ROOT)
-                return if (result.firstOrNull() in 'a'..'z' && result.lastOrNull() in 'a'..'z' &&
-                    result.all { it in 'a'..'z' || it == '\'' }
+                val letters = language.alphabet
+                return if (result.isNotEmpty() && result.first() in letters && result.last() in letters &&
+                    result.all { it in letters || it == '\'' }
                 ) {
                     result
                 } else {

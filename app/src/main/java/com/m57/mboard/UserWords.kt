@@ -19,15 +19,15 @@ class UserWords(
     )
 
     private val prefs = context.getSharedPreferences("user_words", Context.MODE_PRIVATE)
-    private val loaded = HashMap<Layout, LinkedHashMap<String, Word>>()
+    private val loaded = HashMap<Language, LinkedHashMap<String, Word>>()
     private var dirty = false
     private var clock = 0L
 
     private fun key(word: String) = word.lowercase(Locale.ROOT)
 
-    private fun pref(language: Layout) = if (language == Layout.ARABIC) "ar" else "en"
+    private fun pref(language: Language) = language.code
 
-    private fun words(language: Layout): LinkedHashMap<String, Word> =
+    private fun words(language: Language): LinkedHashMap<String, Word> =
         loaded.getOrPut(language) {
             val map = LinkedHashMap<String, Word>()
             try {
@@ -49,7 +49,7 @@ class UserWords(
 
     fun record(
         word: String,
-        language: Layout,
+        language: Language,
     ) {
         if (word.length < 2 || word.length > 32 || word.any(Char::isDigit)) return
         val map = words(language)
@@ -70,12 +70,12 @@ class UserWords(
     /** A word typed often enough that auto-correction should leave it alone. */
     fun knows(
         word: String,
-        language: Layout,
+        language: Language,
     ) = (words(language)[key(word)]?.count ?: 0) >= TRUSTED
 
     fun completions(
         typed: String,
-        language: Layout,
+        language: Language,
     ): List<String> {
         if (typed.isEmpty()) return emptyList()
         val prefix = key(typed)
@@ -87,7 +87,7 @@ class UserWords(
             .map { it.value.display }
     }
 
-    fun size() = Layout.entries.filter { it == Layout.ENGLISH || it == Layout.ARABIC }.sumOf { words(it).size }
+    fun size() = Languages.ALL.sumOf { words(it).size }
 
     fun save() {
         if (!dirty) return
