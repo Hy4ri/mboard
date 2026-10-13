@@ -468,19 +468,26 @@ class MboardService : InputMethodService() {
         val commonEligible: Boolean = false,
         val contextWords: List<String> = emptyList(),
         val sentenceStart: Boolean = false,
-    )
+        /** Word letters right after the caret: the caret sits inside or at the start of an existing word. */
+        val suffix: String = "",
+        /** Whether anything follows the word, so a picked suggestion needs no trailing space. */
+        val textAfterWord: Boolean = false,
+    ) {
+        /** The whole word the caret touches; suggestions are for it and a pick replaces all of it. */
+        val word get() = prefix + suffix
+    }
 
     private fun prefixContext(): PrefixContext {
         val ic = currentInputConnection ?: return PrefixContext("", "No active text editor")
         if (!ic.getSelectedText(0).isNullOrEmpty()) return PrefixContext("", "Selection active · completions paused")
-        val after = ic.getTextAfterCursor(1, 0) ?: return PrefixContext("", "App does not expose text for completions")
+        val after = ic.getTextAfterCursor(65, 0)?.toString() ?: return PrefixContext("", "App does not expose text for completions")
         val before =
             ic.getTextBeforeCursor(65, 0)?.toString()
                 ?: return PrefixContext("", "App does not expose text for completions")
 
-        if (after.firstOrNull()?.let(::wordChar) == true) return PrefixContext("", "Move cursor to the end of a word for completions")
         val result = before.takeLastWhile(::wordChar)
-        if (result.length > 64) return PrefixContext("", "Word is too long for completions")
+        val suffix = after.takeWhile(::wordChar)
+        if (result.length + suffix.length > 64) return PrefixContext("", "Word is too long for completions")
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
         val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
         val sentenceStart = beforeWord.isEmpty() || beforeWord.last() in ".!?؟\n"
@@ -495,10 +502,12 @@ class MboardService : InputMethodService() {
                 .takeLast(8)
         return PrefixContext(
             result,
-            if (result.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
+            if (result.isEmpty() && suffix.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
             idle,
             recent,
             sentenceStart,
+            suffix,
+            after.length > suffix.length,
         )
     }
 
@@ -552,7 +561,10 @@ class MboardService : InputMethodService() {
             )
             return
         }
-        val typed = context.prefix
+        // The caret may sit inside an earlier word: suggest for that whole word, not just the part before it.
+        val typed = context.word
+        val editingInside = context.suffix.isNotEmpty()
+        // Space only auto-corrects at a word's end, so inside a word the correction is offered, not highlighted.
         val autoCorrection = autoCorrection(typed, context.sentenceStart)
         val hint =
             if (autoCorrection == null && settings.autoCorrect && !userWords.knows(typed, language)) {
@@ -589,7 +601,7 @@ class MboardService : InputMethodService() {
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji
-        strip.render(values, typed, editorGeneration, context.status, highlightFirst = autoCorrection != null)
+        strip.render(values, typed, editorGeneration, context.status, highlightFirst = autoCorrection != null && !editingInside)
     }
 
     private fun autoCorrection(
@@ -640,6 +652,31 @@ class MboardService : InputMethodService() {
         return true
     }
 
+    /** Replace the whole word around the caret; a word ending at the caret is the ordinary case. */
+    private fun replaceWord(
+        ic: InputConnection,
+        context: PrefixContext,
+        replacement: String,
+    ): Boolean {
+        if (context.suffix.isEmpty()) return replaceBeforeCursor(ic, context.prefix, replacement)
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return false
+        if (ic.getTextBeforeCursor(context.prefix.length, 0)?.toString() != context.prefix) return false
+        if (ic.getTextAfterCursor(context.suffix.length, 0)?.toString() != context.suffix) return false
+        ic.beginBatchEdit()
+        try {
+            if (!ic.deleteSurroundingText(context.prefix.length, context.suffix.length)) return false
+            if (!ic.commitText(replacement, 1)) {
+                // Put the word back with the caret where it was.
+                ic.commitText(context.prefix, 1)
+                ic.commitText(context.suffix, 0)
+                return false
+            }
+        } finally {
+            ic.endBatchEdit()
+        }
+        return true
+    }
+
     private fun autoCorrectBefore(
         ic: InputConnection,
         separator: String,
@@ -647,6 +684,8 @@ class MboardService : InputMethodService() {
         val kv = keyboard ?: return
         if (mode != Mode.KEYS || kv.layout != language.layout) return
         val context = prefixContext()
+        // A separator inside a word splits it; correcting the first half would mangle it.
+        if (context.suffix.isNotEmpty()) return
         val typed = context.prefix
         val corrected = autoCorrection(typed, context.sentenceStart) ?: return
         if (replaceBeforeCursor(ic, typed, corrected)) lastCorrection = Correction(typed, corrected, separator)
@@ -897,14 +936,13 @@ class MboardService : InputMethodService() {
         }
         val ic = currentInputConnection ?: return
         val context = prefixContext()
-        if (context.prefix != expected || (expected.isEmpty() && !context.commonEligible)) {
+        if (context.word != expected || (expected.isEmpty() && !context.commonEligible)) {
             updateAuxiliary()
             return
         }
-        val after = ic.getTextAfterCursor(1, 0)
         // An emoji replaces the typed word: "fire" → "🔥 ".
         if (expected.isNotEmpty() && Emojis.isEmoji(word)) {
-            if (replaceBeforeCursor(ic, expected, word + if (after.isNullOrEmpty()) " " else "")) {
+            if (replaceWord(ic, context, word + if (context.textAfterWord) "" else " ")) {
                 if (!privateSession && !fieldPolicy.password) emojiHistory.record(word)
             } else {
                 message("This app did not accept the emoji")
@@ -913,9 +951,9 @@ class MboardService : InputMethodService() {
             updateAuxiliary()
             return
         }
-        // Leave the caret after a separator even when editing before existing text.
-        val value = word.trimEnd() + " "
-        val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceBeforeCursor(ic, expected, value)
+        // A new or last word gets its separator; a word fixed in the middle of text keeps the spacing around it.
+        val value = word.trimEnd() + if (context.suffix.isNotEmpty() && context.textAfterWord) "" else " "
+        val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceWord(ic, context, value)
         if (!done) {
             message("This app did not accept the completion")
         } else {
@@ -1041,7 +1079,8 @@ class MboardService : InputMethodService() {
         if (key in separators) {
             val before = prefixContext()
             autoCorrectBefore(ic, key)
-            learn(lastCorrection?.corrected ?: before.prefix, before.contextWords.lastOrNull())
+            // Splitting a word inside teaches nothing: the half before the caret is not a word the user typed.
+            if (before.suffix.isEmpty()) learn(lastCorrection?.corrected ?: before.prefix, before.contextWords.lastOrNull())
         }
         when (key) {
             Keys.SHIFT -> {
