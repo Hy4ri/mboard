@@ -142,6 +142,64 @@ class WordDictionary private constructor(
         return best
     }
 
+    /**
+     * Last resort for a long word with two slips (definatly → definitely): words sharing the first letter
+     * whose start is within two edits of [prefix]. Closer matches always beat more frequent ones.
+     */
+    fun distantCompletions(
+        prefix: String,
+        limit: Int,
+        dialect: Boolean,
+    ): List<Candidate> {
+        if (prefix.length < 5 || prefix.length > 32 || limit <= 0) return emptyList()
+        val typed = normalize(prefix, language) ?: return emptyList()
+        if (typed.length < 5) return emptyList()
+        val first = typed.substring(0, 1)
+        var index = entries.binarySearchBy(first) { it.normalized }.let { if (it < 0) -it - 1 else it }
+        val byDistance = Array(MAX_DISTANCE) { ArrayList<Candidate>(limit) }
+        while (index < entries.size) {
+            val entry = entries[index++]
+            if (!entry.normalized.startsWith(first)) break
+            if ((!dialect && entry.isDialectOnly) || entry.hidden) continue
+            if (entry.normalized.length < typed.length - MAX_DISTANCE) continue
+            val distance = prefixDistance(typed, entry.normalized)
+            if (distance in 1..MAX_DISTANCE) {
+                insertBestCandidate(byDistance[distance - 1], Candidate(entry.original, entry.frequency.toDouble()), limit)
+            }
+        }
+        return byDistance.flatMap { it }.take(limit)
+    }
+
+    /** Fewest edits (with adjacent swaps) turning [typed] into some start of [word]; above the cap is cap + 1. */
+    private fun prefixDistance(
+        typed: String,
+        word: String,
+    ): Int {
+        val m = minOf(word.length, typed.length + MAX_DISTANCE)
+        var before = IntArray(m + 1)
+        var previous = IntArray(m + 1) { it }
+        var current = IntArray(m + 1)
+        for (i in 1..typed.length) {
+            current[0] = i
+            var rowBest = i
+            for (j in 1..m) {
+                val cost = if (typed[i - 1] == word[j - 1]) 0 else 1
+                var value = minOf(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + cost)
+                if (i > 1 && j > 1 && typed[i - 1] == word[j - 2] && typed[i - 2] == word[j - 1]) {
+                    value = minOf(value, before[j - 2] + 1)
+                }
+                current[j] = value
+                rowBest = minOf(rowBest, value)
+            }
+            if (rowBest > MAX_DISTANCE) return MAX_DISTANCE + 1
+            val spare = before
+            before = previous
+            previous = current
+            current = spare
+        }
+        return previous.minOrNull() ?: (MAX_DISTANCE + 1)
+    }
+
     private fun prefixVariants(prefix: String): List<Pair<String, Double>> {
         val out = ArrayList<Pair<String, Double>>(prefix.length * 6)
         val n = prefix.length
@@ -172,6 +230,7 @@ class WordDictionary private constructor(
                     out += (prefix.substring(0, i) + prefix.substring(i + 1)) to 0.9
                 }
             }
+            missingAndExtraLetters(prefix, out)
         } else {
             // Arabic: adjacent substitution: 0.8 (excluding dialect-sensitive pairs)
             for (i in 0 until n) {
@@ -182,8 +241,29 @@ class WordDictionary private constructor(
                     }
                 }
             }
+            missingAndExtraLetters(prefix, out)
         }
         return out
+    }
+
+    /**
+     * A skipped or stray letter is the commonest slip in a long word, and every later keystroke keeps the
+     * exact prefix dead: "unfortunatl" needs the missing e, "beautiiful" the extra i dropped.
+     */
+    private fun missingAndExtraLetters(
+        prefix: String,
+        out: MutableList<Pair<String, Double>>,
+    ) {
+        if (prefix.length < 4) return
+        // The first letter is rarely the slip, and keeping it bounds the candidate set.
+        for (i in 1 until prefix.length) {
+            out += (prefix.substring(0, i) + prefix.substring(i + 1)) to 0.7
+        }
+        for (i in 1..prefix.length) {
+            for (c in language.alphabet) {
+                out += (prefix.substring(0, i) + c + prefix.substring(i)) to 0.7
+            }
+        }
     }
 
     /**
@@ -609,6 +689,7 @@ class WordDictionary private constructor(
 
     companion object {
         private const val MAX_PREFIX_SCAN = 400
+        private const val MAX_DISTANCE = 2
         private val VOWELS = setOf('a', 'e', 'i', 'o', 'u')
         private val VOWELS_Y = setOf('a', 'e', 'i', 'o', 'u', 'y')
 

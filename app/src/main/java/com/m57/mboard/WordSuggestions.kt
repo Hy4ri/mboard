@@ -343,6 +343,14 @@ class WordSuggestions(
             }
         }
 
+        // 4. Nothing matched at all: a long word with two slips still gets its likely target.
+        if (scores.keys.none { matchKey(it) != matchKey(typed) }) {
+            // Already ordered closest first, then most frequent.
+            model.dictionary.distantCompletions(typed, 3, dialect).forEachIndexed { index, c ->
+                scores[c.word] = -index.toDouble()
+            }
+        }
+
         val typedNorm = matchKey(typed)
         return scores.entries
             .filter { matchKey(it.key) != typedNorm }

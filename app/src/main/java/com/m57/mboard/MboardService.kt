@@ -579,10 +579,13 @@ class MboardService : InputMethodService() {
                 ).map { matchCase(it, typed) }
         // Learned words lead the completions, but never push out a correction or the best dictionary match.
         val learned = if (privateSession) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
-        val wordChoices =
+        val others =
             (listOfNotNull(leading, phrase) + ranked.take(1) + learned + ranked.drop(1))
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
+        // A finished long word has no longer completions left; keep the typed word in the strip so it never
+        // goes blank mid-word, and tapping it finishes the word with a space.
+        val wordChoices = if (others.size < 3 && typed.length >= 2) others + typed else others
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji
