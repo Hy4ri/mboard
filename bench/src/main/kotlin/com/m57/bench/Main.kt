@@ -2,6 +2,7 @@ package com.m57.bench
 
 import android.content.Context
 import com.m57.mboard.Languages
+import com.m57.mboard.WordDictionary
 import org.json.JSONObject
 import java.io.File
 import java.util.Locale
@@ -47,7 +48,9 @@ fun main(args: Array<String>) {
                 .drop(1)
                 .filter { it.isNotBlank() }
                 .take(limit)
-        report.put("typos", TypoReplay(strip).run(rows, File(out, "$label.typos.tsv")))
+        val classification = File(opts["classification-words"] ?: "lm/seeds/words_${language.code}.tsv")
+        val dictionary = classification.bufferedReader().use { WordDictionary.read(it, language) }
+        report.put("typos", TypoReplay(strip, dictionary).run(rows, File(out, "$label.typos.tsv")))
         report.put("typos_file", path)
     }
     File(out, "$label.json").writeText(report.toString(2))
@@ -188,7 +191,7 @@ class SentenceReplay(
                 val fullShown = lastShown?.takeIf { foundAt < 0 } ?: strip.show(full)
                 autoCorrectionChecks++
                 // A correct word changed by space. Hamza/ى/ة spelling fixes (انا → أنا) are counted apart.
-                val corrected = strip.autoCorrection(token, full.sentenceStart)?.takeIf { !same(it, token) }
+                val corrected = strip.autoCorrection(token, full.sentenceStart, full.contextWords)?.takeIf { !same(it, token) }
                 val normalizedOnly = corrected != null && fold(corrected) == fold(token)
                 val wrongCorrection = corrected != null && !normalizedOnly
                 if (wrongCorrection) falseCorrections++
@@ -214,7 +217,7 @@ class SentenceReplay(
                         .append('\t')
                         .append(fullShown.values.joinToString("|"))
                         .append('\t')
-                        .append(if (wrongCorrection) strip.autoCorrection(token, full.sentenceStart) else "")
+                        .append(if (wrongCorrection) strip.autoCorrection(token, full.sentenceStart, full.contextWords) else "")
                         .append('\n')
                 }
                 text += token
@@ -224,7 +227,6 @@ class SentenceReplay(
                     strip
                         .context(text)
                         .contextWords
-                        .dropLast(1)
                         .lastOrNull(),
                 )
             }
@@ -279,6 +281,7 @@ class SentenceReplay(
 
 class TypoReplay(
     private val strip: Strip,
+    private val classification: WordDictionary,
 ) {
     fun run(
         rows: List<String>,
@@ -297,7 +300,7 @@ class TypoReplay(
             val c = strip.context(text)
             val shown = strip.show(c)
             // A typo that is itself a listed word needs sentence understanding; scored apart.
-            val realWord = strip.dictionary.frequency(typed) > 0
+            val realWord = classification.frequency(typed) > 0
             val stats = kinds.getOrPut(if (realWord) "~real_word_typo" else kind) { IntArray(4) }
             // Real-human sets hold far misspellings (frate → fight) no keyboard fixes; bucket by distance too.
             val distStats =

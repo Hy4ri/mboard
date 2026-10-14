@@ -17,10 +17,25 @@ class WordSuggestions(
 
     private class Model(
         val dictionary: WordDictionary,
-        val next: Map<String, List<String>>,
-        val context: Map<String, List<String>>,
-        val dialectNext: Map<String, List<String>>,
+        val next: Map<String, Row>,
+        val context: Map<String, Row>,
+        val dialectNext: Map<String, Row>,
     )
+
+    /** One table row: how often [total] the context was followed by anything, and its best followers. */
+    private class Row(
+        val total: Long,
+        val words: Array<String>,
+        val keys: Array<String>,
+        val counts: LongArray,
+    ) {
+        val listed = counts.sum()
+
+        fun count(key: String): Long {
+            for (i in keys.indices) if (keys[i] == key) return counts[i]
+            return 0L
+        }
+    }
 
     private val assets = context.applicationContext.assets
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
@@ -118,28 +133,44 @@ class WordSuggestions(
             emptyMap()
         }
 
-    private fun readTable(name: String): Map<String, List<String>> =
-        try {
+    /**
+     * `context TAB total TAB word:count ...`; a row without counts (`context TAB word ...`) counts its
+     * words by rank. Shared strings keep the tables' memory down.
+     */
+    private fun readTable(name: String): Map<String, Row> {
+        val strings = HashMap<String, String>()
+
+        fun shared(value: String) = strings.getOrPut(value) { value }
+        return try {
             assets
                 .open(name)
                 .bufferedReader()
                 .use { reader ->
-                    reader
-                        .lineSequence()
-                        .mapNotNull { line ->
-                            val parts = line.split('\t')
-                            if (parts.size < 2) {
-                                null
-                            } else {
-                                val key = matchKey(parts[0].trim())
-                                val values = parts.drop(1).map { it.trim() }.filter { it.isNotEmpty() }
-                                if (key.isEmpty() || values.isEmpty()) null else key to values
-                            }
-                        }.toMap()
+                    val rows = HashMap<String, Row>()
+                    reader.lineSequence().forEach { line ->
+                        val parts = line.split('\t')
+                        if (parts.size < 2) return@forEach
+                        val key = matchKey(parts[0].trim())
+                        val total = parts[1].trim().toLongOrNull()
+                        val items = (if (total == null) parts.drop(1) else parts.drop(2)).map { it.trim() }.filter { it.isNotEmpty() }
+                        if (key.isEmpty() || items.isEmpty()) return@forEach
+                        val words = ArrayList<String>(items.size)
+                        val counts = LongArray(items.size)
+                        items.forEachIndexed { i, item ->
+                            val colon = item.lastIndexOf(':')
+                            val count = if (colon > 0) item.substring(colon + 1).toLongOrNull() else null
+                            words += shared(if (count != null) item.substring(0, colon) else item)
+                            counts[i] = count ?: (items.size - i).toLong()
+                        }
+                        val array = words.toTypedArray()
+                        rows[shared(key)] = Row(total ?: counts.sum(), array, Array(array.size) { shared(candidateKey(array[it])) }, counts)
+                    }
+                    rows
                 }
         } catch (_: IOException) {
             emptyMap()
         }
+    }
 
     /**
      * One comparison key for table keys, context words and candidates: lowercase, no harakat/tatweel and
@@ -150,12 +181,18 @@ class WordSuggestions(
             c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640' || c == '\'' || c == '\u2019'
         }
 
+    /** Written candidates keep their apostrophes: friends and friend's are different words. */
+    private fun candidateKey(word: String): String =
+        word.lowercase(Locale.ROOT).replace('\u2019', '\'').filterNot { c ->
+            c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640'
+        }
+
     /** Row for the last word; Arabic falls back to the word behind attached و/ف/ب/ل/ك/ع (والله → الله). */
     private fun row(
-        table: Map<String, List<String>>,
+        table: Map<String, Row>,
         last: String,
         language: Language,
-    ): List<String>? {
+    ): Row? {
         table[last]?.let { return it }
         if (language.script != Script.ARABIC) return null
         var word = last
@@ -177,9 +214,32 @@ class WordSuggestions(
     fun correction(
         word: String,
         language: Language,
+        context: List<String> = emptyList(),
+        dialectOn: Boolean = false,
+        learned: Map<String, Int> = emptyMap(),
     ): String? {
         if (closed) return null
-        return model(language)?.dictionary?.correction(word)
+        val model = model(language) ?: return null
+        val legacy = model.dictionary.correction(word)
+        // Arabic unknown forms are often valid inflections, not typos. Keep its conservative policy;
+        // context-ranked suggestions remain available without forcing a new spelling on space.
+        if (language.script == Script.ARABIC) return legacy
+        val options = model.dictionary.correctionOptions(word)
+        // Keep spelling normalization, contractions and the deliberate-word guards in the dictionary.
+        if (options.isEmpty()) return legacy
+        val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
+        val ranked =
+            options
+                .map { c ->
+                    val frequency = model.dictionary.frequency(c.word)
+                    val editWeight = (c.score / maxOf(frequency, 1L)).coerceIn(1e-6, 1.0)
+                    c to scorer.probability(c.word) * editWeight
+                }.sortedByDescending { it.second }
+        val best = ranked.first()
+        val runner = ranked.getOrNull(1)
+        // Ambiguous typos stay suggestions, not automatic replacements. Context can break the tie.
+        if (runner != null && best.second < runner.second * 3.0) return null
+        return best.first.word
     }
 
     fun likelyIntended(
@@ -196,36 +256,106 @@ class WordSuggestions(
     }
 
     /**
-     * The user's own next words lead, then the two-word context, then the one-word table.
-     * [learned] are words the user typed after the last context word, best first.
+     * The tables around the caret: one- and two-word contexts, the Jordanian ones when on, and the user's
+     * own pairs. A sentence's first word is predicted from the `<s>` row.
+     */
+    private inner class Scorer(
+        private val model: Model,
+        context: List<String>,
+        language: Language,
+        dialect: Boolean,
+        /** Words the user typed after the last context word, with how often. */
+        private val learnedNext: Map<String, Int>,
+        /** Learned words for the current prefix, with how often they were typed. */
+        private val userCounts: Map<String, Int>,
+    ) {
+        private val normalized = context.map(::matchKey)
+        private val last = normalized.lastOrNull() ?: START
+        private val pair = if (normalized.size >= 2) normalized.takeLast(2).joinToString(" ") else null
+        val nextRow = row(model.next, last, language)
+        val contextRow = pair?.let { model.context[it] }
+        val dialectNextRow = if (dialect) row(model.dialectNext, last, language) else null
+        val dialectContextRow = if (dialect && pair != null) model.dialectNext[pair] else null
+        private val learnedKeys = learnedNext.mapKeys { candidateKey(it.key) }
+        private val learnedTotal = learnedNext.values.sum().toLong()
+        private val userKeys = userCounts.mapKeys { candidateKey(it.key) }
+        private val total = model.dictionary.totalFrequency.toDouble()
+
+        /** Context words, best known first, for prediction and context-only completions. */
+        val sources: List<List<String>> =
+            listOfNotNull(
+                learnedNext.keys.toList(),
+                dialectContextRow?.words?.toList(),
+                contextRow?.words?.toList(),
+                dialectNextRow?.words?.toList(),
+                nextRow?.words?.toList(),
+            )
+
+        /** P(word | context): each more specific table refines the one below; [baseFrequency] backs unknown forms. */
+        fun probability(
+            word: String,
+            baseFrequency: Long = 0L,
+        ): Double {
+            val key = candidateKey(word)
+            val frequency = maxOf(model.dictionary.frequency(word), baseFrequency)
+            var p = (frequency + 1.0) / total + USER_WORD * minOf(userKeys[key] ?: 0, 10)
+            p = refine(nextRow, key, p, BETA)
+            p = refine(contextRow, key, p, BETA)
+            p = refineDialect(dialectNextRow, key, p)
+            p = refineDialect(dialectContextRow, key, p)
+            if (learnedTotal > 0) {
+                val c = learnedKeys[key]?.toDouble() ?: 0.0
+                p = if (c > 0) (c + LEARNED_BETA * p) / (learnedTotal + LEARNED_BETA) else LEARNED_BETA * p / (learnedTotal + LEARNED_BETA)
+            }
+            return p
+        }
+
+        /**
+         * A pruned dialect table represents the retained in-domain followers. Smooth that distribution,
+         * not its discarded corpus tail: otherwise missing words inherit most of an unrelated MSA row.
+         * Keep a small lower-model share so unknown prefixes still have dictionary/context fallbacks.
+         */
+        private fun refineDialect(
+            row: Row?,
+            key: String,
+            lower: Double,
+        ): Double {
+            if (row == null) return lower
+            return (row.count(key) + DIALECT_BETA * lower) / (row.listed + DIALECT_BETA)
+        }
+
+        /** Listed followers take their share; the rest keep the unlisted share of the lower estimate. */
+        private fun refine(
+            row: Row?,
+            key: String,
+            lower: Double,
+            beta: Double,
+        ): Double {
+            if (row == null) return lower
+            val c = row.count(key)
+            return if (c > 0) (c + beta * lower) / (row.total + beta) else (row.total - row.listed + beta) * lower / (row.total + beta)
+        }
+    }
+
+    /**
+     * Next words for an empty caret, most probable first.
+     * [learned] are words the user typed after the last context word, with how often.
      */
     fun predict(
         context: List<String>,
         language: Language,
         dialectOn: Boolean,
-        learned: List<String> = emptyList(),
+        learned: Map<String, Int> = emptyMap(),
     ): List<String> {
         if (closed) return emptyList()
         val model = model(language) ?: return emptyList()
-
-        val dialect = dialectOn && language.dialect != null
+        val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
         val normalized = context.map(::matchKey)
-        val pair = normalized.takeLast(2).joinToString(" ")
-        val last = normalized.lastOrNull().orEmpty()
-
-        val dialectPredictions =
-            if (dialect) {
-                model.dialectNext[pair] ?: row(model.dialectNext, last, language).orEmpty()
-            } else {
-                emptyList()
-            }
-
         val candidates =
-            (
-                learned + dialectPredictions + model.context[pair].orEmpty() +
-                    row(model.next, last, language).orEmpty() + model.dictionary.commonWords
-            ).map { written(it, language) }
-                .distinctBy(::matchKey)
+            (scorer.sources.flatten() + model.dictionary.commonWords)
+                .map { written(it, language) }
+                .distinctBy(::candidateKey)
+                .sortedByDescending { scorer.probability(it) }
         // Reject only a repeated multi-word cycle, not every recently used word.
         return candidates.filter { candidate ->
             val tail = normalized + matchKey(candidate)
@@ -233,13 +363,18 @@ class WordSuggestions(
         }
     }
 
-    /** Ranks up to 3 candidate words for the typed prefix taking context and typos into account. */
+    /**
+     * Ranks up to 3 words for the typed prefix by their probability in context; typo and clitic readings
+     * pay a fixed cost. [learned] are the user's next words after the last context word and [userWords]
+     * their learned words starting with [typed], each with how often they were typed.
+     */
     fun rank(
         typed: String,
         context: List<String>,
         language: Language,
         dialectOn: Boolean,
-        learned: List<String> = emptyList(),
+        learned: Map<String, Int> = emptyMap(),
+        userWords: Map<String, Int> = emptyMap(),
     ): List<String> {
         if (closed || typed.isEmpty()) return emptyList()
         val model =
@@ -249,98 +384,59 @@ class WordSuggestions(
             } ?: return emptyList()
 
         val dialect = dialectOn && language.dialect != null
-        val normalized = context.map(::matchKey)
-        val pair = normalized.takeLast(2).joinToString(" ")
-        val last = normalized.lastOrNull().orEmpty()
-
-        fun contextBonus(word: String): Double {
-            val normWord = matchKey(word)
-            val learnedIdx = learned.indexOfFirst { matchKey(it) == normWord }
-            if (learnedIdx != -1) return 4.5 - 0.4 * learnedIdx
-            if (dialect) {
-                val dialectPairList = model.dialectNext[pair]
-                if (dialectPairList != null) {
-                    val idx = dialectPairList.indexOfFirst { matchKey(it) == normWord }
-                    if (idx != -1) return 4.0 - 0.4 * idx
-                }
-            }
-            val contextPairList = model.context[pair]
-            if (contextPairList != null) {
-                val idx = contextPairList.indexOfFirst { matchKey(it) == normWord }
-                if (idx != -1) return 4.0 - 0.4 * idx
-            }
-            if (dialect) {
-                val dialectLastList = row(model.dialectNext, last, language)
-                if (dialectLastList != null) {
-                    val idx = dialectLastList.indexOfFirst { matchKey(it) == normWord }
-                    if (idx != -1) return 3.0 - 0.3 * idx
-                }
-            }
-            val nextLastList = row(model.next, last, language)
-            if (nextLastList != null) {
-                val idx = nextLastList.indexOfFirst { matchKey(it) == normWord }
-                if (idx != -1) return 2.5 - 0.3 * idx
-            }
-            return 0.0
-        }
-
+        val scorer = Scorer(model, context, language, dialect, learned, userWords)
         val scores = LinkedHashMap<String, Double>()
+
+        fun consider(
+            word: String,
+            score: Double,
+        ) {
+            scores[word] = maxOf(scores[word] ?: Double.NEGATIVE_INFINITY, score)
+        }
 
         // 1. Exact prefix completions
         val exactCandidates = model.dictionary.completions(typed, 8, dialect)
         val exactWords = HashSet<String>(exactCandidates.size)
         for (c in exactCandidates) {
-            val score = ln(c.score + 1.0) + contextBonus(c.word)
-            scores[c.word] = maxOf(scores[c.word] ?: Double.NEGATIVE_INFINITY, score)
-            exactWords.add(matchKey(c.word))
+            consider(c.word, ln(scorer.probability(c.word)))
+            exactWords.add(candidateKey(c.word))
         }
 
         // 2. Fuzzy completions
         if (typed.length >= 3) {
-            val fuzzyCandidates = model.dictionary.fuzzyCompletions(typed, 6, dialect)
-            for (c in fuzzyCandidates) {
-                val score = ln(c.score + 1.0) - 1.5 + contextBonus(c.word)
-                scores[c.word] = maxOf(scores[c.word] ?: Double.NEGATIVE_INFINITY, score)
+            for (c in model.dictionary.fuzzyCompletions(typed, 6, dialect)) {
+                val frequency = model.dictionary.frequency(c.word)
+                val weight = if (frequency > 0) c.score / frequency else 1.0
+                consider(c.word, ln(scorer.probability(c.word)) + ln(weight) - FUZZY_COST)
             }
         }
 
         // 2b. Arabic words behind an attached و/ف/ب/ل/ك/لل, which the word list rarely contains.
+        var cliticExact = 0
         if (language.script == Script.ARABIC && typed.length >= 3) {
             for (c in model.dictionary.cliticCompletions(typed, 6, dialect)) {
-                if (matchKey(c.word) in exactWords) continue
-                val score = ln(c.score + 1.0) - 2.5 + contextBonus(c.word)
-                scores[c.word] = maxOf(scores[c.word] ?: Double.NEGATIVE_INFINITY, score)
+                if (candidateKey(c.word) in exactWords) continue
+                cliticExact++
+                consider(c.word, ln(scorer.probability(c.word, c.score.toLong())) - CLITIC_COST)
             }
         }
 
-        // 3. Context-only completions
-        val contextSources = ArrayList<List<String>>()
-        if (learned.isNotEmpty()) contextSources.add(learned)
-        if (dialect) {
-            model.dialectNext[pair]?.let { contextSources.add(it) }
+        // 2c. A slip inside an attached Arabic stem: exact clitic lookup cannot recover it.
+        // Offer choices only; the lexical auto-correction path is deliberately unchanged.
+        // Only when nothing exact matched, so a correct partial word never loses its slots to guesses.
+        if (language.script == Script.ARABIC && typed.length >= 4 && exactWords.isEmpty() && cliticExact == 0) {
+            for (c in model.dictionary.cliticFuzzyCompletions(typed, 4, dialect)) {
+                if (candidateKey(c.word) in exactWords) continue
+                consider(c.word, ln(scorer.probability(c.word, c.score.toLong())) - CLITIC_COST - FUZZY_COST)
+            }
         }
-        model.context[pair]?.let { contextSources.add(it) }
-        if (dialect) {
-            row(model.dialectNext, last, language)?.let { contextSources.add(it) }
-        }
-        row(model.next, last, language)?.let { contextSources.add(it) }
 
+        // 3. Context and learned words that start with the prefix
         val typedKey = matchKey(typed)
-        for (source in contextSources) {
-            for (tableWord in source) {
-                val w = written(tableWord, language)
-                val startsWithTyped =
-                    if (language.cased) {
-                        matchKey(w).startsWith(typedKey)
-                    } else {
-                        w.startsWith(typed)
-                    }
-                if (startsWithTyped && !exactWords.contains(matchKey(w))) {
-                    val freq = model.dictionary.frequency(w)
-                    val score = ln(freq.toDouble() + 1.0) + contextBonus(w)
-                    scores[w] = maxOf(scores[w] ?: Double.NEGATIVE_INFINITY, score)
-                }
-            }
+        for (word in scorer.sources.flatten() + userWords.keys) {
+            val w = written(word, language)
+            val startsWithTyped = if (language.cased) matchKey(w).startsWith(typedKey) else w.startsWith(typed)
+            if (startsWithTyped && !exactWords.contains(candidateKey(w))) consider(w, ln(scorer.probability(w)))
         }
 
         // 4. Nothing matched at all: a long word with two slips still gets its likely target.
@@ -361,6 +457,21 @@ class WordSuggestions(
 
     private companion object {
         const val ARABIC_PROCLITICS = "وفبلكع"
+
+        /** Sentence-start context in the tables. */
+        const val START = "<s>"
+
+        /** Pseudo-counts each table level gives to the level below it. */
+        const val BETA = 3.0
+        const val DIALECT_BETA = 3.0
+        const val LEARNED_BETA = 3.0
+
+        /** Unigram share per use of a learned word, capped at ten uses (about a top-500 word at two uses). */
+        const val USER_WORD = 2e-4
+
+        /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
+        const val FUZZY_COST = 1.5
+        const val CLITIC_COST = 2.5
     }
 
     fun close() {

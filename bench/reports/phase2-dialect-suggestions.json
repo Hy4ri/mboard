@@ -1,0 +1,2150 @@
+{
+  "phase": "2",
+  "baseline": "ranking_typo_v3 (phase 1)",
+  "candidate": "phase2_final",
+  "metrics_before": {
+    "en_chat_learning": {
+      "dialect": false,
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 18,
+        "next_word_top1_pct": 13.18,
+        "avg_letters_to_find": 1.91,
+        "sentences": 400,
+        "words": 3073,
+        "found_before_end_pct": 88.38,
+        "one_letter_top1_pct": 27.18,
+        "latency_desktop_jvm": {
+          "p99_us": 1749,
+          "renders": 10225,
+          "p50_us": 53,
+          "max_us": 14276,
+          "p95_us": 240
+        },
+        "one_letter_top3_pct": 41.83,
+        "keystroke_savings_pct": 42.2,
+        "found_within_2_letters_by_length": {
+          "1": 65.26,
+          "2": 81.97,
+          "3": 89.16,
+          "4": 65.15,
+          "5": 50.74,
+          "6": 28.19,
+          "7": 28.46,
+          "8": 20.44,
+          "9": 13.56,
+          "10+": 9.3
+        },
+        "next_word_top3_pct": 22.28,
+        "first_word_top3_pct": 3.73,
+        "false_autocorrect_pct": 0.59
+      },
+      "sentences_file": "data/en_chat.txt",
+      "dictionary_load_ms": 773,
+      "learning": true,
+      "label": "en_chat_learning",
+      "lang": "en"
+    },
+    "jo_chat_dialect": {
+      "dialect": true,
+      "typos_file": "data/jo_chat_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.42,
+        "in_strip_pct": 54.09,
+        "autofixed_pct": 17.31,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 55.24,
+            "autofixed_pct": 24.76,
+            "rows": 105
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.59,
+            "in_strip_pct": 53.97,
+            "autofixed_pct": 16.49,
+            "rows": 958
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 55.24,
+            "autofixed_pct": 24.76,
+            "rows": 105
+          },
+          "doubled": {
+            "wrong_fix_pct": 3.42,
+            "in_strip_pct": 69.23,
+            "autofixed_pct": 26.5,
+            "rows": 117
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 16.67,
+            "autofixed_pct": 16.67,
+            "rows": 6
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 11.03,
+            "in_strip_pct": 41.91,
+            "autofixed_pct": 0.74,
+            "rows": 136
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.75,
+            "in_strip_pct": 54.78,
+            "autofixed_pct": 17.07,
+            "rows": 533
+          },
+          "insertion": {
+            "wrong_fix_pct": 5.31,
+            "in_strip_pct": 58.41,
+            "autofixed_pct": 22.12,
+            "rows": 113
+          },
+          "omission": {
+            "wrong_fix_pct": 7.49,
+            "in_strip_pct": 41.18,
+            "autofixed_pct": 5.35,
+            "rows": 187
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 12.5,
+            "in_strip_pct": 50,
+            "autofixed_pct": 0,
+            "rows": 16
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 10.83,
+            "in_strip_pct": 40.83,
+            "autofixed_pct": 0.83,
+            "rows": 120
+          }
+        },
+        "scored_rows": 1063,
+        "rows": 1199
+      },
+      "sentences": {
+        "spelling_normalized_pct": 1.8,
+        "false_autocorrect_count": 73,
+        "next_word_top1_pct": 5.08,
+        "avg_letters_to_find": 2.48,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 54.83,
+        "one_letter_top1_pct": 9.98,
+        "latency_desktop_jvm": {
+          "p99_us": 525,
+          "renders": 45963,
+          "p50_us": 31,
+          "max_us": 63288,
+          "p95_us": 223
+        },
+        "one_letter_top3_pct": 14.32,
+        "keystroke_savings_pct": 19.49,
+        "found_within_2_letters_by_length": {
+          "1": 29.96,
+          "2": 66.16,
+          "3": 55.07,
+          "4": 36.09,
+          "5": 16.97,
+          "6": 7.2,
+          "7": 5.59,
+          "8": 4.14,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 8.94,
+        "first_word_top3_pct": 0.15,
+        "false_autocorrect_pct": 0.71
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1690,
+      "learning": false,
+      "label": "jo_chat_dialect",
+      "lang": "ar"
+    },
+    "en_subs": {
+      "dialect": false,
+      "typos_file": "data/en_subs_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.34,
+        "in_strip_pct": 92.03,
+        "autofixed_pct": 82.88,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 1.75,
+            "in_strip_pct": 95.45,
+            "autofixed_pct": 84.27,
+            "rows": 286
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.7,
+            "in_strip_pct": 91.56,
+            "autofixed_pct": 82.69,
+            "rows": 2085
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.75,
+            "in_strip_pct": 95.45,
+            "autofixed_pct": 84.27,
+            "rows": 286
+          },
+          "doubled": {
+            "wrong_fix_pct": 0.79,
+            "in_strip_pct": 96.44,
+            "autofixed_pct": 86.56,
+            "rows": 253
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.79,
+            "autofixed_pct": 0,
+            "rows": 419
+          },
+          "adjacent": {
+            "wrong_fix_pct": 2.64,
+            "in_strip_pct": 96.32,
+            "autofixed_pct": 88.65,
+            "rows": 1251
+          },
+          "insertion": {
+            "wrong_fix_pct": 2.88,
+            "in_strip_pct": 94.25,
+            "autofixed_pct": 89.78,
+            "rows": 313
+          },
+          "omission": {
+            "wrong_fix_pct": 20.15,
+            "in_strip_pct": 61.57,
+            "autofixed_pct": 42.91,
+            "rows": 268
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 90,
+            "autofixed_pct": 0,
+            "rows": 10
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.37,
+            "autofixed_pct": 0,
+            "rows": 409
+          }
+        },
+        "scored_rows": 2371,
+        "rows": 2790
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 289,
+        "next_word_top1_pct": 17.1,
+        "avg_letters_to_find": 1.58,
+        "sentences": 8000,
+        "words": 56273,
+        "found_before_end_pct": 87.67,
+        "one_letter_top1_pct": 32.13,
+        "latency_desktop_jvm": {
+          "p99_us": 823,
+          "renders": 173342,
+          "p50_us": 10,
+          "max_us": 38366,
+          "p95_us": 112
+        },
+        "one_letter_top3_pct": 47.73,
+        "keystroke_savings_pct": 43.59,
+        "found_within_2_letters_by_length": {
+          "1": 72.95,
+          "2": 83.16,
+          "3": 91.14,
+          "4": 73.42,
+          "5": 51.36,
+          "6": 36.57,
+          "7": 18.92,
+          "8": 14.85,
+          "9": 15.94,
+          "10+": 9.91
+        },
+        "next_word_top3_pct": 29.18,
+        "first_word_top3_pct": 16.22,
+        "false_autocorrect_pct": 0.51
+      },
+      "sentences_file": "data/en_subs.txt",
+      "dictionary_load_ms": 1182,
+      "learning": false,
+      "label": "en_subs",
+      "lang": "en"
+    },
+    "ar_real_typos": {
+      "dialect": false,
+      "typos_file": "data/ar_real_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 2.94,
+        "in_strip_pct": 49.41,
+        "autofixed_pct": 16.86,
+        "by_kind": {
+          "other": {
+            "wrong_fix_pct": 7.27,
+            "in_strip_pct": 41.82,
+            "autofixed_pct": 10.91,
+            "rows": 55
+          },
+          "doubled": {
+            "wrong_fix_pct": 2.53,
+            "in_strip_pct": 86.08,
+            "autofixed_pct": 39.24,
+            "rows": 79
+          },
+          "adjacent": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 55.74,
+            "autofixed_pct": 16.39,
+            "rows": 61
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 9.68,
+            "in_strip_pct": 29.03,
+            "autofixed_pct": 0,
+            "rows": 31
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0.43,
+            "in_strip_pct": 65.65,
+            "autofixed_pct": 19.57,
+            "rows": 230
+          },
+          "transposition": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 54.41,
+            "autofixed_pct": 7.35,
+            "rows": 68
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 3.33,
+            "in_strip_pct": 49.88,
+            "autofixed_pct": 19,
+            "rows": 421
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.15,
+            "in_strip_pct": 48.28,
+            "autofixed_pct": 6.9,
+            "rows": 87
+          },
+          "phonetic": {
+            "wrong_fix_pct": 1.3,
+            "in_strip_pct": 11.69,
+            "autofixed_pct": 0,
+            "rows": 77
+          },
+          "taa": {
+            "wrong_fix_pct": 1.96,
+            "in_strip_pct": 74.51,
+            "autofixed_pct": 52.94,
+            "rows": 51
+          },
+          "~edits_3+": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "yaa": {
+            "wrong_fix_pct": 7.41,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 27
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 1.53,
+            "in_strip_pct": 61.3,
+            "autofixed_pct": 17.24,
+            "rows": 261
+          },
+          "insertion": {
+            "wrong_fix_pct": 9.68,
+            "in_strip_pct": 61.29,
+            "autofixed_pct": 0,
+            "rows": 31
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 45,
+            "autofixed_pct": 35,
+            "rows": 20
+          },
+          "omission": {
+            "wrong_fix_pct": 4.88,
+            "in_strip_pct": 36.59,
+            "autofixed_pct": 0,
+            "rows": 41
+          }
+        },
+        "scored_rows": 510,
+        "rows": 771
+      },
+      "dictionary_load_ms": 1613,
+      "learning": false,
+      "label": "ar_real_typos",
+      "lang": "ar"
+    },
+    "en_chat": {
+      "dialect": false,
+      "typos_file": "data/en_chat_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 6.14,
+        "in_strip_pct": 91.52,
+        "autofixed_pct": 83.04,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 95.74,
+            "autofixed_pct": 89.36,
+            "rows": 47
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 7.12,
+            "in_strip_pct": 90.85,
+            "autofixed_pct": 82.03,
+            "rows": 295
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 95.74,
+            "autofixed_pct": 89.36,
+            "rows": 47
+          },
+          "doubled": {
+            "wrong_fix_pct": 3.13,
+            "in_strip_pct": 96.88,
+            "autofixed_pct": 93.75,
+            "rows": 32
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.41,
+            "autofixed_pct": 0,
+            "rows": 58
+          },
+          "adjacent": {
+            "wrong_fix_pct": 4.86,
+            "in_strip_pct": 96.76,
+            "autofixed_pct": 87.57,
+            "rows": 185
+          },
+          "insertion": {
+            "wrong_fix_pct": 6.9,
+            "in_strip_pct": 89.66,
+            "autofixed_pct": 86.21,
+            "rows": 29
+          },
+          "omission": {
+            "wrong_fix_pct": 18.37,
+            "in_strip_pct": 65.31,
+            "autofixed_pct": 51.02,
+            "rows": 49
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.41,
+            "autofixed_pct": 0,
+            "rows": 58
+          }
+        },
+        "scored_rows": 342,
+        "rows": 400
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 36,
+        "next_word_top1_pct": 13,
+        "avg_letters_to_find": 1.95,
+        "sentences": 400,
+        "words": 3073,
+        "found_before_end_pct": 87.99,
+        "one_letter_top1_pct": 26.92,
+        "latency_desktop_jvm": {
+          "p99_us": 2696,
+          "renders": 10354,
+          "p50_us": 31,
+          "max_us": 18481,
+          "p95_us": 344
+        },
+        "one_letter_top3_pct": 41.24,
+        "keystroke_savings_pct": 41.45,
+        "found_within_2_letters_by_length": {
+          "1": 67.37,
+          "2": 81.97,
+          "3": 87.86,
+          "4": 63.94,
+          "5": 50.74,
+          "6": 27.41,
+          "7": 18.73,
+          "8": 18.98,
+          "9": 8.47,
+          "10+": 6.98
+        },
+        "next_word_top3_pct": 22.4,
+        "first_word_top3_pct": 3.73,
+        "false_autocorrect_pct": 1.17
+      },
+      "sentences_file": "data/en_chat.txt",
+      "dictionary_load_ms": 1177,
+      "learning": false,
+      "label": "en_chat",
+      "lang": "en"
+    },
+    "jo_chat_learning": {
+      "dialect": true,
+      "sentences": {
+        "spelling_normalized_pct": 1.54,
+        "false_autocorrect_count": 71,
+        "next_word_top1_pct": 5.88,
+        "avg_letters_to_find": 2.28,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 62.47,
+        "one_letter_top1_pct": 11.8,
+        "latency_desktop_jvm": {
+          "p99_us": 874,
+          "renders": 43624,
+          "p50_us": 113,
+          "max_us": 35864,
+          "p95_us": 389
+        },
+        "one_letter_top3_pct": 18.47,
+        "keystroke_savings_pct": 23.82,
+        "found_within_2_letters_by_length": {
+          "1": 33.2,
+          "2": 69.81,
+          "3": 70.63,
+          "4": 45.48,
+          "5": 23.05,
+          "6": 14.13,
+          "7": 6.32,
+          "8": 5.26,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 9.98,
+        "first_word_top3_pct": 0.15,
+        "false_autocorrect_pct": 0.69
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1655,
+      "learning": true,
+      "label": "jo_chat_learning",
+      "lang": "ar"
+    },
+    "en_tatoeba": {
+      "dialect": false,
+      "typos_file": "data/en_tatoeba_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 5.43,
+        "in_strip_pct": 89.74,
+        "autofixed_pct": 80.08,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 1.46,
+            "in_strip_pct": 95.62,
+            "autofixed_pct": 85.04,
+            "rows": 274
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 5.92,
+            "in_strip_pct": 89.02,
+            "autofixed_pct": 79.47,
+            "rows": 2231
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.46,
+            "in_strip_pct": 95.62,
+            "autofixed_pct": 85.04,
+            "rows": 274
+          },
+          "doubled": {
+            "wrong_fix_pct": 1.55,
+            "in_strip_pct": 96.51,
+            "autofixed_pct": 84.88,
+            "rows": 258
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 56.92,
+            "autofixed_pct": 0,
+            "rows": 455
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.44,
+            "in_strip_pct": 94.99,
+            "autofixed_pct": 87.51,
+            "rows": 1337
+          },
+          "insertion": {
+            "wrong_fix_pct": 7.07,
+            "in_strip_pct": 88.89,
+            "autofixed_pct": 80.81,
+            "rows": 297
+          },
+          "omission": {
+            "wrong_fix_pct": 17.99,
+            "in_strip_pct": 59.88,
+            "autofixed_pct": 42.48,
+            "rows": 339
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 76.92,
+            "autofixed_pct": 0,
+            "rows": 13
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 56.33,
+            "autofixed_pct": 0,
+            "rows": 442
+          }
+        },
+        "scored_rows": 2505,
+        "rows": 2960
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 160,
+        "next_word_top1_pct": 16.42,
+        "avg_letters_to_find": 1.64,
+        "sentences": 6000,
+        "words": 44170,
+        "found_before_end_pct": 86.1,
+        "one_letter_top1_pct": 30.74,
+        "latency_desktop_jvm": {
+          "p99_us": 693,
+          "renders": 140553,
+          "p50_us": 11,
+          "max_us": 32330,
+          "p95_us": 117
+        },
+        "one_letter_top3_pct": 44.57,
+        "keystroke_savings_pct": 42.68,
+        "found_within_2_letters_by_length": {
+          "1": 82.79,
+          "2": 87.48,
+          "3": 80.05,
+          "4": 67.37,
+          "5": 53.21,
+          "6": 34.66,
+          "7": 18.13,
+          "8": 15.47,
+          "9": 12.65,
+          "10+": 10.71
+        },
+        "next_word_top3_pct": 28.25,
+        "first_word_top3_pct": 17.65,
+        "false_autocorrect_pct": 0.36
+      },
+      "sentences_file": "data/en_tatoeba.txt",
+      "dictionary_load_ms": 1233,
+      "learning": false,
+      "label": "en_tatoeba",
+      "lang": "en"
+    },
+    "ar_subs": {
+      "dialect": false,
+      "typos_file": "data/ar_subs_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.89,
+        "in_strip_pct": 70.19,
+        "autofixed_pct": 26.26,
+        "by_kind": {
+          "doubled": {
+            "wrong_fix_pct": 4.55,
+            "in_strip_pct": 83.12,
+            "autofixed_pct": 43.83,
+            "rows": 308
+          },
+          "adjacent": {
+            "wrong_fix_pct": 5.35,
+            "in_strip_pct": 72.57,
+            "autofixed_pct": 25.95,
+            "rows": 1214
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 62.86,
+            "autofixed_pct": 0,
+            "rows": 35
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 4.86,
+            "in_strip_pct": 54.4,
+            "autofixed_pct": 5.09,
+            "rows": 432
+          },
+          "transposition": {
+            "wrong_fix_pct": 6.18,
+            "in_strip_pct": 75.27,
+            "autofixed_pct": 23.27,
+            "rows": 275
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.73,
+            "in_strip_pct": 69.55,
+            "autofixed_pct": 26.64,
+            "rows": 2177
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 6.18,
+            "in_strip_pct": 75.27,
+            "autofixed_pct": 23.27,
+            "rows": 275
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 80,
+            "autofixed_pct": 60,
+            "rows": 5
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 100,
+            "autofixed_pct": 0,
+            "rows": 1
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 4.71,
+            "in_strip_pct": 55.03,
+            "autofixed_pct": 4.71,
+            "rows": 467
+          },
+          "insertion": {
+            "wrong_fix_pct": 2.55,
+            "in_strip_pct": 76.73,
+            "autofixed_pct": 39.27,
+            "rows": 275
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "omission": {
+            "wrong_fix_pct": 4.57,
+            "in_strip_pct": 43.28,
+            "autofixed_pct": 5.11,
+            "rows": 372
+          }
+        },
+        "scored_rows": 2452,
+        "rows": 2919
+      },
+      "sentences": {
+        "spelling_normalized_pct": 2.09,
+        "false_autocorrect_count": 138,
+        "next_word_top1_pct": 11.63,
+        "avg_letters_to_find": 1.86,
+        "sentences": 8000,
+        "words": 42474,
+        "found_before_end_pct": 70.45,
+        "one_letter_top1_pct": 23.14,
+        "latency_desktop_jvm": {
+          "p99_us": 638,
+          "renders": 158117,
+          "p50_us": 17,
+          "max_us": 13693,
+          "p95_us": 234
+        },
+        "one_letter_top3_pct": 33.82,
+        "keystroke_savings_pct": 29.15,
+        "found_within_2_letters_by_length": {
+          "1": 7.97,
+          "2": 80.26,
+          "3": 80.68,
+          "4": 50.84,
+          "5": 26.1,
+          "6": 15.22,
+          "7": 10.16,
+          "8": 8.55,
+          "9": 3.95,
+          "10+": 3.95
+        },
+        "next_word_top3_pct": 20.41,
+        "first_word_top3_pct": 9.35,
+        "false_autocorrect_pct": 0.32
+      },
+      "sentences_file": "data/ar_subs.txt",
+      "dictionary_load_ms": 1613,
+      "learning": false,
+      "label": "ar_subs",
+      "lang": "ar"
+    },
+    "jo_chat_msa": {
+      "dialect": false,
+      "sentences": {
+        "spelling_normalized_pct": 1.8,
+        "false_autocorrect_count": 73,
+        "next_word_top1_pct": 1.53,
+        "avg_letters_to_find": 2.71,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 41.39,
+        "one_letter_top1_pct": 5.05,
+        "latency_desktop_jvm": {
+          "p99_us": 994,
+          "renders": 49058,
+          "p50_us": 26,
+          "max_us": 44334,
+          "p95_us": 364
+        },
+        "one_letter_top3_pct": 8.16,
+        "keystroke_savings_pct": 13.1,
+        "found_within_2_letters_by_length": {
+          "1": 0.4,
+          "2": 55.85,
+          "3": 47.09,
+          "4": 24.51,
+          "5": 8.13,
+          "6": 3.7,
+          "7": 2.65,
+          "8": 1.13,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 3.49,
+        "first_word_top3_pct": 0.53,
+        "false_autocorrect_pct": 0.71
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1692,
+      "learning": false,
+      "label": "jo_chat_msa",
+      "lang": "ar"
+    },
+    "en_real_typos": {
+      "dialect": false,
+      "typos_file": "data/en_real_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 19.38,
+        "in_strip_pct": 50.58,
+        "autofixed_pct": 31.4,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 4.96,
+            "in_strip_pct": 100,
+            "autofixed_pct": 91.74,
+            "rows": 121
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 11.93,
+            "in_strip_pct": 87.11,
+            "autofixed_pct": 75.91,
+            "rows": 1241
+          },
+          "other": {
+            "wrong_fix_pct": 27.07,
+            "in_strip_pct": 19.05,
+            "autofixed_pct": 3.36,
+            "rows": 1459
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 23.01,
+            "in_strip_pct": 73.88,
+            "autofixed_pct": 26.94,
+            "rows": 1095
+          },
+          "phonetic": {
+            "wrong_fix_pct": 19.95,
+            "in_strip_pct": 53.62,
+            "autofixed_pct": 26.56,
+            "rows": 1604
+          },
+          "doubled": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 98.59,
+            "autofixed_pct": 94.37,
+            "rows": 71
+          },
+          "~edits_3+": {
+            "wrong_fix_pct": 22.54,
+            "in_strip_pct": 7.99,
+            "autofixed_pct": 1.14,
+            "rows": 1664
+          },
+          "adjacent": {
+            "wrong_fix_pct": 1.14,
+            "in_strip_pct": 97.73,
+            "autofixed_pct": 93.18,
+            "rows": 88
+          },
+          "insertion": {
+            "wrong_fix_pct": 5.65,
+            "in_strip_pct": 91.74,
+            "autofixed_pct": 84.78,
+            "rows": 230
+          },
+          "omission": {
+            "wrong_fix_pct": 9.37,
+            "in_strip_pct": 92.97,
+            "autofixed_pct": 76.35,
+            "rows": 427
+          }
+        },
+        "scored_rows": 4000,
+        "rows": 4000
+      },
+      "dictionary_load_ms": 1170,
+      "learning": false,
+      "label": "en_real_typos",
+      "lang": "en"
+    },
+    "ar_tatoeba": {
+      "dialect": false,
+      "typos_file": "data/ar_tatoeba_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 3.65,
+        "in_strip_pct": 65.74,
+        "autofixed_pct": 23.34,
+        "by_kind": {
+          "doubled": {
+            "wrong_fix_pct": 4.76,
+            "in_strip_pct": 79.93,
+            "autofixed_pct": 40.14,
+            "rows": 294
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.32,
+            "in_strip_pct": 69.99,
+            "autofixed_pct": 22.93,
+            "rows": 1173
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 6.67,
+            "in_strip_pct": 62.22,
+            "autofixed_pct": 0,
+            "rows": 45
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 5.22,
+            "in_strip_pct": 53.91,
+            "autofixed_pct": 5,
+            "rows": 460
+          },
+          "transposition": {
+            "wrong_fix_pct": 3.03,
+            "in_strip_pct": 69.7,
+            "autofixed_pct": 23.11,
+            "rows": 264
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 3.73,
+            "in_strip_pct": 65.25,
+            "autofixed_pct": 23.37,
+            "rows": 2144
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 3.03,
+            "in_strip_pct": 69.7,
+            "autofixed_pct": 23.11,
+            "rows": 264
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 100,
+            "autofixed_pct": 100,
+            "rows": 3
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 3
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 5.35,
+            "in_strip_pct": 54.65,
+            "autofixed_pct": 4.55,
+            "rows": 505
+          },
+          "insertion": {
+            "wrong_fix_pct": 3.31,
+            "in_strip_pct": 72.06,
+            "autofixed_pct": 34.19,
+            "rows": 272
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "omission": {
+            "wrong_fix_pct": 4.53,
+            "in_strip_pct": 36.27,
+            "autofixed_pct": 4.53,
+            "rows": 397
+          }
+        },
+        "scored_rows": 2408,
+        "rows": 2913
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0.47,
+        "false_autocorrect_count": 108,
+        "next_word_top1_pct": 10.09,
+        "avg_letters_to_find": 1.95,
+        "sentences": 6000,
+        "words": 26853,
+        "found_before_end_pct": 65.72,
+        "one_letter_top1_pct": 20.5,
+        "latency_desktop_jvm": {
+          "p99_us": 700,
+          "renders": 106020,
+          "p50_us": 19,
+          "max_us": 37056,
+          "p95_us": 262
+        },
+        "one_letter_top3_pct": 29.35,
+        "keystroke_savings_pct": 26.07,
+        "found_within_2_letters_by_length": {
+          "1": 17.61,
+          "2": 80.7,
+          "3": 77.48,
+          "4": 34.77,
+          "5": 24.39,
+          "6": 12.83,
+          "7": 8.4,
+          "8": 8.11,
+          "9": 9.76,
+          "10+": 7.91
+        },
+        "next_word_top3_pct": 17.15,
+        "first_word_top3_pct": 11.06,
+        "false_autocorrect_pct": 0.4
+      },
+      "sentences_file": "data/ar_tatoeba.txt",
+      "dictionary_load_ms": 1617,
+      "learning": false,
+      "label": "ar_tatoeba",
+      "lang": "ar"
+    }
+  },
+  "metrics_after": {
+    "en_chat_learning": {
+      "dialect": false,
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 18,
+        "next_word_top1_pct": 13.18,
+        "avg_letters_to_find": 1.91,
+        "sentences": 400,
+        "words": 3073,
+        "found_before_end_pct": 88.38,
+        "one_letter_top1_pct": 27.18,
+        "latency_desktop_jvm": {
+          "p99_us": 1658,
+          "renders": 10225,
+          "p50_us": 52,
+          "max_us": 12607,
+          "p95_us": 253
+        },
+        "one_letter_top3_pct": 41.83,
+        "keystroke_savings_pct": 42.2,
+        "found_within_2_letters_by_length": {
+          "1": 65.26,
+          "2": 81.97,
+          "3": 89.16,
+          "4": 65.15,
+          "5": 50.74,
+          "6": 28.19,
+          "7": 28.46,
+          "8": 20.44,
+          "9": 13.56,
+          "10+": 9.3
+        },
+        "next_word_top3_pct": 22.28,
+        "first_word_top3_pct": 3.73,
+        "false_autocorrect_pct": 0.59
+      },
+      "sentences_file": "data/en_chat.txt",
+      "dictionary_load_ms": 812,
+      "learning": true,
+      "label": "en_chat_learning",
+      "lang": "en"
+    },
+    "jo_chat_dialect": {
+      "dialect": true,
+      "typos_file": "data/jo_chat_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.42,
+        "in_strip_pct": 57.01,
+        "autofixed_pct": 17.31,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 58.1,
+            "autofixed_pct": 24.76,
+            "rows": 105
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.59,
+            "in_strip_pct": 56.89,
+            "autofixed_pct": 16.49,
+            "rows": 958
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 58.1,
+            "autofixed_pct": 24.76,
+            "rows": 105
+          },
+          "doubled": {
+            "wrong_fix_pct": 3.42,
+            "in_strip_pct": 72.65,
+            "autofixed_pct": 26.5,
+            "rows": 117
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 16.67,
+            "autofixed_pct": 16.67,
+            "rows": 6
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 50,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 11.03,
+            "in_strip_pct": 48.53,
+            "autofixed_pct": 0.74,
+            "rows": 136
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.75,
+            "in_strip_pct": 57.41,
+            "autofixed_pct": 17.07,
+            "rows": 533
+          },
+          "insertion": {
+            "wrong_fix_pct": 5.31,
+            "in_strip_pct": 65.49,
+            "autofixed_pct": 22.12,
+            "rows": 113
+          },
+          "omission": {
+            "wrong_fix_pct": 7.49,
+            "in_strip_pct": 41.71,
+            "autofixed_pct": 5.35,
+            "rows": 187
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 12.5,
+            "in_strip_pct": 75,
+            "autofixed_pct": 0,
+            "rows": 16
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 10.83,
+            "in_strip_pct": 45,
+            "autofixed_pct": 0.83,
+            "rows": 120
+          }
+        },
+        "scored_rows": 1063,
+        "rows": 1199
+      },
+      "sentences": {
+        "spelling_normalized_pct": 1.8,
+        "false_autocorrect_count": 73,
+        "next_word_top1_pct": 5.38,
+        "avg_letters_to_find": 2.52,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 57.92,
+        "one_letter_top1_pct": 10.18,
+        "latency_desktop_jvm": {
+          "p99_us": 578,
+          "renders": 45812,
+          "p50_us": 26,
+          "max_us": 25232,
+          "p95_us": 231
+        },
+        "one_letter_top3_pct": 14.21,
+        "keystroke_savings_pct": 19.82,
+        "found_within_2_letters_by_length": {
+          "1": 31.17,
+          "2": 66.16,
+          "3": 63.75,
+          "4": 33.97,
+          "5": 16.84,
+          "6": 7.2,
+          "7": 5.59,
+          "8": 4.14,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 9.33,
+        "first_word_top3_pct": 0.15,
+        "false_autocorrect_pct": 0.71
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1664,
+      "learning": false,
+      "label": "jo_chat_dialect",
+      "lang": "ar"
+    },
+    "en_subs": {
+      "dialect": false,
+      "typos_file": "data/en_subs_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.34,
+        "in_strip_pct": 92.03,
+        "autofixed_pct": 82.88,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 1.75,
+            "in_strip_pct": 95.45,
+            "autofixed_pct": 84.27,
+            "rows": 286
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.7,
+            "in_strip_pct": 91.56,
+            "autofixed_pct": 82.69,
+            "rows": 2085
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.75,
+            "in_strip_pct": 95.45,
+            "autofixed_pct": 84.27,
+            "rows": 286
+          },
+          "doubled": {
+            "wrong_fix_pct": 0.79,
+            "in_strip_pct": 96.44,
+            "autofixed_pct": 86.56,
+            "rows": 253
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.79,
+            "autofixed_pct": 0,
+            "rows": 419
+          },
+          "adjacent": {
+            "wrong_fix_pct": 2.64,
+            "in_strip_pct": 96.32,
+            "autofixed_pct": 88.65,
+            "rows": 1251
+          },
+          "insertion": {
+            "wrong_fix_pct": 2.88,
+            "in_strip_pct": 94.25,
+            "autofixed_pct": 89.78,
+            "rows": 313
+          },
+          "omission": {
+            "wrong_fix_pct": 20.15,
+            "in_strip_pct": 61.57,
+            "autofixed_pct": 42.91,
+            "rows": 268
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 90,
+            "autofixed_pct": 0,
+            "rows": 10
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.37,
+            "autofixed_pct": 0,
+            "rows": 409
+          }
+        },
+        "scored_rows": 2371,
+        "rows": 2790
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 289,
+        "next_word_top1_pct": 17.1,
+        "avg_letters_to_find": 1.58,
+        "sentences": 8000,
+        "words": 56273,
+        "found_before_end_pct": 87.67,
+        "one_letter_top1_pct": 32.13,
+        "latency_desktop_jvm": {
+          "p99_us": 807,
+          "renders": 173342,
+          "p50_us": 9,
+          "max_us": 17392,
+          "p95_us": 112
+        },
+        "one_letter_top3_pct": 47.73,
+        "keystroke_savings_pct": 43.59,
+        "found_within_2_letters_by_length": {
+          "1": 72.95,
+          "2": 83.16,
+          "3": 91.14,
+          "4": 73.42,
+          "5": 51.36,
+          "6": 36.57,
+          "7": 18.92,
+          "8": 14.85,
+          "9": 15.94,
+          "10+": 9.91
+        },
+        "next_word_top3_pct": 29.18,
+        "first_word_top3_pct": 16.22,
+        "false_autocorrect_pct": 0.51
+      },
+      "sentences_file": "data/en_subs.txt",
+      "dictionary_load_ms": 1217,
+      "learning": false,
+      "label": "en_subs",
+      "lang": "en"
+    },
+    "ar_real_typos": {
+      "dialect": false,
+      "typos_file": "data/ar_real_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 2.94,
+        "in_strip_pct": 49.41,
+        "autofixed_pct": 16.86,
+        "by_kind": {
+          "other": {
+            "wrong_fix_pct": 7.27,
+            "in_strip_pct": 41.82,
+            "autofixed_pct": 10.91,
+            "rows": 55
+          },
+          "doubled": {
+            "wrong_fix_pct": 2.53,
+            "in_strip_pct": 86.08,
+            "autofixed_pct": 39.24,
+            "rows": 79
+          },
+          "adjacent": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 55.74,
+            "autofixed_pct": 16.39,
+            "rows": 61
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 9.68,
+            "in_strip_pct": 29.03,
+            "autofixed_pct": 0,
+            "rows": 31
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0.43,
+            "in_strip_pct": 65.65,
+            "autofixed_pct": 19.57,
+            "rows": 230
+          },
+          "transposition": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 54.41,
+            "autofixed_pct": 7.35,
+            "rows": 68
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 3.33,
+            "in_strip_pct": 49.88,
+            "autofixed_pct": 19,
+            "rows": 421
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.15,
+            "in_strip_pct": 48.28,
+            "autofixed_pct": 6.9,
+            "rows": 87
+          },
+          "phonetic": {
+            "wrong_fix_pct": 1.3,
+            "in_strip_pct": 11.69,
+            "autofixed_pct": 0,
+            "rows": 77
+          },
+          "taa": {
+            "wrong_fix_pct": 1.96,
+            "in_strip_pct": 74.51,
+            "autofixed_pct": 52.94,
+            "rows": 51
+          },
+          "~edits_3+": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "yaa": {
+            "wrong_fix_pct": 7.41,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 27
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 1.53,
+            "in_strip_pct": 61.3,
+            "autofixed_pct": 17.24,
+            "rows": 261
+          },
+          "insertion": {
+            "wrong_fix_pct": 9.68,
+            "in_strip_pct": 61.29,
+            "autofixed_pct": 0,
+            "rows": 31
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 45,
+            "autofixed_pct": 35,
+            "rows": 20
+          },
+          "omission": {
+            "wrong_fix_pct": 4.88,
+            "in_strip_pct": 36.59,
+            "autofixed_pct": 0,
+            "rows": 41
+          }
+        },
+        "scored_rows": 510,
+        "rows": 771
+      },
+      "dictionary_load_ms": 1633,
+      "learning": false,
+      "label": "ar_real_typos",
+      "lang": "ar"
+    },
+    "en_chat": {
+      "dialect": false,
+      "typos_file": "data/en_chat_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 6.14,
+        "in_strip_pct": 91.52,
+        "autofixed_pct": 83.04,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 95.74,
+            "autofixed_pct": 89.36,
+            "rows": 47
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 7.12,
+            "in_strip_pct": 90.85,
+            "autofixed_pct": 82.03,
+            "rows": 295
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 95.74,
+            "autofixed_pct": 89.36,
+            "rows": 47
+          },
+          "doubled": {
+            "wrong_fix_pct": 3.13,
+            "in_strip_pct": 96.88,
+            "autofixed_pct": 93.75,
+            "rows": 32
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.41,
+            "autofixed_pct": 0,
+            "rows": 58
+          },
+          "adjacent": {
+            "wrong_fix_pct": 4.86,
+            "in_strip_pct": 96.76,
+            "autofixed_pct": 87.57,
+            "rows": 185
+          },
+          "insertion": {
+            "wrong_fix_pct": 6.9,
+            "in_strip_pct": 89.66,
+            "autofixed_pct": 86.21,
+            "rows": 29
+          },
+          "omission": {
+            "wrong_fix_pct": 18.37,
+            "in_strip_pct": 65.31,
+            "autofixed_pct": 51.02,
+            "rows": 49
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 72.41,
+            "autofixed_pct": 0,
+            "rows": 58
+          }
+        },
+        "scored_rows": 342,
+        "rows": 400
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 36,
+        "next_word_top1_pct": 13,
+        "avg_letters_to_find": 1.95,
+        "sentences": 400,
+        "words": 3073,
+        "found_before_end_pct": 87.99,
+        "one_letter_top1_pct": 26.92,
+        "latency_desktop_jvm": {
+          "p99_us": 2382,
+          "renders": 10354,
+          "p50_us": 31,
+          "max_us": 29219,
+          "p95_us": 343
+        },
+        "one_letter_top3_pct": 41.24,
+        "keystroke_savings_pct": 41.45,
+        "found_within_2_letters_by_length": {
+          "1": 67.37,
+          "2": 81.97,
+          "3": 87.86,
+          "4": 63.94,
+          "5": 50.74,
+          "6": 27.41,
+          "7": 18.73,
+          "8": 18.98,
+          "9": 8.47,
+          "10+": 6.98
+        },
+        "next_word_top3_pct": 22.4,
+        "first_word_top3_pct": 3.73,
+        "false_autocorrect_pct": 1.17
+      },
+      "sentences_file": "data/en_chat.txt",
+      "dictionary_load_ms": 1223,
+      "learning": false,
+      "label": "en_chat",
+      "lang": "en"
+    },
+    "jo_chat_learning": {
+      "dialect": true,
+      "sentences": {
+        "spelling_normalized_pct": 1.54,
+        "false_autocorrect_count": 71,
+        "next_word_top1_pct": 6,
+        "avg_letters_to_find": 2.3,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 63.44,
+        "one_letter_top1_pct": 11.98,
+        "latency_desktop_jvm": {
+          "p99_us": 760,
+          "renders": 43518,
+          "p50_us": 117,
+          "max_us": 36382,
+          "p95_us": 383
+        },
+        "one_letter_top3_pct": 18.45,
+        "keystroke_savings_pct": 24.05,
+        "found_within_2_letters_by_length": {
+          "1": 34.41,
+          "2": 69.81,
+          "3": 71.04,
+          "4": 45.41,
+          "5": 23.14,
+          "6": 14.13,
+          "7": 6.32,
+          "8": 5.26,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 10.23,
+        "first_word_top3_pct": 0.15,
+        "false_autocorrect_pct": 0.69
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1690,
+      "learning": true,
+      "label": "jo_chat_learning",
+      "lang": "ar"
+    },
+    "en_tatoeba": {
+      "dialect": false,
+      "typos_file": "data/en_tatoeba_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 5.43,
+        "in_strip_pct": 89.74,
+        "autofixed_pct": 80.08,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 1.46,
+            "in_strip_pct": 95.62,
+            "autofixed_pct": 85.04,
+            "rows": 274
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 5.92,
+            "in_strip_pct": 89.02,
+            "autofixed_pct": 79.47,
+            "rows": 2231
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 1.46,
+            "in_strip_pct": 95.62,
+            "autofixed_pct": 85.04,
+            "rows": 274
+          },
+          "doubled": {
+            "wrong_fix_pct": 1.55,
+            "in_strip_pct": 96.51,
+            "autofixed_pct": 84.88,
+            "rows": 258
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 56.92,
+            "autofixed_pct": 0,
+            "rows": 455
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.44,
+            "in_strip_pct": 94.99,
+            "autofixed_pct": 87.51,
+            "rows": 1337
+          },
+          "insertion": {
+            "wrong_fix_pct": 7.07,
+            "in_strip_pct": 88.89,
+            "autofixed_pct": 80.81,
+            "rows": 297
+          },
+          "omission": {
+            "wrong_fix_pct": 17.99,
+            "in_strip_pct": 59.88,
+            "autofixed_pct": 42.48,
+            "rows": 339
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 76.92,
+            "autofixed_pct": 0,
+            "rows": 13
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 56.33,
+            "autofixed_pct": 0,
+            "rows": 442
+          }
+        },
+        "scored_rows": 2505,
+        "rows": 2960
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0,
+        "false_autocorrect_count": 160,
+        "next_word_top1_pct": 16.42,
+        "avg_letters_to_find": 1.64,
+        "sentences": 6000,
+        "words": 44170,
+        "found_before_end_pct": 86.1,
+        "one_letter_top1_pct": 30.74,
+        "latency_desktop_jvm": {
+          "p99_us": 676,
+          "renders": 140553,
+          "p50_us": 10,
+          "max_us": 19439,
+          "p95_us": 111
+        },
+        "one_letter_top3_pct": 44.57,
+        "keystroke_savings_pct": 42.68,
+        "found_within_2_letters_by_length": {
+          "1": 82.79,
+          "2": 87.48,
+          "3": 80.05,
+          "4": 67.37,
+          "5": 53.21,
+          "6": 34.66,
+          "7": 18.13,
+          "8": 15.47,
+          "9": 12.65,
+          "10+": 10.71
+        },
+        "next_word_top3_pct": 28.25,
+        "first_word_top3_pct": 17.65,
+        "false_autocorrect_pct": 0.36
+      },
+      "sentences_file": "data/en_tatoeba.txt",
+      "dictionary_load_ms": 1223,
+      "learning": false,
+      "label": "en_tatoeba",
+      "lang": "en"
+    },
+    "ar_subs": {
+      "dialect": false,
+      "typos_file": "data/ar_subs_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 4.89,
+        "in_strip_pct": 70.19,
+        "autofixed_pct": 26.26,
+        "by_kind": {
+          "doubled": {
+            "wrong_fix_pct": 4.55,
+            "in_strip_pct": 83.12,
+            "autofixed_pct": 43.83,
+            "rows": 308
+          },
+          "adjacent": {
+            "wrong_fix_pct": 5.35,
+            "in_strip_pct": 72.57,
+            "autofixed_pct": 25.95,
+            "rows": 1214
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 2.86,
+            "in_strip_pct": 62.86,
+            "autofixed_pct": 0,
+            "rows": 35
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 4.86,
+            "in_strip_pct": 54.4,
+            "autofixed_pct": 5.09,
+            "rows": 432
+          },
+          "transposition": {
+            "wrong_fix_pct": 6.18,
+            "in_strip_pct": 75.27,
+            "autofixed_pct": 23.27,
+            "rows": 275
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 4.73,
+            "in_strip_pct": 69.55,
+            "autofixed_pct": 26.64,
+            "rows": 2177
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 6.18,
+            "in_strip_pct": 75.27,
+            "autofixed_pct": 23.27,
+            "rows": 275
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 80,
+            "autofixed_pct": 60,
+            "rows": 5
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 100,
+            "autofixed_pct": 0,
+            "rows": 1
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 4.71,
+            "in_strip_pct": 55.03,
+            "autofixed_pct": 4.71,
+            "rows": 467
+          },
+          "insertion": {
+            "wrong_fix_pct": 2.55,
+            "in_strip_pct": 76.73,
+            "autofixed_pct": 39.27,
+            "rows": 275
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "omission": {
+            "wrong_fix_pct": 4.57,
+            "in_strip_pct": 43.28,
+            "autofixed_pct": 5.11,
+            "rows": 372
+          }
+        },
+        "scored_rows": 2452,
+        "rows": 2919
+      },
+      "sentences": {
+        "spelling_normalized_pct": 2.09,
+        "false_autocorrect_count": 138,
+        "next_word_top1_pct": 11.63,
+        "avg_letters_to_find": 1.86,
+        "sentences": 8000,
+        "words": 42474,
+        "found_before_end_pct": 70.45,
+        "one_letter_top1_pct": 23.14,
+        "latency_desktop_jvm": {
+          "p99_us": 664,
+          "renders": 158117,
+          "p50_us": 16,
+          "max_us": 47425,
+          "p95_us": 228
+        },
+        "one_letter_top3_pct": 33.82,
+        "keystroke_savings_pct": 29.15,
+        "found_within_2_letters_by_length": {
+          "1": 7.97,
+          "2": 80.26,
+          "3": 80.68,
+          "4": 50.84,
+          "5": 26.1,
+          "6": 15.22,
+          "7": 10.16,
+          "8": 8.55,
+          "9": 3.95,
+          "10+": 3.95
+        },
+        "next_word_top3_pct": 20.41,
+        "first_word_top3_pct": 9.35,
+        "false_autocorrect_pct": 0.32
+      },
+      "sentences_file": "data/ar_subs.txt",
+      "dictionary_load_ms": 1633,
+      "learning": false,
+      "label": "ar_subs",
+      "lang": "ar"
+    },
+    "jo_chat_msa": {
+      "dialect": false,
+      "sentences": {
+        "spelling_normalized_pct": 1.8,
+        "false_autocorrect_count": 73,
+        "next_word_top1_pct": 1.53,
+        "avg_letters_to_find": 2.71,
+        "sentences": 1200,
+        "words": 10283,
+        "found_before_end_pct": 41.39,
+        "one_letter_top1_pct": 5.05,
+        "latency_desktop_jvm": {
+          "p99_us": 739,
+          "renders": 49058,
+          "p50_us": 24,
+          "max_us": 29431,
+          "p95_us": 309
+        },
+        "one_letter_top3_pct": 8.16,
+        "keystroke_savings_pct": 13.1,
+        "found_within_2_letters_by_length": {
+          "1": 0.4,
+          "2": 55.85,
+          "3": 47.09,
+          "4": 24.51,
+          "5": 8.13,
+          "6": 3.7,
+          "7": 2.65,
+          "8": 1.13,
+          "9": 0,
+          "10+": 0
+        },
+        "next_word_top3_pct": 3.49,
+        "first_word_top3_pct": 0.53,
+        "false_autocorrect_pct": 0.71
+      },
+      "sentences_file": "data/jo_chat.txt",
+      "dictionary_load_ms": 1753,
+      "learning": false,
+      "label": "jo_chat_msa",
+      "lang": "ar"
+    },
+    "en_real_typos": {
+      "dialect": false,
+      "typos_file": "data/en_real_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 19.38,
+        "in_strip_pct": 50.58,
+        "autofixed_pct": 31.4,
+        "by_kind": {
+          "transposition": {
+            "wrong_fix_pct": 4.96,
+            "in_strip_pct": 100,
+            "autofixed_pct": 91.74,
+            "rows": 121
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 11.93,
+            "in_strip_pct": 87.11,
+            "autofixed_pct": 75.91,
+            "rows": 1241
+          },
+          "other": {
+            "wrong_fix_pct": 27.07,
+            "in_strip_pct": 19.05,
+            "autofixed_pct": 3.36,
+            "rows": 1459
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 23.01,
+            "in_strip_pct": 73.88,
+            "autofixed_pct": 26.94,
+            "rows": 1095
+          },
+          "phonetic": {
+            "wrong_fix_pct": 19.95,
+            "in_strip_pct": 53.62,
+            "autofixed_pct": 26.56,
+            "rows": 1604
+          },
+          "doubled": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 98.59,
+            "autofixed_pct": 94.37,
+            "rows": 71
+          },
+          "~edits_3+": {
+            "wrong_fix_pct": 22.54,
+            "in_strip_pct": 7.99,
+            "autofixed_pct": 1.14,
+            "rows": 1664
+          },
+          "adjacent": {
+            "wrong_fix_pct": 1.14,
+            "in_strip_pct": 97.73,
+            "autofixed_pct": 93.18,
+            "rows": 88
+          },
+          "insertion": {
+            "wrong_fix_pct": 5.65,
+            "in_strip_pct": 91.74,
+            "autofixed_pct": 84.78,
+            "rows": 230
+          },
+          "omission": {
+            "wrong_fix_pct": 9.37,
+            "in_strip_pct": 92.97,
+            "autofixed_pct": 76.35,
+            "rows": 427
+          }
+        },
+        "scored_rows": 4000,
+        "rows": 4000
+      },
+      "dictionary_load_ms": 1278,
+      "learning": false,
+      "label": "en_real_typos",
+      "lang": "en"
+    },
+    "ar_tatoeba": {
+      "dialect": false,
+      "typos_file": "data/ar_tatoeba_typos.tsv",
+      "typos": {
+        "wrong_fix_pct": 3.65,
+        "in_strip_pct": 65.74,
+        "autofixed_pct": 23.34,
+        "by_kind": {
+          "doubled": {
+            "wrong_fix_pct": 4.76,
+            "in_strip_pct": 79.93,
+            "autofixed_pct": 40.14,
+            "rows": 294
+          },
+          "adjacent": {
+            "wrong_fix_pct": 3.32,
+            "in_strip_pct": 69.99,
+            "autofixed_pct": 22.93,
+            "rows": 1173
+          },
+          "~real_word_edits_2": {
+            "wrong_fix_pct": 6.67,
+            "in_strip_pct": 62.22,
+            "autofixed_pct": 0,
+            "rows": 45
+          },
+          "~real_word_edits_1": {
+            "wrong_fix_pct": 5.22,
+            "in_strip_pct": 53.91,
+            "autofixed_pct": 5,
+            "rows": 460
+          },
+          "transposition": {
+            "wrong_fix_pct": 3.03,
+            "in_strip_pct": 69.7,
+            "autofixed_pct": 23.11,
+            "rows": 264
+          },
+          "~edits_1": {
+            "wrong_fix_pct": 3.73,
+            "in_strip_pct": 65.25,
+            "autofixed_pct": 23.37,
+            "rows": 2144
+          },
+          "~edits_2": {
+            "wrong_fix_pct": 3.03,
+            "in_strip_pct": 69.7,
+            "autofixed_pct": 23.11,
+            "rows": 264
+          },
+          "taa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 100,
+            "autofixed_pct": 100,
+            "rows": 3
+          },
+          "yaa": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 3
+          },
+          "~real_word_typo": {
+            "wrong_fix_pct": 5.35,
+            "in_strip_pct": 54.65,
+            "autofixed_pct": 4.55,
+            "rows": 505
+          },
+          "insertion": {
+            "wrong_fix_pct": 3.31,
+            "in_strip_pct": 72.06,
+            "autofixed_pct": 34.19,
+            "rows": 272
+          },
+          "hamza": {
+            "wrong_fix_pct": 0,
+            "in_strip_pct": 0,
+            "autofixed_pct": 0,
+            "rows": 2
+          },
+          "omission": {
+            "wrong_fix_pct": 4.53,
+            "in_strip_pct": 36.27,
+            "autofixed_pct": 4.53,
+            "rows": 397
+          }
+        },
+        "scored_rows": 2408,
+        "rows": 2913
+      },
+      "sentences": {
+        "spelling_normalized_pct": 0.47,
+        "false_autocorrect_count": 108,
+        "next_word_top1_pct": 10.09,
+        "avg_letters_to_find": 1.95,
+        "sentences": 6000,
+        "words": 26853,
+        "found_before_end_pct": 65.72,
+        "one_letter_top1_pct": 20.5,
+        "latency_desktop_jvm": {
+          "p99_us": 681,
+          "renders": 106020,
+          "p50_us": 17,
+          "max_us": 46283,
+          "p95_us": 251
+        },
+        "one_letter_top3_pct": 29.35,
+        "keystroke_savings_pct": 26.07,
+        "found_within_2_letters_by_length": {
+          "1": 17.61,
+          "2": 80.7,
+          "3": 77.48,
+          "4": 34.77,
+          "5": 24.39,
+          "6": 12.83,
+          "7": 8.4,
+          "8": 8.11,
+          "9": 9.76,
+          "10+": 7.91
+        },
+        "next_word_top3_pct": 17.15,
+        "first_word_top3_pct": 11.06,
+        "false_autocorrect_pct": 0.4
+      },
+      "sentences_file": "data/ar_tatoeba.txt",
+      "dictionary_load_ms": 1664,
+      "learning": false,
+      "label": "ar_tatoeba",
+      "lang": "ar"
+    }
+  },
+  "reviewed_decisions": {
+    "kept": [
+      "dialect surface aliases",
+      "canonical-only correction guards",
+      "retained dialect-table smoothing"
+    ],
+    "rejected": [
+      "broader folded context-prefix matching",
+      "one-letter-stem clitic expansion"
+    ]
+  },
+  "parity": {
+    "rows": 156733,
+    "sha256": "8dea064a0f96541ab56f704a2b5050a295a04a93ff5ea41cb289c19eb19fb25f",
+    "byte_identical": true,
+    "breakdown": {
+      "en/completion_off": 32718,
+      "en/correction": 33348,
+      "ar/completion_off": 57996,
+      "ar/correction": 32671
+    }
+  },
+  "apk": {
+    "path": "/home/m57/Projects/mboard/app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 12876317,
+    "sha256": "3c7e60f0ca94a2d28d2fe4b7bbd1f185df912ec187a6fcb044f64bd46ec86e3d"
+  },
+  "source_sha256": {
+    "app/src/main/java/com/m57/mboard/ArabicWords.kt": "f77efef0a042650b4c1555d74c770e5133ceca47f9a6887bf9944577d0b3abdc",
+    "app/src/main/java/com/m57/mboard/BoardSettings.kt": "1c2b9862c11640372c061727dfd2d5243e5138f9f23c2eb08f0f58171cb3e62f",
+    "app/src/main/java/com/m57/mboard/BoardUi.kt": "d127b65d7a1438f131a609e3a92606a98ad9f3f16ca93162943c009d1e900e01",
+    "app/src/main/java/com/m57/mboard/Calculator.kt": "7c5a190a2435e3242266d85431e6d134423c4d2cbf0412674694836ed00fdc36",
+    "app/src/main/java/com/m57/mboard/ClipStore.kt": "bd6379ac9d733510c9c5cf00ab57fd5b6552a702cba447a90f8d1fca521be0f3",
+    "app/src/main/java/com/m57/mboard/ClipboardPanel.kt": "9b939b31a67b5409cc1958afdbb2f9dbd691befc138689b06e322af878ccec4e",
+    "app/src/main/java/com/m57/mboard/EmojiHistory.kt": "959ef6eb8229b8a09d6933589ef798e21862dbf96b05fffcf5120882b038364b",
+    "app/src/main/java/com/m57/mboard/EmojiPanel.kt": "68a24c31486b48e17542188ea015083760b7cdb2acb5da88612a34b5f26baecb",
+    "app/src/main/java/com/m57/mboard/Emojis.kt": "b7029f84a9a8f8502ac22538a6f13a3c7940a435fe0ca26dc0744d785b97d1a5",
+    "app/src/main/java/com/m57/mboard/EnglishWords.kt": "2ee49ca5b7566ea3ccadb4756cf651a41dd84185b0f69ea6c5f1886c6063ac8d",
+    "app/src/main/java/com/m57/mboard/KeyboardAccessibility.kt": "c17765bdbf039eedd6fb9c6cd3cf5fdbf6810aebacf15535285f72092127855c",
+    "app/src/main/java/com/m57/mboard/KeyboardView.kt": "f8d8e6aecb4118333fc517bba2abf0b4f89d8e95fd3d6457cfad3f8b09313e95",
+    "app/src/main/java/com/m57/mboard/Languages.kt": "0788f5aed866d165a23baf32b1c8d61ee8434bbfbd737e0dffaf0f5b5d0e96d9",
+    "app/src/main/java/com/m57/mboard/Layouts.kt": "1f24fadc5d1e76095190b81604b5eee67b03f5dfeb134549cbbe84ed9c63f8d6",
+    "app/src/main/java/com/m57/mboard/MboardService.kt": "bdaf9b78039c64c5c65969d6c436947f6d9270a12d5525be270c921d66e3f68e",
+    "app/src/main/java/com/m57/mboard/OneHandSurface.kt": "fa7ff9882c28f2e47bca3a74d98ae97aeba53e021bcf261959f933a113368480",
+    "app/src/main/java/com/m57/mboard/PhraseStore.kt": "580c65be4e18e9610d6ebc5d0d46953394291788e9010274bbf1cb2591a8df33",
+    "app/src/main/java/com/m57/mboard/SettingsUi.kt": "20014271bb3e6f05b68e7ed39ea06c2852133f1bb8926a58ae7a365946f932c5",
+    "app/src/main/java/com/m57/mboard/SetupActivity.kt": "55d5e30519a5de99128004bd32a24c36aa0832928257c919676ee1d5c2343294",
+    "app/src/main/java/com/m57/mboard/SuggestionPolicy.kt": "792737cef0c0a7b67bddebd93e134dd218fd503d49f40fe5469cefd2f62ad0ae",
+    "app/src/main/java/com/m57/mboard/SuggestionStrip.kt": "63683a638733e40914df9f055b8437ec306058e8d238d734e5e5e13e64f1ed6b",
+    "app/src/main/java/com/m57/mboard/UserWords.kt": "edfd621fc3c78f43908d69123edd8b52a6ad0ae8921d30f6ad75b6108b9b00e3",
+    "app/src/main/java/com/m57/mboard/WordDictionary.kt": "60e3e2e032c5411c26cf85d353e8e2d7e491fbfa394e24de9342f9a8c07919ea",
+    "app/src/main/java/com/m57/mboard/WordSuggestions.kt": "58d0728689ab2e0dbbea1e4bc984a9e9275101b9707b5057ee4a84e696164939"
+  },
+  "dataset_sha256": {
+    "SOURCES.md": "eedc4bb1cb061fe37dc167f0062bf16c30f3a4041159f1027460e22fff250209",
+    "ar_real_typos.tsv": "4ff08be0f87aa973e652775974e444519aed9f56c1c519efac79f4446145bafa",
+    "ar_subs.txt": "a6da175f1b8f0015cee5a92787b88451aed07f513a4c9adad37673ac83475aaf",
+    "ar_subs_typos.tsv": "c062eaf6f08b7fbec404a0fa84b3f3ce00498f9a8e645e9dacce9d22747410bb",
+    "ar_tatoeba.txt": "820d6bd7ab1098cba20c43f922d058769bc0fa5645a4a0260a5a3debf2faaa29",
+    "ar_tatoeba_typos.tsv": "d20dbb9e7b124a570c6f58d30da9d8bdff4fe5e6ccb4c3b64cb7ebcb31e56908",
+    "en_chat.txt": "2edb4feab24d102b0b86b74bf8c65913fce4d6d2aa9a663fc88f693b1686a83a",
+    "en_chat_typos.tsv": "be0ee42943260706fbf38c6e595bb24d85d377e6852b0349ddc02e22de59ee04",
+    "en_real_typos.tsv": "c724b9ab149c0509bff33ea7d8ffd93d5cc467ad84756521f6328b4a0be4e3d9",
+    "en_subs.txt": "672328d6ce4576b356922a5bb90faa7de1865f1724c3efe21cbcd12aff493bfc",
+    "en_subs_typos.tsv": "b4f0d05029df2161b61a07093ff9da5a15d62eb9ff76cfa9d3c7d8e2c618cf4f",
+    "en_tatoeba.txt": "6965a9775bfe74949312be02b9c0dc128d93d727bfe173d992d65f5ae61dbdba",
+    "en_tatoeba_typos.tsv": "cd2f4e54fe2551abb62bdda73d7ba708eaffd9d833859f2c9411edee3a7e45ec",
+    "jo_chat.txt": "92f1d87a8d45a831d3c56ecf1c5f7413690b33605ee685e9a961481d7a2f4947",
+    "jo_chat_a.txt": "47590f8547e435b01ed4781262d02e13010f6d60ffb7ced8ecf8d8cb7549422e",
+    "jo_chat_b.txt": "21d311351fb932895ca212138b8bf58c091b84fd3b62b201386c5c6328bf6b99",
+    "jo_chat_typos.tsv": "a3b125261ec3f8d998cc47068d4e37904e48eaa468158fad6071f1ce6f4d8e22"
+  },
+  "gates": {
+    "parent_full_benchmark_exit": 0,
+    "parent_ktlint_exit": 0,
+    "parent_assembleDebug_exit": 0,
+    "parent_dictionary_cmp_exit": 0,
+    "git_diff_check_exit": 0,
+    "device_acceptance": "pending; no device connected at last adb check"
+  },
+  "published": false
+}

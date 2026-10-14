@@ -1,0 +1,14 @@
+{
+  "en_fresh.txt": {
+    "lines": 2000,
+    "normalized_duplicates": 0,
+    "old_overlap": 0,
+    "sha256": "b1dc5dce8297b9e71f49f91f5a9d8740e91ded33da4c9b881069421c48c6a908"
+  },
+  "ar_fresh.txt": {
+    "lines": 2000,
+    "normalized_duplicates": 0,
+    "old_overlap": 0,
+    "sha256": "db14a952bc69fc2a0fa59f8bea07a4be44f5a27ef43329a303c6eee1619d75a9"
+  }
+}

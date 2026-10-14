@@ -1,6 +1,7 @@
 package com.m57.mboard
 
 import kotlin.math.abs
+import kotlin.math.exp
 
 /** Spelling rules a language's dictionary uses; languages sharing a script share them. */
 enum class Script { LATIN, ARABIC }
@@ -62,13 +63,29 @@ class Language(
         val maxUnits = widths.maxOfOrNull { it.sum() } ?: 0.0
         val out = HashMap<Char, Pair<Int, Double>>()
         letterRows.forEachIndexed { r, row ->
-            var x = if (stretch) 0.0 else (maxUnits - widths[r].sum()) / 2
+            val rowUnits = widths[r].sum()
+            val scale = if (stretch) maxUnits / rowUnits else 1.0
+            var x = if (stretch) 0.0 else (maxUnits - rowUnits) / 2
             row.forEachIndexed { i, key ->
-                if (key.length == 1) out[key[0]] = r to x
-                x += widths[r][i]
+                // Stretched Arabic rows have different key widths (backspace widens the last row).
+                if (key.length == 1) out[key[0]] = r to (x + widths[r][i] * scale / 2)
+                x += widths[r][i] * scale
             }
         }
         out
+    }
+
+    /** Width of a same-row neighbour in the widest stretched letter row, in [positions] units. */
+    private val neighbourWidth: Double by lazy {
+        if (!stretch) {
+            1.0
+        } else {
+            val units =
+                rows
+                    .filter { row -> row.any { it.length == 1 && it[0] in this.alphabet } }
+                    .map { row -> row.sumOf { if (it.length == 1) 1.0 else 1.5 } }
+            units.max() / units.min()
+        }
     }
 
     fun adjacent(
@@ -77,7 +94,20 @@ class Language(
     ): Boolean {
         val pa = positions[a] ?: return false
         val pb = positions[b] ?: return false
-        return abs(pa.first - pb.first) <= 1 && abs(pa.second - pb.second) <= 1.01
+        return abs(pa.first - pb.first) <= 1 && abs(pa.second - pb.second) <= neighbourWidth * 1.01
+    }
+
+    /** Relative likelihood of a neighbour-key slip, from actual key centres, not a flat yes/no score. */
+    fun typoWeight(
+        typed: Char,
+        intended: Char,
+    ): Double {
+        if (typed == intended) return 1.0
+        val a = positions[typed] ?: return 0.15
+        val b = positions[intended] ?: return 0.15
+        val dx = a.second - b.second
+        val dy = (a.first - b.first).toDouble()
+        return (0.9 * exp(-0.5 * (dx * dx + dy * dy - 1.0))).coerceIn(0.15, 0.9)
     }
 
     fun alternatesFor(key: String) = alternates[key] ?: ALTERNATES[key]

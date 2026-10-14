@@ -1,0 +1,1182 @@
+{
+  "source": {
+    "path": "bench/lm/jo_shami.txt",
+    "sha256": "5e4372f8740f2d9ccc4aa4720b5570a6d17cf83a0d83a6d8334c228807130916",
+    "total_lines": 6964
+  },
+  "parameters": {
+    "block_size": 50,
+    "seed": 57485,
+    "selection_rule": "sha256(f'{seed}:{group_text}').digest() % 5 == 0"
+  },
+  "group_summary": {
+    "total_groups": 140,
+    "train_groups": 110,
+    "heldout_groups": 30,
+    "train_raw_lines": 5500,
+    "heldout_raw_lines": 1464
+  },
+  "outputs": {
+    "train": {
+      "path": "bench/lm/jo_shami_train.txt",
+      "row_count": 5500,
+      "sha256": "9ea907f28afdde33e9ad8a254f4201238897a0f4554aed0836bbb77a5314e0e1",
+      "omitted_old_eval_overlap": 0
+    },
+    "heldout": {
+      "path": "bench/data/jo_human_fresh.txt",
+      "row_count": 1353,
+      "sha256": "6c85c5c04422c825abec211a0602e931c462f4d4606d96e65674bc73c86274ed",
+      "omitted_breakdown": {
+        "word_count": 111,
+        "hygiene_filter": 0,
+        "eval_overlap": 0,
+        "duplicate_normalized": 0
+      },
+      "total_omitted_heldout_lines": 111
+    },
+    "sources_doc": {
+      "path": "bench/data/jo_human_fresh_sources.md",
+      "sha256": "db16abdfd5a586f4b797fa05f31d1ceee6e263f0f945d7c5dab35c35d7afbabc"
+    }
+  },
+  "disjointness_verification": {
+    "train_heldout_exact_overlap": 0,
+    "train_heldout_normalized_overlap": 0,
+    "train_old_eval_overlap": 0,
+    "heldout_old_eval_overlap": 0,
+    "heldout_normalized_duplicates": 0,
+    "excluded_old_eval_files": [
+      "bench/data/ar_subs.txt",
+      "bench/data/ar_tatoeba.txt",
+      "bench/data/en_chat.txt",
+      "bench/data/en_subs.txt",
+      "bench/data/en_tatoeba.txt",
+      "bench/data/jo_chat.txt",
+      "bench/data/jo_chat_a.txt",
+      "bench/data/jo_chat_b.txt"
+    ]
+  },
+  "groups": [
+    {
+      "group_id": 0,
+      "line_start": 0,
+      "line_end": 50,
+      "line_count": 50,
+      "sha256": "651b40b110c5756bafaac622cfb12c6931549faadc77cb93f3300345594893f4",
+      "assignment": "train"
+    },
+    {
+      "group_id": 1,
+      "line_start": 50,
+      "line_end": 100,
+      "line_count": 50,
+      "sha256": "97fd35518d12301d166afd48cdefcf82d615f9d0f8123a0625e52fb2006ba505",
+      "assignment": "train"
+    },
+    {
+      "group_id": 2,
+      "line_start": 100,
+      "line_end": 150,
+      "line_count": 50,
+      "sha256": "935318503d6dc2764511ccd12f73b85debe6f3e308d4b2ef577aa096f79043ba",
+      "assignment": "train"
+    },
+    {
+      "group_id": 3,
+      "line_start": 150,
+      "line_end": 200,
+      "line_count": 50,
+      "sha256": "079aa6fe9c0d288f7ee745502aa152d652871229224d71ae0cee326b316f7744",
+      "assignment": "train"
+    },
+    {
+      "group_id": 4,
+      "line_start": 200,
+      "line_end": 250,
+      "line_count": 50,
+      "sha256": "447df884da6bc79837335cade44c867cf59c8912befc3f4916050b0225ecc6f3",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 5,
+      "line_start": 250,
+      "line_end": 300,
+      "line_count": 50,
+      "sha256": "d1493cc29f0ffe6d36406d01baed42f1c269811f1894d78645e3fb00090c212f",
+      "assignment": "train"
+    },
+    {
+      "group_id": 6,
+      "line_start": 300,
+      "line_end": 350,
+      "line_count": 50,
+      "sha256": "da7cc7fac50c6339df81ab9b2d6dcf7d62121852f3e30d0d010df09ed0c437e4",
+      "assignment": "train"
+    },
+    {
+      "group_id": 7,
+      "line_start": 350,
+      "line_end": 400,
+      "line_count": 50,
+      "sha256": "865f660d05b3b9eb32a9e12e6e9530af3f5c7f3aec78f7108389ef0ef16d11cb",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 8,
+      "line_start": 400,
+      "line_end": 450,
+      "line_count": 50,
+      "sha256": "2af0f6bad26d70a7dd07b2e642b3a12fde219d5c0fbef14889512492ad5aa0d1",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 9,
+      "line_start": 450,
+      "line_end": 500,
+      "line_count": 50,
+      "sha256": "8a65599629dfa203062f8f5778205e30e0a03134fb9723bfdbda5565ff275d19",
+      "assignment": "train"
+    },
+    {
+      "group_id": 10,
+      "line_start": 500,
+      "line_end": 550,
+      "line_count": 50,
+      "sha256": "78b804ef97813eaf7593608debd8275876825a81e1063e9d9c82d7c77b923aee",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 11,
+      "line_start": 550,
+      "line_end": 600,
+      "line_count": 50,
+      "sha256": "29bf546fc0feea7b32f7710f9bad42259987515c12cdd7ec529f03a9f0e832f8",
+      "assignment": "train"
+    },
+    {
+      "group_id": 12,
+      "line_start": 600,
+      "line_end": 650,
+      "line_count": 50,
+      "sha256": "56b48ac2ef9b0ca6118ed0e9dc4e09e1a563f6d3ba42838737f8a8351a84c1b7",
+      "assignment": "train"
+    },
+    {
+      "group_id": 13,
+      "line_start": 650,
+      "line_end": 700,
+      "line_count": 50,
+      "sha256": "a2925829189f7e943fce5d7b579b77acda88062f1ec1e10425d1f2558d399002",
+      "assignment": "train"
+    },
+    {
+      "group_id": 14,
+      "line_start": 700,
+      "line_end": 750,
+      "line_count": 50,
+      "sha256": "c42ea54b98773aaff45d88296d0f5166ec34ce07dd3b818d75369720b263c9ed",
+      "assignment": "train"
+    },
+    {
+      "group_id": 15,
+      "line_start": 750,
+      "line_end": 800,
+      "line_count": 50,
+      "sha256": "81b1fe7a521bcb27a17429821ba33d66966ddb368b884da30192d9be5b720862",
+      "assignment": "train"
+    },
+    {
+      "group_id": 16,
+      "line_start": 800,
+      "line_end": 850,
+      "line_count": 50,
+      "sha256": "8c8459fc1aefe818757491e89b67b263aa3244a07ca8e321355a092560e49f00",
+      "assignment": "train"
+    },
+    {
+      "group_id": 17,
+      "line_start": 850,
+      "line_end": 900,
+      "line_count": 50,
+      "sha256": "ac705dc8c98ee360d3e8a0363356227ec0d4d7b270f3d500310bb5e135792183",
+      "assignment": "train"
+    },
+    {
+      "group_id": 18,
+      "line_start": 900,
+      "line_end": 950,
+      "line_count": 50,
+      "sha256": "1106895b3b653424f69aa7afa1ae01c7c1fa24d5ac41e23428b7f6040cdda483",
+      "assignment": "train"
+    },
+    {
+      "group_id": 19,
+      "line_start": 950,
+      "line_end": 1000,
+      "line_count": 50,
+      "sha256": "224604972f15f83fdb1b72f9d1cc2257c969e83bca02cd792cec68e3cc74a2d6",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 20,
+      "line_start": 1000,
+      "line_end": 1050,
+      "line_count": 50,
+      "sha256": "bc70ccf7da347671ff0a118997b006c64038ff0b12e25bdb9e89d65031e1f9b7",
+      "assignment": "train"
+    },
+    {
+      "group_id": 21,
+      "line_start": 1050,
+      "line_end": 1100,
+      "line_count": 50,
+      "sha256": "ff5693236a301207689bfb724064d5705c75d5adf5fd0684ed518371ada3e240",
+      "assignment": "train"
+    },
+    {
+      "group_id": 22,
+      "line_start": 1100,
+      "line_end": 1150,
+      "line_count": 50,
+      "sha256": "6e63de212df545b47cfeb850431a90d3b523c981e3aa5babbb74c1adf394d82c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 23,
+      "line_start": 1150,
+      "line_end": 1200,
+      "line_count": 50,
+      "sha256": "c2c900568c74dd284b214897e0d0585b27092deaeef17b351c3a9ca2b3571168",
+      "assignment": "train"
+    },
+    {
+      "group_id": 24,
+      "line_start": 1200,
+      "line_end": 1250,
+      "line_count": 50,
+      "sha256": "60770f0fcec6cec74c32468f3efb1ac72efa0de2ab624a1bb4ba4f4f1ea82be3",
+      "assignment": "train"
+    },
+    {
+      "group_id": 25,
+      "line_start": 1250,
+      "line_end": 1300,
+      "line_count": 50,
+      "sha256": "8fa376534fe36fe8df855bf917e555bb8d17137b16b4b9c886090de3bc11d1fe",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 26,
+      "line_start": 1300,
+      "line_end": 1350,
+      "line_count": 50,
+      "sha256": "628b723dc9e09ef84fcb67b57076288ce3bf017346a62f1b6877e378b69b4338",
+      "assignment": "train"
+    },
+    {
+      "group_id": 27,
+      "line_start": 1350,
+      "line_end": 1400,
+      "line_count": 50,
+      "sha256": "f0dcfe6b4504a5738c889fcc872526019861aaa24bc5738d7e2d3e305ecde553",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 28,
+      "line_start": 1400,
+      "line_end": 1450,
+      "line_count": 50,
+      "sha256": "3b1a01dba5c0960f4878eff98dfdc3ed4d0f298710012c05a85c2971f630e180",
+      "assignment": "train"
+    },
+    {
+      "group_id": 29,
+      "line_start": 1450,
+      "line_end": 1500,
+      "line_count": 50,
+      "sha256": "0a0dfb379b02e86f4dd66b96b7f4371fcdd2a3570cf61f30f702933cd5017aa2",
+      "assignment": "train"
+    },
+    {
+      "group_id": 30,
+      "line_start": 1500,
+      "line_end": 1550,
+      "line_count": 50,
+      "sha256": "10e1904b322e75ee6a974dd32879e235ef9341ca629b1dbbce0af2e843be0003",
+      "assignment": "train"
+    },
+    {
+      "group_id": 31,
+      "line_start": 1550,
+      "line_end": 1600,
+      "line_count": 50,
+      "sha256": "c8f0d9c6b35f886eb5b654877035540fef8cccd1b3bb053b0ea6c11ac4250b6a",
+      "assignment": "train"
+    },
+    {
+      "group_id": 32,
+      "line_start": 1600,
+      "line_end": 1650,
+      "line_count": 50,
+      "sha256": "e6d2055f46849b2eb878a29e1a38bcff8191e132e6ad0a2d249889b11e0ad652",
+      "assignment": "train"
+    },
+    {
+      "group_id": 33,
+      "line_start": 1650,
+      "line_end": 1700,
+      "line_count": 50,
+      "sha256": "0d2e45b3bae011f2259b6658075b30a343afec90909a5efdd65f2fd6e609db7b",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 34,
+      "line_start": 1700,
+      "line_end": 1750,
+      "line_count": 50,
+      "sha256": "4674821964ae3dbde2ebd8c90d74cdf26d74b2b0cf329112515d1608a1e29aa5",
+      "assignment": "train"
+    },
+    {
+      "group_id": 35,
+      "line_start": 1750,
+      "line_end": 1800,
+      "line_count": 50,
+      "sha256": "d0e70e683253c12c836f5a4dc9b2e9c9b9d83dd44452fbb0c1af2ff6e6dfd6c9",
+      "assignment": "train"
+    },
+    {
+      "group_id": 36,
+      "line_start": 1800,
+      "line_end": 1850,
+      "line_count": 50,
+      "sha256": "689275f76b73ba12ab5c40ac5b4d3bca47a94f7b4781b9edb0c548769b7be90a",
+      "assignment": "train"
+    },
+    {
+      "group_id": 37,
+      "line_start": 1850,
+      "line_end": 1900,
+      "line_count": 50,
+      "sha256": "de00273a0e09d9692d9fa88f3c210df77025d3126f94084dbefb8659b1985685",
+      "assignment": "train"
+    },
+    {
+      "group_id": 38,
+      "line_start": 1900,
+      "line_end": 1950,
+      "line_count": 50,
+      "sha256": "ad20d5ccd0ff1987d5f72d5d5df0c31838e6356c5ec827fcd49cc3a1d1d4a917",
+      "assignment": "train"
+    },
+    {
+      "group_id": 39,
+      "line_start": 1950,
+      "line_end": 2000,
+      "line_count": 50,
+      "sha256": "14fc1a83b7005e63723b07b629b7628f55b89e52329adfe151f0bc7a92bfbee2",
+      "assignment": "train"
+    },
+    {
+      "group_id": 40,
+      "line_start": 2000,
+      "line_end": 2050,
+      "line_count": 50,
+      "sha256": "c9f1feea740b55c441eed8bea6d44bec15420da15983033e779991659290d206",
+      "assignment": "train"
+    },
+    {
+      "group_id": 41,
+      "line_start": 2050,
+      "line_end": 2100,
+      "line_count": 50,
+      "sha256": "ac2cf3fc44b9c0f2d4190c43bb556947abdfe86326ffd54a52ed2b1367c0c3da",
+      "assignment": "train"
+    },
+    {
+      "group_id": 42,
+      "line_start": 2100,
+      "line_end": 2150,
+      "line_count": 50,
+      "sha256": "91d57f3533f9feefa168b857f5e8130157ebfbe47b806965c94abbd7b794423a",
+      "assignment": "train"
+    },
+    {
+      "group_id": 43,
+      "line_start": 2150,
+      "line_end": 2200,
+      "line_count": 50,
+      "sha256": "d451b64386b93682e9b8331160008757b69f082d7bbad65a3029c8bc9ee6c2f2",
+      "assignment": "train"
+    },
+    {
+      "group_id": 44,
+      "line_start": 2200,
+      "line_end": 2250,
+      "line_count": 50,
+      "sha256": "5b8b68ea8f3a66111c43c773fa3b01fab816a9a2eb1fa9cc0de7693c5d208f95",
+      "assignment": "train"
+    },
+    {
+      "group_id": 45,
+      "line_start": 2250,
+      "line_end": 2300,
+      "line_count": 50,
+      "sha256": "1a26e05545f9b6bca0fa3f8bc2e2c6fd11c7bfcdc4d95167ca4ccb01a20d9c8b",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 46,
+      "line_start": 2300,
+      "line_end": 2350,
+      "line_count": 50,
+      "sha256": "2516209020f2657da38b340e3648b850e3fc96ad736ddd99eec62ab62ea6ed7e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 47,
+      "line_start": 2350,
+      "line_end": 2400,
+      "line_count": 50,
+      "sha256": "57375cf03e7ad00eea7dc8801bc20c3f59b886ec06298a6bd9ebd6cbfa6202d3",
+      "assignment": "train"
+    },
+    {
+      "group_id": 48,
+      "line_start": 2400,
+      "line_end": 2450,
+      "line_count": 50,
+      "sha256": "f26dc1f7449026dc454eb4e3c6a127f2d10a8158e512ed5c405aba15cb3a9fa8",
+      "assignment": "train"
+    },
+    {
+      "group_id": 49,
+      "line_start": 2450,
+      "line_end": 2500,
+      "line_count": 50,
+      "sha256": "eeef08c805b0c9b4d9569f6429e87597ac27f4c9194f6e6632d4c7cfc29fd984",
+      "assignment": "train"
+    },
+    {
+      "group_id": 50,
+      "line_start": 2500,
+      "line_end": 2550,
+      "line_count": 50,
+      "sha256": "27de96e0d880b3d48dc94d82053c55d11836c1142f47043f8e3be5ef3741b1f1",
+      "assignment": "train"
+    },
+    {
+      "group_id": 51,
+      "line_start": 2550,
+      "line_end": 2600,
+      "line_count": 50,
+      "sha256": "ee7f852b21b35eb9306c76f0b3f92712b4328a36b0cfe584bc86ca931542fe07",
+      "assignment": "train"
+    },
+    {
+      "group_id": 52,
+      "line_start": 2600,
+      "line_end": 2650,
+      "line_count": 50,
+      "sha256": "244f4ddf008e407face8300403a519ecf648b54bf009deb994f065e7d41c179d",
+      "assignment": "train"
+    },
+    {
+      "group_id": 53,
+      "line_start": 2650,
+      "line_end": 2700,
+      "line_count": 50,
+      "sha256": "dda1a7e3a4fe377e283bf51631ee6fecc778f2f85d20891451a388867bc60b78",
+      "assignment": "train"
+    },
+    {
+      "group_id": 54,
+      "line_start": 2700,
+      "line_end": 2750,
+      "line_count": 50,
+      "sha256": "2da4dd110fcd49b1b04a3d9849efea65f125c25b9d72aec555a68acf200dd442",
+      "assignment": "train"
+    },
+    {
+      "group_id": 55,
+      "line_start": 2750,
+      "line_end": 2800,
+      "line_count": 50,
+      "sha256": "6071623cebc584c45c21bc544d143a1bd95087b1c702bc07998c49049b4746d8",
+      "assignment": "train"
+    },
+    {
+      "group_id": 56,
+      "line_start": 2800,
+      "line_end": 2850,
+      "line_count": 50,
+      "sha256": "aa0ce3d45a8bba0136327a24386ca6ef1f6784638b0849aeebc9839b4aebd27a",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 57,
+      "line_start": 2850,
+      "line_end": 2900,
+      "line_count": 50,
+      "sha256": "bbee59fb24861d4ab3d975a9edc5af93aa24eb140d68a68c9f66c924597ec941",
+      "assignment": "train"
+    },
+    {
+      "group_id": 58,
+      "line_start": 2900,
+      "line_end": 2950,
+      "line_count": 50,
+      "sha256": "898a1700e7b2b53883ace5cb86585f8e30b729b39dcc476f715a8541aed84596",
+      "assignment": "train"
+    },
+    {
+      "group_id": 59,
+      "line_start": 2950,
+      "line_end": 3000,
+      "line_count": 50,
+      "sha256": "6be38b4ff667566f2eee0fdc4557852ab1b50a26dcbe0b85db4c79e3fb8a02d4",
+      "assignment": "train"
+    },
+    {
+      "group_id": 60,
+      "line_start": 3000,
+      "line_end": 3050,
+      "line_count": 50,
+      "sha256": "de5b59832fa13c92bf02c04fa7c9fb281973854235ecac64b198682bdd17de70",
+      "assignment": "train"
+    },
+    {
+      "group_id": 61,
+      "line_start": 3050,
+      "line_end": 3100,
+      "line_count": 50,
+      "sha256": "815d91c26e1c4e0b8386d5887dd2337dbbb0a9df29a27f17a3a5da61e4b4b57c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 62,
+      "line_start": 3100,
+      "line_end": 3150,
+      "line_count": 50,
+      "sha256": "3663018a57f712ee45950173a6fb560a1ddf944a4498264a1b0160168c9865c1",
+      "assignment": "train"
+    },
+    {
+      "group_id": 63,
+      "line_start": 3150,
+      "line_end": 3200,
+      "line_count": 50,
+      "sha256": "36fc86642174b57aa738b00ae3f0acf938068a5dafa58b98a8bd66255718adc4",
+      "assignment": "train"
+    },
+    {
+      "group_id": 64,
+      "line_start": 3200,
+      "line_end": 3250,
+      "line_count": 50,
+      "sha256": "24017f60f13c36254e58944597214c8b276ae3c88aa0ccad3d9407db3380aa82",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 65,
+      "line_start": 3250,
+      "line_end": 3300,
+      "line_count": 50,
+      "sha256": "39e31a5c57222ad95e8641e506a3345532d2438c8a7b52b374c9f63114d45bab",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 66,
+      "line_start": 3300,
+      "line_end": 3350,
+      "line_count": 50,
+      "sha256": "cecf380587f8121d4bbd597e2c3c47f35c18e996de45b4a12d7d8d7ee5bc08fb",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 67,
+      "line_start": 3350,
+      "line_end": 3400,
+      "line_count": 50,
+      "sha256": "c49486f4b2d0baebb9c189def1035fb3d2fb1f3436731efe24769931b75ee972",
+      "assignment": "train"
+    },
+    {
+      "group_id": 68,
+      "line_start": 3400,
+      "line_end": 3450,
+      "line_count": 50,
+      "sha256": "6db9ee279bcbdb19ea73bedc99a5e0d7720b230963359472d31d9f6031de3a38",
+      "assignment": "train"
+    },
+    {
+      "group_id": 69,
+      "line_start": 3450,
+      "line_end": 3500,
+      "line_count": 50,
+      "sha256": "4d339b2150ab6269d021df728dbddeddda9e1ffaeb62873b630dfdc61465eaf9",
+      "assignment": "train"
+    },
+    {
+      "group_id": 70,
+      "line_start": 3500,
+      "line_end": 3550,
+      "line_count": 50,
+      "sha256": "01a310067db2bcb15fd86d2f8ccf7fb2f82461d4acb530dde901ee0fd4ea151e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 71,
+      "line_start": 3550,
+      "line_end": 3600,
+      "line_count": 50,
+      "sha256": "151039d44dd82f308689bf252fbe08a7579aa7189dc40aa16c50800f04d274fa",
+      "assignment": "train"
+    },
+    {
+      "group_id": 72,
+      "line_start": 3600,
+      "line_end": 3650,
+      "line_count": 50,
+      "sha256": "7560cabe5bf1ef710c00513b2e90b81b099e82c568f58380782a04835a54471f",
+      "assignment": "train"
+    },
+    {
+      "group_id": 73,
+      "line_start": 3650,
+      "line_end": 3700,
+      "line_count": 50,
+      "sha256": "50316a45cb8d43973f5c6ee02e552ed957dc16f779e6b897505eb1d14a1e109d",
+      "assignment": "train"
+    },
+    {
+      "group_id": 74,
+      "line_start": 3700,
+      "line_end": 3750,
+      "line_count": 50,
+      "sha256": "5ba573fa669d9fb1f69b6a8ed8facb4ad5994279f60b9099b0a25bf5d859aeaf",
+      "assignment": "train"
+    },
+    {
+      "group_id": 75,
+      "line_start": 3750,
+      "line_end": 3800,
+      "line_count": 50,
+      "sha256": "3874c948c501ae00f40b552b7d170eed4895262ca34afe70bedf394d3d7d423c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 76,
+      "line_start": 3800,
+      "line_end": 3850,
+      "line_count": 50,
+      "sha256": "d236f495cf1512af951cd39c82c003d52ef24244cfc5d30f4b61f02fce6bce63",
+      "assignment": "train"
+    },
+    {
+      "group_id": 77,
+      "line_start": 3850,
+      "line_end": 3900,
+      "line_count": 50,
+      "sha256": "98caea712b82d354726ac9a190b1e2f4e7a38586f5fd6bc4c60787c1a6d85d2c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 78,
+      "line_start": 3900,
+      "line_end": 3950,
+      "line_count": 50,
+      "sha256": "e55d3680391342897e4f57e983bf296eed68bf3b83b3d9041e8aeb918b0efefb",
+      "assignment": "train"
+    },
+    {
+      "group_id": 79,
+      "line_start": 3950,
+      "line_end": 4000,
+      "line_count": 50,
+      "sha256": "f194d397f45d2038f8842132bbaa6d6da20253450e0aadd208e25bf9d6a132f3",
+      "assignment": "train"
+    },
+    {
+      "group_id": 80,
+      "line_start": 4000,
+      "line_end": 4050,
+      "line_count": 50,
+      "sha256": "bdced337ed66b6f6da88a63b86570dfd314637c96ec4d184ea3e4bef575828ef",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 81,
+      "line_start": 4050,
+      "line_end": 4100,
+      "line_count": 50,
+      "sha256": "3aefca6eabab28872de81e198cc243d104f95da344c83bfb132db073697d0740",
+      "assignment": "train"
+    },
+    {
+      "group_id": 82,
+      "line_start": 4100,
+      "line_end": 4150,
+      "line_count": 50,
+      "sha256": "7ed3b2d0ea8c076564ed0768457f5f776479b53c8db5ef7fb07855244629511f",
+      "assignment": "train"
+    },
+    {
+      "group_id": 83,
+      "line_start": 4150,
+      "line_end": 4200,
+      "line_count": 50,
+      "sha256": "bd84b1c392e35e2c4788f7da6713d5f80049b30467125cea6635c2711de540df",
+      "assignment": "train"
+    },
+    {
+      "group_id": 84,
+      "line_start": 4200,
+      "line_end": 4250,
+      "line_count": 50,
+      "sha256": "fb2a1d8aa654492ee46d932d2d6538a03aef60ea0dc4edade094097ac6c3da60",
+      "assignment": "train"
+    },
+    {
+      "group_id": 85,
+      "line_start": 4250,
+      "line_end": 4300,
+      "line_count": 50,
+      "sha256": "fe2180b1d297eee6ef5514ef6d6adf46835d3b11b906992a8c02020ffc9ff6ef",
+      "assignment": "train"
+    },
+    {
+      "group_id": 86,
+      "line_start": 4300,
+      "line_end": 4350,
+      "line_count": 50,
+      "sha256": "00cad66e6003d069bc433962601c99d6d2ce48d3f3b8bee671d15fdf81d5d744",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 87,
+      "line_start": 4350,
+      "line_end": 4400,
+      "line_count": 50,
+      "sha256": "8cc7c271f91df6bd2e45c3d96c9666da1b5ea85aabd5880f343e632c89e6fecb",
+      "assignment": "train"
+    },
+    {
+      "group_id": 88,
+      "line_start": 4400,
+      "line_end": 4450,
+      "line_count": 50,
+      "sha256": "44d14bc582996f9e308e3b6b85c0418d3316d1bfc9a6e475aa4b8ebb91b4a0f1",
+      "assignment": "train"
+    },
+    {
+      "group_id": 89,
+      "line_start": 4450,
+      "line_end": 4500,
+      "line_count": 50,
+      "sha256": "ff9f8d19ae3b9d4f286f76812b9fe97ea8e521c2e650de7390e23577287d2547",
+      "assignment": "train"
+    },
+    {
+      "group_id": 90,
+      "line_start": 4500,
+      "line_end": 4550,
+      "line_count": 50,
+      "sha256": "3b2086d1fc9f0226cc6230ef3d5ccecb46dc82e1350240e47e487d1828c00466",
+      "assignment": "train"
+    },
+    {
+      "group_id": 91,
+      "line_start": 4550,
+      "line_end": 4600,
+      "line_count": 50,
+      "sha256": "9c5a11d0b260142c69f29b87f8be2406e073db624f1d1d782877efb577783278",
+      "assignment": "train"
+    },
+    {
+      "group_id": 92,
+      "line_start": 4600,
+      "line_end": 4650,
+      "line_count": 50,
+      "sha256": "3a524f9387fc6fe7775cad57e9b9d84bad8be4de588ddd7a5a89aa7e0e5d14a2",
+      "assignment": "train"
+    },
+    {
+      "group_id": 93,
+      "line_start": 4650,
+      "line_end": 4700,
+      "line_count": 50,
+      "sha256": "8253c895e630770a410fd83c4f536fbb33f020adfac76793bcdead1032868944",
+      "assignment": "train"
+    },
+    {
+      "group_id": 94,
+      "line_start": 4700,
+      "line_end": 4750,
+      "line_count": 50,
+      "sha256": "1bec36d081a92033b3ae5cb02ed430573ddbc9b0849e515ea7e1a9dd31886f4e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 95,
+      "line_start": 4750,
+      "line_end": 4800,
+      "line_count": 50,
+      "sha256": "4624ec6d37028db436e367fbc50837d0a19abacac61c25d2997f3430546981c6",
+      "assignment": "train"
+    },
+    {
+      "group_id": 96,
+      "line_start": 4800,
+      "line_end": 4850,
+      "line_count": 50,
+      "sha256": "33920351285d51fdee3ac458ce7ad41462043cd859f11e36b6cf9d918091b590",
+      "assignment": "train"
+    },
+    {
+      "group_id": 97,
+      "line_start": 4850,
+      "line_end": 4900,
+      "line_count": 50,
+      "sha256": "180bfec9c4e69c5fa266fa5eb92a0eb901899a496b54cd16036f35947cc31315",
+      "assignment": "train"
+    },
+    {
+      "group_id": 98,
+      "line_start": 4900,
+      "line_end": 4950,
+      "line_count": 50,
+      "sha256": "05b1d1fe9ab69a7ff6c41b6d407766a8efd576847225c1452084c4f3d3078ea4",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 99,
+      "line_start": 4950,
+      "line_end": 5000,
+      "line_count": 50,
+      "sha256": "631a2b0d04b55af2cbf0c4e3e8178e21279360349461a4508d02e0f43ae69658",
+      "assignment": "train"
+    },
+    {
+      "group_id": 100,
+      "line_start": 5000,
+      "line_end": 5050,
+      "line_count": 50,
+      "sha256": "9157cf64ee3e0a2b9e8bff3508a0d854939a03b026d12f6f0166c5257af94cc0",
+      "assignment": "train"
+    },
+    {
+      "group_id": 101,
+      "line_start": 5050,
+      "line_end": 5100,
+      "line_count": 50,
+      "sha256": "5037738a69ec38633f533051bac859516c8814ee63e152ed917659e45c1c63d5",
+      "assignment": "train"
+    },
+    {
+      "group_id": 102,
+      "line_start": 5100,
+      "line_end": 5150,
+      "line_count": 50,
+      "sha256": "c8ebf2704a8fccb451ac05f4ad458ad3c732fedf697effa7fa563a2acf409d10",
+      "assignment": "train"
+    },
+    {
+      "group_id": 103,
+      "line_start": 5150,
+      "line_end": 5200,
+      "line_count": 50,
+      "sha256": "825898316f5c210148891bded78517013835b1df55c32f518d8d6c9cbca47abf",
+      "assignment": "train"
+    },
+    {
+      "group_id": 104,
+      "line_start": 5200,
+      "line_end": 5250,
+      "line_count": 50,
+      "sha256": "7f523c78c1c892ecb084d55ee8fa328eb47023768947e33e9664b67c25e85d20",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 105,
+      "line_start": 5250,
+      "line_end": 5300,
+      "line_count": 50,
+      "sha256": "0c65d8fee2a66061c76b963b752e7c6eb119f3bfe93255e2d27462259881ae1e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 106,
+      "line_start": 5300,
+      "line_end": 5350,
+      "line_count": 50,
+      "sha256": "8193c65f43ad1790e83c45dfaaf9cac5b41d1e9c98c31b7ee2e4ae50d7cc9187",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 107,
+      "line_start": 5350,
+      "line_end": 5400,
+      "line_count": 50,
+      "sha256": "6c0e55912c12663f0bbd85af154292d8b0fca260cb8d51203a9a8e2fa2233414",
+      "assignment": "train"
+    },
+    {
+      "group_id": 108,
+      "line_start": 5400,
+      "line_end": 5450,
+      "line_count": 50,
+      "sha256": "c37f1407bdf6236ff06695c15b58937aa8cb9c1ce7dd6d9489a1b640346b5aa6",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 109,
+      "line_start": 5450,
+      "line_end": 5500,
+      "line_count": 50,
+      "sha256": "235ec5d3e6f177e383cad9e808d061291ad2b6f769f6d03d84bb7c2270ebcd51",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 110,
+      "line_start": 5500,
+      "line_end": 5550,
+      "line_count": 50,
+      "sha256": "5268af809ff6e6bcc9342b3947ef7099f2af428a9e4d94cb404bc841ed75126e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 111,
+      "line_start": 5550,
+      "line_end": 5600,
+      "line_count": 50,
+      "sha256": "7d532d35ce8fd2bf8653ced86f4e74dee35187f17d47b3f0a7d044713a13c401",
+      "assignment": "train"
+    },
+    {
+      "group_id": 112,
+      "line_start": 5600,
+      "line_end": 5650,
+      "line_count": 50,
+      "sha256": "09fc4853e5e147bc9f67f8f03d16108221d4f82494db5d580ace8dd7b38e4d00",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 113,
+      "line_start": 5650,
+      "line_end": 5700,
+      "line_count": 50,
+      "sha256": "0f89dcf88ff26b25381feb332467d0b32079c5cf5493eecf641b047a95ec95fe",
+      "assignment": "train"
+    },
+    {
+      "group_id": 114,
+      "line_start": 5700,
+      "line_end": 5750,
+      "line_count": 50,
+      "sha256": "c5fc2625c1df59d658cf2661e4096fefef68e9188e40b07c128dc1215e305326",
+      "assignment": "train"
+    },
+    {
+      "group_id": 115,
+      "line_start": 5750,
+      "line_end": 5800,
+      "line_count": 50,
+      "sha256": "f0465e622588b492059e86c5666e5410fbfe55bdaf19b18ec12475a158a0778c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 116,
+      "line_start": 5800,
+      "line_end": 5850,
+      "line_count": 50,
+      "sha256": "347ce43331f34a966aecd8b1573d9b136ad6a154de92c30b8b7abe62a7386561",
+      "assignment": "train"
+    },
+    {
+      "group_id": 117,
+      "line_start": 5850,
+      "line_end": 5900,
+      "line_count": 50,
+      "sha256": "9ec0f771ec512476386f67ff3c39e1100abd3700ff6c330f74ac4b42e196e4b0",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 118,
+      "line_start": 5900,
+      "line_end": 5950,
+      "line_count": 50,
+      "sha256": "5ba6937f588fb6e7b516ce4d8adb260cd8c0b17f071114bf0808ff1485c93fae",
+      "assignment": "train"
+    },
+    {
+      "group_id": 119,
+      "line_start": 5950,
+      "line_end": 6000,
+      "line_count": 50,
+      "sha256": "d32fb4bf4a64d9bd21f923466382bdaa22364d1d4feb65e4c3b5a01e36cc9ee4",
+      "assignment": "train"
+    },
+    {
+      "group_id": 120,
+      "line_start": 6000,
+      "line_end": 6050,
+      "line_count": 50,
+      "sha256": "c874de1eee8a337a6bff106d6d19e5c1f7d3c1af37c90b24602c95a66e904d77",
+      "assignment": "train"
+    },
+    {
+      "group_id": 121,
+      "line_start": 6050,
+      "line_end": 6100,
+      "line_count": 50,
+      "sha256": "54eb513368033102abde743250ca8559e3296914c55143f3fab279a3249a9661",
+      "assignment": "train"
+    },
+    {
+      "group_id": 122,
+      "line_start": 6100,
+      "line_end": 6150,
+      "line_count": 50,
+      "sha256": "c343af464687e5b1734e21cf2b0b7e8bcca32d951b337333d83252699693efdd",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 123,
+      "line_start": 6150,
+      "line_end": 6200,
+      "line_count": 50,
+      "sha256": "4548e631d6c447ca11e4a3487f4033fca529593dec70ad7cbb1395528804c9e2",
+      "assignment": "train"
+    },
+    {
+      "group_id": 124,
+      "line_start": 6200,
+      "line_end": 6250,
+      "line_count": 50,
+      "sha256": "368efa8dd0d78b4b23ecb5274d53780e729046d71eff8c608d794a11741a492a",
+      "assignment": "train"
+    },
+    {
+      "group_id": 125,
+      "line_start": 6250,
+      "line_end": 6300,
+      "line_count": 50,
+      "sha256": "dbaca3842661807ee6f84ceb4967fd66a62d32067b54263e9bf38b73761e7239",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 126,
+      "line_start": 6300,
+      "line_end": 6350,
+      "line_count": 50,
+      "sha256": "425929974f54f69e5906e284e058c65306d1321ebfa282122ccc9d1d67397f5c",
+      "assignment": "train"
+    },
+    {
+      "group_id": 127,
+      "line_start": 6350,
+      "line_end": 6400,
+      "line_count": 50,
+      "sha256": "bb860d2e497e4d8675dceb6b6e42785d644fa0da7ec98bc187e44eaf41dbb4a1",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 128,
+      "line_start": 6400,
+      "line_end": 6450,
+      "line_count": 50,
+      "sha256": "8b7e71ae70cd239db13e20a8d88e640a0df51b3018faa0eb5311f7c81f41014e",
+      "assignment": "train"
+    },
+    {
+      "group_id": 129,
+      "line_start": 6450,
+      "line_end": 6500,
+      "line_count": 50,
+      "sha256": "7e5d063057bfec56896319706857c7e29f793514f89c753f41fc3fd72f3b5a4d",
+      "assignment": "train"
+    },
+    {
+      "group_id": 130,
+      "line_start": 6500,
+      "line_end": 6550,
+      "line_count": 50,
+      "sha256": "3d555039502649c9e171eca99e2b9b28cc3eeb6d0ab5defa4341ccf07b28f964",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 131,
+      "line_start": 6550,
+      "line_end": 6600,
+      "line_count": 50,
+      "sha256": "87a58fd1b1029a3520d89e948e497185f1ce52dd8cfbca7d52dd33b45fe32bd9",
+      "assignment": "train"
+    },
+    {
+      "group_id": 132,
+      "line_start": 6600,
+      "line_end": 6650,
+      "line_count": 50,
+      "sha256": "78df1aa31b77b7aa238ce5e4149fb4ec360540d5b59b514d2f322e7be611777d",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 133,
+      "line_start": 6650,
+      "line_end": 6700,
+      "line_count": 50,
+      "sha256": "63b090dbd74c17797da0c8b313fa01fd5a467f9b89f077dc8fd76803f3002338",
+      "assignment": "train"
+    },
+    {
+      "group_id": 134,
+      "line_start": 6700,
+      "line_end": 6750,
+      "line_count": 50,
+      "sha256": "3ad7bab82b52eef4b10764394d1b7aec29b2c4fe11ffc044cf340a5cb1c8de4d",
+      "assignment": "train"
+    },
+    {
+      "group_id": 135,
+      "line_start": 6750,
+      "line_end": 6800,
+      "line_count": 50,
+      "sha256": "f6aa38b9b3dc30f0d7e533b4630da91809bf11d513009476b54b2b0bb9639afb",
+      "assignment": "train"
+    },
+    {
+      "group_id": 136,
+      "line_start": 6800,
+      "line_end": 6850,
+      "line_count": 50,
+      "sha256": "6ba0604978e0bd1749ede6c0dd57e5e3521961dda5ac18c7e9557dd27361c3a6",
+      "assignment": "train"
+    },
+    {
+      "group_id": 137,
+      "line_start": 6850,
+      "line_end": 6900,
+      "line_count": 50,
+      "sha256": "177d6746b840e665b337ca7e994ff49831341f431eed09379e7537624e7bf876",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 138,
+      "line_start": 6900,
+      "line_end": 6950,
+      "line_count": 50,
+      "sha256": "c0af6d05794b94891afb3f5b3d7a85f065caac87ad721e4ac4afcd6ff9cde1db",
+      "assignment": "heldout"
+    },
+    {
+      "group_id": 139,
+      "line_start": 6950,
+      "line_end": 6964,
+      "line_count": 14,
+      "sha256": "84f913afe05bde3e61c54ed345e8032b32f71b6843e1b006af41d49e93b0d968",
+      "assignment": "heldout"
+    }
+  ]
+}

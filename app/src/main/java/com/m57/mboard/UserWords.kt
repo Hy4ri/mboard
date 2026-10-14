@@ -89,19 +89,19 @@ class UserWords(
         }
     }
 
-    /** Words the user has typed after [previous] at least twice, most used and most recent first. */
+    /** Words the user has typed after [previous] at least twice, with how often; most used first. */
     fun next(
         previous: String,
         language: Language,
-    ): List<String> {
-        if (previous.isEmpty()) return emptyList()
+    ): Map<String, Int> {
+        if (previous.isEmpty()) return emptyMap()
         val start = key(previous) + " "
         return pairs(language)
             .entries
             .filter { it.value.count >= TRUSTED && it.key.startsWith(start) }
             .sortedWith(compareByDescending<Map.Entry<String, Word>> { it.value.count }.thenByDescending { it.value.used })
-            .take(3)
-            .map { it.value.display }
+            .take(6)
+            .associate { it.value.display to it.value.count }
     }
 
     /** A word typed often enough that auto-correction should leave it alone. */
@@ -110,18 +110,19 @@ class UserWords(
         language: Language,
     ) = (words(language)[key(word)]?.count ?: 0) >= TRUSTED
 
+    /** Trusted learned words longer than [typed] that start with it, with how often they were typed. */
     fun completions(
         typed: String,
         language: Language,
-    ): List<String> {
-        if (typed.isEmpty()) return emptyList()
+    ): Map<String, Int> {
+        if (typed.isEmpty()) return emptyMap()
         val prefix = key(typed)
         return words(language)
             .entries
             .filter { it.value.count >= TRUSTED && it.key.length > prefix.length && it.key.startsWith(prefix) }
             .sortedWith(compareByDescending<Map.Entry<String, Word>> { it.value.count }.thenByDescending { it.value.used })
-            .take(3)
-            .map { it.value.display }
+            .take(6)
+            .associate { it.value.display to it.value.count }
     }
 
     fun size() = Languages.ALL.sumOf { words(it).size }

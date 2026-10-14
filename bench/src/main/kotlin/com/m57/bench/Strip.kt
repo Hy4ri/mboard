@@ -82,18 +82,20 @@ class Strip(
         source: String,
     ) = WordDictionary.displayWord(word, source, language, false, false)
 
-    private fun learnedNext(contextWords: List<String>): List<String> =
-        if (!learning) emptyList() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
+    private fun learnedNext(contextWords: List<String>): Map<String, Int> =
+        if (!learning) emptyMap() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
 
     // MboardService.autoCorrection
     fun autoCorrection(
         typed: String,
         wordStart: Boolean,
+        contextWords: List<String> = emptyList(),
     ): String? {
         if (!autoCorrect || typed.isEmpty() || typed in rejectedCorrections) return null
         if (userWords.knows(typed, language)) return null
         if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
-        val correction = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return null
+        val correction =
+            words.correction(typed, language, contextWords, dialect, learnedNext(contextWords))?.let { matchCase(it, typed) } ?: return null
         return if (correction == typed) null else correction
     }
 
@@ -104,7 +106,7 @@ class Strip(
             return Shown(predicted.map { matchCase(it, "") }.take(3), false)
         }
         val typed = c.prefix
-        val autoCorrection = autoCorrection(typed, c.sentenceStart)
+        val autoCorrection = autoCorrection(typed, c.sentenceStart, c.contextWords)
         val hint =
             if (autoCorrection == null && autoCorrect && !userWords.knows(typed, language)) {
                 words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
@@ -113,10 +115,17 @@ class Strip(
             }
         val leading = autoCorrection ?: hint
         val ranked =
-            words.rank(typed, c.contextWords, language, dialect, learnedNext(c.contextWords)).map { matchCase(it, typed) }
-        val learned = if (!learning) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
+            words
+                .rank(
+                    typed,
+                    c.contextWords,
+                    language,
+                    dialect,
+                    learnedNext(c.contextWords),
+                    if (!learning) emptyMap() else userWords.completions(typed, language),
+                ).map { matchCase(it, typed) }
         val others =
-            (listOfNotNull(leading) + ranked.take(1) + learned + ranked.drop(1))
+            (listOfNotNull(leading) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         val wordChoices = if (others.size < 3 && typed.length >= 2) others + typed else others

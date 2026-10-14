@@ -565,7 +565,7 @@ class MboardService : InputMethodService() {
         val typed = context.word
         val editingInside = context.suffix.isNotEmpty()
         // Space only auto-corrects at a word's end, so inside a word the correction is offered, not highlighted.
-        val autoCorrection = autoCorrection(typed, context.sentenceStart)
+        val autoCorrection = autoCorrection(typed, context.sentenceStart, context.contextWords)
         val hint =
             if (autoCorrection == null && settings.autoCorrect && !userWords.knows(typed, language)) {
                 words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
@@ -580,6 +580,7 @@ class MboardService : InputMethodService() {
             } else {
                 phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
             }
+        // Learned words are ranked with the dictionary by how likely they are here.
         val ranked =
             words
                 .rank(
@@ -588,11 +589,10 @@ class MboardService : InputMethodService() {
                     language,
                     settings.dialectEnabled(language.dialect),
                     learnedNext(context.contextWords),
+                    if (privateSession) emptyMap() else userWords.completions(typed, language),
                 ).map { matchCase(it, typed) }
-        // Learned words lead the completions, but never push out a correction or the best dictionary match.
-        val learned = if (privateSession) emptyList() else userWords.completions(typed, language).map { matchCase(it, typed) }
         val others =
-            (listOfNotNull(leading, phrase) + ranked.take(1) + learned + ranked.drop(1))
+            (listOfNotNull(leading, phrase) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // A finished long word has no longer completions left; keep the typed word in the strip so it never
@@ -607,12 +607,16 @@ class MboardService : InputMethodService() {
     private fun autoCorrection(
         typed: String,
         wordStart: Boolean,
+        contextWords: List<String> = emptyList(),
     ): String? {
         if (!settings.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || fieldPolicy.password) return null
         if (userWords.knows(typed, language)) return null
         if (words.state(language) != WordSuggestions.State.READY) return null
         if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
-        val correction = words.correction(typed, language)?.let { matchCase(it, typed) } ?: return null
+        val correction =
+            words
+                .correction(typed, language, contextWords, settings.dialectEnabled(language.dialect), learnedNext(contextWords))
+                ?.let { matchCase(it, typed) } ?: return null
         return if (correction == typed) null else correction
     }
 
@@ -687,7 +691,7 @@ class MboardService : InputMethodService() {
         // A separator inside a word splits it; correcting the first half would mangle it.
         if (context.suffix.isNotEmpty()) return
         val typed = context.prefix
-        val corrected = autoCorrection(typed, context.sentenceStart) ?: return
+        val corrected = autoCorrection(typed, context.sentenceStart, context.contextWords) ?: return
         if (replaceBeforeCursor(ic, typed, corrected)) lastCorrection = Correction(typed, corrected, separator)
     }
 
@@ -905,8 +909,8 @@ class MboardService : InputMethodService() {
     }
 
     /** Words the user has typed after the last context word; nothing in a private session. */
-    private fun learnedNext(contextWords: List<String>): List<String> =
-        if (privateSession) emptyList() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
+    private fun learnedNext(contextWords: List<String>): Map<String, Int> =
+        if (privateSession) emptyMap() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
 
     private fun matchCase(
         word: String,

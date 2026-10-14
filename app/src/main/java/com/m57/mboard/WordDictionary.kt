@@ -13,6 +13,7 @@ class WordDictionary private constructor(
     private val spellings: Map<String, List<Spelling>>,
     private val originals: Map<String, Long>,
     private val dialectSpellings: Set<String>,
+    private val dialectAliases: Map<String, List<Spelling>> = emptyMap(),
 ) {
     data class Candidate(
         val word: String,
@@ -35,6 +36,9 @@ class WordDictionary private constructor(
 
     val size: Int get() = entries.size
 
+    /** Sum of all listed frequencies, the denominator of a word's share. */
+    val totalFrequency: Long = entries.sumOf { it.frequency }.coerceAtLeast(1L)
+
     fun frequency(word: String): Long {
         val normalized = normalize(word, language) ?: return 0L
         return exact[normalized]?.frequency ?: 0L
@@ -45,6 +49,14 @@ class WordDictionary private constructor(
         prefix: String,
         limit: Int,
         dialect: Boolean,
+    ): List<Candidate> = complete(prefix, limit, dialect, includeAliases = true)
+
+    /** Canonical-only lookup remains available to the spelling guards: aliases are display choices. */
+    private fun complete(
+        prefix: String,
+        limit: Int,
+        dialect: Boolean,
+        includeAliases: Boolean,
     ): List<Candidate> {
         if (prefix.isEmpty() || prefix.length > 64 || limit <= 0) return emptyList()
         val normalizedPrefix = normalize(prefix, language) ?: return emptyList()
@@ -52,13 +64,41 @@ class WordDictionary private constructor(
 
         if (normalizedPrefix.length <= 3) {
             shortPrefixes[normalizedPrefix]?.let { cachedEntries ->
-                val result = ArrayList<Candidate>(limit)
-                for (entry in cachedEntries) {
-                    if (!dialect && entry.isDialectOnly) continue
-                    result.add(Candidate(entry.original, entry.frequency.toDouble()))
-                    if (result.size == limit) break
+                if (!includeAliases || !dialect || dialectAliases.isEmpty()) {
+                    val result = ArrayList<Candidate>(limit)
+                    for (entry in cachedEntries) {
+                        if (!dialect && entry.isDialectOnly) continue
+                        result.add(Candidate(entry.original, entry.frequency.toDouble()))
+                        if (result.size == limit) break
+                    }
+                    return result
                 }
-                return result
+                val best = ArrayList<Candidate>(limit)
+                val seenWords = HashSet<String>()
+                for (entry in cachedEntries) {
+                    val aliases = dialectAliases[entry.normalized]
+                    if (aliases != null) {
+                        for (alias in aliases) {
+                            if (seenWords.add(alias.original)) {
+                                insertBestCandidate(
+                                    best,
+                                    Candidate(alias.original, alias.frequency.toDouble()),
+                                    limit,
+                                    preferNewOnTie = true,
+                                )
+                            }
+                        }
+                    }
+                    if (seenWords.add(entry.original)) {
+                        insertBestCandidate(
+                            best,
+                            Candidate(entry.original, entry.frequency.toDouble()),
+                            limit,
+                            preferNewOnTie = false,
+                        )
+                    }
+                }
+                return best
             }
         }
 
@@ -70,6 +110,7 @@ class WordDictionary private constructor(
         }
 
         val best = ArrayList<Candidate>(limit)
+        val seenWords = if (includeAliases && dialect && dialectAliases.isNotEmpty()) HashSet<String>() else null
         var index = low
         var scanned = 0
         while (index < entries.size && scanned < MAX_PREFIX_SCAN) {
@@ -77,7 +118,32 @@ class WordDictionary private constructor(
             scanned++
             if (!entry.normalized.startsWith(normalizedPrefix)) break
             if ((!dialect && entry.isDialectOnly) || entry.hidden) continue
-            insertBestCandidate(best, Candidate(entry.original, entry.frequency.toDouble()), limit)
+
+            if (seenWords != null) {
+                val aliases = dialectAliases[entry.normalized]
+                if (aliases != null) {
+                    for (alias in aliases) {
+                        if (seenWords.add(alias.original)) {
+                            insertBestCandidate(
+                                best,
+                                Candidate(alias.original, alias.frequency.toDouble()),
+                                limit,
+                                preferNewOnTie = true,
+                            )
+                        }
+                    }
+                }
+                if (seenWords.add(entry.original)) {
+                    insertBestCandidate(
+                        best,
+                        Candidate(entry.original, entry.frequency.toDouble()),
+                        limit,
+                        preferNewOnTie = false,
+                    )
+                }
+            } else {
+                insertBestCandidate(best, Candidate(entry.original, entry.frequency.toDouble()), limit)
+            }
         }
         return best
     }
@@ -107,6 +173,66 @@ class WordDictionary private constructor(
         return best
     }
 
+    /**
+     * Typo-tolerant Arabic completions behind an attached conjunction or preposition (e.g. وخياىر → وخيار).
+     * Suggestion-only seam; never called by correction/autocorrect.
+     * Evaluates at most the two longest eligible clitic matches, requiring at least 3 substantive typed stem letters.
+     */
+    fun cliticFuzzyCompletions(
+        prefix: String,
+        limit: Int,
+        dialect: Boolean,
+    ): List<Candidate> {
+        if (language.script != Script.ARABIC || prefix.length < 4 || prefix.length > 32 || limit <= 0) {
+            return emptyList()
+        }
+
+        val effectiveLimit = minOf(limit, 4)
+        val candidateMap = HashMap<String, Double>()
+        var branchesEvaluated = 0
+
+        for ((clitic, stemStart) in ARABIC_CLITIC_PREFIXES) {
+            if (!prefix.startsWith(clitic)) continue
+            val typedStemAfterClitic = prefix.substring(clitic.length)
+            if (typedStemAfterClitic.length < 3) continue
+
+            val stem = stemStart + typedStemAfterClitic
+            val stemCandidates = fuzzyCompletions(stem, effectiveLimit, dialect)
+
+            for (c in stemCandidates) {
+                if (stemStart.isNotEmpty() && !c.word.startsWith(stemStart)) continue
+                val word = clitic + c.word.substring(stemStart.length)
+                if (word == prefix || word.startsWith(prefix)) continue
+
+                val existing = candidateMap[word]
+                if (existing == null || c.score > existing) {
+                    candidateMap[word] = c.score
+                }
+            }
+
+            branchesEvaluated++
+            if (branchesEvaluated >= 2) break
+        }
+
+        if (candidateMap.isEmpty()) return emptyList()
+
+        return candidateMap.entries
+            .sortedWith(compareByDescending<Map.Entry<String, Double>> { it.value }.thenBy { it.key })
+            .take(effectiveLimit)
+            .map { Candidate(it.key, it.value) }
+    }
+
+    private data class FuzzyKey(
+        val prefix: String,
+        val limit: Int,
+        val dialect: Boolean,
+    )
+
+    private val fuzzyCache =
+        object : LinkedHashMap<FuzzyKey, List<Candidate>>(64, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<FuzzyKey, List<Candidate>>?) = size > 128
+        }
+
     /** Typo-tolerant prefix completions; score equals frequency * weight. */
     fun fuzzyCompletions(
         prefix: String,
@@ -114,6 +240,23 @@ class WordDictionary private constructor(
         dialect: Boolean,
     ): List<Candidate> {
         if (prefix.length < 3 || prefix.length > 64 || limit <= 0) return emptyList()
+        val key = FuzzyKey(prefix, limit, dialect)
+        synchronized(fuzzyCache) {
+            fuzzyCache[key]?.let { return it }
+        }
+        val computed = computeFuzzyCompletions(prefix, limit, dialect)
+        val result = java.util.Collections.unmodifiableList(ArrayList(computed))
+        synchronized(fuzzyCache) {
+            fuzzyCache[key] = result
+        }
+        return result
+    }
+
+    private fun computeFuzzyCompletions(
+        prefix: String,
+        limit: Int,
+        dialect: Boolean,
+    ): List<Candidate> {
         val normalizedPrefix = normalize(prefix, language) ?: return emptyList()
         if (normalizedPrefix.length < 3) return emptyList()
 
@@ -216,7 +359,7 @@ class WordDictionary private constructor(
                 val orig = prefix[i]
                 for (c in language.alphabet) {
                     if (c != orig && language.adjacent(orig, c)) {
-                        out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to 0.8
+                        out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to language.typoWeight(orig, c)
                     }
                 }
             }
@@ -237,7 +380,7 @@ class WordDictionary private constructor(
                 val orig = prefix[i]
                 for (c in language.alphabet) {
                     if (c != orig && language.adjacent(orig, c) && !isDialectSensitive(orig, c)) {
-                        out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to 0.8
+                        out += (prefix.substring(0, i) + c + prefix.substring(i + 1)) to language.typoWeight(orig, c)
                     }
                 }
             }
@@ -264,6 +407,24 @@ class WordDictionary private constructor(
                 out += (prefix.substring(0, i) + c + prefix.substring(i)) to 0.7
             }
         }
+    }
+
+    /** Full Latin dictionary words one plausible keyboard edit away; unfinished completions are excluded. */
+    fun correctionOptions(word: String): List<Candidate> {
+        if (language.script != Script.LATIN || word.length !in 3..32) return emptyList()
+        val normalized = normalize(word, language) ?: return emptyList()
+        if (word.any { !it.isLetter() } || word.drop(1).any { it.isUpperCase() }) return emptyList()
+        if (normalized in language.keepAsTyped || normalized in language.contractions || exact.containsKey(normalized)) return emptyList()
+        val scores = HashMap<String, Candidate>()
+        for ((variant, weight) in prefixVariants(normalized)) {
+            val entry = exact[variant] ?: continue
+            if (entry.hidden || entry.normalized == normalized) continue
+            val score = entry.frequency * weight
+            if (score < 300.0 || midWord(normalized, entry)) continue
+            val old = scores[entry.original]
+            if (old == null || score > old.score) scores[entry.original] = Candidate(entry.original, score)
+        }
+        return scores.values.sortedByDescending { it.score }.take(12)
     }
 
     /**
@@ -428,7 +589,7 @@ class WordDictionary private constructor(
         normalized: String,
         candidate: Entry,
     ): Boolean =
-        completions(normalized, limit = 2, dialect = true).any {
+        complete(normalized, limit = 2, dialect = true, includeAliases = false).any {
             it.word != candidate.original && it.score >= candidate.frequency
         }
 
@@ -856,6 +1017,21 @@ class WordDictionary private constructor(
 
             val entries = mergedMap.values.sortedWith(compareBy<Entry> { it.normalized }.thenByDescending { it.frequency })
 
+            val dialectAliases = HashMap<String, MutableList<Spelling>>()
+            if (dialect.isNotEmpty()) {
+                for ((orig, freq) in dialect) {
+                    if (freq <= 0L || orig in language.misspellings) continue
+                    val normalized = normalize(orig, language) ?: continue
+                    if (normalized.isEmpty()) continue
+                    val canonical = mergedMap[normalized] ?: continue
+                    if (canonical.hidden) continue
+                    if (orig != canonical.original) {
+                        dialectAliases.getOrPut(normalized) { ArrayList() } += Spelling(orig, freq)
+                    }
+                }
+                dialectAliases.values.forEach { group -> group.sortByDescending { it.frequency } }
+            }
+
             val short = HashMap<String, MutableList<Entry>>()
             val exact = HashMap<String, Entry>(entries.size * 2)
 
@@ -886,6 +1062,7 @@ class WordDictionary private constructor(
                 spellings = spellings,
                 originals = originals,
                 dialectSpellings = if (language.script == Script.ARABIC) dialect.keys else emptySet(),
+                dialectAliases = dialectAliases,
             )
         }
 
@@ -954,8 +1131,14 @@ class WordDictionary private constructor(
             best: MutableList<Candidate>,
             candidate: Candidate,
             limit: Int,
+            preferNewOnTie: Boolean = false,
         ) {
-            val position = best.indexOfFirst { it.score < candidate.score }
+            val position =
+                if (preferNewOnTie) {
+                    best.indexOfFirst { it.score <= candidate.score }
+                } else {
+                    best.indexOfFirst { it.score < candidate.score }
+                }
             if (position < 0) best.add(candidate) else best.add(position, candidate)
             if (best.size > limit) best.removeAt(limit)
         }
