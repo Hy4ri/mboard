@@ -595,9 +595,10 @@ class MboardService : InputMethodService() {
             (listOfNotNull(leading, phrase) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
-        // A finished long word has no longer completions left; keep the typed word in the strip so it never
-        // goes blank mid-word, and tapping it finishes the word with a space.
-        val wordChoices = if (others.size < 3 && typed.length >= 2) others + typed else others
+        // The word as typed always keeps a slot, right after a correction or hint, so it can be kept with one tap
+        // (tapping it finishes the word with a space and no correction). Single letters are left out.
+        val keepAt = if (leading != null && leading != typed) 1 else 0
+        val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji

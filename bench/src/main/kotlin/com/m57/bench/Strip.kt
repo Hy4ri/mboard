@@ -77,10 +77,13 @@ class Strip(
         return Caret(result, idle, recent, sentenceStart)
     }
 
+    /** Keyboard shift state (auto-capitalize at a sentence start); the replay bench keeps it off. */
+    var shifted = false
+
     private fun matchCase(
         word: String,
         source: String,
-    ) = WordDictionary.displayWord(word, source, language, false, false)
+    ) = WordDictionary.displayWord(word, source, language, shifted, false)
 
     private fun learnedNext(contextWords: List<String>): Map<String, Int> =
         if (!learning) emptyMap() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
@@ -128,7 +131,8 @@ class Strip(
             (listOfNotNull(leading) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
-        val wordChoices = if (others.size < 3 && typed.length >= 2) others + typed else others
+        val keepAt = if (leading != null && leading != typed) 1 else 0
+        val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
         return Shown(wordChoices.take(3), autoCorrection != null)
     }
 
