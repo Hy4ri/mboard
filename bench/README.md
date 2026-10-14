@@ -20,6 +20,21 @@ Single dataset, after `installDist`:
 
 Use `--learning` for an ordered online-learning run. Preferences are isolated per process. The replay feeds the intended words into learning, not an actually auto-corrected/accepted editor transcript; this controlled oracle history separates personalization from cascaded typing errors. The previous-word bug in the initial bench was fixed: use the rerun `baseline_corrected`, not the original `baseline`, when comparing learning runs.
 
+## Single lookup and live typing
+
+`suggest.sh` answers one question: what would the strip show for this text, caret at the end. A trailing space (or empty text) shows next words; otherwise it completes the word under the caret. Each run is its own process with fresh in-memory preferences, so nothing is learned or carried over, and it writes a markdown log to `bench/logs/suggest/` (gitignored).
+
+    bench/suggest.sh "I am goin"
+    bench/suggest.sh --lang ar --dialect "شو "
+
+`--live` turns it into a simulated text field: every key redraws the strip. Tab, F1-F3 or Alt-1/2/3 tap suggestion 1/2/3, Backspace right after an auto-correction undoes it, Ctrl-D quits. The log gains one table row per key. Piped input is read as keys and prints one line per key. Learning is on in live mode as in the keyboard (`--no-learning` turns it off), so a word typed twice is trusted for the rest of that session.
+
+For agents and scripts, `--json` makes a single lookup print one JSON object, and `--agent` is live mode over JSON lines: one command per stdin line (`{"type":"hi "}`, `{"pick":2}`, `{"key":"backspace","times":3}`, `{"set":"..."}`, `{"wait":800}`, `{"state":true}`, `{"quit":true}`), one reply per stdout line with the text, the 3 suggestions, the auto-correction and what happened. Time is virtual (100 ms per key), so a session replays identically. Every command, every key and every reply goes to `<stamp>-agent.md` (readable) and `<stamp>-agent.jsonl` (machine). `bench/suggest.sh --help-agent` prints the full protocol. Stdout carries only the result; the dev-shell banner goes to stderr.
+
+    printf '%s\n' '{"type":"I am goin"}' '{"pick":2}' | bench/suggest.sh --agent
+
+All modes use the keyboard's real engine through `Strip.kt`; live mode adds `Editor` in `Live.kt`, which mirrors MboardService's separator handling, double-space period, undo and suggestion tap. Keep both in step with `MboardService.kt`. Not simulated: saved phrases, emoji slot, password/address fields, selection, a caret inside a word.
+
 ## Metrics and limitations
 
 - `next_word_top3_pct`: intended word appears among the three displayed choices before typing, with preceding context. Sentence starts are reported separately.
