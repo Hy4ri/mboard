@@ -1,7 +1,7 @@
 mboard third-party credits
 
 Word frequency lists
-Arabic contains 25,000 selected entries from FrequencyWords' 2018 50k list. English starts with its 25,000 selected entries, refreshes frequencies from the OpenSubtitles2018 training slices below, and adds 288 whole contractions (25,288 entries total). Non-word tokens are filtered; files are tab-separated.
+Arabic contains 25,000 selected entries from FrequencyWords' 2018 50k list. English starts with its 25,000 selected entries, refreshes frequencies from the OpenSubtitles2018 training slices below, adds 288 whole contractions, and includes lowercase SCOWL English/American/British spellings (125,674 asset entries, plus the spelling-only supplements below). SCOWL words absent from the training slice receive the minimum frequency so they are preserved, not promoted as frequent completions. Non-word tokens are filtered; files are tab-separated.
 Author: Hermit Dave and FrequencyWords contributors.
 Source: https://github.com/hermitdave/FrequencyWords
 Upstream data: OpenSubtitles2018 via OPUS.
@@ -9,6 +9,21 @@ Content license: Creative Commons Attribution-ShareAlike 4.0 International (CC B
 https://creativecommons.org/licenses/by-sa/4.0/
 These word-list adaptations are distributed under CC BY-SA 4.0. This does not change the license of unrelated application code.
 Note: upstream's MIT license covers its generator code, not its word-list content.
+
+SCOWL spelling vocabulary
+Source: SCOWL 2020.12.07, https://wordlist.aspell.net/ and https://downloads.sourceforge.net/wordlist/scowl-2020.12.07.tar.gz.
+English, American and British word lists through size 70 plus upper-case and abbreviation lists through size 60 validate additional English spellings; proper-name and variant lists are not imported. Modifications: lowercase and union these lists, retain only ASCII letters of length 2..32, and assign frequencies from the separately licensed OpenSubtitles training slice (minimum 1 when unobserved).
+Copyright Kevin Atkinson and contributing sources. Full collective and component notices: assets/licenses/scowl-Copyright.txt. The permissively licensed spelling vocabulary is combined with the existing CC BY-SA 4.0 frequency adaptation above.
+
+Arabic spelling protection
+known_forms_ar.txt contains 429,720 valid surface forms generated from the CAMeL Morph MSA LREC-COLING 2024 database, revision 15f5aede4b609db54abd6f87aded1f5ec5d930af. It is separate from the frequency lists and only prevents destructive correction; it does not rank new completions or supply typo targets. Modifications: generate compatible inflections without extra clitics, omit proper-name/backoff parts of speech, strip harakat and tatweel, map alef wasla to alef, retain Arabic-letter forms of length 2..32, sort and deduplicate.
+Authors: Christian Khairallah, Salam Khalifa, Reham Marzouk, Mayar Mohamadein Nassar and Nizar Habash, CAMeL Lab, New York University Abu Dhabi. Camel Morph MSA: A Large-Scale Open-Source Morphological Analyzer for Modern Standard Arabic, LREC-COLING 2024. https://aclanthology.org/2024.lrec-main.240.pdf
+Source: https://github.com/CAMeL-Lab/camel_morph/tree/15f5aede4b609db54abd6f87aded1f5ec5d930af/official_releases/lrec-coling2024_release
+Content and adapted surface forms: Creative Commons Attribution 4.0 International (CC BY 4.0). https://creativecommons.org/licenses/by/4.0/
+Full license: assets/licenses/camel-morph-CC-BY-4.0.txt. Upstream generator code is separately MIT-licensed and is not packaged in the app. No endorsement by the source authors is implied.
+
+Small curated spelling supplements
+The runtime additionally recognizes respawn (an independently curated English gaming term), آراء and مرفقات (attested in the CAMeL data credited above), and the productive definite form المرفقات. These use the minimum lexical score 1, not measured corpus counts. They enable manual completion/typo choices; unobserved Arabic supplements are not evidence for automatic orthographic replacement. CAMeL-derived supplements retain CC BY 4.0 attribution and terms above. Small keep-as-typed overlays protect deliberate technical/brand/loanword spellings, including npm, Romex and كويز; they do not claim observed frequencies or endorsement by trademark owners.
 
 Next-word predictions
 next_en.tsv and next_ar.tsv contain observed totals and follower counts for 30,000 one-word contexts; context_en.tsv and context_ar.tsv contain 60,000 two-word contexts each. Rows retain up to eight followers. A <s> row stores sentence-start counts. The desktop replay datasets are excluded verbatim from training.

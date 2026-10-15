@@ -1,0 +1,33 @@
+{
+  "source_revision": "15f5aede4b609db54abd6f87aded1f5ec5d930af",
+  "data_license": "CC-BY-4.0",
+  "source_hashes": {
+    "morphology/database.py": "2f3283042ac706471fde0fb498e438724e96a057ea042de6df8d0f76de16d66f",
+    "morphology/generator.py": "41f4ea954de6edf4c2457dcb5552ba49e5ad8efe159a525c6ea0b294edebe460",
+    "morphology/utils.py": "a24ece6a94e0e2e7027a39d5dacc83e73e9d0ee5c7d7d8669e0fd940918d0de0",
+    "morphology/errors.py": "b00c071977d1d7b3b5f7ca58fbd34e72ef703a7c32b6feaa883d530f9617dd4d",
+    "utils/stringutils.py": "cb354ca45fc49397ae371484c2f43fd45c10bd14d2fda7dfc49f757af3846b7d",
+    "camel_morph_msa_v1.0.db": "110e03baa282874062d076e23d9671e985b6f76520b891d58cba4e55de0b8f60"
+  },
+  "allowed_pos": [
+    "adj",
+    "adj_comp",
+    "adj_num",
+    "adv",
+    "conj",
+    "interj",
+    "noun",
+    "noun_num",
+    "noun_quant",
+    "part",
+    "prep",
+    "pron",
+    "verb",
+    "verb_nom",
+    "verb_pseudo"
+  ],
+  "forms": 429720,
+  "lemmas": 33592,
+  "analyses": 3134967,
+  "sha256": "c6b97dfdb60cf1ca210fb930ee69c6fd13552d75e484a56ba0c6b1b5e3328dd1"
+}

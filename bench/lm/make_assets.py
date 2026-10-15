@@ -125,7 +125,16 @@ def english_words(assets):
             # I'm, I'll keep their capital; other contractions are lowercase like the rest of the list.
             out[w if w.lower().startswith("i'") else lw] = round(uni[lw] * scale)
             added += 1
-    rows = sorted(out.items(), key=lambda x: -x[1])
+    # A subtitle top-list is not a spelling dictionary: technical words and inflections can
+    # be absent altogether. SCOWL validates their spelling; only the training corpus supplies
+    # frequency. Unobserved valid words get the minimum score, protecting them on space
+    # without promoting them above observed completions.
+    with open(os.path.join(SEEDS, "scowl_en.txt"), encoding="utf-8") as f:
+        for line in f:
+            w = line.strip()
+            if re.fullmatch(r"[a-z]{2,32}", w):
+                out.setdefault(w, max(1, round(uni.get(w, 0) * scale)))
+    rows = sorted(out.items(), key=lambda x: (-x[1], x[0]))
     return added, scale, rows
 
 
@@ -136,8 +145,18 @@ def main():
     ap.add_argument("--context-rows", type=int, default=60000)
     ap.add_argument("--width", type=int, default=8)
     ap.add_argument("--dialect-source", default=os.path.join(HERE, "out_jo"))
+    ap.add_argument("--only-english-words", action="store_true", help="Refresh English vocabulary only; preserve all continuation and Arabic assets")
     ap.add_argument("--only-jordanian-next", action="store_true", help="Refresh continuation counts only; preserve lexical spelling guards")
     a = ap.parse_args()
+    if a.only_english_words and a.only_jordanian_next:
+        ap.error("choose only one asset-only mode")
+    if a.only_english_words:
+        added, scale, words = english_words(a.assets)
+        with open(os.path.join(a.assets, "words_en.tsv"), "w", encoding="utf-8", newline="\n") as f:
+            for w, c in words:
+                f.write(f"{w}\t{c}\n")
+        print(f"words_en {len(words)} (+{added} contractions, scale {scale:.4f}); other assets unchanged")
+        return
     if a.only_jordanian_next:
         jo = jordanian_next(a.assets, a.width, a.dialect_source)
         write_rows(os.path.join(a.assets, "jordanian_next.tsv"), jo)
