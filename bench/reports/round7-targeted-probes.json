@@ -1,0 +1,446 @@
+{
+  "baseline": "frozen mboard-sim10-round6",
+  "cases": 12,
+  "all_space_preservation_checks": true,
+  "all_requested_picks_checked": true,
+  "apk_sha256": "6f1d1fd022736f9834a79fa396709295d5945484dbcd3dc092fafc7c619100c9",
+  "source_hashes": {
+    "Languages.kt": "b8be6c92143f1902fb71f15439af209eec62a589965a68ea6a89abefca0af1a1",
+    "EnglishWords.kt": "1e185a70a902ac6f6344167f277b2336251e376bfb8e3feae5a08cc4039339e4",
+    "ArabicWords.kt": "3775acf2710794b5072541555c9aa9efc476b660eb893a981c0bdf80af37fc19",
+    "WordDictionary.kt": "25746b9a7442286f6adcb7f140f0a50acddd5af118a26ca49d3b3061796e62f9",
+    "WordSuggestions.kt": "033f14832c5cb314d1f9a7cce03606c790c5f4d13fda5b66535c75f911a33b61"
+  },
+  "before": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "run npm",
+      "wanted": null,
+      "strip": [
+        "nom",
+        "npm",
+        "nominated"
+      ],
+      "auto": "nom",
+      "after_space": "Run nom ",
+      "space_events": [
+        "auto-corrected npm → nom"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "pull 12/2 romex",
+      "wanted": null,
+      "strip": [
+        "rome",
+        "romex",
+        "romeo"
+      ],
+      "auto": "rome",
+      "after_space": "Pull 12/2 rome ",
+      "space_events": [
+        "auto-corrected romex → rome"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I also offer handmade croch",
+      "wanted": "crochet",
+      "strip": [
+        "croch",
+        "crichton",
+        "crocodile"
+      ],
+      "auto": null,
+      "after_space": "I also offer handmade croch ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I think shed",
+      "wanted": "she'd",
+      "strip": [
+        "shed",
+        "she",
+        "she's"
+      ],
+      "auto": null,
+      "after_space": "I think shed ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to resapwn",
+      "wanted": "respawn",
+      "strip": [
+        "resapwn",
+        "responsible",
+        "responsibility"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to resapwn ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to respaw",
+      "wanted": "respawn",
+      "strip": [
+        "respaw",
+        "respect",
+        "responsible"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to respaw ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "يرجى تقديم عينه",
+      "wanted": "عينة",
+      "strip": [
+        "عينه",
+        "عنه",
+        "عنها"
+      ],
+      "auto": null,
+      "after_space": "يرجى تقديم عينه ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "احمد",
+      "wanted": "أحمد",
+      "strip": [
+        "احمد",
+        "أحد",
+        "الحمدلله"
+      ],
+      "auto": null,
+      "after_space": "احمد ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "اراء",
+      "wanted": "آراء",
+      "strip": [
+        "إجراء",
+        "اراء",
+        "أراك"
+      ],
+      "auto": null,
+      "after_space": "اراء ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "تجدون في المرفقا",
+      "wanted": "المرفقات",
+      "strip": [
+        "المرفقا",
+        "المرفأ"
+      ],
+      "auto": null,
+      "after_space": "تجدون في المرفقا ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "عندي كويز",
+      "wanted": null,
+      "strip": [
+        "كوين",
+        "كويز",
+        "كويسة"
+      ],
+      "auto": "كوين",
+      "after_space": "عندي كوين ",
+      "space_events": [
+        "auto-corrected كويز → كوين"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "الكويزات",
+      "wanted": null,
+      "strip": [
+        "الكويزات"
+      ],
+      "auto": null,
+      "after_space": "الكويزات ",
+      "space_events": []
+    }
+  ],
+  "after": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "run npm",
+      "wanted": null,
+      "strip": [
+        "npm",
+        "nominated",
+        "nomination"
+      ],
+      "auto": null,
+      "after_space": "Run npm ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "pull 12/2 romex",
+      "wanted": null,
+      "strip": [
+        "romex",
+        "rome",
+        "romeo"
+      ],
+      "auto": null,
+      "after_space": "Pull 12/2 romex ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I also offer handmade croch",
+      "wanted": "crochet",
+      "strip": [
+        "croch",
+        "crochet",
+        "crichton"
+      ],
+      "auto": null,
+      "after_space": "I also offer handmade croch ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I also offer handmade crochet ",
+      "pick_events": [
+        "picked crochet"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I think shed",
+      "wanted": "she'd",
+      "strip": [
+        "shed",
+        "she'd",
+        "she"
+      ],
+      "auto": null,
+      "after_space": "I think shed ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I think she'd ",
+      "pick_events": [
+        "picked she'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to resapwn",
+      "wanted": "respawn",
+      "strip": [
+        "resapwn",
+        "respawn",
+        "responsible"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to resapwn ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to respaw",
+      "wanted": "respawn",
+      "strip": [
+        "respaw",
+        "respawn"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to respaw ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "يرجى تقديم عينه",
+      "wanted": "عينة",
+      "strip": [
+        "عينة",
+        "عينه",
+        "عنه"
+      ],
+      "auto": null,
+      "after_space": "يرجى تقديم عينه ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "يرجى تقديم عينة ",
+      "pick_events": [
+        "picked عينة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "احمد",
+      "wanted": "أحمد",
+      "strip": [
+        "أحمد",
+        "احمد",
+        "أحد"
+      ],
+      "auto": null,
+      "after_space": "احمد ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "أحمد ",
+      "pick_events": [
+        "picked أحمد"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "اراء",
+      "wanted": "آراء",
+      "strip": [
+        "آراء",
+        "اراء",
+        "أراك"
+      ],
+      "auto": null,
+      "after_space": "اراء ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "آراء ",
+      "pick_events": [
+        "picked آراء"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "تجدون في المرفقا",
+      "wanted": "المرفقات",
+      "strip": [
+        "المرفقا",
+        "المرفأ",
+        "المرفقات"
+      ],
+      "auto": null,
+      "after_space": "تجدون في المرفقا ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "تجدون في المرفقات ",
+      "pick_events": [
+        "picked المرفقات"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "عندي كويز",
+      "wanted": null,
+      "strip": [
+        "كويز",
+        "كويسة",
+        "كويس"
+      ],
+      "auto": null,
+      "after_space": "عندي كويز ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "الكويزات",
+      "wanted": null,
+      "strip": [
+        "الكويزات"
+      ],
+      "auto": null,
+      "after_space": "الكويزات ",
+      "space_events": []
+    }
+  ]
+}

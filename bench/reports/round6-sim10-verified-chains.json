@@ -1,0 +1,53 @@
+{
+  "method": "Exactly 700 actual pick replies; seed words are not separately prepended.",
+  "runs": [
+    {
+      "native_log": "/home/m57/.hermes/cache/scratch/mboard-sim10-round6/sim-10/20261014-183300-agent.jsonl",
+      "settings": {
+        "autocorrect": true,
+        "dialect": true,
+        "autocap": false,
+        "language": "ar",
+        "learning": true
+      },
+      "picks": 700,
+      "empty_post_pick_strips": 0,
+      "200": {
+        "total": 197,
+        "unique": 197,
+        "repeated_patterns": 0,
+        "max_multiplicity": 1
+      },
+      "700": {
+        "total": 697,
+        "unique": 615,
+        "repeated_patterns": 62,
+        "max_multiplicity": 4
+      }
+    },
+    {
+      "native_log": "/home/m57/.hermes/cache/scratch/mboard-sim10-round6/sim-10/20261014-183304-agent.jsonl",
+      "settings": {
+        "autocorrect": true,
+        "dialect": false,
+        "autocap": false,
+        "language": "ar",
+        "learning": false
+      },
+      "picks": 700,
+      "empty_post_pick_strips": 0,
+      "200": {
+        "total": 197,
+        "unique": 197,
+        "repeated_patterns": 0,
+        "max_multiplicity": 1
+      },
+      "700": {
+        "total": 697,
+        "unique": 595,
+        "repeated_patterns": 102,
+        "max_multiplicity": 2
+      }
+    }
+  ]
+}

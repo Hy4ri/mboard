@@ -1,0 +1,52 @@
+{
+  "chain_learning_on": {
+    "native_log": "/home/m57/.hermes/cache/scratch/mboard-sim10-round6/sim-09/chain_learning_on/20261014-183250-agent.jsonl",
+    "settings": {
+      "autocorrect": true,
+      "dialect": null,
+      "autocap": true,
+      "language": "en",
+      "learning": true
+    },
+    "picks": 700,
+    "empty_post_pick_pools": 0,
+    "all_protocol_replies_ok": true,
+    "200": {
+      "fourgrams": 197,
+      "unique": 197,
+      "repeated_patterns": 0,
+      "max_multiplicity": 1
+    },
+    "700": {
+      "fourgrams": 697,
+      "unique": 651,
+      "repeated_patterns": 46,
+      "max_multiplicity": 2
+    }
+  },
+  "chain_no_learning": {
+    "native_log": "/home/m57/.hermes/cache/scratch/mboard-sim10-round6/sim-09/chain_no_learning/20261014-183255-agent.jsonl",
+    "settings": {
+      "autocorrect": true,
+      "dialect": null,
+      "autocap": true,
+      "language": "en",
+      "learning": false
+    },
+    "picks": 700,
+    "empty_post_pick_pools": 0,
+    "all_protocol_replies_ok": true,
+    "200": {
+      "fourgrams": 197,
+      "unique": 197,
+      "repeated_patterns": 0,
+      "max_multiplicity": 1
+    },
+    "700": {
+      "fourgrams": 697,
+      "unique": 563,
+      "repeated_patterns": 134,
+      "max_multiplicity": 2
+    }
+  }
+}

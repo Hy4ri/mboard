@@ -1,0 +1,858 @@
+{
+  "before": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "run npm",
+      "wanted": null,
+      "strip": [
+        "nom",
+        "npm",
+        "nominated"
+      ],
+      "auto": "nom",
+      "after_space": "Run nom ",
+      "space_events": [
+        "auto-corrected npm → nom"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "pull 12/2 romex",
+      "wanted": null,
+      "strip": [
+        "rome",
+        "romex",
+        "romeo"
+      ],
+      "auto": "rome",
+      "after_space": "Pull 12/2 rome ",
+      "space_events": [
+        "auto-corrected romex → rome"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I also offer handmade croch",
+      "wanted": "crochet",
+      "strip": [
+        "croch",
+        "crichton",
+        "crocodile"
+      ],
+      "auto": null,
+      "after_space": "I also offer handmade croch ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I think shed",
+      "wanted": "she'd",
+      "strip": [
+        "shed",
+        "she",
+        "she's"
+      ],
+      "auto": null,
+      "after_space": "I think shed ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "receipt days",
+      "wanted": "says",
+      "strip": [
+        "days",
+        "day",
+        "says"
+      ],
+      "auto": null,
+      "after_space": "Receipt days ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "Receipt says ",
+      "pick_events": [
+        "picked says"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "ill",
+      "wanted": "i'll",
+      "strip": [
+        "Ill",
+        "I'll",
+        "Illegal"
+      ],
+      "auto": null,
+      "after_space": "Ill ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I'll ",
+      "pick_events": [
+        "picked I'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "well",
+      "wanted": "we'll",
+      "strip": [
+        "Well",
+        "We'll",
+        "Welcome"
+      ],
+      "auto": null,
+      "after_space": "Well ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "We'll ",
+      "pick_events": [
+        "picked We'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "were",
+      "wanted": "we're",
+      "strip": [
+        "Were",
+        "We're",
+        "Where"
+      ],
+      "auto": null,
+      "after_space": "Were ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "We're ",
+      "pick_events": [
+        "picked We're"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wed",
+      "wanted": "we'd",
+      "strip": [
+        "Wed",
+        "Were",
+        "We'd"
+      ],
+      "auto": null,
+      "after_space": "Wed ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "We'd ",
+      "pick_events": [
+        "picked We'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "id",
+      "wanted": "i'd",
+      "strip": [
+        "Id",
+        "I'd",
+        "Idea"
+      ],
+      "auto": null,
+      "after_space": "Id ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I'd ",
+      "pick_events": [
+        "picked I'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "its",
+      "wanted": "it's",
+      "strip": [
+        "Its",
+        "It's",
+        "Itself"
+      ],
+      "auto": null,
+      "after_space": "Its ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "It's ",
+      "pick_events": [
+        "picked It's"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "shed",
+      "wanted": "she'd",
+      "strip": [
+        "Shed",
+        "She",
+        "She's"
+      ],
+      "auto": null,
+      "after_space": "Shed ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "hell",
+      "wanted": "he'll",
+      "strip": [
+        "Hell",
+        "Hello",
+        "He'll"
+      ],
+      "auto": null,
+      "after_space": "Hell ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "He'll ",
+      "pick_events": [
+        "picked He'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "shell",
+      "wanted": "she'll",
+      "strip": [
+        "Shell",
+        "She'll",
+        "Sell"
+      ],
+      "auto": null,
+      "after_space": "Shell ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "She'll ",
+      "pick_events": [
+        "picked She'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to resapwn",
+      "wanted": "respawn",
+      "strip": [
+        "resapwn",
+        "responsible",
+        "responsibility"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to resapwn ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to respaw",
+      "wanted": "respawn",
+      "strip": [
+        "respaw",
+        "respect",
+        "responsible"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to respaw ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "يرجى تقديم عينه",
+      "wanted": "عينة",
+      "strip": [
+        "عينه",
+        "عنه",
+        "عنها"
+      ],
+      "auto": null,
+      "after_space": "يرجى تقديم عينه ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "احمد",
+      "wanted": "أحمد",
+      "strip": [
+        "احمد",
+        "أحد",
+        "الحمدلله"
+      ],
+      "auto": null,
+      "after_space": "احمد ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "اراء",
+      "wanted": "آراء",
+      "strip": [
+        "إجراء",
+        "اراء",
+        "أراك"
+      ],
+      "auto": null,
+      "after_space": "اراء ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "تجدون في المرفقا",
+      "wanted": "المرفقات",
+      "strip": [
+        "المرفقا",
+        "المرفأ"
+      ],
+      "auto": null,
+      "after_space": "تجدون في المرفقا ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "عندي كويز",
+      "wanted": null,
+      "strip": [
+        "كوين",
+        "كويز",
+        "كويسة"
+      ],
+      "auto": "كوين",
+      "after_space": "عندي كوين ",
+      "space_events": [
+        "auto-corrected كويز → كوين"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "الكويزات",
+      "wanted": null,
+      "strip": [
+        "الكويزات"
+      ],
+      "auto": null,
+      "after_space": "الكويزات ",
+      "space_events": []
+    }
+  ],
+  "after": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "run npm",
+      "wanted": null,
+      "strip": [
+        "npm",
+        "nominated",
+        "nomination"
+      ],
+      "auto": null,
+      "after_space": "Run npm ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "pull 12/2 romex",
+      "wanted": null,
+      "strip": [
+        "romex",
+        "rome",
+        "romeo"
+      ],
+      "auto": null,
+      "after_space": "Pull 12/2 romex ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I also offer handmade croch",
+      "wanted": "crochet",
+      "strip": [
+        "croch",
+        "crochet",
+        "crichton"
+      ],
+      "auto": null,
+      "after_space": "I also offer handmade croch ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I also offer handmade crochet ",
+      "pick_events": [
+        "picked crochet"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I think shed",
+      "wanted": "she'd",
+      "strip": [
+        "shed",
+        "she'd",
+        "she"
+      ],
+      "auto": null,
+      "after_space": "I think shed ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I think she'd ",
+      "pick_events": [
+        "picked she'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "receipt days",
+      "wanted": "says",
+      "strip": [
+        "days",
+        "day",
+        "says"
+      ],
+      "auto": null,
+      "after_space": "Receipt days ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "Receipt says ",
+      "pick_events": [
+        "picked says"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "ill",
+      "wanted": "i'll",
+      "strip": [
+        "Ill",
+        "I'll",
+        "Illegal"
+      ],
+      "auto": null,
+      "after_space": "Ill ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I'll ",
+      "pick_events": [
+        "picked I'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "well",
+      "wanted": "we'll",
+      "strip": [
+        "Well",
+        "We'll",
+        "Welcome"
+      ],
+      "auto": null,
+      "after_space": "Well ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "We'll ",
+      "pick_events": [
+        "picked We'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "were",
+      "wanted": "we're",
+      "strip": [
+        "Were",
+        "We're",
+        "Where"
+      ],
+      "auto": null,
+      "after_space": "Were ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "We're ",
+      "pick_events": [
+        "picked We're"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wed",
+      "wanted": "we'd",
+      "strip": [
+        "Wed",
+        "Were",
+        "We'd"
+      ],
+      "auto": null,
+      "after_space": "Wed ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "We'd ",
+      "pick_events": [
+        "picked We'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "id",
+      "wanted": "i'd",
+      "strip": [
+        "Id",
+        "I'd",
+        "Idea"
+      ],
+      "auto": null,
+      "after_space": "Id ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I'd ",
+      "pick_events": [
+        "picked I'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "its",
+      "wanted": "it's",
+      "strip": [
+        "Its",
+        "It's",
+        "Itself"
+      ],
+      "auto": null,
+      "after_space": "Its ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "It's ",
+      "pick_events": [
+        "picked It's"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "shed",
+      "wanted": "she'd",
+      "strip": [
+        "Shed",
+        "She'd",
+        "She"
+      ],
+      "auto": null,
+      "after_space": "Shed ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "She'd ",
+      "pick_events": [
+        "picked She'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "hell",
+      "wanted": "he'll",
+      "strip": [
+        "Hell",
+        "Hello",
+        "He'll"
+      ],
+      "auto": null,
+      "after_space": "Hell ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "He'll ",
+      "pick_events": [
+        "picked He'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "shell",
+      "wanted": "she'll",
+      "strip": [
+        "Shell",
+        "She'll",
+        "Sell"
+      ],
+      "auto": null,
+      "after_space": "Shell ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "She'll ",
+      "pick_events": [
+        "picked She'll"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to resapwn",
+      "wanted": "respawn",
+      "strip": [
+        "resapwn",
+        "respawn",
+        "responsible"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to resapwn ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to respaw",
+      "wanted": "respawn",
+      "strip": [
+        "respaw",
+        "respawn"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to respaw ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "يرجى تقديم عينه",
+      "wanted": "عينة",
+      "strip": [
+        "عينة",
+        "عينه",
+        "عنه"
+      ],
+      "auto": null,
+      "after_space": "يرجى تقديم عينه ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "يرجى تقديم عينة ",
+      "pick_events": [
+        "picked عينة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "احمد",
+      "wanted": "أحمد",
+      "strip": [
+        "أحمد",
+        "احمد",
+        "أحد"
+      ],
+      "auto": null,
+      "after_space": "احمد ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "أحمد ",
+      "pick_events": [
+        "picked أحمد"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "اراء",
+      "wanted": "آراء",
+      "strip": [
+        "آراء",
+        "اراء",
+        "أراك"
+      ],
+      "auto": null,
+      "after_space": "اراء ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "آراء ",
+      "pick_events": [
+        "picked آراء"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "تجدون في المرفقا",
+      "wanted": "المرفقات",
+      "strip": [
+        "المرفقا",
+        "المرفأ",
+        "المرفقات"
+      ],
+      "auto": null,
+      "after_space": "تجدون في المرفقا ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "تجدون في المرفقات ",
+      "pick_events": [
+        "picked المرفقات"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "عندي كويز",
+      "wanted": null,
+      "strip": [
+        "كويز",
+        "كويسة",
+        "كويس"
+      ],
+      "auto": null,
+      "after_space": "عندي كويز ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "الكويزات",
+      "wanted": null,
+      "strip": [
+        "الكويزات"
+      ],
+      "auto": null,
+      "after_space": "الكويزات ",
+      "space_events": []
+    }
+  ],
+  "case_count": 22,
+  "apk_sha256": "2ea3e266d4e247b615014f2ffb5c075cfdd78aa668c2786994892c23c1615f2a",
+  "source_hashes": {
+    "Languages.kt": "e08e06e71306860138310d3464bc583314f7098c96466b3cdf14094ecb2364ae",
+    "EnglishWords.kt": "5edf2dfd0b57888446fc603c39242b00add5840456bf7261945f8366b16fe719",
+    "ArabicWords.kt": "3775acf2710794b5072541555c9aa9efc476b660eb893a981c0bdf80af37fc19",
+    "WordDictionary.kt": "25746b9a7442286f6adcb7f140f0a50acddd5af118a26ca49d3b3061796e62f9",
+    "WordSuggestions.kt": "6080db5d981dbeb38526278ad4ea1b9482df4016ad99d3fe51de2bc56129d368"
+  }
+}

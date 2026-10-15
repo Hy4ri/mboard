@@ -1,0 +1,308 @@
+{
+  "targeted_cases": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "run npm",
+      "wanted": null,
+      "strip": [
+        "npm",
+        "nominated",
+        "nomination"
+      ],
+      "auto": null,
+      "after_space": "Run npm ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "pull 12/2 romex",
+      "wanted": null,
+      "strip": [
+        "romex",
+        "rome",
+        "romeo"
+      ],
+      "auto": null,
+      "after_space": "Pull 12/2 romex ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I also offer handmade croch",
+      "wanted": "crochet",
+      "strip": [
+        "croch",
+        "crochet",
+        "crichton"
+      ],
+      "auto": null,
+      "after_space": "I also offer handmade croch ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I also offer handmade crochet ",
+      "pick_events": [
+        "picked crochet"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "I think shed",
+      "wanted": "she'd",
+      "strip": [
+        "shed",
+        "she'd",
+        "she"
+      ],
+      "auto": null,
+      "after_space": "I think shed ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "I think she'd ",
+      "pick_events": [
+        "picked she'd"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to resapwn",
+      "wanted": "respawn",
+      "strip": [
+        "resapwn",
+        "respawn",
+        "responsible"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to resapwn ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "input": "wait for me to respaw",
+      "wanted": "respawn",
+      "strip": [
+        "respaw",
+        "respawn"
+      ],
+      "auto": null,
+      "after_space": "Wait for me to respaw ",
+      "space_events": [],
+      "picked_slot": 2,
+      "after_pick": "Wait for me to respawn ",
+      "pick_events": [
+        "picked respawn"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "يرجى تقديم عينه",
+      "wanted": "عينة",
+      "strip": [
+        "عينة",
+        "عينه",
+        "عنه"
+      ],
+      "auto": null,
+      "after_space": "يرجى تقديم عينه ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "يرجى تقديم عينة ",
+      "pick_events": [
+        "picked عينة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "احمد",
+      "wanted": "أحمد",
+      "strip": [
+        "أحمد",
+        "احمد",
+        "أحد"
+      ],
+      "auto": null,
+      "after_space": "احمد ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "أحمد ",
+      "pick_events": [
+        "picked أحمد"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "اراء",
+      "wanted": "آراء",
+      "strip": [
+        "آراء",
+        "اراء",
+        "أراك"
+      ],
+      "auto": null,
+      "after_space": "اراء ",
+      "space_events": [],
+      "picked_slot": 1,
+      "after_pick": "آراء ",
+      "pick_events": [
+        "picked آراء"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "input": "تجدون في المرفقا",
+      "wanted": "المرفقات",
+      "strip": [
+        "المرفقا",
+        "المرفأ",
+        "المرفقات"
+      ],
+      "auto": null,
+      "after_space": "تجدون في المرفقا ",
+      "space_events": [],
+      "picked_slot": 3,
+      "after_pick": "تجدون في المرفقات ",
+      "pick_events": [
+        "picked المرفقات"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "عندي كويز",
+      "wanted": null,
+      "strip": [
+        "كويز",
+        "كويسة",
+        "كويس"
+      ],
+      "auto": null,
+      "after_space": "عندي كويز ",
+      "space_events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "input": "الكويزات",
+      "wanted": null,
+      "strip": [
+        "الكويزات"
+      ],
+      "auto": null,
+      "after_space": "الكويزات ",
+      "space_events": []
+    }
+  ],
+  "collateral_before": [
+    {
+      "input": "alls",
+      "target": "also",
+      "strip": [
+        "alls",
+        "all",
+        "also"
+      ],
+      "auto": null,
+      "space": "alls "
+    },
+    {
+      "input": "thats youd",
+      "target": "your",
+      "strip": [
+        "you",
+        "youd",
+        "your"
+      ],
+      "auto": "you",
+      "space": "that's you "
+    },
+    {
+      "input": "tom plans to saty",
+      "target": "stay",
+      "strip": [
+        "saty",
+        "say",
+        "stay"
+      ],
+      "auto": null,
+      "space": "tom plans to saty "
+    }
+  ],
+  "collateral_after": [
+    {
+      "input": "alls",
+      "target": "also",
+      "strip": [
+        "alls",
+        "all",
+        "also"
+      ],
+      "auto": null,
+      "space": "alls "
+    },
+    {
+      "input": "thats youd",
+      "target": "your",
+      "strip": [
+        "you",
+        "youd",
+        "your"
+      ],
+      "auto": "you",
+      "space": "that's you "
+    },
+    {
+      "input": "tom plans to saty",
+      "target": "stay",
+      "strip": [
+        "saty",
+        "say",
+        "stay"
+      ],
+      "auto": null,
+      "space": "tom plans to saty "
+    }
+  ],
+  "apk_sha256": "d9bb2be9c4abcaac95581e3a4d7e923fbda478817ea3e3f5e019186c094b435a",
+  "rank_source_sha256": "6c8f6309ef6075985db4240130bba8038f9106fc1b2420b543f448ca03809b52",
+  "note": "All three collateral manual targets recovered; pre-existing youd->you automatic behavior is unchanged, not reported fixed."
+}

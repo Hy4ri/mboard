@@ -1,0 +1,3455 @@
+{
+  "baseline": "frozen mboard-sim10-round5",
+  "candidate": "frozen mboard-sim10-round6",
+  "before": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "gouda",
+      "strip": [
+        "Good",
+        "Gouda",
+        "Goddamn"
+      ],
+      "auto": "Good",
+      "after": "Good ",
+      "events": [
+        "auto-corrected Gouda → Good"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "penne",
+      "strip": [
+        "Penny",
+        "Penne",
+        "Penetrate"
+      ],
+      "auto": "Penny",
+      "after": "Penny ",
+      "events": [
+        "auto-corrected Penne → Penny"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "motrin",
+      "strip": [
+        "Martin",
+        "Motrin",
+        "Morning"
+      ],
+      "auto": "Martin",
+      "after": "Martin ",
+      "events": [
+        "auto-corrected Motrin → Martin"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "carline",
+      "strip": [
+        "Caroline",
+        "Carline",
+        "Carmine"
+      ],
+      "auto": "Caroline",
+      "after": "Caroline ",
+      "events": [
+        "auto-corrected Carline → Caroline"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "fps",
+      "strip": [
+        "Gps",
+        "Fps",
+        "Foster"
+      ],
+      "auto": "Gps",
+      "after": "Gps ",
+      "events": [
+        "auto-corrected Fps → Gps"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "rebar",
+      "strip": [
+        "Rebar",
+        "Rear",
+        "Regarding"
+      ],
+      "auto": null,
+      "after": "Rebar ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "cpu",
+      "strip": [
+        "Cpu",
+        "Could",
+        "Course"
+      ],
+      "auto": null,
+      "after": "Cpu ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "dns",
+      "strip": [
+        "Dns",
+        "Dna",
+        "Ensign"
+      ],
+      "auto": null,
+      "after": "Dns ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "yaml",
+      "strip": [
+        "Yaml",
+        "Hamlet",
+        "Yale"
+      ],
+      "auto": null,
+      "after": "Yaml ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "grep",
+      "strip": [
+        "Grep",
+        "Great",
+        "Green"
+      ],
+      "auto": null,
+      "after": "Grep ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "api",
+      "strip": [
+        "Api",
+        "Alive",
+        "Pain"
+      ],
+      "auto": null,
+      "after": "Api ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "async",
+      "strip": [
+        "Async",
+        "Asynchronous",
+        "Asynchronously"
+      ],
+      "auto": null,
+      "after": "Async ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "node",
+      "strip": [
+        "Node",
+        "Nose",
+        "Model"
+      ],
+      "auto": null,
+      "after": "Node ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "allocation",
+      "strip": [
+        "Allocation",
+        "Allocations",
+        "Allocating"
+      ],
+      "auto": null,
+      "after": "Allocation ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "teether",
+      "strip": [
+        "Tether",
+        "Teether",
+        "Tethers"
+      ],
+      "auto": "Tether",
+      "after": "Tether ",
+      "events": [
+        "auto-corrected Teether → Tether"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "onesie",
+      "strip": [
+        "Ones",
+        "Onesie",
+        "Oneself"
+      ],
+      "auto": "Ones",
+      "after": "Ones ",
+      "events": [
+        "auto-corrected Onesie → Ones"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "binky",
+      "strip": [
+        "Pinky",
+        "Binky",
+        "Bank"
+      ],
+      "auto": "Pinky",
+      "after": "Pinky ",
+      "events": [
+        "auto-corrected Binky → Pinky"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "shader",
+      "strip": [
+        "Shade",
+        "Shader",
+        "Shades"
+      ],
+      "auto": "Shade",
+      "after": "Shade ",
+      "events": [
+        "auto-corrected Shader → Shade"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "oled",
+      "strip": [
+        "Old",
+        "Oled",
+        "Older"
+      ],
+      "auto": "Old",
+      "after": "Old ",
+      "events": [
+        "auto-corrected Oled → Old"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "cmu",
+      "strip": [
+        "Cum",
+        "Cmu",
+        "Club"
+      ],
+      "auto": "Cum",
+      "after": "Cum ",
+      "events": [
+        "auto-corrected Cmu → Cum"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "awg",
+      "strip": [
+        "Wag",
+        "Awg",
+        "Awful"
+      ],
+      "auto": "Wag",
+      "after": "Wag ",
+      "events": [
+        "auto-corrected Awg → Wag"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "hilti",
+      "strip": [
+        "Hilt",
+        "Hilti",
+        "Hilts"
+      ],
+      "auto": "Hilt",
+      "after": "Hilt ",
+      "events": [
+        "auto-corrected Hilti → Hilt"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "vulkan",
+      "strip": [
+        "Vulcan",
+        "Vulkan",
+        "Vulcanized"
+      ],
+      "auto": "Vulcan",
+      "after": "Vulcan ",
+      "events": [
+        "auto-corrected Vulkan → Vulcan"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "dlss",
+      "strip": [
+        "Doss",
+        "Dlss",
+        "Dossier"
+      ],
+      "auto": "Doss",
+      "after": "Doss ",
+      "events": [
+        "auto-corrected Dlss → Doss"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "fov",
+      "strip": [
+        "Fog",
+        "Fov",
+        "Five"
+      ],
+      "auto": "Fog",
+      "after": "Fog ",
+      "events": [
+        "auto-corrected Fov → Fog"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "shif",
+      "strip": [
+        "Shif",
+        "Shift",
+        "Shit"
+      ],
+      "auto": null,
+      "after": "Shif ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "canc",
+      "strip": [
+        "Can",
+        "Canc",
+        "Can't"
+      ],
+      "auto": "Can",
+      "after": "Can ",
+      "events": [
+        "auto-corrected Canc → Can"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "sche",
+      "strip": [
+        "She",
+        "Sche",
+        "She's"
+      ],
+      "auto": "She",
+      "after": "She ",
+      "events": [
+        "auto-corrected Sche → She"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "fron",
+      "strip": [
+        "Fron",
+        "From",
+        "Front"
+      ],
+      "auto": null,
+      "after": "Fron ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "hage",
+      "strip": [
+        "Hage",
+        "Hagen",
+        "Have"
+      ],
+      "auto": null,
+      "after": "Hage ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "whar",
+      "strip": [
+        "Whar",
+        "Wharf",
+        "What"
+      ],
+      "auto": null,
+      "after": "Whar ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "upd",
+      "strip": [
+        "Upd",
+        "Upset",
+        "Upstairs"
+      ],
+      "auto": null,
+      "after": "Upd ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "perman",
+      "strip": [
+        "Perman",
+        "Permanent",
+        "Permanently"
+      ],
+      "auto": null,
+      "after": "Perman ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "lectur",
+      "strip": [
+        "Lectur",
+        "Lecture",
+        "Lectures"
+      ],
+      "auto": null,
+      "after": "Lectur ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "teh",
+      "strip": [
+        "The",
+        "Teh",
+        "There"
+      ],
+      "auto": "The",
+      "after": "The ",
+      "events": [
+        "auto-corrected Teh → The"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "weve",
+      "strip": [
+        "We've",
+        "Weve",
+        "Week"
+      ],
+      "auto": "We've",
+      "after": "We've ",
+      "events": [
+        "auto-corrected Weve → We've"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "perants",
+      "strip": [
+        "Perants",
+        "Parents",
+        "Pants"
+      ],
+      "auto": null,
+      "after": "Perants ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "rember",
+      "strip": [
+        "Member",
+        "Rember",
+        "Rembrandt"
+      ],
+      "auto": "Member",
+      "after": "Member ",
+      "events": [
+        "auto-corrected Rember → Member"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "definatly",
+      "strip": [
+        "Definatly",
+        "Defiantly"
+      ],
+      "auto": null,
+      "after": "Definatly ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "chedar",
+      "strip": [
+        "Cedar",
+        "Chedar",
+        "Cedars"
+      ],
+      "auto": "Cedar",
+      "after": "Cedar ",
+      "events": [
+        "auto-corrected Chedar → Cedar"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "finshing",
+      "strip": [
+        "Fishing",
+        "Finshing",
+        "Finishing"
+      ],
+      "auto": "Fishing",
+      "after": "Fishing ",
+      "events": [
+        "auto-corrected Finshing → Fishing"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفاضل",
+      "strip": [
+        "تفضل",
+        "تفاضل",
+        "تفضلي"
+      ],
+      "auto": "تفضل",
+      "after": "تفضل ",
+      "events": [
+        "auto-corrected تفاضل → تفضل"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفاضلي",
+      "strip": [
+        "تفضلي",
+        "تفاضلي",
+        "تفضلين"
+      ],
+      "auto": "تفضلي",
+      "after": "تفضلي ",
+      "events": [
+        "auto-corrected تفاضلي → تفضلي"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تناظر",
+      "strip": [
+        "تنتظر",
+        "تناظر",
+        "تنظر"
+      ],
+      "auto": "تنتظر",
+      "after": "تنتظر ",
+      "events": [
+        "auto-corrected تناظر → تنتظر"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يناظر",
+      "strip": [
+        "ينتظر",
+        "يناظر",
+        "ينظر"
+      ],
+      "auto": "ينتظر",
+      "after": "ينتظر ",
+      "events": [
+        "auto-corrected يناظر → ينتظر"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نناظر",
+      "strip": [
+        "ننتظر",
+        "نناظر",
+        "ننظر"
+      ],
+      "auto": "ننتظر",
+      "after": "ننتظر ",
+      "events": [
+        "auto-corrected نناظر → ننتظر"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تنسق",
+      "strip": [
+        "تنسى",
+        "تنسق",
+        "تسقط"
+      ],
+      "auto": "تنسى",
+      "after": "تنسى ",
+      "events": [
+        "auto-corrected تنسق → تنسى"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نلقى",
+      "strip": [
+        "نلقي",
+        "نلقى",
+        "تلقيت"
+      ],
+      "auto": "نلقي",
+      "after": "نلقي ",
+      "events": [
+        "auto-corrected نلقى → نلقي"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "وعى",
+      "strip": [
+        "وعي",
+        "وعى",
+        "وهي"
+      ],
+      "auto": "وعي",
+      "after": "وعي ",
+      "events": [
+        "auto-corrected وعى → وعي"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "توثق",
+      "strip": [
+        "تثق",
+        "توثق",
+        "توقف"
+      ],
+      "auto": "تثق",
+      "after": "تثق ",
+      "events": [
+        "auto-corrected توثق → تثق"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "أوثق",
+      "strip": [
+        "واثق",
+        "أوثق",
+        "أثق"
+      ],
+      "auto": "واثق",
+      "after": "واثق ",
+      "events": [
+        "auto-corrected أوثق → واثق"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يعامد",
+      "strip": [
+        "يعتمد",
+        "يعامد",
+        "يعتمدون"
+      ],
+      "auto": "يعتمد",
+      "after": "يعتمد ",
+      "events": [
+        "auto-corrected يعامد → يعتمد"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تلخص",
+      "strip": [
+        "تخلص",
+        "تلخص",
+        "الخصوصية"
+      ],
+      "auto": "تخلص",
+      "after": "تخلص ",
+      "events": [
+        "auto-corrected تلخص → تخلص"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفرع",
+      "strip": [
+        "ترفع",
+        "تفرع",
+        "تفعل"
+      ],
+      "auto": "ترفع",
+      "after": "ترفع ",
+      "events": [
+        "auto-corrected تفرع → ترفع"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "صغرى",
+      "strip": [
+        "صغير",
+        "صغرى",
+        "صغيرة"
+      ],
+      "auto": "صغير",
+      "after": "صغير ",
+      "events": [
+        "auto-corrected صغرى → صغير"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "وسعى",
+      "strip": [
+        "وسعي",
+        "وسعى",
+        "وسعيد"
+      ],
+      "auto": "وسعي",
+      "after": "وسعي ",
+      "events": [
+        "auto-corrected وسعى → وسعي"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نوزع",
+      "strip": [
+        "نوع",
+        "نوزع",
+        "نوعا"
+      ],
+      "auto": "نوع",
+      "after": "نوع ",
+      "events": [
+        "auto-corrected نوزع → نوع"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يلخص",
+      "strip": [
+        "يخلص",
+        "يلخص",
+        "يخص"
+      ],
+      "auto": "يخلص",
+      "after": "يخلص ",
+      "events": [
+        "auto-corrected يلخص → يخلص"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الجهود",
+      "strip": [
+        "الجنود",
+        "الجهود",
+        "الجهد"
+      ],
+      "auto": "الجنود",
+      "after": "الجنود ",
+      "events": [
+        "auto-corrected الجهود → الجنود"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الوفود",
+      "strip": [
+        "الوقود",
+        "الوفود",
+        "الفودكا"
+      ],
+      "auto": "الوقود",
+      "after": "الوقود ",
+      "events": [
+        "auto-corrected الوفود → الوقود"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "ندرة",
+      "strip": [
+        "نظرة",
+        "ندرة",
+        "نادرة"
+      ],
+      "auto": "نظرة",
+      "after": "نظرة ",
+      "events": [
+        "auto-corrected ندرة → نظرة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "العروش",
+      "strip": [
+        "العروس",
+        "العروش",
+        "العرش"
+      ],
+      "auto": "العروس",
+      "after": "العروس ",
+      "events": [
+        "auto-corrected العروش → العروس"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يساند",
+      "strip": [
+        "يساعد",
+        "يساند",
+        "يساعدني"
+      ],
+      "auto": "يساعد",
+      "after": "يساعد ",
+      "events": [
+        "auto-corrected يساند → يساعد"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "مقالب",
+      "strip": [
+        "مقابل",
+        "مقالب",
+        "مقابلة"
+      ],
+      "auto": "مقابل",
+      "after": "مقابل ",
+      "events": [
+        "auto-corrected مقالب → مقابل"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يعوي",
+      "strip": [
+        "يعني",
+        "يعوي",
+        "يعود"
+      ],
+      "auto": "يعني",
+      "after": "يعني ",
+      "events": [
+        "auto-corrected يعوي → يعني"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تنالوا",
+      "strip": [
+        "تعالوا",
+        "تنالوا"
+      ],
+      "auto": "تعالوا",
+      "after": "تعالوا ",
+      "events": [
+        "auto-corrected تنالوا → تعالوا"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تتحدى",
+      "strip": [
+        "تتحدث",
+        "تتحدى",
+        "تتحدثين"
+      ],
+      "auto": "تتحدث",
+      "after": "تتحدث ",
+      "events": [
+        "auto-corrected تتحدى → تتحدث"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الحوش",
+      "strip": [
+        "الوحش",
+        "الحوش",
+        "الوحوش"
+      ],
+      "auto": "الوحش",
+      "after": "الوحش ",
+      "events": [
+        "auto-corrected الحوش → الوحش"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفلون",
+      "strip": [
+        "تلفون",
+        "تفلون",
+        "تفعلون"
+      ],
+      "auto": "تلفون",
+      "after": "تلفون ",
+      "events": [
+        "auto-corrected تفلون → تلفون"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "بسطة",
+      "strip": [
+        "بسيطة",
+        "بسطة",
+        "بساطة"
+      ],
+      "auto": "بسيطة",
+      "after": "بسيطة ",
+      "events": [
+        "auto-corrected بسطة → بسيطة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "سحارة",
+      "strip": [
+        "ساحرة",
+        "سحارة",
+        "سارة"
+      ],
+      "auto": "ساحرة",
+      "after": "ساحرة ",
+      "events": [
+        "auto-corrected سحارة → ساحرة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "لدى",
+      "strip": [
+        "لدي",
+        "لدى",
+        "لديك"
+      ],
+      "auto": null,
+      "after": "لدى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "لدي",
+      "strip": [
+        "لدي",
+        "لديك",
+        "لدينا"
+      ],
+      "auto": null,
+      "after": "لدي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "على",
+      "strip": [
+        "على",
+        "عليك",
+        "عليه"
+      ],
+      "auto": null,
+      "after": "على ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "علي",
+      "strip": [
+        "علي",
+        "على",
+        "عليك"
+      ],
+      "auto": null,
+      "after": "علي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "شكرن",
+      "strip": [
+        "شكرا",
+        "شكرن",
+        "شكر"
+      ],
+      "auto": "شكرا",
+      "after": "شكرا ",
+      "events": [
+        "auto-corrected شكرن → شكرا"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "كتااب",
+      "strip": [
+        "كتاب",
+        "كتااب",
+        "كتابة"
+      ],
+      "auto": "كتاب",
+      "after": "كتاب ",
+      "events": [
+        "auto-corrected كتااب → كتاب"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "شكراا",
+      "strip": [
+        "شكراا",
+        "شكرا"
+      ],
+      "auto": null,
+      "after": "شكراا ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "باللنسبة",
+      "strip": [
+        "بالنسبة",
+        "باللنسبة"
+      ],
+      "auto": "بالنسبة",
+      "after": "بالنسبة ",
+      "events": [
+        "auto-corrected باللنسبة → بالنسبة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "صحيحه",
+      "strip": [
+        "صحيحة",
+        "صحيحه",
+        "صحيح"
+      ],
+      "auto": null,
+      "after": "صحيحه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "فاتوره",
+      "strip": [
+        "فاتورة",
+        "فاتوره"
+      ],
+      "auto": "فاتورة",
+      "after": "فاتورة ",
+      "events": [
+        "auto-corrected فاتوره → فاتورة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "يسكن في قريه",
+      "strip": [
+        "قرية",
+        "قريه",
+        "قريب"
+      ],
+      "auto": "قرية",
+      "after": "يسكن في قرية ",
+      "events": [
+        "auto-corrected قريه → قرية"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "يتحدث لغه",
+      "strip": [
+        "لغة",
+        "لغه",
+        "لله"
+      ],
+      "auto": "لغة",
+      "after": "يتحدث لغة ",
+      "events": [
+        "auto-corrected لغه → لغة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "شاشه",
+      "strip": [
+        "شاشة",
+        "شاشه",
+        "شاهد"
+      ],
+      "auto": "شاشة",
+      "after": "شاشة ",
+      "events": [
+        "auto-corrected شاشه → شاشة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "شقه",
+      "strip": [
+        "شقة",
+        "شقه",
+        "شبه"
+      ],
+      "auto": "شقة",
+      "after": "شقة ",
+      "events": [
+        "auto-corrected شقه → شقة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حافله",
+      "strip": [
+        "حافلة",
+        "حافله",
+        "حالها"
+      ],
+      "auto": "حافلة",
+      "after": "حافلة ",
+      "events": [
+        "auto-corrected حافله → حافلة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "نظاره",
+      "strip": [
+        "نظارة",
+        "نظاره",
+        "نظره"
+      ],
+      "auto": "نظارة",
+      "after": "نظارة ",
+      "events": [
+        "auto-corrected نظاره → نظارة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "تغير مجري",
+      "strip": [
+        "مجرى",
+        "مجري",
+        "مجرد"
+      ],
+      "auto": "مجرى",
+      "after": "تغير مجرى ",
+      "events": [
+        "auto-corrected مجري → مجرى"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "نبي الله موسي",
+      "strip": [
+        "موسى",
+        "موسي",
+        "موسيقى"
+      ],
+      "auto": "موسى",
+      "after": "نبي الله موسى ",
+      "events": [
+        "auto-corrected موسي → موسى"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حقق كبري",
+      "strip": [
+        "كبرى",
+        "كبري",
+        "كبير"
+      ],
+      "auto": "كبرى",
+      "after": "حقق كبرى ",
+      "events": [
+        "auto-corrected كبري → كبرى"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "خطي",
+      "strip": [
+        "خطى",
+        "خطي",
+        "خطير"
+      ],
+      "auto": "خطى",
+      "after": "خطى ",
+      "events": [
+        "auto-corrected خطي → خطى"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "من كل فلب",
+      "strip": [
+        "قلب",
+        "فلب",
+        "قلبي"
+      ],
+      "auto": null,
+      "after": "من كل فلب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حقق جلم",
+      "strip": [
+        "حلم",
+        "جلم",
+        "كلمة"
+      ],
+      "auto": null,
+      "after": "حقق جلم ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "أكل تفحا",
+      "strip": [
+        "تفاح",
+        "تفحا",
+        "تحاول"
+      ],
+      "auto": null,
+      "after": "أكل تفحا ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "تسوق من سقو",
+      "strip": [
+        "سوق",
+        "سقو",
+        "يقول"
+      ],
+      "auto": null,
+      "after": "تسوق من سقو ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "قلى بضي",
+      "strip": [
+        "بيض",
+        "بضي",
+        "بشيء"
+      ],
+      "auto": null,
+      "after": "قلى بضي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "بعطيك",
+      "strip": [
+        "يعطيك",
+        "بعطيك",
+        "يعطيكم"
+      ],
+      "auto": "يعطيك",
+      "after": "يعطيك ",
+      "events": [
+        "auto-corrected بعطيك → يعطيك"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "عالمكتب",
+      "strip": [
+        "عالمكتب",
+        "عالمكتبة"
+      ],
+      "auto": null,
+      "after": "عالمكتب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "وعالمكتب",
+      "strip": [
+        "وعالمكتب",
+        "وعالمكتبة"
+      ],
+      "auto": null,
+      "after": "وعالمكتب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "عالشارع",
+      "strip": [
+        "عالشارع",
+        "عالأرض",
+        "عالجامعة"
+      ],
+      "auto": null,
+      "after": "عالشارع ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "حكالك",
+      "strip": [
+        "حكالك",
+        "حالك",
+        "حكالي"
+      ],
+      "auto": null,
+      "after": "حكالك ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "حكيتلي",
+      "strip": [
+        "حكيتلي",
+        "حكيتلو",
+        "حكتلي"
+      ],
+      "auto": null,
+      "after": "حكيتلي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "مافيش",
+      "strip": [
+        "مافيش",
+        "مفيش",
+        "مافي"
+      ],
+      "auto": null,
+      "after": "مافيش ",
+      "events": []
+    }
+  ],
+  "after": [
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "gouda",
+      "strip": [
+        "Gouda",
+        "Godard",
+        "Goudas"
+      ],
+      "auto": null,
+      "after": "Gouda ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "penne",
+      "strip": [
+        "Penne",
+        "Penny",
+        "Penetrate"
+      ],
+      "auto": null,
+      "after": "Penne ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "motrin",
+      "strip": [
+        "Motrin",
+        "Mitring",
+        "Motoring"
+      ],
+      "auto": null,
+      "after": "Motrin ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "carline",
+      "strip": [
+        "Carmine",
+        "Carline",
+        "Caroline"
+      ],
+      "auto": null,
+      "after": "Carline ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "fps",
+      "strip": [
+        "Fps",
+        "Foster",
+        "Fossils"
+      ],
+      "auto": null,
+      "after": "Fps ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "rebar",
+      "strip": [
+        "Rebar",
+        "Rear",
+        "Regarding"
+      ],
+      "auto": null,
+      "after": "Rebar ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "cpu",
+      "strip": [
+        "Cpu",
+        "Could",
+        "Course"
+      ],
+      "auto": null,
+      "after": "Cpu ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "dns",
+      "strip": [
+        "Dns",
+        "Dna",
+        "Ensign"
+      ],
+      "auto": null,
+      "after": "Dns ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "yaml",
+      "strip": [
+        "Yaml",
+        "Hamlet",
+        "Yale"
+      ],
+      "auto": null,
+      "after": "Yaml ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "grep",
+      "strip": [
+        "Grep",
+        "Great",
+        "Green"
+      ],
+      "auto": null,
+      "after": "Grep ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "api",
+      "strip": [
+        "Api",
+        "Alive",
+        "Pain"
+      ],
+      "auto": null,
+      "after": "Api ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "async",
+      "strip": [
+        "Async",
+        "Asynchronism",
+        "Asynchronisms"
+      ],
+      "auto": null,
+      "after": "Async ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "node",
+      "strip": [
+        "Node",
+        "Nose",
+        "Model"
+      ],
+      "auto": null,
+      "after": "Node ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "allocation",
+      "strip": [
+        "Allocation",
+        "Allocations",
+        "Allocating"
+      ],
+      "auto": null,
+      "after": "Allocation ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "teether",
+      "strip": [
+        "Teether",
+        "Tether",
+        "Tethers"
+      ],
+      "auto": null,
+      "after": "Teether ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "onesie",
+      "strip": [
+        "Onesie",
+        "Oneself"
+      ],
+      "auto": null,
+      "after": "Onesie ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "binky",
+      "strip": [
+        "Binky",
+        "Bank",
+        "Billy"
+      ],
+      "auto": null,
+      "after": "Binky ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "shader",
+      "strip": [
+        "Shader",
+        "Shade",
+        "Shades"
+      ],
+      "auto": null,
+      "after": "Shader ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "oled",
+      "strip": [
+        "Oled",
+        "Old",
+        "Older"
+      ],
+      "auto": null,
+      "after": "Oled ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "cmu",
+      "strip": [
+        "Cmu",
+        "Club",
+        "Clue"
+      ],
+      "auto": null,
+      "after": "Cmu ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "awg",
+      "strip": [
+        "Awg",
+        "Awful",
+        "Awfully"
+      ],
+      "auto": null,
+      "after": "Awg ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "hilti",
+      "strip": [
+        "Hilti",
+        "Hilts",
+        "Hilton"
+      ],
+      "auto": null,
+      "after": "Hilti ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "vulkan",
+      "strip": [
+        "Vulkan",
+        "Vulcan",
+        "Vulcanized"
+      ],
+      "auto": null,
+      "after": "Vulkan ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "dlss",
+      "strip": [
+        "Dlss",
+        "Doss",
+        "Dossier"
+      ],
+      "auto": null,
+      "after": "Dlss ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "valid",
+      "input": "fov",
+      "strip": [
+        "Fov",
+        "Five",
+        "Cover"
+      ],
+      "auto": null,
+      "after": "Fov ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "shif",
+      "strip": [
+        "Shif",
+        "Shift",
+        "Shit"
+      ],
+      "auto": null,
+      "after": "Shif ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "canc",
+      "strip": [
+        "Canc",
+        "Cancer",
+        "Can"
+      ],
+      "auto": null,
+      "after": "Canc ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "sche",
+      "strip": [
+        "Sche",
+        "Schedule",
+        "She"
+      ],
+      "auto": null,
+      "after": "Sche ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "fron",
+      "strip": [
+        "Fron",
+        "From",
+        "Front"
+      ],
+      "auto": null,
+      "after": "Fron ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "hage",
+      "strip": [
+        "Hage",
+        "Hagen",
+        "Have"
+      ],
+      "auto": null,
+      "after": "Hage ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "whar",
+      "strip": [
+        "Whar",
+        "Wharton",
+        "What"
+      ],
+      "auto": null,
+      "after": "Whar ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "upd",
+      "strip": [
+        "Upd",
+        "Upset",
+        "Upstairs"
+      ],
+      "auto": null,
+      "after": "Upd ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "perman",
+      "strip": [
+        "Perman",
+        "Permanent",
+        "Permanently"
+      ],
+      "auto": null,
+      "after": "Perman ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "prefix",
+      "input": "lectur",
+      "strip": [
+        "Lectur",
+        "Lecture",
+        "Lectures"
+      ],
+      "auto": null,
+      "after": "Lectur ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "teh",
+      "strip": [
+        "The",
+        "Teh",
+        "There"
+      ],
+      "auto": "The",
+      "after": "The ",
+      "events": [
+        "auto-corrected Teh → The"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "weve",
+      "strip": [
+        "We've",
+        "Weve",
+        "Week"
+      ],
+      "auto": "We've",
+      "after": "We've ",
+      "events": [
+        "auto-corrected Weve → We've"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "perants",
+      "strip": [
+        "Perants",
+        "Parents",
+        "Pants"
+      ],
+      "auto": null,
+      "after": "Perants ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "rember",
+      "strip": [
+        "Member",
+        "Rember",
+        "Rembrandt"
+      ],
+      "auto": "Member",
+      "after": "Member ",
+      "events": [
+        "auto-corrected Rember → Member"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "definatly",
+      "strip": [
+        "Definatly",
+        "Defiantly"
+      ],
+      "auto": null,
+      "after": "Definatly ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "chedar",
+      "strip": [
+        "Cedar",
+        "Chedar",
+        "Cedars"
+      ],
+      "auto": "Cedar",
+      "after": "Cedar ",
+      "events": [
+        "auto-corrected Chedar → Cedar"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "en"
+      ],
+      "kind": "typo",
+      "input": "finshing",
+      "strip": [
+        "Fishing",
+        "Finshing",
+        "Finishing"
+      ],
+      "auto": "Fishing",
+      "after": "Fishing ",
+      "events": [
+        "auto-corrected Finshing → Fishing"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفاضل",
+      "strip": [
+        "تفضل",
+        "تفاضل",
+        "تفضلي"
+      ],
+      "auto": null,
+      "after": "تفاضل ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفاضلي",
+      "strip": [
+        "تفضلي",
+        "تفاضلي",
+        "تفضلين"
+      ],
+      "auto": null,
+      "after": "تفاضلي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تناظر",
+      "strip": [
+        "تنتظر",
+        "تناظر",
+        "تنظر"
+      ],
+      "auto": null,
+      "after": "تناظر ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يناظر",
+      "strip": [
+        "ينتظر",
+        "يناظر",
+        "ينظر"
+      ],
+      "auto": null,
+      "after": "يناظر ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نناظر",
+      "strip": [
+        "ننتظر",
+        "نناظر",
+        "ننظر"
+      ],
+      "auto": null,
+      "after": "نناظر ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تنسق",
+      "strip": [
+        "تنسى",
+        "تنسق",
+        "تسقط"
+      ],
+      "auto": null,
+      "after": "تنسق ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نلقى",
+      "strip": [
+        "نلقي",
+        "نلقى",
+        "تلقيت"
+      ],
+      "auto": null,
+      "after": "نلقى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "وعى",
+      "strip": [
+        "وعي",
+        "وعى",
+        "وهي"
+      ],
+      "auto": null,
+      "after": "وعى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "توثق",
+      "strip": [
+        "تثق",
+        "توثق",
+        "توقف"
+      ],
+      "auto": null,
+      "after": "توثق ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "أوثق",
+      "strip": [
+        "واثق",
+        "أوثق",
+        "أثق"
+      ],
+      "auto": null,
+      "after": "أوثق ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يعامد",
+      "strip": [
+        "يعامد",
+        "يعتمد",
+        "يعتمدون"
+      ],
+      "auto": null,
+      "after": "يعامد ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تلخص",
+      "strip": [
+        "تخلص",
+        "تلخص",
+        "الخصوصية"
+      ],
+      "auto": null,
+      "after": "تلخص ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفرع",
+      "strip": [
+        "ترفع",
+        "تفرع",
+        "تفعل"
+      ],
+      "auto": null,
+      "after": "تفرع ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "صغرى",
+      "strip": [
+        "صغير",
+        "صغرى",
+        "صغيرة"
+      ],
+      "auto": null,
+      "after": "صغرى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "وسعى",
+      "strip": [
+        "وسعي",
+        "وسعى",
+        "وسعيد"
+      ],
+      "auto": null,
+      "after": "وسعى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "نوزع",
+      "strip": [
+        "نوع",
+        "نوزع",
+        "نوعا"
+      ],
+      "auto": null,
+      "after": "نوزع ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يلخص",
+      "strip": [
+        "يخلص",
+        "يلخص",
+        "يخص"
+      ],
+      "auto": null,
+      "after": "يلخص ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الجهود",
+      "strip": [
+        "الجنود",
+        "الجهود",
+        "الجهد"
+      ],
+      "auto": null,
+      "after": "الجهود ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الوفود",
+      "strip": [
+        "الوقود",
+        "الوفود",
+        "الفودكا"
+      ],
+      "auto": null,
+      "after": "الوفود ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "ندرة",
+      "strip": [
+        "نظرة",
+        "ندرة",
+        "نادرة"
+      ],
+      "auto": null,
+      "after": "ندرة ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "العروش",
+      "strip": [
+        "العروس",
+        "العروش",
+        "العرش"
+      ],
+      "auto": null,
+      "after": "العروش ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يساند",
+      "strip": [
+        "يساعد",
+        "يساند",
+        "يساعدني"
+      ],
+      "auto": null,
+      "after": "يساند ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "مقالب",
+      "strip": [
+        "مقابل",
+        "مقالب",
+        "مقابلة"
+      ],
+      "auto": null,
+      "after": "مقالب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "يعوي",
+      "strip": [
+        "يعني",
+        "يعوي",
+        "يعود"
+      ],
+      "auto": null,
+      "after": "يعوي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تنالوا",
+      "strip": [
+        "تعالوا",
+        "تنالوا"
+      ],
+      "auto": null,
+      "after": "تنالوا ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تتحدى",
+      "strip": [
+        "تتحدث",
+        "تتحدى",
+        "تتحدثين"
+      ],
+      "auto": null,
+      "after": "تتحدى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "الحوش",
+      "strip": [
+        "الوحش",
+        "الحوش",
+        "الوحوش"
+      ],
+      "auto": null,
+      "after": "الحوش ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "تفلون",
+      "strip": [
+        "تلفون",
+        "تفلون",
+        "تفعلون"
+      ],
+      "auto": null,
+      "after": "تفلون ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "بسطة",
+      "strip": [
+        "بسيطة",
+        "بسطة",
+        "بساطة"
+      ],
+      "auto": null,
+      "after": "بسطة ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "سحارة",
+      "strip": [
+        "ساحرة",
+        "سحارة",
+        "سارة"
+      ],
+      "auto": null,
+      "after": "سحارة ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "لدى",
+      "strip": [
+        "لدي",
+        "لدى",
+        "لديك"
+      ],
+      "auto": null,
+      "after": "لدى ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "لدي",
+      "strip": [
+        "لدي",
+        "لديك",
+        "لدينا"
+      ],
+      "auto": null,
+      "after": "لدي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "على",
+      "strip": [
+        "على",
+        "عليك",
+        "عليه"
+      ],
+      "auto": null,
+      "after": "على ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "valid",
+      "input": "علي",
+      "strip": [
+        "علي",
+        "على",
+        "عليك"
+      ],
+      "auto": null,
+      "after": "علي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "شكرن",
+      "strip": [
+        "شكرن",
+        "شكرا",
+        "شكر"
+      ],
+      "auto": null,
+      "after": "شكرن ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "كتااب",
+      "strip": [
+        "كتاب",
+        "كتااب",
+        "كتابة"
+      ],
+      "auto": "كتاب",
+      "after": "كتاب ",
+      "events": [
+        "auto-corrected كتااب → كتاب"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "شكراا",
+      "strip": [
+        "شكراا",
+        "شكرا"
+      ],
+      "auto": null,
+      "after": "شكراا ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "باللنسبة",
+      "strip": [
+        "بالنسبة",
+        "باللنسبة"
+      ],
+      "auto": "بالنسبة",
+      "after": "بالنسبة ",
+      "events": [
+        "auto-corrected باللنسبة → بالنسبة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "صحيحه",
+      "strip": [
+        "صحيحة",
+        "صحيحه",
+        "صحيح"
+      ],
+      "auto": null,
+      "after": "صحيحه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "typo",
+      "input": "فاتوره",
+      "strip": [
+        "فاتورة",
+        "فاتوره"
+      ],
+      "auto": "فاتورة",
+      "after": "فاتورة ",
+      "events": [
+        "auto-corrected فاتوره → فاتورة"
+      ]
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "يسكن في قريه",
+      "strip": [
+        "قرية",
+        "قريه",
+        "قريب"
+      ],
+      "auto": null,
+      "after": "يسكن في قريه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "يتحدث لغه",
+      "strip": [
+        "لغة",
+        "لغه",
+        "لله"
+      ],
+      "auto": null,
+      "after": "يتحدث لغه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "شاشه",
+      "strip": [
+        "شاشة",
+        "شاشه",
+        "شاهد"
+      ],
+      "auto": null,
+      "after": "شاشه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "شقه",
+      "strip": [
+        "شقة",
+        "شقه",
+        "شبه"
+      ],
+      "auto": null,
+      "after": "شقه ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حافله",
+      "strip": [
+        "حافلة",
+        "حافله",
+        "حالها"
+      ],
+      "auto": null,
+      "after": "حافله ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "نظاره",
+      "strip": [
+        "نظارة",
+        "نظاره",
+        "نظره"
+      ],
+      "auto": null,
+      "after": "نظاره ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "تغير مجري",
+      "strip": [
+        "مجرى",
+        "مجري",
+        "مجرد"
+      ],
+      "auto": null,
+      "after": "تغير مجري ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "نبي الله موسي",
+      "strip": [
+        "موسى",
+        "موسي",
+        "موسيقى"
+      ],
+      "auto": null,
+      "after": "نبي الله موسي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حقق كبري",
+      "strip": [
+        "كبرى",
+        "كبري",
+        "كبير"
+      ],
+      "auto": null,
+      "after": "حقق كبري ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "خطي",
+      "strip": [
+        "خطى",
+        "خطي",
+        "خطير"
+      ],
+      "auto": null,
+      "after": "خطي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "من كل فلب",
+      "strip": [
+        "قلب",
+        "فلب",
+        "قلبي"
+      ],
+      "auto": null,
+      "after": "من كل فلب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "حقق جلم",
+      "strip": [
+        "حلم",
+        "جلم",
+        "كلمة"
+      ],
+      "auto": null,
+      "after": "حقق جلم ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "أكل تفحا",
+      "strip": [
+        "تفاح",
+        "تفحا",
+        "تحاول"
+      ],
+      "auto": null,
+      "after": "أكل تفحا ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "تسوق من سقو",
+      "strip": [
+        "سوق",
+        "سقو",
+        "يقول"
+      ],
+      "auto": null,
+      "after": "تسوق من سقو ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar"
+      ],
+      "kind": "alternatives",
+      "input": "قلى بضي",
+      "strip": [
+        "بيض",
+        "بضي",
+        "بشيء"
+      ],
+      "auto": null,
+      "after": "قلى بضي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "بعطيك",
+      "strip": [
+        "بعطيك",
+        "يعطيك",
+        "يعطيكم"
+      ],
+      "auto": null,
+      "after": "بعطيك ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "عالمكتب",
+      "strip": [
+        "عالمكتب",
+        "عالمكتبة"
+      ],
+      "auto": null,
+      "after": "عالمكتب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "وعالمكتب",
+      "strip": [
+        "وعالمكتب",
+        "وعالمكتبة"
+      ],
+      "auto": null,
+      "after": "وعالمكتب ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "عالشارع",
+      "strip": [
+        "عالشارع",
+        "عالأرض",
+        "عالجامعة"
+      ],
+      "auto": null,
+      "after": "عالشارع ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "حكالك",
+      "strip": [
+        "حكالك",
+        "حالك",
+        "حكالي"
+      ],
+      "auto": null,
+      "after": "حكالك ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "حكيتلي",
+      "strip": [
+        "حكيتلي",
+        "حكيتلو",
+        "حكتلي"
+      ],
+      "auto": null,
+      "after": "حكيتلي ",
+      "events": []
+    },
+    {
+      "flags": [
+        "--lang",
+        "ar",
+        "--dialect"
+      ],
+      "kind": "valid",
+      "input": "مافيش",
+      "strip": [
+        "مافيش",
+        "مفيش",
+        "مافي"
+      ],
+      "auto": null,
+      "after": "مافيش ",
+      "events": []
+    }
+  ]
+}

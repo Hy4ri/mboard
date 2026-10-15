@@ -1,0 +1,258 @@
+{
+  "ar_fresh.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "missed": 564,
+      "offered": 637,
+      "fixed": 220,
+      "wrong_fix": 40
+    },
+    "outcomes_after": {
+      "missed": 564,
+      "offered": 637,
+      "fixed": 220,
+      "wrong_fix": 40
+    }
+  },
+  "ar_real_typos.typos": {
+    "lost": [],
+    "gained": [
+      {
+        "context": "",
+        "typed": "اهل",
+        "intended": "أهل",
+        "before": "اهل|أعلم|إلهي",
+        "after": "أهل|اهل|أعلم"
+      },
+      {
+        "context": "حضر",
+        "typed": "الاف",
+        "intended": "آلاف",
+        "before": "الاف|الآن|الأمر",
+        "after": "آلاف|الاف|الآن"
+      },
+      {
+        "context": "استمع إلى",
+        "typed": "اراء",
+        "intended": "آراء",
+        "before": "إجراء|اراء|أراك",
+        "after": "آراء|اراء|أراك"
+      },
+      {
+        "context": "قرأ",
+        "typed": "قصه",
+        "intended": "قصة",
+        "before": "قصه|قصتك|قصتي",
+        "after": "قصة|قصه|قصتك"
+      },
+      {
+        "context": "طلب",
+        "typed": "وجبه",
+        "intended": "وجبة",
+        "before": "وجبه|وجهي|وجه",
+        "after": "وجبة|وجبه|وجهي"
+      },
+      {
+        "context": "وضع",
+        "typed": "خطه",
+        "intended": "خطة",
+        "before": "خطه|خطتك|خطتي",
+        "after": "خطة|خطه|خطتك"
+      },
+      {
+        "context": "أهل",
+        "typed": "حاره",
+        "intended": "حارة",
+        "before": "حاره|حالها|حاله",
+        "after": "حارة|حاره|حالها"
+      },
+      {
+        "context": "",
+        "typed": "علبه",
+        "intended": "علبة",
+        "before": "علبه|عليه|عليها",
+        "after": "علبة|علبه|عليه"
+      }
+    ],
+    "outcomes_before": {
+      "offered": 295,
+      "fixed": 81,
+      "missed": 386,
+      "wrong_fix": 9
+    },
+    "outcomes_after": {
+      "offered": 303,
+      "fixed": 81,
+      "missed": 378,
+      "wrong_fix": 9
+    }
+  },
+  "ar_subs.typos": {
+    "lost": [],
+    "gained": [
+      {
+        "context": "إن اخترت البقاء، مع حبي،",
+        "typed": "امك",
+        "intended": "أمك",
+        "before": "امك|أنك|يمكن",
+        "after": "أمك|امك|أنك"
+      },
+      {
+        "context": "ربما",
+        "typed": "اكون",
+        "intended": "أكون",
+        "before": "اكون|يكون|تكون",
+        "after": "أكون|اكون|يكون"
+      }
+    ],
+    "outcomes_before": {
+      "offered": 1386,
+      "missed": 932,
+      "wrong_fix": 95,
+      "fixed": 506
+    },
+    "outcomes_after": {
+      "offered": 1388,
+      "missed": 930,
+      "wrong_fix": 95,
+      "fixed": 506
+    }
+  },
+  "ar_tatoeba.typos": {
+    "lost": [],
+    "gained": [
+      {
+        "context": "كانت لجنتنا تحتوي على",
+        "typed": "عشره",
+        "intended": "عشرة",
+        "before": "عشره|عشر|شعرها",
+        "after": "عشرة|عشره|عشر"
+      }
+    ],
+    "outcomes_before": {
+      "fixed": 474,
+      "missed": 1084,
+      "offered": 1287,
+      "wrong_fix": 68
+    },
+    "outcomes_after": {
+      "fixed": 474,
+      "missed": 1083,
+      "offered": 1288,
+      "wrong_fix": 68
+    }
+  },
+  "en_chat.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "fixed": 262,
+      "wrong_fix": 16,
+      "offered": 81,
+      "missed": 41
+    },
+    "outcomes_after": {
+      "fixed": 262,
+      "wrong_fix": 16,
+      "offered": 81,
+      "missed": 41
+    }
+  },
+  "en_fresh.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "fixed": 903,
+      "wrong_fix": 47,
+      "missed": 215,
+      "offered": 322
+    },
+    "outcomes_after": {
+      "fixed": 903,
+      "wrong_fix": 47,
+      "missed": 215,
+      "offered": 322
+    }
+  },
+  "en_real_typos.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "missed": 1539,
+      "offered": 698,
+      "fixed": 1146,
+      "wrong_fix": 617
+    },
+    "outcomes_after": {
+      "missed": 1539,
+      "offered": 698,
+      "fixed": 1146,
+      "wrong_fix": 617
+    }
+  },
+  "en_subs.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "offered": 622,
+      "fixed": 1827,
+      "wrong_fix": 79,
+      "missed": 262
+    },
+    "outcomes_after": {
+      "offered": 622,
+      "fixed": 1827,
+      "wrong_fix": 79,
+      "missed": 262
+    }
+  },
+  "en_tatoeba.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "fixed": 1854,
+      "offered": 589,
+      "missed": 413,
+      "wrong_fix": 104
+    },
+    "outcomes_after": {
+      "fixed": 1854,
+      "offered": 589,
+      "missed": 413,
+      "wrong_fix": 104
+    }
+  },
+  "jo_chat_dialect.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "offered": 503,
+      "fixed": 145,
+      "missed": 516,
+      "wrong_fix": 35
+    },
+    "outcomes_after": {
+      "offered": 503,
+      "fixed": 145,
+      "missed": 516,
+      "wrong_fix": 35
+    }
+  },
+  "jo_human_fresh.typos": {
+    "lost": [],
+    "gained": [],
+    "outcomes_before": {
+      "missed": 588,
+      "offered": 535,
+      "fixed": 181,
+      "wrong_fix": 48
+    },
+    "outcomes_after": {
+      "missed": 588,
+      "offered": 535,
+      "fixed": 181,
+      "wrong_fix": 48
+    }
+  }
+}
