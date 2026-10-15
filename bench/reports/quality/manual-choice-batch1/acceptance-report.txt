@@ -1,0 +1,54 @@
+MBOARD MANUAL-CHOICE BATCH 1 — ACCEPTANCE REPORT
+BEHAVIORAL_DESKTOP_GATE_PASS; LATENCY_UNRESOLVED; DEVICE_NOT_RUN
+
+Scope: one investigated display-slot reservation mechanism. Closing dirty working tree is baseline, not HEAD.
+Change: WordSuggestions.rank stops reserving a generated regular -s inflection alongside its blocked original reading, leaving ordinary ranked alternatives visible.
+Source: app/src/main/java/com/m57/mboard/WordSuggestions.kt:594. Exact batch-only change: batch-only.diff.
+No assets, vocabulary, automatic-correction policy, learning/prediction logic, strip glue, helper or sentinel fixtures changed.
+
+Reproduction and manual picks:
+  glars: glars|glares|glare -> glars|glare|glass; space still preserves glars. Slot 3 commits glass, then punctuation commits glass?.
+  exsplain: exsplain|explains|explain -> exsplain|explain|explained; space still preserves exsplain. Slot 3 commits explained, then punctuation commits explained?.
+  Bonus same-mechanism target: context=the, facs -> facts, now facs|facts|face. No special case was added.
+
+Full existing replay: 22252 aligned typo rows across 11 sets, including real-word buckets.
+  targets_lost: 0
+  targets_gained: 3
+  new_wrong: 0
+  wrong_removed: 0
+  correct_auto_lost: 0
+  auto_to_manual: 0
+  new_valid_corruption: 0
+  Correct automatic fixes: 7406 -> 7406
+  Wrong automatic fixes: 1086 -> 1086
+  All 12 clean-set miss TSVs are byte-identical; every non-timing sentence metric is identical, including completion, key savings, learning and next-word prediction.
+  All 50 unchanged sentinels pass. Every text/auto/event/context observation matches baseline; only the two requested shown-target lists changed.
+  Fixed 50-row quick sample passes. All native logs in the batch validate; actual picks commit the targets.
+
+Prediction: both same-seed learning-on/off 210-pick sessions complete. First 200: 197 distinct fourgrams, no repetition. Full 210: 207 distinct fourgrams, no repetition. No empty pools. These bounded results do not establish long-run coherence; historical recurrence is not claimed fixed.
+
+Desktop latency — unresolved, not a performance acceptance:
+  Full ar_fresh.json: p95 593 -> 611 us
+  Full ar_subs.json: p95 305 -> 331 us
+  Full ar_tatoeba.json: p95 337 -> 392 us
+  Full en_chat.json: p95 394 -> 403 us
+  Full en_chat_learning.json: p95 461 -> 2743 us
+  Full en_fresh.json: p95 233 -> 245 us
+  Full en_subs.json: p95 185 -> 160 us
+  Full en_tatoeba.json: p95 209 -> 175 us
+  Full jo_chat_dialect.json: p95 320 -> 546 us
+  Full jo_chat_learning.json: p95 500 -> 3131 us
+  Full jo_chat_msa.json: p95 427 -> 1100 us
+  Full jo_human_fresh.json: p95 335 -> 650 us
+  Serial ABBA en_chat_learning: baseline=[440, 2213] us; candidate=[531, 1387] us
+  Serial ABBA jo_chat_learning: baseline=[635, 861] us; candidate=[1470, 1856] us
+  Unresolved under concurrent host load and swap pressure. English baseline p95 itself ranges 440..2213 us. Jordanian candidate repeats remain higher than the two baseline repeats (1470/1856 vs 635/861 us); do not claim this is explained away, a speedup, or a clean performance pass. No unrelated processes were stopped.
+
+Build/identity: final lint, assembleDebug, desktop installDist, frozen worktree check and both complete existing replays exit 0. Candidate1 and final engine manifests are identical, so earlier candidate probes cover the final source. All 17 packaged assets match source.
+APK SHA-256: 14c834bdcc9403825cab3e392346517d25cb3d85df643b4507fad3829dd8d02e
+Durable APK: /home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/artifacts/mboard-debug.apk
+
+Approval boundary: This narrow batch does not approve the earlier 193 correct automatic fixes downgraded to manual relative to round7c. Baseline for this batch is the closing working tree.
+Device feedback remains m57-owned and unperformed. Nothing was installed, committed or pushed. No persona/discovery wave ran.
+Stop: candidate retained with behavioral gates passing and latency explicitly unresolved. Do not expand this batch or run another timing/discovery loop automatically. A quieter performance comparison is the concrete remaining verification gate.
+Commands, raw rows, native references, settings, manifests, build logs and timing observations: acceptance.json and the referenced run directories.

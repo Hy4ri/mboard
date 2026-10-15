@@ -1,0 +1,116 @@
+{
+  "baseline": "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/quick-baseline",
+  "candidate": "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/quick-candidate1",
+  "input_hashes": {
+    "baseline": {
+      "ar.json": "7449465cb9f4800dffa8286f402fcf5aafe333c8f0c523666e8fe9ee4955f4ec",
+      "ar.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ar.stdout.txt": "034441e37594e082a70c9372eae035a2d2872a783d66fcd3547e5163fa3effd0",
+      "ar.typos.tsv": "8d0ff168114d3cc0d3bf9e5944d0484407bea8a213237637aedd9e47b9718c5d",
+      "ar_dialect.json": "7088a9443361e95aed67d0a86a34411fa6a5b0071ac7fe1073bb4ebad94c941f",
+      "ar_dialect.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ar_dialect.stdout.txt": "b36a089699eecee9f0d8b4fcb0abbb41d97c72e4d463ca5a6cf2eeee4feb3f7e",
+      "ar_dialect.typos.tsv": "ee390fdcb9012078bac1efb773dc92ed462803186b06f6059dd2ecede80a2f2a",
+      "classification_ar.tsv": "611d4c3600ad58f0e9821a98355970f59cf8992031eb562182514cafcbac42be",
+      "classification_en.tsv": "a0da50c1ee6f56ac520f2fb30f00f3451f9937fc5e5207af7d512e9d5e683f90",
+      "en.json": "0ac2df4a3c0f082037c06eb9fd6972d0b083f89c5a1a4905d826197bebafbd89",
+      "en.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "en.stdout.txt": "6f8818d138b7b5c6637dff191c7aae18e11934a0e95fadde51b48fa19bde9e35",
+      "en.typos.tsv": "2845d033df6c1e69925564909ebc45754c1f8dc798f45b264ee7336ebac978a1",
+      "identity/run.json": "6576fe669f62fdf7151077454d91e93d388b23c2dc9319234961462c0c9daf0f"
+    },
+    "candidate": {
+      "ar.json": "a8912b7c294a05cf5e0d7388a5348e0179e982acd1bbecd8fa635c4a310ca760",
+      "ar.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ar.stdout.txt": "75419968c0c569567afead151fc2e7866c236fb79ba21c15f9ee0be2bfa11538",
+      "ar.typos.tsv": "8d0ff168114d3cc0d3bf9e5944d0484407bea8a213237637aedd9e47b9718c5d",
+      "ar_dialect.json": "040669c3c125536f716bd5b3d023a51af77e6f0693d062b816500572272f3b3a",
+      "ar_dialect.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ar_dialect.stdout.txt": "e0bb0629bc789d71e0f48c705ad97fb38ea4a56ff15b2284ebcec81bf1c211ec",
+      "ar_dialect.typos.tsv": "ee390fdcb9012078bac1efb773dc92ed462803186b06f6059dd2ecede80a2f2a",
+      "classification_ar.tsv": "611d4c3600ad58f0e9821a98355970f59cf8992031eb562182514cafcbac42be",
+      "classification_en.tsv": "a0da50c1ee6f56ac520f2fb30f00f3451f9937fc5e5207af7d512e9d5e683f90",
+      "en.json": "84199968ffa87a5feeb87dd97b0da73cdd922abc881db5679b60ca9d3dd518d3",
+      "en.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "en.stdout.txt": "e5055b0b83f334fbb4269af74ef921d213dc11820b6d77190d03ef18f978f3fa",
+      "en.typos.tsv": "2845d033df6c1e69925564909ebc45754c1f8dc798f45b264ee7336ebac978a1",
+      "identity/run.json": "ffe22eec69ea992def82c88274cc7a41ead3ef26e188f6738d3272c83ad9a72d"
+    }
+  },
+  "counts": {
+    "targets_lost": 0,
+    "targets_gained": 0,
+    "new_wrong": 0,
+    "wrong_removed": 0,
+    "correct_auto_lost": 0,
+    "auto_to_manual": 0,
+    "new_valid_corruption": 0
+  },
+  "default_gate": "ROW_GATE_PASS",
+  "sets": {
+    "ar.typos.tsv": {
+      "rows": 20,
+      "before_outcomes": {
+        "offered": 11,
+        "fixed": 5,
+        "missed": 4
+      },
+      "after_outcomes": {
+        "offered": 11,
+        "fixed": 5,
+        "missed": 4
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "ar_dialect.typos.tsv": {
+      "rows": 16,
+      "before_outcomes": {
+        "offered": 10,
+        "missed": 3,
+        "wrong_fix": 1,
+        "fixed": 2
+      },
+      "after_outcomes": {
+        "offered": 10,
+        "missed": 3,
+        "wrong_fix": 1,
+        "fixed": 2
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en.typos.tsv": {
+      "rows": 14,
+      "before_outcomes": {
+        "fixed": 8,
+        "offered": 3,
+        "missed": 1,
+        "wrong_fix": 2
+      },
+      "after_outcomes": {
+        "fixed": 8,
+        "offered": 3,
+        "missed": 1,
+        "wrong_fix": 2
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    }
+  },
+  "clean_metrics": {},
+  "new_valid_corruption": {},
+  "limitations": "Historical metrics do not bind results to jars. Row gate is not full acceptance; lint/build/state/device gates remain separate. Exact case-insensitive membership, no Arabic folding."
+}

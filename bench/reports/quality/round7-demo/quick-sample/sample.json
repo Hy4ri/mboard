@@ -1,0 +1,675 @@
+{
+  "provenance": "fixed hash-selected tuning regression sample, NOT blind evidence",
+  "source_sha256": {
+    "/home/m57/Projects/mboard/bench/data/ar_fresh_typos.tsv": "d4929265a8057658a029aab14d4a3b9407dd66eada5cc6b8e81fbe791d939634",
+    "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv": "4ff08be0f87aa973e652775974e444519aed9f56c1c519efac79f4446145bafa",
+    "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv": "c062eaf6f08b7fbec404a0fa84b3f3ce00498f9a8e645e9dacce9d22747410bb",
+    "/home/m57/Projects/mboard/bench/data/ar_tatoeba_typos.tsv": "d20dbb9e7b124a570c6f58d30da9d8bdff4fe5e6ccb4c3b64cb7ebcb31e56908",
+    "/home/m57/Projects/mboard/bench/data/en_chat_typos.tsv": "be0ee42943260706fbf38c6e595bb24d85d377e6852b0349ddc02e22de59ee04",
+    "/home/m57/Projects/mboard/bench/data/en_fresh_typos.tsv": "09160daa28354c4e944916de1707ecd8c50cfc1856afd1b34538b5284d915be1",
+    "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv": "c724b9ab149c0509bff33ea7d8ffd93d5cc467ad84756521f6328b4a0be4e3d9",
+    "/home/m57/Projects/mboard/bench/data/en_subs_typos.tsv": "b4f0d05029df2161b61a07093ff9da5a15d62eb9ff76cfa9d3c7d8e2c618cf4f",
+    "/home/m57/Projects/mboard/bench/data/en_tatoeba_typos.tsv": "cd2f4e54fe2551abb62bdda73d7ba708eaffd9d833859f2c9411edee3a7e45ec",
+    "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv": "a3b125261ec3f8d998cc47068d4e37904e48eaa468158fad6071f1ce6f4d8e22",
+    "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv": "cbdb5ab1c374814b7ab4bdeeb882d438c70095f06ba2a9a246a59b33a859eba6"
+  },
+  "selected": [
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 2677,
+      "language": "ar",
+      "dialect": false,
+      "kind": "adjacent",
+      "row": {
+        "context": "",
+        "typed": "نجن",
+        "intended": "نحن",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 2436,
+      "language": "ar",
+      "dialect": false,
+      "kind": "adjacent",
+      "row": {
+        "context": "لابد أن",
+        "typed": "تطون",
+        "intended": "تكون",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_tatoeba_typos.tsv",
+      "line": 2587,
+      "language": "ar",
+      "dialect": false,
+      "kind": "doubled",
+      "row": {
+        "context": "اشترت لي",
+        "typed": "أميي",
+        "intended": "أمي",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 2040,
+      "language": "ar",
+      "dialect": false,
+      "kind": "doubled",
+      "row": {
+        "context": "نعم، وأنا حصلت على هذه",
+        "typed": "الههديه",
+        "intended": "الهديه",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 61,
+      "language": "ar",
+      "dialect": false,
+      "kind": "hamza",
+      "row": {
+        "context": "",
+        "typed": "اجابة",
+        "intended": "إجابة",
+        "kind": "hamza"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 2492,
+      "language": "ar",
+      "dialect": false,
+      "kind": "hamza",
+      "row": {
+        "context": "أنا على وشك أن",
+        "typed": "اصبح",
+        "intended": "أصبح",
+        "kind": "hamza"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_tatoeba_typos.tsv",
+      "line": 2171,
+      "language": "ar",
+      "dialect": false,
+      "kind": "insertion",
+      "row": {
+        "context": "أخذ",
+        "typed": "معخه",
+        "intended": "معه",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 468,
+      "language": "ar",
+      "dialect": false,
+      "kind": "insertion",
+      "row": {
+        "context": "و لهذا السبب أنهى",
+        "typed": "علاتقته",
+        "intended": "علاقته",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_tatoeba_typos.tsv",
+      "line": 424,
+      "language": "ar",
+      "dialect": false,
+      "kind": "omission",
+      "row": {
+        "context": "",
+        "typed": "الناء",
+        "intended": "النساء",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_tatoeba_typos.tsv",
+      "line": 1624,
+      "language": "ar",
+      "dialect": false,
+      "kind": "omission",
+      "row": {
+        "context": "كان سامي",
+        "typed": "يكم",
+        "intended": "يكلم",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 725,
+      "language": "ar",
+      "dialect": false,
+      "kind": "other",
+      "row": {
+        "context": "الساعة العاشرة",
+        "typed": "بلضبط",
+        "intended": "بالضبط",
+        "kind": "other"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 712,
+      "language": "ar",
+      "dialect": false,
+      "kind": "other",
+      "row": {
+        "context": "انعطف فورا",
+        "typed": "ليمين",
+        "intended": "لليمين",
+        "kind": "other"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 280,
+      "language": "ar",
+      "dialect": false,
+      "kind": "phonetic",
+      "row": {
+        "context": "الكذب عادة ذميمة",
+        "typed": "كزب",
+        "intended": "كذب",
+        "kind": "phonetic"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 247,
+      "language": "ar",
+      "dialect": false,
+      "kind": "phonetic",
+      "row": {
+        "context": "بحكم",
+        "typed": "ضروف",
+        "intended": "ظروف",
+        "kind": "phonetic"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_subs_typos.tsv",
+      "line": 729,
+      "language": "ar",
+      "dialect": false,
+      "kind": "taa",
+      "row": {
+        "context": "يبدأ العمل في السادسة صباحا، واستراحة للغداء لمدة",
+        "typed": "ساعه",
+        "intended": "ساعة",
+        "kind": "taa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 113,
+      "language": "ar",
+      "dialect": false,
+      "kind": "taa",
+      "row": {
+        "context": "حمل",
+        "typed": "حقيبه",
+        "intended": "حقيبة",
+        "kind": "taa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_fresh_typos.tsv",
+      "line": 1396,
+      "language": "ar",
+      "dialect": false,
+      "kind": "transposition",
+      "row": {
+        "context": "هل",
+        "typed": "ههذ",
+        "intended": "هذه",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 690,
+      "language": "ar",
+      "dialect": false,
+      "kind": "transposition",
+      "row": {
+        "context": "",
+        "typed": "بتي",
+        "intended": "بيت",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 164,
+      "language": "ar",
+      "dialect": false,
+      "kind": "yaa",
+      "row": {
+        "context": "انتظر",
+        "typed": "حتي",
+        "intended": "حتى",
+        "kind": "yaa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/ar_real_typos.tsv",
+      "line": 162,
+      "language": "ar",
+      "dialect": false,
+      "kind": "yaa",
+      "row": {
+        "context": "سلمت",
+        "typed": "علي",
+        "intended": "على",
+        "kind": "yaa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_chat_typos.tsv",
+      "line": 400,
+      "language": "en",
+      "dialect": false,
+      "kind": "adjacent",
+      "row": {
+        "context": "remember to",
+        "typed": "eaf",
+        "intended": "eat",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_tatoeba_typos.tsv",
+      "line": 1526,
+      "language": "en",
+      "dialect": false,
+      "kind": "adjacent",
+      "row": {
+        "context": "im",
+        "typed": "wending",
+        "intended": "sending",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_tatoeba_typos.tsv",
+      "line": 1138,
+      "language": "en",
+      "dialect": false,
+      "kind": "doubled",
+      "row": {
+        "context": "when sami",
+        "typed": "finiished",
+        "intended": "finished",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_tatoeba_typos.tsv",
+      "line": 753,
+      "language": "en",
+      "dialect": false,
+      "kind": "doubled",
+      "row": {
+        "context": "you should be careful",
+        "typed": "wiith",
+        "intended": "with",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_tatoeba_typos.tsv",
+      "line": 2185,
+      "language": "en",
+      "dialect": false,
+      "kind": "insertion",
+      "row": {
+        "context": "",
+        "typed": "Jomnas",
+        "intended": "Jonas",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_subs_typos.tsv",
+      "line": 132,
+      "language": "en",
+      "dialect": false,
+      "kind": "insertion",
+      "row": {
+        "context": "my gun my car so",
+        "typed": "dshe",
+        "intended": "she",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_fresh_typos.tsv",
+      "line": 817,
+      "language": "en",
+      "dialect": false,
+      "kind": "omission",
+      "row": {
+        "context": "ive been",
+        "typed": "haing",
+        "intended": "having",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_fresh_typos.tsv",
+      "line": 636,
+      "language": "en",
+      "dialect": false,
+      "kind": "omission",
+      "row": {
+        "context": "he approached the",
+        "typed": "by",
+        "intended": "boy",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv",
+      "line": 3533,
+      "language": "en",
+      "dialect": false,
+      "kind": "other",
+      "row": {
+        "context": "",
+        "typed": "quators",
+        "intended": "quarters",
+        "kind": "other"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv",
+      "line": 3676,
+      "language": "en",
+      "dialect": false,
+      "kind": "other",
+      "row": {
+        "context": "",
+        "typed": "hanser",
+        "intended": "answer",
+        "kind": "other"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv",
+      "line": 2458,
+      "language": "en",
+      "dialect": false,
+      "kind": "phonetic",
+      "row": {
+        "context": "",
+        "typed": "fressing",
+        "intended": "freezing",
+        "kind": "phonetic"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv",
+      "line": 118,
+      "language": "en",
+      "dialect": false,
+      "kind": "phonetic",
+      "row": {
+        "context": "",
+        "typed": "misterry",
+        "intended": "mystery",
+        "kind": "phonetic"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_real_typos.tsv",
+      "line": 1296,
+      "language": "en",
+      "dialect": false,
+      "kind": "transposition",
+      "row": {
+        "context": "",
+        "typed": "anceint",
+        "intended": "ancient",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/en_subs_typos.tsv",
+      "line": 255,
+      "language": "en",
+      "dialect": false,
+      "kind": "transposition",
+      "row": {
+        "context": "",
+        "typed": "Deos",
+        "intended": "Does",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 776,
+      "language": "ar",
+      "dialect": true,
+      "kind": "adjacent",
+      "row": {
+        "context": "بدي اشتري مكواة بخار صغيرة",
+        "typed": "عشات",
+        "intended": "عشان",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 305,
+      "language": "ar",
+      "dialect": true,
+      "kind": "adjacent",
+      "row": {
+        "context": "انا فجأه بعد هالخطاب تحولت جلستي من جلسه",
+        "typed": "غرعونيه",
+        "intended": "فرعونيه",
+        "kind": "adjacent"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 972,
+      "language": "ar",
+      "dialect": true,
+      "kind": "doubled",
+      "row": {
+        "context": "ف رحت",
+        "typed": "وافقتت",
+        "intended": "وافقت",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 929,
+      "language": "ar",
+      "dialect": true,
+      "kind": "doubled",
+      "row": {
+        "context": "ما علينا",
+        "typed": "اانا",
+        "intended": "انا",
+        "kind": "doubled"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 1146,
+      "language": "ar",
+      "dialect": true,
+      "kind": "hamza",
+      "row": {
+        "context": "وعفكره لو ام خالد بدها تيجي عالحفله ومعها طقم فناجين ابنها يقولها يما شو",
+        "typed": "رايك",
+        "intended": "رأيك",
+        "kind": "hamza"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 727,
+      "language": "ar",
+      "dialect": true,
+      "kind": "hamza",
+      "row": {
+        "context": "مش عارفه مين رح يفزعلي",
+        "typed": "لانو",
+        "intended": "لإنو",
+        "kind": "hamza"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 866,
+      "language": "ar",
+      "dialect": true,
+      "kind": "insertion",
+      "row": {
+        "context": "هسا شو انا لا اسخر من اي",
+        "typed": "لونن",
+        "intended": "لون",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 560,
+      "language": "ar",
+      "dialect": true,
+      "kind": "insertion",
+      "row": {
+        "context": "مبارح المزراب كان يصب مية",
+        "typed": "زمطر",
+        "intended": "مطر",
+        "kind": "insertion"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 862,
+      "language": "ar",
+      "dialect": true,
+      "kind": "omission",
+      "row": {
+        "context": "مين بعرف حدا من الناس",
+        "typed": "الل",
+        "intended": "اللي",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_human_fresh_typos.tsv",
+      "line": 167,
+      "language": "ar",
+      "dialect": true,
+      "kind": "omission",
+      "row": {
+        "context": "لإنو الجو قلب عواصف و",
+        "typed": "بلت",
+        "intended": "بلشت",
+        "kind": "omission"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 184,
+      "language": "ar",
+      "dialect": true,
+      "kind": "taa",
+      "row": {
+        "context": "المطعم نظيف وخدمتهم",
+        "typed": "سريعه",
+        "intended": "سريعة",
+        "kind": "taa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 773,
+      "language": "ar",
+      "dialect": true,
+      "kind": "taa",
+      "row": {
+        "context": "",
+        "typed": "الفاتوره",
+        "intended": "الفاتورة",
+        "kind": "taa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 309,
+      "language": "ar",
+      "dialect": true,
+      "kind": "transposition",
+      "row": {
+        "context": "تلفوني ما عم بنزل ملفات الصوت، شكله",
+        "typed": "الذاركة",
+        "intended": "الذاكرة",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 865,
+      "language": "ar",
+      "dialect": true,
+      "kind": "transposition",
+      "row": {
+        "context": "النزول زلق",
+        "typed": "ثكير",
+        "intended": "كثير",
+        "kind": "transposition"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 1010,
+      "language": "ar",
+      "dialect": true,
+      "kind": "yaa",
+      "row": {
+        "context": "حركاتك هاي مش",
+        "typed": "على",
+        "intended": "علي",
+        "kind": "yaa"
+      }
+    },
+    {
+      "source": "/home/m57/Projects/mboard/bench/data/jo_chat_typos.tsv",
+      "line": 736,
+      "language": "ar",
+      "dialect": true,
+      "kind": "yaa",
+      "row": {
+        "context": "",
+        "typed": "بدى",
+        "intended": "بدي",
+        "kind": "yaa"
+      }
+    }
+  ],
+  "files": {
+    "ar.tsv": "ee65a36bb4a100a2612091a85b5c6d4bad235caba31c07c9e07ae9c1d63c00ba",
+    "ar_dialect.tsv": "4075e599b6b2578f9e2e07fac653a8f9ae7f85e4bca81a252c6cb978601f326b",
+    "classification_ar.tsv": "611d4c3600ad58f0e9821a98355970f59cf8992031eb562182514cafcbac42be",
+    "classification_en.tsv": "a0da50c1ee6f56ac520f2fb30f00f3451f9937fc5e5207af7d512e9d5e683f90",
+    "en.tsv": "6d2de3a067aeed0784a638b2d359e0f922451ab420e011d35885212c5c0e9563"
+  }
+}

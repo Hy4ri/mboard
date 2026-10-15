@@ -1,0 +1,81 @@
+{
+  "purpose": "Authorized bounded latency-only continuation; no source changes/builds/phone/discovery",
+  "java": "openjdk version \"21.0.12\" 2026-07-21\nOpenJDK Runtime Environment (build 21.0.12+8-nixos)\nOpenJDK 64-Bit Server VM (build 21.0.12+8-nixos, mixed mode, sharing)\n",
+  "cpu_count": 8,
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "engine_manifests": {
+    "baseline": "11f1b2d129ffaabd8682b452afaffde9f80ad9ab183536e5fea3fd6189a22b2a",
+    "final": "d9cdffbc2371cf21a9848b75493e56e4c97e031a668788e57725991ad8af248c"
+  },
+  "inputs": {
+    "bench/data/ar_fresh.txt": "db14a952bc69fc2a0fa59f8bea07a4be44f5a27ef43329a303c6eee1619d75a9",
+    "bench/data/ar_fresh_typos.tsv": "d4929265a8057658a029aab14d4a3b9407dd66eada5cc6b8e81fbe791d939634",
+    "bench/data/ar_real_typos.tsv": "4ff08be0f87aa973e652775974e444519aed9f56c1c519efac79f4446145bafa",
+    "bench/data/ar_subs.txt": "a6da175f1b8f0015cee5a92787b88451aed07f513a4c9adad37673ac83475aaf",
+    "bench/data/ar_subs_typos.tsv": "c062eaf6f08b7fbec404a0fa84b3f3ce00498f9a8e645e9dacce9d22747410bb",
+    "bench/data/ar_tatoeba.txt": "820d6bd7ab1098cba20c43f922d058769bc0fa5645a4a0260a5a3debf2faaa29",
+    "bench/data/ar_tatoeba_typos.tsv": "d20dbb9e7b124a570c6f58d30da9d8bdff4fe5e6ccb4c3b64cb7ebcb31e56908",
+    "bench/data/en_chat.txt": "2edb4feab24d102b0b86b74bf8c65913fce4d6d2aa9a663fc88f693b1686a83a",
+    "bench/data/en_chat_typos.tsv": "be0ee42943260706fbf38c6e595bb24d85d377e6852b0349ddc02e22de59ee04",
+    "bench/data/en_fresh.txt": "b1dc5dce8297b9e71f49f91f5a9d8740e91ded33da4c9b881069421c48c6a908",
+    "bench/data/en_fresh_typos.tsv": "09160daa28354c4e944916de1707ecd8c50cfc1856afd1b34538b5284d915be1",
+    "bench/data/en_real_typos.tsv": "c724b9ab149c0509bff33ea7d8ffd93d5cc467ad84756521f6328b4a0be4e3d9",
+    "bench/data/en_subs.txt": "672328d6ce4576b356922a5bb90faa7de1865f1724c3efe21cbcd12aff493bfc",
+    "bench/data/en_subs_typos.tsv": "b4f0d05029df2161b61a07093ff9da5a15d62eb9ff76cfa9d3c7d8e2c618cf4f",
+    "bench/data/en_tatoeba.txt": "6965a9775bfe74949312be02b9c0dc128d93d727bfe173d992d65f5ae61dbdba",
+    "bench/data/en_tatoeba_typos.tsv": "cd2f4e54fe2551abb62bdda73d7ba708eaffd9d833859f2c9411edee3a7e45ec",
+    "bench/data/jo_chat.txt": "92f1d87a8d45a831d3c56ecf1c5f7413690b33605ee685e9a961481d7a2f4947",
+    "bench/data/jo_chat_a.txt": "47590f8547e435b01ed4781262d02e13010f6d60ffb7ced8ecf8d8cb7549422e",
+    "bench/data/jo_chat_b.txt": "21d311351fb932895ca212138b8bf58c091b84fd3b62b201386c5c6328bf6b99",
+    "bench/data/jo_chat_typos.tsv": "a3b125261ec3f8d998cc47068d4e37904e48eaa468158fad6071f1ce6f4d8e22",
+    "bench/data/jo_human_fresh.txt": "6c85c5c04422c825abec211a0602e931c462f4d4606d96e65674bc73c86274ed",
+    "bench/data/jo_human_fresh_typos.tsv": "cbdb5ab1c374814b7ab4bdeeb882d438c70095f06ba2a9a246a59b33a859eba6",
+    "bench/run.sh": "a5db6925f36fe04e9e7094ab3193550efa048f944fec306e83fd9f89fa320a6d",
+    "bench/scripts/summary.py": "64719b6c4f2c43619650a7a169e230d9e2cc1a97bc15bcfb4a8c79d1800625d8",
+    "bench/scripts/quality.py": "dc3cc186ef6d99e063ae29d7ece126a9632ed5ee190963157b2754a9b3c59a07"
+  },
+  "host_before": {
+    "load": [
+      1.4990234375,
+      1.0244140625,
+      1.25927734375
+    ],
+    "vmstat": {
+      "pswpin": 1469086,
+      "pswpout": 2489746,
+      "pgmajfault": 1494989
+    },
+    "meminfo": "MemTotal:       16164260 kB\nMemFree:         1204160 kB\nMemAvailable:    4612288 kB\nBuffers:          348976 kB\nCached:          3848608 kB\nSwapCached:      1119940 kB\nActive:          8231652 kB\nInactive:        4015888 kB\nActive(anon):    7924424 kB\nInactive(anon):   966752 kB\nActive(file):     307228 kB\nInactive(file):  3049136 kB\nUnevictable:      588236 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005168 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              1192 kB\nWriteback:             0 kB\nAnonPages:       8632912 kB\nMapped:           670684 kB\nShmem:            718116 kB\nKReclaimable:     472384 kB\nSlab:             748624 kB\nSReclaimable:     472384 kB\nSUnreclaim:       276240 kB\nKernelStack:       21528 kB\nPageTables:       112716 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33727224 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      246972 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+    "at": "2026-10-15T10:36:42.641415+00:00"
+  },
+  "order": [
+    "baseline",
+    "final",
+    "final",
+    "baseline"
+  ],
+  "heap": "-Xmx3g",
+  "host_after": {
+    "load": [
+      2.53515625,
+      1.46240234375,
+      1.396484375
+    ],
+    "vmstat": {
+      "pswpin": 1469102,
+      "pswpout": 2489746,
+      "pgmajfault": 1495012
+    },
+    "meminfo": "MemTotal:       16164260 kB\nMemFree:          949872 kB\nMemAvailable:    4362580 kB\nBuffers:          349524 kB\nCached:          3777716 kB\nSwapCached:      1119952 kB\nActive:          8354056 kB\nInactive:        4020312 kB\nActive(anon):    8046828 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3053536 kB\nUnevictable:      523524 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3972 kB\nWriteback:             0 kB\nAnonPages:       8765340 kB\nMapped:           790920 kB\nShmem:            643672 kB\nKReclaimable:     472564 kB\nSlab:             748796 kB\nSReclaimable:     472564 kB\nSUnreclaim:       276232 kB\nKernelStack:       21840 kB\nPageTables:       113852 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33536488 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247420 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+    "at": "2026-10-15T10:37:54.766783+00:00"
+  }
+}

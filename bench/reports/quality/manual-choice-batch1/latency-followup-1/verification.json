@@ -1,0 +1,19 @@
+[
+  {
+    "command": "python3 -I bench/scripts/quality.py check --engine bench/reports/quality/manual-choice-batch1/engines/baseline",
+    "output": "{\"manifest_sha256\": \"11f1b2d129ffaabd8682b452afaffde9f80ad9ab183536e5fea3fd6189a22b2a\", \"working_tree_matches\": false}",
+    "exit_code": 0,
+    "error": null
+  },
+  {
+    "command": "python3 -I bench/scripts/quality.py check --engine bench/reports/quality/manual-choice-batch1/engines/final --working-tree",
+    "output": "{\"manifest_sha256\": \"d9cdffbc2371cf21a9848b75493e56e4c97e031a668788e57725991ad8af248c\", \"working_tree_matches\": true}",
+    "exit_code": 0,
+    "error": null
+  },
+  {
+    "output": "",
+    "exit_code": 0,
+    "error": null
+  }
+]

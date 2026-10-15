@@ -1,0 +1,42 @@
+[
+  {
+    "log": "/home/m57/Projects/mboard/bench/reports/quality/round7-demo/validated-native/logs/sim-10/20261014-194332-agent.jsonl",
+    "sha256": "5c22ac382381f70f3fbbab4bde40b8c9bb7b0971077ec43a8e2030d2a11e3802",
+    "settings_match": true,
+    "picked_tokens_match": true,
+    "picks_excluding_seed": 700,
+    "first200": {
+      "fourgrams": 197,
+      "unique": 197,
+      "repeated_patterns": 0,
+      "max_multiplicity": 1
+    },
+    "all": {
+      "fourgrams": 697,
+      "unique": 601,
+      "repeated_patterns": 75,
+      "max_multiplicity": 4
+    },
+    "empty_post_pick_seq": []
+  },
+  {
+    "log": "/home/m57/Projects/mboard/bench/reports/quality/round7-demo/validated-native/logs/sim-10/20261014-194335-agent.jsonl",
+    "sha256": "453117747053a9cbc26b2e2d92c5033f3dfede3e9ae2073d99d149df3556dfa3",
+    "settings_match": true,
+    "picked_tokens_match": true,
+    "picks_excluding_seed": 700,
+    "first200": {
+      "fourgrams": 197,
+      "unique": 197,
+      "repeated_patterns": 0,
+      "max_multiplicity": 1
+    },
+    "all": {
+      "fourgrams": 697,
+      "unique": 564,
+      "repeated_patterns": 133,
+      "max_multiplicity": 2
+    },
+    "empty_post_pick_seq": []
+  }
+]

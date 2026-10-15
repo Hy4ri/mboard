@@ -1,0 +1,22 @@
+MBOARD — CONSOLIDATED STATUS AFTER AUTHORIZED LATENCY FOLLOW-UP
+BEHAVIORAL_DESKTOP_PASS; PREVIOUS_MULTIFOLD_LEARNING_SLOWDOWN_NOT_REPRODUCED; SMALL_ENGLISH_TIMING_DELTA_NOT_CAUSALLY_RESOLVED; DEVICE_NOT_RUN
+
+No production, asset, vocabulary, scenario, helper or build changes in this continuation. Frozen final engine still matches the working tree. Original acceptance evidence remains intact.
+
+Behavioral result from unchanged final candidate: 22,252 aligned typo rows across 11 sets; 3 manual targets gained, 0 lost; 0 newly wrong automatic replacements, 0 lost correct automatic fixes, 0 new measured valid-text corruption. All 50 sentinels and the immutable quick sample passed; clean completion/key savings/learning/prediction metrics unchanged.
+
+New timing execution: native MainKt, both complete chat learning datasets, serial A/B/B/A, -Xmx3g for every run; all 8 JVMs exit 0. Inputs and engine manifests were checked; no builds were needed. Every non-timing metric matches original full baseline and all per-language misses TSVs match.
+
+en_chat_learning: baseline p95 [290, 276] us; candidate [326, 289] us. Median-of-run-p95 283.0 -> 307.5 us (+8.66%).
+jo_chat_learning: baseline p95 [399, 400] us; candidate [403, 385] us. Median-of-run-p95 399.5 -> 394.0 us (-1.38%).
+
+The previous several-fold learning-mode slowdown was not reproduced. Jordanian candidate p95 overlaps baseline. English candidate one repeat is higher; median difference is reported without claiming significance, proving zero latency regression, or requesting implicit approval for a tradeoff. Two repeats per engine are not a performance equivalence study.
+Host load before: [1.4990234375, 1.0244140625, 1.25927734375]; after: [2.53515625, 1.46240234375, 1.396484375]. VM counters and memory snapshots are retained in metadata.json/runs.json; existing swap occupancy alone is not evidence of active swapping.
+Older full-run p95 values, including the large slowdowns, are NOT overwritten or declared invalid: ../acceptance-report.txt.
+No Android editor compatibility, UI latency or typing-feel claim follows from these desktop measurements.
+
+Durable exact argv, per-run stdout/stderr/JSON/miss TSVs, settings, engine hashes and resource snapshots: runs.json, metadata.json and 1-baseline/, 2-final/, 3-final/, 4-baseline/.
+Commands verifying source/engine identity and a clean diff/index check: verification.json.
+
+Next boundary: Stop here. No new tuning/discovery automatically. Historical 193 automatic-to-manual transitions remain a separate approval decision. If stronger performance confidence is requested, agree a meaningful latency budget and repeat count first rather than looping until a favorable measurement.
+No personas, source changes, APK installations, commits, pushes, unrelated-process changes or additional tuning loops performed.

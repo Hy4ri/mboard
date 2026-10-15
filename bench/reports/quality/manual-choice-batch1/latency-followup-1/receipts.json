@@ -1,0 +1,68 @@
+{
+  "status": "BEHAVIORAL_DESKTOP_PASS; PREVIOUS_MULTIFOLD_LEARNING_SLOWDOWN_NOT_REPRODUCED; SMALL_ENGLISH_TIMING_DELTA_NOT_CAUSALLY_RESOLVED; DEVICE_NOT_RUN",
+  "authorized_scope": "Latency-only continuation; identical frozen engines, no builds or source/asset/fixture changes",
+  "method": "Serial baseline/candidate/candidate/baseline, both complete existing chat learning datasets, fixed -Xmx3g, native MainKt, eight successful JVM exits; no new discovery",
+  "original_acceptance_sha256": "7474206055baa6d44ba7cf4554b158f114a6668c030c82262c50d46fb673e872",
+  "engine_manifests": {
+    "baseline": "11f1b2d129ffaabd8682b452afaffde9f80ad9ab183536e5fea3fd6189a22b2a",
+    "final": "d9cdffbc2371cf21a9848b75493e56e4c97e031a668788e57725991ad8af248c"
+  },
+  "timing": {
+    "en_chat_learning": {
+      "p95_us": {
+        "baseline": [
+          290,
+          276
+        ],
+        "final": [
+          326,
+          289
+        ]
+      },
+      "median_p95_us": {
+        "baseline": 283.0,
+        "final": 307.5
+      },
+      "median_p95_change_pct": 8.657243816254411,
+      "all_nontiming_metrics_match_original_full_baseline": true,
+      "all_misses_tsv_identical": true
+    },
+    "jo_chat_learning": {
+      "p95_us": {
+        "baseline": [
+          399,
+          400
+        ],
+        "final": [
+          403,
+          385
+        ]
+      },
+      "median_p95_us": {
+        "baseline": 399.5,
+        "final": 394.0
+      },
+      "median_p95_change_pct": -1.3767209011264048,
+      "all_nontiming_metrics_match_original_full_baseline": true,
+      "all_misses_tsv_identical": true
+    }
+  },
+  "vmstat_delta": {
+    "pswpin": 16,
+    "pswpout": 0,
+    "pgmajfault": 23
+  },
+  "behavioral_counts": {
+    "targets_lost": 0,
+    "targets_gained": 3,
+    "new_wrong": 0,
+    "wrong_removed": 0,
+    "correct_auto_lost": 0,
+    "auto_to_manual": 0,
+    "new_valid_corruption": 0
+  },
+  "interpretation": "The previous several-fold learning-mode slowdown was not reproduced. Jordanian candidate p95 overlaps baseline. English candidate one repeat is higher; median difference is reported without claiming significance, proving zero latency regression, or requesting implicit approval for a tradeoff. Two repeats per engine are not a performance equivalence study.",
+  "unchanged_source_previous_gates_still_applicable": true,
+  "device_verified": false,
+  "next_action": "Stop here. No new tuning/discovery automatically. Historical 193 automatic-to-manual transitions remain a separate approval decision. If stronger performance confidence is requested, agree a meaningful latency budget and repeat count first rather than looping until a favorable measurement."
+}

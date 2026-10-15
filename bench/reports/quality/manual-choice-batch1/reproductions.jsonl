@@ -1,0 +1,2 @@
+{"id": "recorded-loss-glars", "category": "known-missing-manual", "settings": {"language": "en", "dialect": null, "autocorrect": true, "autocap": false, "learning": false}, "starting_text": "", "actions": [{"type": "glars"}, {"key": "space"}], "expect": [{"at": 1, "target": "glass"}]}
+{"id": "recorded-loss-exsplain", "category": "known-missing-manual", "settings": {"language": "en", "dialect": null, "autocorrect": true, "autocap": false, "learning": false}, "starting_text": "", "actions": [{"type": "exsplain"}, {"key": "space"}], "expect": [{"at": 1, "target": "explained"}]}

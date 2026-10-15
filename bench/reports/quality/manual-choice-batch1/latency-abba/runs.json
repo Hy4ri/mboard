@@ -1,0 +1,566 @@
+[
+  {
+    "order": 1,
+    "engine": "baseline",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/1-baseline/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      6.001953125,
+      6.9990234375,
+      5.0830078125
+    ],
+    "load_after": [
+      6.322265625,
+      7.04931640625,
+      5.10986328125
+    ],
+    "seconds": 6.093332538000141,
+    "p95_us": 440,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 920,
+        "renders": 10571,
+        "p50_us": 110,
+        "max_us": 52106,
+        "p95_us": 440
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    }
+  },
+  {
+    "order": 1,
+    "engine": "baseline",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/1-baseline/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      6.322265625,
+      7.04931640625,
+      5.10986328125
+    ],
+    "load_after": [
+      5.73583984375,
+      6.8671875,
+      5.08984375
+    ],
+    "seconds": 19.92945372399936,
+    "p95_us": 635,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 1231,
+        "renders": 44971,
+        "p50_us": 170,
+        "max_us": 38141,
+        "p95_us": 635
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    }
+  },
+  {
+    "order": 2,
+    "engine": "final",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/2-final/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      5.73583984375,
+      6.8671875,
+      5.08984375
+    ],
+    "load_after": [
+      6.15185546875,
+      6.9208984375,
+      5.126953125
+    ],
+    "seconds": 7.015398534999804,
+    "p95_us": 531,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 1383,
+        "renders": 10571,
+        "p50_us": 133,
+        "max_us": 54470,
+        "p95_us": 531
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    }
+  },
+  {
+    "order": 2,
+    "engine": "final",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/2-final/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      6.15185546875,
+      6.9208984375,
+      5.126953125
+    ],
+    "load_after": [
+      9.69775390625,
+      7.70703125,
+      5.466796875
+    ],
+    "seconds": 44.10250411499965,
+    "p95_us": 1470,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 3072,
+        "renders": 44971,
+        "p50_us": 383,
+        "max_us": 42817,
+        "p95_us": 1470
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    }
+  },
+  {
+    "order": 3,
+    "engine": "final",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/3-final/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      9.69775390625,
+      7.70703125,
+      5.466796875
+    ],
+    "load_after": [
+      10.38720703125,
+      7.9521484375,
+      5.5830078125
+    ],
+    "seconds": 15.406612280000445,
+    "p95_us": 1387,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 5321,
+        "renders": 10571,
+        "p50_us": 280,
+        "max_us": 38555,
+        "p95_us": 1387
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    }
+  },
+  {
+    "order": 3,
+    "engine": "final",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/3-final/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      10.38720703125,
+      7.9521484375,
+      5.5830078125
+    ],
+    "load_after": [
+      12.029296875,
+      8.904296875,
+      6.0498046875
+    ],
+    "seconds": 54.57714083600058,
+    "p95_us": 1856,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 4766,
+        "renders": 44971,
+        "p50_us": 443,
+        "max_us": 95099,
+        "p95_us": 1856
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    }
+  },
+  {
+    "order": 4,
+    "engine": "baseline",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/4-baseline/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      12.029296875,
+      8.904296875,
+      6.0498046875
+    ],
+    "load_after": [
+      13.58837890625,
+      9.47509765625,
+      6.2998046875
+    ],
+    "seconds": 17.90802642900053,
+    "p95_us": 2213,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 6592,
+        "renders": 10571,
+        "p50_us": 251,
+        "max_us": 68997,
+        "p95_us": 2213
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    }
+  },
+  {
+    "order": 4,
+    "engine": "baseline",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-abba/4-baseline/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "load_before": [
+      13.58837890625,
+      9.47509765625,
+      6.2998046875
+    ],
+    "load_after": [
+      12.82421875,
+      9.6982421875,
+      6.47705078125
+    ],
+    "seconds": 29.434876809999878,
+    "p95_us": 861,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 2675,
+        "renders": 44971,
+        "p50_us": 210,
+        "max_us": 123974,
+        "p95_us": 861
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    }
+  }
+]

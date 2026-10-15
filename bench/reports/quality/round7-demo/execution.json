@@ -1,0 +1,226 @@
+{
+  "commands": [
+    {
+      "command": "git status --short; git branch --show-current",
+      "exit": 0,
+      "result": "main; pre-existing dirty state inspected; no index changes"
+    },
+    {
+      "command": "git diff --stat; git diff --check; hostname; uname -m",
+      "exit": 0,
+      "result": "dirty closing changes inspected; diff check clean; hyari x86_64"
+    },
+    {
+      "command": "nix develop -c ./gradlew -p bench installDist --console=plain",
+      "exit": 0,
+      "result": "4 tasks up-to-date; build successful"
+    },
+    {
+      "command": "nix develop -c bash -c 'set -euo pipefail; ktlint \"app/src/main/java/**/*.kt\" \"bench/src/**/*.kt\"; ./gradlew assembleDebug --console=plain'",
+      "exit": 0,
+      "result": "lint passed; 34 APK tasks up-to-date; build successful"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py freeze --snapshot /home/m57/.hermes/cache/scratch/mboard-sim10-round7 --out bench/reports/quality/round7-demo/engines/round7c",
+      "exit": 0,
+      "result": "old manifest verified; snapshot imported durably"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py freeze --out bench/reports/quality/round7-demo/engines/current",
+      "exit": 0,
+      "result": "dirty working-tree source/assets/jars frozen"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py check --engine bench/reports/quality/round7-demo/engines/current --working-tree",
+      "exit": 0,
+      "result": "all frozen/live source, assets, jars and copied build inputs match"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py consolidate --engine bench/reports/quality/round7-demo/engines/round7c --logs /home/m57/.hermes/cache/scratch/mboard-sim10-round7 --legacy --out bench/reports/quality/round7-demo/native",
+      "exit": 2,
+      "result": "18 logs examined; 17 accepted; one genuine failed command rejected/copied"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py sample --out bench/reports/quality/round7-demo/quick-sample",
+      "exit": 0,
+      "result": "fixed 50-row, 25-stratum sample plus classification identity"
+    },
+    {
+      "command": "nix develop -c python3 -I bench/scripts/quality.py replay --engine bench/reports/quality/round7-demo/engines/round7c --scenarios bench/data/quality_sentinels.jsonl --out bench/reports/quality/round7-demo/replay-baseline",
+      "exit": 2,
+      "result": "50 scenarios executed; 28 failed expectations preserved; native/stdout/settings/actions validated"
+    },
+    {
+      "command": "nix develop -c python3 -I bench/scripts/quality.py replay --engine bench/reports/quality/round7-demo/engines/current --scenarios bench/data/quality_sentinels.jsonl --out bench/reports/quality/round7-demo/replay-current",
+      "exit": 2,
+      "result": "50 scenarios executed; 2 failed expectations preserved; native/stdout/settings/actions validated"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py quick --engine bench/reports/quality/round7-demo/engines/round7c --sample bench/reports/quality/round7-demo/quick-sample --out bench/reports/quality/round7-demo/quick-baseline",
+      "exit": 2,
+      "result": "bring-up failure: classification TSV selected as replay input; fixed helper file selection, no fixtures changed"
+    },
+    {
+      "command": "nix develop -c python3 -I bench/scripts/quality.py quick --engine bench/reports/quality/round7-demo/engines/round7c --sample bench/reports/quality/round7-demo/quick-sample --out bench/reports/quality/round7-demo/quick-baseline-verified",
+      "exit": 0,
+      "result": "3 MainKt strata groups executed on identical frozen 50-row sample"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py quick --engine bench/reports/quality/round7-demo/engines/current --sample bench/reports/quality/round7-demo/quick-sample --out bench/reports/quality/round7-demo/quick-current",
+      "exit": 2,
+      "result": "bring-up failure: classification TSV selected as replay input; fixed helper file selection, no fixtures changed"
+    },
+    {
+      "command": "nix develop -c python3 -I bench/scripts/quality.py quick --engine bench/reports/quality/round7-demo/engines/current --sample bench/reports/quality/round7-demo/quick-sample --out bench/reports/quality/round7-demo/quick-current-verified",
+      "exit": 0,
+      "result": "3 MainKt strata groups executed on identical frozen 50-row sample"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py compare --baseline bench/reports/quality/round7-demo/quick-baseline-verified --candidate bench/reports/quality/round7-demo/quick-current-verified --out bench/reports/quality/round7-demo/quick-comparison",
+      "exit": 0,
+      "result": "50 aligned rows: no target/outcome regression; ROW_GATE_PASS only"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py compare --baseline bench/reports/quality/round7-demo/recorded-results/loop7c_aux_hints --candidate bench/reports/quality/round7-demo/recorded-results/loop7close_orthographic --out bench/reports/quality/round7-demo/full-comparison",
+      "exit": 2,
+      "result": "22,252 aligned rows; 11 sets; tradeoff approval required; summary.py invoked successfully; all set membership deltas crosschecked against existing receipt"
+    },
+    {
+      "command": "nix develop -c python3 -I bench/scripts/quality.py replay --engine bench/reports/quality/round7-demo/engines/round7c --native-log bench/reports/quality/round7-demo/native/logs/sim-03/20261014-194228-agent.jsonl --out bench/reports/quality/round7-demo/mechanic-exact",
+      "exit": 0,
+      "result": "133 exact original commands including IDs; every reply field matches original; verification.json"
+    },
+    {
+      "command": "Python stdlib independent audit of source hashes, APK ZIP assets, exact native replies, historical chain token sequences and row receipts",
+      "exit": 0,
+      "result": "all five source hashes and APK match round-7 close; five packaged assets match; both 700-token sequences match; exact 133-reply replay matches"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py consolidate --engine bench/reports/quality/round7-demo/engines/round7c --logs bench/reports/quality/round7-demo/replay-baseline --out bench/reports/quality/round7-demo/validated-baseline",
+      "exit": 0,
+      "result": "all 50 sessions accepted with manifest/log/settings/process bindings and complete key/reply counts"
+    },
+    {
+      "command": "python3 -I bench/scripts/quality.py consolidate --engine bench/reports/quality/round7-demo/engines/current --logs bench/reports/quality/round7-demo/replay-current --out bench/reports/quality/round7-demo/validated-current",
+      "exit": 0,
+      "result": "all 50 sessions accepted with manifest/log/settings/process bindings and complete key/reply counts"
+    }
+  ],
+  "verification": {
+    "source_matches_closing_receipt": {
+      "app/src/main/java/com/m57/mboard/WordDictionary.kt": true,
+      "app/src/main/java/com/m57/mboard/WordSuggestions.kt": true,
+      "app/src/main/java/com/m57/mboard/MboardService.kt": true,
+      "app/src/main/java/com/m57/mboard/ArabicWords.kt": true,
+      "bench/src/main/kotlin/com/m57/bench/Live.kt": true
+    },
+    "apk_sha256": "0035d5dbdd32ec3ddaa929a209f2bc7f3919344239d3e98a21ba485e84895897",
+    "apk_matches_closing_receipt": true,
+    "packaged_asset_matches": {
+      "words_en.tsv": true,
+      "words_ar.tsv": true,
+      "known_forms_ar.txt": true,
+      "jordanian.tsv": true,
+      "NOTICE.txt": true
+    },
+    "preexisting_files_sha256": {
+      "app/src/main/assets/NOTICE.txt": "b322e14e3825dbed6ec7bc06a72aa1ff337246d1788411d4848f17848da33923",
+      "app/src/main/assets/jordanian.tsv": "8ebb923de5106609a2998841713d23c55042ed92a4ad70455c50db6cf9fb4742",
+      "app/src/main/java/com/m57/mboard/ArabicWords.kt": "1b8fbf766dd9e916b32236ee246060a54605f468eee313a257e13fff0ee2e98b",
+      "app/src/main/java/com/m57/mboard/MboardService.kt": "18f733e6f87d3aba29984c40f548c081ea0c93fb8a656350a199885616c3c8dc",
+      "app/src/main/java/com/m57/mboard/WordDictionary.kt": "f250601393483d69ccbcb60247f38141e7046782e91b9a334b012b92fe9551fa",
+      "app/src/main/java/com/m57/mboard/WordSuggestions.kt": "3e7eecabcb290c89c90be77cc994ddd580f9065fb34012ff53c5e0d495be47db",
+      "bench/lm/SOURCES.md": "3ee62d6384b7034863a7a406c096e073706528503b64ea931051227716f6d898",
+      "bench/lm/seeds/jordanian.tsv": "e7d87bbeacd111415e0cb427c934aecbbebe21c5fe44f215dbf18a6c23723cb5",
+      "bench/reports/agent-loop-rounds.md": "a2290a29d5fe6d935488e174f1317449f081f48aab37815f1184456093908345",
+      "bench/src/main/kotlin/com/m57/bench/Live.kt": "4df1a4c0dd87abb6eb403b4da45914741428e34e8bedd5cfd260e00e28cfa334"
+    },
+    "build_commands": [
+      {
+        "command": "nix develop -c ./gradlew -p bench installDist --console=plain",
+        "exit": 0,
+        "result": "BUILD SUCCESSFUL, 4 tasks up-to-date"
+      },
+      {
+        "command": "nix develop -c bash -c 'set -euo pipefail; ktlint \"app/src/main/java/**/*.kt\" \"bench/src/**/*.kt\"; ./gradlew assembleDebug --console=plain' ",
+        "exit": 0,
+        "result": "ktlint passed; BUILD SUCCESSFUL, 34 tasks up-to-date"
+      }
+    ]
+  },
+  "exact_native_reproduction": {
+    "original": "bench/reports/quality/round7-demo/native/logs/sim-03/20261014-194228-agent.jsonl",
+    "replayed": "/home/m57/Projects/mboard/bench/reports/quality/round7-demo/mechanic-exact/000/20261015-115702-agent.jsonl",
+    "commands": 133,
+    "reply_count": 133,
+    "settings_match": true,
+    "commands_match_including_ids": true,
+    "differing_seq": [],
+    "fields": [
+      "text",
+      "suggestions",
+      "auto",
+      "events",
+      "mode",
+      "word",
+      "context",
+      "id",
+      "seq",
+      "keys",
+      "ok"
+    ]
+  },
+  "historical_chains": [
+    {
+      "log": "/home/m57/Projects/mboard/bench/reports/quality/round7-demo/validated-native/logs/sim-10/20261014-194332-agent.jsonl",
+      "sha256": "5c22ac382381f70f3fbbab4bde40b8c9bb7b0971077ec43a8e2030d2a11e3802",
+      "settings_match": true,
+      "picked_tokens_match": true,
+      "picks_excluding_seed": 700,
+      "first200": {
+        "fourgrams": 197,
+        "unique": 197,
+        "repeated_patterns": 0,
+        "max_multiplicity": 1
+      },
+      "all": {
+        "fourgrams": 697,
+        "unique": 601,
+        "repeated_patterns": 75,
+        "max_multiplicity": 4
+      },
+      "empty_post_pick_seq": []
+    },
+    {
+      "log": "/home/m57/Projects/mboard/bench/reports/quality/round7-demo/validated-native/logs/sim-10/20261014-194335-agent.jsonl",
+      "sha256": "453117747053a9cbc26b2e2d92c5033f3dfede3e9ae2073d99d149df3556dfa3",
+      "settings_match": true,
+      "picked_tokens_match": true,
+      "picks_excluding_seed": 700,
+      "first200": {
+        "fourgrams": 197,
+        "unique": 197,
+        "repeated_patterns": 0,
+        "max_multiplicity": 1
+      },
+      "all": {
+        "fourgrams": 697,
+        "unique": 564,
+        "repeated_patterns": 133,
+        "max_multiplicity": 2
+      },
+      "empty_post_pick_seq": []
+    }
+  ],
+  "bringup_notes": [
+    "The first native replay preserved all editing actions but dropped the final quit transport ID. Corrected helper and reran mechanic-exact; original 133 commands and replies now match exactly.",
+    "Quick sample selection initially included classification TSVs. Corrected helper selection and reran both frozen engines on unchanged sample."
+  ],
+  "not_run": [
+    "new full benchmark (existing round-7 results imported and analyzed instead)",
+    "discovery/persona wave",
+    "unit/instrumented/screenshot tests",
+    "phone or adb actions",
+    "commit/push"
+  ]
+}

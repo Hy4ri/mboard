@@ -1,0 +1,25 @@
+{
+  "authorized_scope": "Continue the proposed narrow manual-availability batch for glars/glass and exsplain/explained. No discovery wave, phone action, commit or push.",
+  "baseline": "engines/baseline: verified dirty round-7 closing worktree, not HEAD",
+  "classification": "Confirmed missing useful manual choice/completion",
+  "root_cause_groups": 1,
+  "mechanism": "A manually enumerated regular -s inflection was unconditionally promoted ahead of the blocked original automatic reading. Those two reservations consumed both nonliteral visible slots, hiding a target already returned by fuzzy candidate generation. The ranker's third alternative is not the strip's third slot because literal input consumes a slot.",
+  "hypotheses": [
+    {"hypothesis": "Display-slot reservation crowds out existing targets", "finding": "Confirmed by native strips and real Kotlin rank traces: glares/glare precede glass; explains/explain precede explained."},
+    {"hypothesis": "Target vocabulary/candidate-generation coverage is missing", "finding": "Rejected for these reproductions: real fuzzyCompletions already returns glass and explained."},
+    {"hypothesis": "Context-only scoring changes the outcome", "finding": "Not needed to reproduce: both exact recorded benchmark contexts are empty, and the native blank-context reproduction exhibits the loss."}
+  ],
+  "fix": "In WordSuggestions.rank only, do not reserve a manually enumerated candidate equal to the blocked reading plus regular -s. Keep the original reading and ordinary ranked alternatives. No typo-specific spellings, dictionary/assets, correction guards, learning, prediction or strip-glue changes.",
+  "runtime_evidence": [
+    "candidates-baseline.log",
+    "candidates-candidate1.log",
+    "repro-baseline/replay.json",
+    "repro-candidate1/replay.json",
+    "manual-picks-candidate1/replay.json"
+  ],
+  "deferred": [
+    "Earlier 193 correct-auto-to-manual transitions versus round7c are not approved by this narrow batch.",
+    "Unrelated vocabulary coverage, ambiguous typo cases and prediction coherence/long-run recurrence remain queued.",
+    "Android editor compatibility and typing feel remain m57's separate device gate."
+  ]
+}

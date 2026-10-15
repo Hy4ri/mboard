@@ -1,0 +1,13 @@
+mboard quality: aligned recorded baseline/candidate comparison
+ROW_GATE_PASS
+Aligned 50 rows in 3 sets, including real-word rows.
+targets_lost: 0
+targets_gained: 0
+new_wrong: 0
+wrong_removed: 0
+correct_auto_lost: 0
+auto_to_manual: 0
+new_valid_corruption: 0
+Clean sets: found%, saved%, badAC count, next3%, desktop p95 us (baseline -> candidate)
+Per-language clean completion, savings, prediction and same-baseline p95: comparison.json / summary.txt.
+No general correctness, fresh blind evidence, or Android/editor acceptance is implied.

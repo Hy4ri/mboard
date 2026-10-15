@@ -1,0 +1,27 @@
+mboard quality: aligned recorded baseline/candidate comparison
+TRADEOFF_APPROVAL_REQUIRED
+Aligned 22252 rows in 11 sets, including real-word rows.
+targets_lost: 2
+targets_gained: 14
+new_wrong: 0
+wrong_removed: 72
+correct_auto_lost: 193
+auto_to_manual: 193
+new_valid_corruption: 0
+LOST en_real_typos.typos.tsv:630 glars -> glass: glare|glars|glass => glars|glares|glare
+LOST en_real_typos.typos.tsv:3625 exsplain -> explained: explain|exsplain|explained => exsplain|explains|explain
+Clean sets: found%, saved%, badAC count, next3%, desktop p95 us (baseline -> candidate)
+ar_fresh.json: 60.47->60.63, 24.48->24.51, 7->7, 17.61->17.61, 451->623
+ar_subs.json: 65.52->65.72, 26.9->26.93, 58->58, 20.59->20.59, 244->484
+ar_tatoeba.json: 59.42->59.57, 23.68->23.71, 26->26, 17.27->17.27, 264->489
+en_chat.json: 86.89->86.92, 39.34->39.35, 28->28, 22.51->22.51, 337->423
+en_chat_learning.json: 87.05->87.08, 40.12->40.14, 10->10, 22.36->22.36, 410->497
+en_fresh.json: 84.69->84.71, 40.58->40.59, 15->15, 27.9->27.9, 195->275
+en_subs.json: 86.79->86.8, 41.82->41.83, 92->89, 29.42->29.42, 128->220
+en_tatoeba.json: 85.23->85.24, 40.91->40.91, 56->51, 28.42->28.42, 129->229
+jo_chat_dialect.json: 51.69->51.93, 17.46->17.49, 12->12, 9.37->9.37, 311->561
+jo_chat_learning.json: 57.89->58.1, 21.45->21.48, 12->12, 10.35->10.35, 470->964
+jo_chat_msa.json: 36.93->37.18, 11.18->11.23, 12->12, 3.57->3.57, 422->625
+jo_human_fresh.json: 50.9->51.11, 18.26->18.26, 35->35, 11.51->11.51, 307->457
+Per-language clean completion, savings, prediction and same-baseline p95: comparison.json / summary.txt.
+No general correctness, fresh blind evidence, or Android/editor acceptance is implied.

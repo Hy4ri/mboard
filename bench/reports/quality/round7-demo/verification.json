@@ -1,0 +1,42 @@
+{
+  "source_matches_closing_receipt": {
+    "app/src/main/java/com/m57/mboard/WordDictionary.kt": true,
+    "app/src/main/java/com/m57/mboard/WordSuggestions.kt": true,
+    "app/src/main/java/com/m57/mboard/MboardService.kt": true,
+    "app/src/main/java/com/m57/mboard/ArabicWords.kt": true,
+    "bench/src/main/kotlin/com/m57/bench/Live.kt": true
+  },
+  "apk_sha256": "0035d5dbdd32ec3ddaa929a209f2bc7f3919344239d3e98a21ba485e84895897",
+  "apk_matches_closing_receipt": true,
+  "packaged_asset_matches": {
+    "words_en.tsv": true,
+    "words_ar.tsv": true,
+    "known_forms_ar.txt": true,
+    "jordanian.tsv": true,
+    "NOTICE.txt": true
+  },
+  "preexisting_files_sha256": {
+    "app/src/main/assets/NOTICE.txt": "b322e14e3825dbed6ec7bc06a72aa1ff337246d1788411d4848f17848da33923",
+    "app/src/main/assets/jordanian.tsv": "8ebb923de5106609a2998841713d23c55042ed92a4ad70455c50db6cf9fb4742",
+    "app/src/main/java/com/m57/mboard/ArabicWords.kt": "1b8fbf766dd9e916b32236ee246060a54605f468eee313a257e13fff0ee2e98b",
+    "app/src/main/java/com/m57/mboard/MboardService.kt": "18f733e6f87d3aba29984c40f548c081ea0c93fb8a656350a199885616c3c8dc",
+    "app/src/main/java/com/m57/mboard/WordDictionary.kt": "f250601393483d69ccbcb60247f38141e7046782e91b9a334b012b92fe9551fa",
+    "app/src/main/java/com/m57/mboard/WordSuggestions.kt": "3e7eecabcb290c89c90be77cc994ddd580f9065fb34012ff53c5e0d495be47db",
+    "bench/lm/SOURCES.md": "3ee62d6384b7034863a7a406c096e073706528503b64ea931051227716f6d898",
+    "bench/lm/seeds/jordanian.tsv": "e7d87bbeacd111415e0cb427c934aecbbebe21c5fe44f215dbf18a6c23723cb5",
+    "bench/reports/agent-loop-rounds.md": "a2290a29d5fe6d935488e174f1317449f081f48aab37815f1184456093908345",
+    "bench/src/main/kotlin/com/m57/bench/Live.kt": "4df1a4c0dd87abb6eb403b4da45914741428e34e8bedd5cfd260e00e28cfa334"
+  },
+  "build_commands": [
+    {
+      "command": "nix develop -c ./gradlew -p bench installDist --console=plain",
+      "exit": 0,
+      "result": "BUILD SUCCESSFUL, 4 tasks up-to-date"
+    },
+    {
+      "command": "nix develop -c bash -c 'set -euo pipefail; ktlint \"app/src/main/java/**/*.kt\" \"bench/src/**/*.kt\"; ./gradlew assembleDebug --console=plain' ",
+      "exit": 0,
+      "result": "ktlint passed; BUILD SUCCESSFUL, 34 tasks up-to-date"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "raw_automatic_outcomes": {
+    "before_outcomes": {
+      "fixed": 7406,
+      "wrong_fix": 1086
+    },
+    "after_outcomes": {
+      "fixed": 7406,
+      "wrong_fix": 1086
+    }
+  },
+  "all_50_sentinel_text_auto_events_and_context_identical_to_baseline": true,
+  "sentinel_suggestion_changes": [
+    {
+      "id": "recorded-loss-glars",
+      "seq": 1,
+      "before": [
+        "glars",
+        "glares",
+        "glare"
+      ],
+      "after": [
+        "glars",
+        "glare",
+        "glass"
+      ]
+    },
+    {
+      "id": "recorded-loss-exsplain",
+      "seq": 1,
+      "before": [
+        "exsplain",
+        "explains",
+        "explain"
+      ],
+      "after": [
+        "exsplain",
+        "explain",
+        "explained"
+      ]
+    }
+  ],
+  "clean_row_and_metric_audit": [
+    {
+      "set": "ar_fresh",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "ar_subs",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "ar_tatoeba",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "en_chat",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "en_chat_learning",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "en_fresh",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "en_subs",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "en_tatoeba",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "jo_chat_dialect",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "jo_chat_learning",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "jo_chat_msa",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    },
+    {
+      "set": "jo_human_fresh",
+      "all_nontiming_sentence_metrics_identical": true,
+      "misses_tsv_byte_identical": true
+    }
+  ],
+  "scenario_sha256": "f1860912f4e37f0f48fc1ebfe6f443b4608a5cb09f7dd02fdf9ac8e37006f3bb"
+}

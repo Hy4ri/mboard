@@ -1,0 +1,55 @@
+MBOARD QUALITY WORKFLOW — CONSOLIDATED EVIDENCE REPORT
+
+mboard quality: aligned recorded baseline/candidate comparison
+TRADEOFF_APPROVAL_REQUIRED
+Aligned 22252 rows in 11 sets, including real-word rows.
+targets_lost: 2
+targets_gained: 14
+new_wrong: 0
+wrong_removed: 72
+correct_auto_lost: 193
+auto_to_manual: 193
+new_valid_corruption: 0
+LOST en_real_typos.typos.tsv:630 glars -> glass: glare|glars|glass => glars|glares|glare
+LOST en_real_typos.typos.tsv:3625 exsplain -> explained: explain|exsplain|explained => exsplain|explains|explain
+Clean sets: found%, saved%, badAC count, next3%, desktop p95 us (baseline -> candidate)
+ar_fresh.json: 60.47->60.63, 24.48->24.51, 7->7, 17.61->17.61, 451->623
+ar_subs.json: 65.52->65.72, 26.9->26.93, 58->58, 20.59->20.59, 244->484
+ar_tatoeba.json: 59.42->59.57, 23.68->23.71, 26->26, 17.27->17.27, 264->489
+en_chat.json: 86.89->86.92, 39.34->39.35, 28->28, 22.51->22.51, 337->423
+en_chat_learning.json: 87.05->87.08, 40.12->40.14, 10->10, 22.36->22.36, 410->497
+en_fresh.json: 84.69->84.71, 40.58->40.59, 15->15, 27.9->27.9, 195->275
+en_subs.json: 86.79->86.8, 41.82->41.83, 92->89, 29.42->29.42, 128->220
+en_tatoeba.json: 85.23->85.24, 40.91->40.91, 56->51, 28.42->28.42, 129->229
+jo_chat_dialect.json: 51.69->51.93, 17.46->17.49, 12->12, 9.37->9.37, 311->561
+jo_chat_learning.json: 57.89->58.1, 21.45->21.48, 12->12, 10.35->10.35, 470->964
+jo_chat_msa.json: 36.93->37.18, 11.18->11.23, 12->12, 3.57->3.57, 422->625
+jo_human_fresh.json: 50.9->51.11, 18.26->18.26, 35->35, 11.51->11.51, 307->457
+Per-language clean completion, savings, prediction and same-baseline p95: comparison.json / summary.txt.
+No general correctness, fresh blind evidence, or Android/editor acceptance is implied.
+
+Native logs: 18 examined; 17 accepted; 1 rejected.
+Historical logs have directory attribution, not retroactively proven per-session engine binding.
+REJECTED /home/m57/Projects/mboard/bench/reports/quality/round7-demo/validated-native/logs/sim-07/20261014-194230-agent.jsonl: failed command {'id': 2, 'ok': False, 'error': 'unknown command; use type, key, pick, set, wait, state or quit', 'event': 'reply', 'seq': 2}
+Replay /home/m57/Projects/mboard/bench/reports/quality/round7-demo/replay-baseline: 50 scenarios; 28 failed expectations. Failures retained, never fixture-adjusted.
+Replay /home/m57/Projects/mboard/bench/reports/quality/round7-demo/replay-current: 50 scenarios; 2 failed expectations. Failures retained, never fixture-adjusted.
+Replay /home/m57/Projects/mboard/bench/reports/quality/round7-demo/mechanic-exact: 1 scenarios; 0 failed expectations. Failures retained, never fixture-adjusted.
+Fixed quick sample: 50 aligned rows; ROW_GATE_PASS; {'targets_lost': 0, 'targets_gained': 0, 'new_wrong': 0, 'wrong_removed': 0, 'correct_auto_lost': 0, 'auto_to_manual': 0, 'new_valid_corruption': 0}.
+Learning replay replay-baseline/chain-learning-false: 210 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 207, 'unique': 207, 'repeated_patterns': 0, 'max_multiplicity': 1}; empty pools=0.
+Learning replay replay-baseline/chain-learning-true: 210 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 207, 'unique': 207, 'repeated_patterns': 0, 'max_multiplicity': 1}; empty pools=0.
+Learning replay replay-current/chain-learning-false: 210 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 207, 'unique': 207, 'repeated_patterns': 0, 'max_multiplicity': 1}; empty pools=0.
+Learning replay replay-current/chain-learning-true: 210 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 207, 'unique': 207, 'repeated_patterns': 0, 'max_multiplicity': 1}; empty pools=0.
+Historical chain 20261014-194332-agent.jsonl: 700 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 697, 'unique': 601, 'repeated_patterns': 75, 'max_multiplicity': 4}; empty pools=0.
+Historical chain 20261014-194335-agent.jsonl: 700 exact picks excluding seed; first200={'fourgrams': 197, 'unique': 197, 'repeated_patterns': 0, 'max_multiplicity': 1}; full={'fourgrams': 697, 'unique': 564, 'repeated_patterns': 133, 'max_multiplicity': 2}; empty pools=0.
+Commands actually run and verification: execution.json (embedded in receipts.json).
+
+Triage: failed expectations are evidence of observed behavior versus the stated intent, not proven mechanisms.
+Preserved typos with useful manual targets are intentional conservative behavior, not automatically defects.
+A wrong manual pick is not an automatic replacement. Vocabulary requests require source investigation.
+Unsupported/editor-only claims remain unconfirmed; desktop replay cannot settle device compatibility.
+Historical chains differ in seed/dialect/learning and are NOT a learning-only ablation. New paired learning sentinels hold all other settings and seed fixed.
+No fix batch authorized or selected here. At most three investigated mechanism groups per next approved batch; all others queued.
+Default gate: TRADEOFF_APPROVAL_REQUIRED. Approval is not inferred from an earlier 'accepted' heading.
+This report compares supplied result directories; it does not execute a full benchmark. Historical tuning results are regression evidence, not fresh blind evidence.
+Full acceptance still requires a source/asset freeze, lint, APK/desktop builds, complete existing run.sh replay, every-row comparison and sentinel state gate after the last behavioral edit.
+STOP: no discovery/persona wave, production behavior change, commit, push or phone action.

@@ -1,0 +1,718 @@
+[
+  {
+    "order": 1,
+    "engine": "baseline",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/1-baseline/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        1.4990234375,
+        1.0244140625,
+        1.25927734375
+      ],
+      "vmstat": {
+        "pswpin": 1469086,
+        "pswpout": 2489746,
+        "pgmajfault": 1494989
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:         1204160 kB\nMemAvailable:    4612288 kB\nBuffers:          348976 kB\nCached:          3848608 kB\nSwapCached:      1119940 kB\nActive:          8231652 kB\nInactive:        4015888 kB\nActive(anon):    7924424 kB\nInactive(anon):   966752 kB\nActive(file):     307228 kB\nInactive(file):  3049136 kB\nUnevictable:      588236 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005168 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              1192 kB\nWriteback:             0 kB\nAnonPages:       8632912 kB\nMapped:           670684 kB\nShmem:            718116 kB\nKReclaimable:     472384 kB\nSlab:             748624 kB\nSReclaimable:     472384 kB\nSUnreclaim:       276240 kB\nKernelStack:       21528 kB\nPageTables:       112716 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33727224 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      246972 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:36:42.641984+00:00"
+    },
+    "host_after": {
+      "load": [
+        1.53955078125,
+        1.041015625,
+        1.263671875
+      ],
+      "vmstat": {
+        "pswpin": 1469091,
+        "pswpout": 2489746,
+        "pgmajfault": 1494994
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:         1026136 kB\nMemAvailable:    4434884 kB\nBuffers:          349004 kB\nCached:          3848716 kB\nSwapCached:      1119940 kB\nActive:          8358760 kB\nInactive:        4016476 kB\nActive(anon):    8051532 kB\nInactive(anon):   966764 kB\nActive(file):     307228 kB\nInactive(file):  3049712 kB\nUnevictable:      587980 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005188 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              1900 kB\nWriteback:             0 kB\nAnonPages:       8760348 kB\nMapped:           788468 kB\nShmem:            717860 kB\nKReclaimable:     472428 kB\nSlab:             748668 kB\nSReclaimable:     472428 kB\nSUnreclaim:       276240 kB\nKernelStack:       21684 kB\nPageTables:       115160 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33576668 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247436 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:36:47.085752+00:00"
+    },
+    "seconds": 4.4437723259998165,
+    "p95_us": 290,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 606,
+        "renders": 10571,
+        "p50_us": 77,
+        "max_us": 18008,
+        "p95_us": 290
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    },
+    "misses_sha256": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b"
+  },
+  {
+    "order": 1,
+    "engine": "baseline",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/1-baseline/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        1.53955078125,
+        1.041015625,
+        1.263671875
+      ],
+      "vmstat": {
+        "pswpin": 1469091,
+        "pswpout": 2489746,
+        "pgmajfault": 1494994
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:         1026136 kB\nMemAvailable:    4434884 kB\nBuffers:          349004 kB\nCached:          3848716 kB\nSwapCached:      1119940 kB\nActive:          8359020 kB\nInactive:        4016476 kB\nActive(anon):    8051792 kB\nInactive(anon):   966764 kB\nActive(file):     307228 kB\nInactive(file):  3049712 kB\nUnevictable:      587980 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005188 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              1900 kB\nWriteback:             0 kB\nAnonPages:       8760608 kB\nMapped:           788468 kB\nShmem:            717860 kB\nKReclaimable:     472428 kB\nSlab:             748668 kB\nSReclaimable:     472428 kB\nSUnreclaim:       276240 kB\nKernelStack:       21684 kB\nPageTables:       115160 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33576668 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247436 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:36:47.086509+00:00"
+    },
+    "host_after": {
+      "load": [
+        1.93798828125,
+        1.15380859375,
+        1.29736328125
+      ],
+      "vmstat": {
+        "pswpin": 1469093,
+        "pswpout": 2489746,
+        "pgmajfault": 1494996
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          946600 kB\nMemAvailable:    4355884 kB\nBuffers:          349112 kB\nCached:          3783272 kB\nSwapCached:      1119940 kB\nActive:          8332960 kB\nInactive:        4016988 kB\nActive(anon):    8025732 kB\nInactive(anon):   966768 kB\nActive(file):     307228 kB\nInactive(file):  3050220 kB\nUnevictable:      526224 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005196 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              2332 kB\nWriteback:             0 kB\nAnonPages:       8738472 kB\nMapped:           790624 kB\nShmem:            652004 kB\nKReclaimable:     472456 kB\nSlab:             748696 kB\nSReclaimable:     472456 kB\nSUnreclaim:       276240 kB\nKernelStack:       22028 kB\nPageTables:       115148 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33525672 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247644 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:00.562383+00:00"
+    },
+    "seconds": 13.475868864999939,
+    "p95_us": 399,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 810,
+        "renders": 44971,
+        "p50_us": 120,
+        "max_us": 20584,
+        "p95_us": 399
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    },
+    "misses_sha256": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8"
+  },
+  {
+    "order": 2,
+    "engine": "final",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/2-final/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        1.93798828125,
+        1.15380859375,
+        1.29736328125
+      ],
+      "vmstat": {
+        "pswpin": 1469093,
+        "pswpout": 2489746,
+        "pgmajfault": 1494996
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          946340 kB\nMemAvailable:    4355624 kB\nBuffers:          349112 kB\nCached:          3783272 kB\nSwapCached:      1119940 kB\nActive:          8332960 kB\nInactive:        4016988 kB\nActive(anon):    8025732 kB\nInactive(anon):   966768 kB\nActive(file):     307228 kB\nInactive(file):  3050220 kB\nUnevictable:      526224 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005196 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              2332 kB\nWriteback:             0 kB\nAnonPages:       8738472 kB\nMapped:           790624 kB\nShmem:            652004 kB\nKReclaimable:     472456 kB\nSlab:             748696 kB\nSReclaimable:     472456 kB\nSUnreclaim:       276240 kB\nKernelStack:       22028 kB\nPageTables:       115148 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33525984 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247644 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:00.564227+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.263671875,
+        1.234375,
+        1.32275390625
+      ],
+      "vmstat": {
+        "pswpin": 1469094,
+        "pswpout": 2489746,
+        "pgmajfault": 1494997
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          851120 kB\nMemAvailable:    4260620 kB\nBuffers:          349160 kB\nCached:          3783112 kB\nSwapCached:      1119940 kB\nActive:          8324732 kB\nInactive:        4017152 kB\nActive(anon):    8017504 kB\nInactive(anon):   966748 kB\nActive(file):     307228 kB\nInactive(file):  3050404 kB\nUnevictable:      526028 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005200 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              2580 kB\nWriteback:             0 kB\nAnonPages:       8730148 kB\nMapped:           790620 kB\nShmem:            651812 kB\nKReclaimable:     472488 kB\nSlab:             748728 kB\nSReclaimable:     472488 kB\nSUnreclaim:       276240 kB\nKernelStack:       21928 kB\nPageTables:       115332 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33521692 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247644 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:05.073107+00:00"
+    },
+    "seconds": 4.5088828899988584,
+    "p95_us": 326,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 578,
+        "renders": 10571,
+        "p50_us": 91,
+        "max_us": 36008,
+        "p95_us": 326
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    },
+    "misses_sha256": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b"
+  },
+  {
+    "order": 2,
+    "engine": "final",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/2-final/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        2.263671875,
+        1.234375,
+        1.32275390625
+      ],
+      "vmstat": {
+        "pswpin": 1469094,
+        "pswpout": 2489746,
+        "pgmajfault": 1494997
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          851120 kB\nMemAvailable:    4260620 kB\nBuffers:          349160 kB\nCached:          3783112 kB\nSwapCached:      1119940 kB\nActive:          8324732 kB\nInactive:        4017152 kB\nActive(anon):    8017504 kB\nInactive(anon):   966748 kB\nActive(file):     307228 kB\nInactive(file):  3050404 kB\nUnevictable:      526028 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005200 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              2580 kB\nWriteback:             0 kB\nAnonPages:       8730148 kB\nMapped:           790620 kB\nShmem:            651812 kB\nKReclaimable:     472488 kB\nSlab:             748728 kB\nSReclaimable:     472488 kB\nSUnreclaim:       276240 kB\nKernelStack:       21928 kB\nPageTables:       115332 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33521692 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247644 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:05.073796+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.216796875,
+        1.259765625,
+        1.330078125
+      ],
+      "vmstat": {
+        "pswpin": 1469100,
+        "pswpout": 2489746,
+        "pgmajfault": 1495010
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          964432 kB\nMemAvailable:    4375008 kB\nBuffers:          349248 kB\nCached:          3784012 kB\nSwapCached:      1119948 kB\nActive:          8333420 kB\nInactive:        4018216 kB\nActive(anon):    8026192 kB\nInactive(anon):   966764 kB\nActive(file):     307228 kB\nInactive(file):  3051452 kB\nUnevictable:      525832 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005220 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3524 kB\nWriteback:             0 kB\nAnonPages:       8738820 kB\nMapped:           790852 kB\nShmem:            651612 kB\nKReclaimable:     472516 kB\nSlab:             748748 kB\nSReclaimable:     472516 kB\nSUnreclaim:       276232 kB\nKernelStack:       21728 kB\nPageTables:       115240 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33533788 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247324 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:18.645291+00:00"
+    },
+    "seconds": 13.571490964000986,
+    "p95_us": 403,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 854,
+        "renders": 44971,
+        "p50_us": 119,
+        "max_us": 20841,
+        "p95_us": 403
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    },
+    "misses_sha256": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8"
+  },
+  {
+    "order": 3,
+    "engine": "final",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/3-final/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        2.216796875,
+        1.259765625,
+        1.330078125
+      ],
+      "vmstat": {
+        "pswpin": 1469100,
+        "pswpout": 2489746,
+        "pgmajfault": 1495010
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          964432 kB\nMemAvailable:    4375008 kB\nBuffers:          349248 kB\nCached:          3784012 kB\nSwapCached:      1119948 kB\nActive:          8333420 kB\nInactive:        4018216 kB\nActive(anon):    8026192 kB\nInactive(anon):   966764 kB\nActive(file):     307228 kB\nInactive(file):  3051452 kB\nUnevictable:      525832 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005220 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3524 kB\nWriteback:             0 kB\nAnonPages:       8738820 kB\nMapped:           790852 kB\nShmem:            651612 kB\nKReclaimable:     472516 kB\nSlab:             748748 kB\nSReclaimable:     472516 kB\nSUnreclaim:       276232 kB\nKernelStack:       21728 kB\nPageTables:       115240 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33533788 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247324 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:18.646959+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.19921875,
+        1.2724609375,
+        1.333984375
+      ],
+      "vmstat": {
+        "pswpin": 1469100,
+        "pswpout": 2489746,
+        "pgmajfault": 1495010
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          896864 kB\nMemAvailable:    4307848 kB\nBuffers:          349292 kB\nCached:          3784184 kB\nSwapCached:      1119948 kB\nActive:          8333276 kB\nInactive:        4018604 kB\nActive(anon):    8026048 kB\nInactive(anon):   966768 kB\nActive(file):     307228 kB\nInactive(file):  3051836 kB\nUnevictable:      525896 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005220 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3700 kB\nWriteback:             0 kB\nAnonPages:       8739224 kB\nMapped:           787872 kB\nShmem:            651676 kB\nKReclaimable:     472540 kB\nSlab:             748772 kB\nSReclaimable:     472540 kB\nSUnreclaim:       276232 kB\nKernelStack:       21652 kB\nPageTables:       114960 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33522040 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247452 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:23.252671+00:00"
+    },
+    "seconds": 4.605716396001299,
+    "p95_us": 289,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 559,
+        "renders": 10571,
+        "p50_us": 78,
+        "max_us": 17100,
+        "p95_us": 289
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    },
+    "misses_sha256": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b"
+  },
+  {
+    "order": 3,
+    "engine": "final",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/final/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/3-final/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        2.19921875,
+        1.2724609375,
+        1.333984375
+      ],
+      "vmstat": {
+        "pswpin": 1469100,
+        "pswpout": 2489746,
+        "pgmajfault": 1495010
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          896864 kB\nMemAvailable:    4307848 kB\nBuffers:          349292 kB\nCached:          3784184 kB\nSwapCached:      1119948 kB\nActive:          8333276 kB\nInactive:        4018604 kB\nActive(anon):    8026048 kB\nInactive(anon):   966768 kB\nActive(file):     307228 kB\nInactive(file):  3051836 kB\nUnevictable:      525896 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005220 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3700 kB\nWriteback:             0 kB\nAnonPages:       8739224 kB\nMapped:           787872 kB\nShmem:            651676 kB\nKReclaimable:     472540 kB\nSlab:             748772 kB\nSReclaimable:     472540 kB\nSUnreclaim:       276232 kB\nKernelStack:       21652 kB\nPageTables:       114960 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33522040 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247452 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:23.253458+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.21044921875,
+        1.32373046875,
+        1.3505859375
+      ],
+      "vmstat": {
+        "pswpin": 1469102,
+        "pswpout": 2489746,
+        "pgmajfault": 1495012
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          837004 kB\nMemAvailable:    4249124 kB\nBuffers:          349392 kB\nCached:          3787264 kB\nSwapCached:      1119952 kB\nActive:          8364308 kB\nInactive:        4019740 kB\nActive(anon):    8057080 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3052964 kB\nUnevictable:      525832 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              4108 kB\nWriteback:             0 kB\nAnonPages:       8767912 kB\nMapped:           788820 kB\nShmem:            653660 kB\nKReclaimable:     472548 kB\nSlab:             748780 kB\nSReclaimable:     472548 kB\nSUnreclaim:       276232 kB\nKernelStack:       21756 kB\nPageTables:       115108 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33536428 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247404 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:36.748282+00:00"
+    },
+    "seconds": 13.494825820000187,
+    "p95_us": 385,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 824,
+        "renders": 44971,
+        "p50_us": 116,
+        "max_us": 23757,
+        "p95_us": 385
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    },
+    "misses_sha256": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8"
+  },
+  {
+    "order": 4,
+    "engine": "baseline",
+    "label": "en_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "en",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/en_chat.txt",
+      "--label",
+      "en_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/4-baseline/en_chat_learning"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        2.21044921875,
+        1.32373046875,
+        1.3505859375
+      ],
+      "vmstat": {
+        "pswpin": 1469102,
+        "pswpout": 2489746,
+        "pgmajfault": 1495012
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          837004 kB\nMemAvailable:    4249124 kB\nBuffers:          349392 kB\nCached:          3787264 kB\nSwapCached:      1119952 kB\nActive:          8364308 kB\nInactive:        4019740 kB\nActive(anon):    8057080 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3052964 kB\nUnevictable:      525832 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              4108 kB\nWriteback:             0 kB\nAnonPages:       8767912 kB\nMapped:           788820 kB\nShmem:            653660 kB\nKReclaimable:     472548 kB\nSlab:             748780 kB\nSReclaimable:     472548 kB\nSUnreclaim:       276232 kB\nKernelStack:       21756 kB\nPageTables:       115108 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33536428 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247404 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:36.750029+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.43408203125,
+        1.384765625,
+        1.37060546875
+      ],
+      "vmstat": {
+        "pswpin": 1469102,
+        "pswpout": 2489746,
+        "pgmajfault": 1495012
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          799920 kB\nMemAvailable:    4212088 kB\nBuffers:          349436 kB\nCached:          3785336 kB\nSwapCached:      1119952 kB\nActive:          8368380 kB\nInactive:        4019788 kB\nActive(anon):    8061152 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3053012 kB\nUnevictable:      523844 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              4200 kB\nWriteback:             0 kB\nAnonPages:       8771836 kB\nMapped:           790860 kB\nShmem:            651676 kB\nKReclaimable:     472548 kB\nSlab:             748780 kB\nSReclaimable:     472548 kB\nSUnreclaim:       276232 kB\nKernelStack:       21696 kB\nPageTables:       115244 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33543020 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247324 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:41.355427+00:00"
+    },
+    "seconds": 4.605403233999823,
+    "p95_us": 276,
+    "metrics": {
+      "spelling_normalized_pct": 0,
+      "false_autocorrect_count": 10,
+      "next_word_top1_pct": 13.18,
+      "avg_letters_to_find": 2.06,
+      "sentences": 400,
+      "words": 3073,
+      "found_before_end_pct": 87.08,
+      "one_letter_top1_pct": 21.78,
+      "latency_desktop_jvm": {
+        "p99_us": 556,
+        "renders": 10571,
+        "p50_us": 75,
+        "max_us": 27737,
+        "p95_us": 276
+      },
+      "one_letter_top3_pct": 41.5,
+      "keystroke_savings_pct": 40.14,
+      "found_within_2_letters_by_length": {
+        "1": 65.26,
+        "2": 82.58,
+        "3": 83.01,
+        "4": 55.45,
+        "5": 46.29,
+        "6": 22.01,
+        "7": 19.1,
+        "8": 16.06,
+        "9": 8.47,
+        "10+": 2.33
+      },
+      "next_word_top3_pct": 22.36,
+      "first_word_top3_pct": 3.73,
+      "false_autocorrect_pct": 0.33
+    },
+    "misses_sha256": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b"
+  },
+  {
+    "order": 4,
+    "engine": "baseline",
+    "label": "jo_chat_learning",
+    "argv": [
+      "java",
+      "-Xmx3g",
+      "-cp",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/lib/*",
+      "com.m57.bench.MainKt",
+      "--lang",
+      "ar",
+      "--learning",
+      "--assets",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/engines/baseline/assets",
+      "--sentences",
+      "/home/m57/Projects/mboard/bench/data/jo_chat.txt",
+      "--label",
+      "jo_chat_learning",
+      "--out",
+      "/home/m57/Projects/mboard/bench/reports/quality/manual-choice-batch1/latency-followup-1/4-baseline/jo_chat_learning",
+      "--dialect"
+    ],
+    "exit_code": 0,
+    "host_before": {
+      "load": [
+        2.43408203125,
+        1.384765625,
+        1.37060546875
+      ],
+      "vmstat": {
+        "pswpin": 1469102,
+        "pswpout": 2489746,
+        "pgmajfault": 1495012
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          799920 kB\nMemAvailable:    4212088 kB\nBuffers:          349436 kB\nCached:          3785336 kB\nSwapCached:      1119952 kB\nActive:          8368380 kB\nInactive:        4019788 kB\nActive(anon):    8061152 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3053012 kB\nUnevictable:      523844 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              4200 kB\nWriteback:             0 kB\nAnonPages:       8771836 kB\nMapped:           790860 kB\nShmem:            651676 kB\nKReclaimable:     472548 kB\nSlab:             748780 kB\nSReclaimable:     472548 kB\nSUnreclaim:       276232 kB\nKernelStack:       21696 kB\nPageTables:       115244 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33543020 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247324 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:41.356271+00:00"
+    },
+    "host_after": {
+      "load": [
+        2.53515625,
+        1.46240234375,
+        1.396484375
+      ],
+      "vmstat": {
+        "pswpin": 1469102,
+        "pswpout": 2489746,
+        "pgmajfault": 1495012
+      },
+      "meminfo": "MemTotal:       16164260 kB\nMemFree:          949872 kB\nMemAvailable:    4362580 kB\nBuffers:          349524 kB\nCached:          3777716 kB\nSwapCached:      1119952 kB\nActive:          8354056 kB\nInactive:        4020312 kB\nActive(anon):    8046828 kB\nInactive(anon):   966776 kB\nActive(file):     307228 kB\nInactive(file):  3053536 kB\nUnevictable:      523524 kB\nMlocked:           12800 kB\nSwapTotal:      12429560 kB\nSwapFree:        8005224 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              3972 kB\nWriteback:             0 kB\nAnonPages:       8765340 kB\nMapped:           790920 kB\nShmem:            643672 kB\nKReclaimable:     472564 kB\nSlab:             748796 kB\nSReclaimable:     472564 kB\nSUnreclaim:       276232 kB\nKernelStack:       21952 kB\nPageTables:       115152 kB\nSecPageTables:      2056 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    20511688 kB\nCommitted_AS:   33536488 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:      247532 kB\nVmallocChunk:          0 kB\nPercpu:             7008 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:      8192 kB\nFilePmdMapped:      8192 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      997520 kB\nDirectMap2M:    15566848 kB\nDirectMap1G:     1048576 kB\n",
+      "at": "2026-10-15T10:37:54.757674+00:00"
+    },
+    "seconds": 13.401408308998725,
+    "p95_us": 400,
+    "metrics": {
+      "spelling_normalized_pct": 1.06,
+      "false_autocorrect_count": 12,
+      "next_word_top1_pct": 6.14,
+      "avg_letters_to_find": 2.34,
+      "sentences": 1200,
+      "words": 10283,
+      "found_before_end_pct": 58.1,
+      "one_letter_top1_pct": 11.86,
+      "latency_desktop_jvm": {
+        "p99_us": 851,
+        "renders": 44971,
+        "p50_us": 118,
+        "max_us": 21158,
+        "p95_us": 400
+      },
+      "one_letter_top3_pct": 18.36,
+      "keystroke_savings_pct": 21.48,
+      "found_within_2_letters_by_length": {
+        "1": 33.2,
+        "2": 69.56,
+        "3": 66.26,
+        "4": 39.01,
+        "5": 19.79,
+        "6": 11.64,
+        "7": 5.59,
+        "8": 4.51,
+        "9": 0,
+        "10+": 0
+      },
+      "next_word_top3_pct": 10.35,
+      "first_word_top3_pct": 0.15,
+      "false_autocorrect_pct": 0.12
+    },
+    "misses_sha256": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8"
+  }
+]
