@@ -7,6 +7,7 @@ object EnglishWords {
             "i" to "I",
             "im" to "I'm",
             "ive" to "I've",
+            "weve" to "we've",
             "dont" to "don't",
             "cant" to "can't",
             "wont" to "won't",
@@ -34,7 +35,21 @@ object EnglishWords {
             "shouldve" to "should've",
         )
 
-    /** Chat words and transliterations the corpus lacks; never corrected. */
+    /** Auxiliary contractions of valid words; arbitrary possessives (days/day's) are not reserved. */
+    val CONTRACTION_HINTS: Map<String, String> =
+        mapOf(
+            "ill" to "i'll",
+            "well" to "we'll",
+            "were" to "we're",
+            "wed" to "we'd",
+            "id" to "i'd",
+            "its" to "it's",
+            "shed" to "she'd",
+            "hell" to "he'll",
+            "shell" to "she'll",
+        )
+
+    /** Chat words, technical abbreviations, units, brand names, and transliterations; never corrected. */
     val SLANG: Set<String> =
         setOf(
             "lol",
@@ -118,6 +133,7 @@ object EnglishWords {
             "xd",
             "xoxo",
             "yalla",
+            "salam",
             "habibi",
             "habibti",
             "inshallah",
@@ -128,5 +144,44 @@ object EnglishWords {
             "walla",
             "shu",
             "wen",
+            // Technical abbreviations, engineering units, and shorthand
+            "cpu",
+            "ssl",
+            "dns",
+            "json",
+            "yaml",
+            "grep",
+            "htop",
+            "mpa",
+            "gpa",
+            "api",
+            "apis",
+            "async",
+            "bool",
+            "bday",
+            "alloc",
+            "rebar",
+            "shader",
+            "oled",
+            "dlss",
+            "fov",
+            "cmu",
+            "awg",
+            // Contemporary everyday words absent from the selected SCOWL release
+            "teether",
+            "onesie",
+            "binky",
+            // Common brand and service names
+            "lyft",
+            "venmo",
+            "hulu",
+            "cvs",
+            "hilti",
+            "vulkan",
+            "romex",
+            "npm",
         )
+
+    /** Common gaming spelling absent from the selected SCOWL release; no frequency claim. */
+    val SUPPLEMENTAL: Set<String> = setOf("respawn")
 }

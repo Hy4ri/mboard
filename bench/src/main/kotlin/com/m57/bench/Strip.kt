@@ -2,6 +2,7 @@ package com.m57.bench
 
 import android.content.Context
 import com.m57.mboard.Language
+import com.m57.mboard.PredictionTrail
 import com.m57.mboard.UserWords
 import com.m57.mboard.WordDictionary
 import com.m57.mboard.WordSuggestions
@@ -22,6 +23,7 @@ class Strip(
     val autoCorrect: Boolean = true,
 ) {
     val words = WordSuggestions(context)
+    val predictionTrail = PredictionTrail()
     val userWords = UserWords(context)
     val rejectedCorrections = HashSet<String>()
 
@@ -61,7 +63,7 @@ class Strip(
 
     // MboardService.prefixContext with nothing after the caret.
     fun context(text: String): Caret {
-        val before = text.takeLast(65)
+        val before = text.takeLast(120)
         val result = before.takeLastWhile(::wordChar)
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false
         val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
@@ -73,7 +75,7 @@ class Strip(
                 .trim()
                 .split(Regex("\\s+"))
                 .filter { it.isNotEmpty() }
-                .takeLast(8)
+                .takeLast(16)
         return Caret(result, idle, recent, sentenceStart)
     }
 
@@ -105,7 +107,10 @@ class Strip(
     // MboardService.renderSuggestions, ordinary text field, no saved phrases, emoji suggestions off.
     fun show(c: Caret): Shown {
         if (c.idle) {
-            val predicted = words.predict(c.contextWords, language, dialect, learnedNext(c.contextWords))
+            val predicted =
+                words
+                    .predict(c.contextWords, language, dialect, learnedNext(c.contextWords))
+                    .let { predictionTrail.filter(c.contextWords, it) }
             return Shown(predicted.map { matchCase(it, "") }.take(3), false)
         }
         val typed = c.prefix

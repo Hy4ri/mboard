@@ -2,6 +2,12 @@ package com.m57.mboard
 
 /** Arabic word lists the dictionary consults beside its frequency list. */
 object ArabicWords {
+    /** Observed technical/dialect spellings absent from the bundled lexical sources. */
+    val KEEP_TYPED: Set<String> = setOf("عامد", "يعامد", "بعطي", "بعطيك", "كويز", "كويزات")
+
+    /** CAMeL-attested آراء/مرفقات plus the productive definite form; minimum lexical score only. */
+    val SUPPLEMENTAL: Set<String> = setOf("آراء", "مرفقات", "المرفقات")
+
     /** Frequent misspellings that the subtitle corpus lists as words, so edit rules cannot catch them. */
     val MISSPELLINGS: Map<String, String> =
         mapOf(

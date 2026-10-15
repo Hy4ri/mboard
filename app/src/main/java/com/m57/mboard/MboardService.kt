@@ -42,6 +42,7 @@ class MboardService : InputMethodService() {
     private lateinit var emojiHistory: EmojiHistory
     private lateinit var words: WordSuggestions
     private lateinit var userWords: UserWords
+    private val predictionTrail = PredictionTrail()
 
     // Backspace fires on touch-down; a swipe that follows puts that character back first.
     private var pressDeleted: String? = null
@@ -139,6 +140,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun resetEditorState() {
+        predictionTrail.reset()
         editorGeneration++
         suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
         suggestionHandler.removeCallbacks(refreshSuggestions)
@@ -348,6 +350,7 @@ class MboardService : InputMethodService() {
         restarting: Boolean,
     ) {
         super.onStartInput(info, restarting)
+        predictionTrail.reset()
         editorGeneration++
         lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
@@ -482,7 +485,7 @@ class MboardService : InputMethodService() {
         if (!ic.getSelectedText(0).isNullOrEmpty()) return PrefixContext("", "Selection active · completions paused")
         val after = ic.getTextAfterCursor(65, 0)?.toString() ?: return PrefixContext("", "App does not expose text for completions")
         val before =
-            ic.getTextBeforeCursor(65, 0)?.toString()
+            ic.getTextBeforeCursor(CONTEXT_CHARS, 0)?.toString()
                 ?: return PrefixContext("", "App does not expose text for completions")
 
         val result = before.takeLastWhile(::wordChar)
@@ -499,7 +502,8 @@ class MboardService : InputMethodService() {
                 .trim()
                 .split(Regex("\\s+"))
                 .filter { it.isNotEmpty() }
-                .takeLast(8)
+                // The tables read two words; the rest lets prediction see a repeating phrase.
+                .takeLast(CONTEXT_WORDS)
         return PrefixContext(
             result,
             if (result.isEmpty() && suffix.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
@@ -552,7 +556,9 @@ class MboardService : InputMethodService() {
         val context = prefixContext()
         if (context.commonEligible) {
             val predicted =
-                words.predict(context.contextWords, language, settings.dialectEnabled(language.dialect), learnedNext(context.contextWords))
+                words
+                    .predict(context.contextWords, language, settings.dialectEnabled(language.dialect), learnedNext(context.contextWords))
+                    .let { predictionTrail.filter(context.contextWords, it) }
             strip.render(
                 predicted.map { matchCase(it, "") },
                 "",
@@ -962,7 +968,12 @@ class MboardService : InputMethodService() {
         if (!done) {
             message("This app did not accept the completion")
         } else {
-            if (' ' !in word.trim()) learn(word.trim(), context.contextWords.lastOrNull())
+            if (' ' !in word.trim()) {
+                predictionTrail.record(context.contextWords, word.trim())
+                learn(word.trim(), context.contextWords.lastOrNull())
+            } else {
+                predictionTrail.reset()
+            }
             if (keyboard?.capsLocked != true) keyboard?.shifted = false
         }
         lastSpace = 0L
@@ -973,6 +984,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun pasteClipboard() {
+        predictionTrail.reset()
         if (fieldPolicy.password) return
         val raw =
             try {
@@ -1004,6 +1016,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun paste(text: String) {
+        predictionTrail.reset()
         if (currentInputConnection?.commitText(text, 1) == false) message("This app did not accept the text")
         lastSpace = 0L
         if (mode == Mode.KEYS) updateAuxiliary()
@@ -1070,6 +1083,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun onKey(key: String) {
+        predictionTrail.reset()
         if (mode == Mode.EMOJI_SEARCH || mode == Mode.CALCULATOR) return onInternalKey(key)
         val ic = currentInputConnection ?: return
         val kv = keyboard ?: return
@@ -1300,5 +1314,9 @@ class MboardService : InputMethodService() {
 
     private companion object {
         const val AUX_DP = 40
+
+        /** Text read before the caret for completions, and the sentence words kept from it. */
+        const val CONTEXT_CHARS = 120
+        const val CONTEXT_WORDS = 16
     }
 }

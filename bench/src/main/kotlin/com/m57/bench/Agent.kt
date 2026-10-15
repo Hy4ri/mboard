@@ -36,6 +36,8 @@ Everything (commands, every key, every reply) is logged to <log-dir>/<stamp>-age
 
 private const val KEY_MS = 100L
 
+private val ACTIONS = listOf("type", "key", "pick", "set", "wait", "state", "quit")
+
 /** One key applied by a command, kept for the logs. */
 private class Step(
     val key: String,
@@ -192,6 +194,14 @@ internal fun runAgent(
         try {
             val cmd = JSONObject(line)
             if (cmd.has("id")) reply.put("id", cmd.get("id"))
+            val actions = ACTIONS.filter { cmd.has(it) }
+            require(actions.size == 1) {
+                if (actions.isEmpty()) {
+                    "unknown command; use type, key, pick, set, wait, state or quit"
+                } else {
+                    "one action per command, got ${actions.joinToString(", ")}"
+                }
+            }
             when {
                 cmd.has("type") -> {
                     val value = cmd.getString("type")

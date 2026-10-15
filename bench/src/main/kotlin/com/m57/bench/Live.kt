@@ -60,6 +60,7 @@ internal class Editor(
 
     /** A letter, digit, symbol, or separator key. Returns a note when something notable happened. */
     fun type(key: String): String? {
+        strip.predictionTrail.reset()
         if (key != Keys.SPACE) lastSpace = 0L
         lastCorrection = null
         var note: String? = null
@@ -97,6 +98,7 @@ internal class Editor(
 
     /** Replace the whole field, as if the app had set its text; nothing is learned from it. */
     fun set(value: String) {
+        strip.predictionTrail.reset()
         text = value
         lastSpace = 0L
         lastCorrection = null
@@ -104,6 +106,7 @@ internal class Editor(
     }
 
     fun enter() {
+        strip.predictionTrail.reset()
         lastSpace = 0L
         lastCorrection = null
         text += "\n"
@@ -112,6 +115,7 @@ internal class Editor(
 
     /** Backspace straight after an auto-correction puts the typed word back and stops correcting it. */
     fun backspace(): String? {
+        strip.predictionTrail.reset()
         lastSpace = 0L
         val last = lastCorrection
         lastCorrection = null
@@ -134,7 +138,12 @@ internal class Editor(
         val word = shown.values.getOrNull(slot) ?: return "nothing in slot ${slot + 1}"
         val context = caret
         text = text.dropLast(context.prefix.length) + word.trimEnd() + " "
-        if (' ' !in word.trim()) strip.learn(word.trim(), context.contextWords.lastOrNull())
+        if (' ' !in word.trim()) {
+            strip.predictionTrail.record(context.contextWords, word.trim())
+            strip.learn(word.trim(), context.contextWords.lastOrNull())
+        } else {
+            strip.predictionTrail.reset()
+        }
         lastSpace = 0L
         lastCorrection = null
         picks++

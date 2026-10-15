@@ -14,6 +14,7 @@ class WordDictionary private constructor(
     private val originals: Map<String, Long>,
     private val dialectSpellings: Set<String>,
     private val dialectAliases: Map<String, List<Spelling>> = emptyMap(),
+    private val knownForms: KnownWordForms = KnownWordForms.EMPTY,
 ) {
     data class Candidate(
         val word: String,
@@ -293,6 +294,7 @@ class WordDictionary private constructor(
         prefix: String,
         limit: Int,
         dialect: Boolean,
+        minFrequency: Long = 0L,
     ): List<Candidate> {
         if (prefix.length < 5 || prefix.length > 32 || limit <= 0) return emptyList()
         val typed = normalize(prefix, language) ?: return emptyList()
@@ -303,7 +305,7 @@ class WordDictionary private constructor(
         while (index < entries.size) {
             val entry = entries[index++]
             if (!entry.normalized.startsWith(first)) break
-            if ((!dialect && entry.isDialectOnly) || entry.hidden) continue
+            if ((!dialect && entry.isDialectOnly) || entry.hidden || entry.frequency < minFrequency) continue
             if (entry.normalized.length < typed.length - MAX_DISTANCE) continue
             val distance = prefixDistance(typed, entry.normalized)
             if (distance in 1..MAX_DISTANCE) {
@@ -415,6 +417,7 @@ class WordDictionary private constructor(
         val normalized = normalize(word, language) ?: return emptyList()
         if (word.any { !it.isLetter() } || word.drop(1).any { it.isUpperCase() }) return emptyList()
         if (normalized in language.keepAsTyped || normalized in language.contractions || exact.containsKey(normalized)) return emptyList()
+        if (knownPlural(normalized) || unfinishedPrefix(normalized)) return emptyList()
         val scores = HashMap<String, Candidate>()
         for ((variant, weight) in prefixVariants(normalized)) {
             val entry = exact[variant] ?: continue
@@ -501,6 +504,7 @@ class WordDictionary private constructor(
         if (lower in language.keepAsTyped) return null
         val normalized = normalize(word, language) ?: return null
         if (exact.containsKey(normalized)) return null
+        if (knownPlural(normalized) || unfinishedPrefix(normalized)) return null
 
         var bestEntry: Entry? = null
         var bestScore = 0.0
@@ -588,10 +592,32 @@ class WordDictionary private constructor(
     private fun midWord(
         normalized: String,
         candidate: Entry,
-    ): Boolean =
-        complete(normalized, limit = 2, dialect = true, includeAliases = false).any {
-            it.word != candidate.original && it.score >= candidate.frequency
-        }
+    ): Boolean {
+        // Words the typed text begins: one more frequent than the fix, or together a tenth of it (upd → update,
+        // not ups; perman → permanent, not german). A typo rarely happens to start that many real words.
+        val completions = complete(normalized, limit = 8, dialect = true, includeAliases = false).filter { it.word != candidate.original }
+        return completions.any { it.score >= candidate.frequency } || completions.sumOf { it.score } * 10 >= candidate.frequency
+    }
+
+    /** An observed completion makes an unknown input a plausible unfinished word (shif, canc, sche).
+     * Protect the whole decision: dropping one target can expose a worse alternative.
+     */
+    private fun unfinishedPrefix(normalized: String): Boolean =
+        normalized.length >= 4 &&
+            complete(normalized, limit = 8, dialect = false, includeAliases = false).any {
+                it.word.length > normalized.length && (it.score >= 300.0 || it.word in language.supplementalWords)
+            }
+
+    /** A regular plural of a listed word (sprints, regressions, nodes): valid even when the list lacks it. */
+    private fun knownPlural(normalized: String): Boolean =
+        normalized.length >= 4 &&
+            normalized.endsWith('s') &&
+            !normalized.endsWith("ss") &&
+            (
+                exact.containsKey(normalized.dropLast(1)) ||
+                    (normalized.endsWith("es") && exact.containsKey(normalized.dropLast(2))) ||
+                    (normalized.endsWith("ies") && exact.containsKey(normalized.dropLast(3) + "y"))
+            )
 
     private fun restrictedEdits(word: String): List<Pair<String, Double>> {
         val out = ArrayList<Pair<String, Double>>()
@@ -635,12 +661,34 @@ class WordDictionary private constructor(
         return out
     }
 
+    /** Recognize source-validated written forms without adding them to completion/edit targets. */
+    private fun knownArabicForm(word: String): Boolean {
+        if (knownForms.isEmpty && language.keepAsTyped.isEmpty()) return false
+
+        fun knownStem(form: String): Boolean =
+            form in language.keepAsTyped || form in knownForms ||
+                ARABIC_SURFACE_PREFIXES.any { prefix ->
+                    form.startsWith(prefix) && form.length - prefix.length >= 2 &&
+                        (form.substring(prefix.length) in knownForms || form.substring(prefix.length) in language.keepAsTyped)
+                }
+        if (knownStem(word)) return true
+        for (suffix in ARABIC_ENCLITICS) {
+            if (word.endsWith(suffix) && word.length - suffix.length >= 2) {
+                val stem = word.dropLast(suffix.length)
+                if (knownStem(stem)) return true
+                if (stem.endsWith('ت') && knownStem(stem.dropLast(1) + 'ة')) return true
+            }
+        }
+        return false
+    }
+
     private fun arabicCorrection(word: String): String? {
         if (word.any { it in '\u064B'..'\u065F' || it == '\u0670' || it == 'ـ' }) return null
         if (word.length < 2 || word.length > 32) return null
         // Curated dialect spellings are deliberate: هلأ is "now", not a misspelt هلا.
         if (word in dialectSpellings) return null
         language.misspellings[word]?.let { return it }
+        if (knownArabicForm(word)) return null
         val normalized = normalize(word, language) ?: return null
         val typedFrequency = originals[word] ?: 0L
 
@@ -685,8 +733,10 @@ class WordDictionary private constructor(
         val group = spellings[looseKey(normalized)] ?: return null
         val top = group.first()
         if (top.original == word || top.original.length != word.length) return null
+        // Spelling-only supplements supply manual choices, not evidence for automatic normalization.
+        if (strict && top.original in language.supplementalWords && top.frequency == 1L) return null
         val rival = group.firstOrNull { it !== top && it.original != word }?.frequency ?: 0L
-        var ratio = 3L
+        var ratio = if (strict) 3L else 1L
         for (i in word.indices) {
             val typed = word[i]
             val wanted = top.original[i]
@@ -700,7 +750,8 @@ class WordDictionary private constructor(
                 }
 
                 last && typed == 'ى' && wanted == 'ي' -> {
-                    Unit
+                    // لدى and لدي are different valid words, just as على and علي are.
+                    if (strict && typedFrequency > 0) return null
                 }
 
                 // علي and الي are real words, not misspelt على and إلى.
@@ -732,7 +783,9 @@ class WordDictionary private constructor(
 
     /** Suggest-only Arabic fix for an unknown word whose correction was not certain enough to apply. */
     private fun arabicIntended(word: String): String? {
-        if (word.length < 3 || word.length > 32 || word in dialectSpellings) return null
+        // Attested morphology prevents replacement, not a manually pickable alternate spelling.
+        // قريه can be deliberate, while قرية must remain available without applying it on space.
+        if (word.length < 3 || word.length > 32 || word in language.keepAsTyped) return null
         if (word.any { it in '\u064B'..'\u065F' || it == '\u0670' || it == 'ـ' }) return null
         val normalized = normalize(word, language) ?: return null
         // مدرسه stays as typed (it can mean "his teacher") but مدرسة is offered first.
@@ -797,6 +850,11 @@ class WordDictionary private constructor(
      */
     private fun looksInflected(normalized: String): Boolean {
         if (isCliticDecomposable(normalized)) return true
+        // Colloquial negation wraps a known form: مافيش / مابديش retain the final ش.
+        if (normalized.startsWith("ما") && normalized.endsWith('ش') && normalized.length >= 5) {
+            val withoutSuffix = normalized.dropLast(1)
+            if (exact.containsKey(withoutSuffix) || exact.containsKey(withoutSuffix.drop(2))) return true
+        }
         val verb = if (normalized.startsWith('س') && normalized.length >= 4) normalized.drop(1) else normalized
         if (verb.length >= 3 && verb[0] in VERB_PREFIXES) {
             val rest = verb.substring(1)
@@ -813,6 +871,13 @@ class WordDictionary private constructor(
     }
 
     private fun isCliticDecomposable(normalizedWord: String): Boolean {
+        // Contracted prepositions retain the article: عالبيت / للبيت both contain البيت.
+        // Share the same mapping as completion so a suggested clitic form is not stripped on space.
+        for ((prefix, replacement) in ARABIC_CLITIC_PREFIXES) {
+            if (normalizedWord.startsWith(prefix) && normalizedWord.length - prefix.length >= 2) {
+                if (exact.containsKey(replacement + normalizedWord.substring(prefix.length))) return true
+            }
+        }
         // Enclitic only; a doubled final ي/و (حبيي) is a slip, not a pronoun.
         for (e in ARABIC_ENCLITICS) {
             if (normalizedWord.endsWith(e) && normalizedWord.length - e.length >= 2) {
@@ -869,10 +934,14 @@ class WordDictionary private constructor(
                 "ك",
             )
 
+        private val ARABIC_SURFACE_PREFIXES = ARABIC_PROCLITICS + listOf("وعال", "فعال", "عال", "وع", "فع", "ع")
+
         private val ARABIC_ENCLITICS =
             listOf(
                 "هما",
                 "كما",
+                "لي",
+                "لك",
                 "كم",
                 "كن",
                 "هم",
@@ -889,6 +958,12 @@ class WordDictionary private constructor(
         /** Clitic prefix as typed, and what the bare word starts with in its place. */
         private val ARABIC_CLITIC_PREFIXES =
             listOf(
+                "وعال" to "ال",
+                "فعال" to "ال",
+                "عال" to "ال",
+                "وع" to "",
+                "فع" to "",
+                "ع" to "",
                 "ولل" to "ال",
                 "فلل" to "ال",
                 "لل" to "ال",
@@ -962,8 +1037,9 @@ class WordDictionary private constructor(
             reader: Reader,
             language: Language,
             dialect: Map<String, Long> = emptyMap(),
+            knownForms: KnownWordForms = KnownWordForms.EMPTY,
         ): WordDictionary {
-            val fileEntries =
+            val assetEntries =
                 reader
                     .buffered()
                     .useLines { lines ->
@@ -981,6 +1057,13 @@ class WordDictionary private constructor(
                                 }
                             }.toList()
                     }
+
+            val supplementalEntries =
+                language.supplementalWords.filterNot { original -> assetEntries.any { it.original == original } }.mapNotNull { original ->
+                    val normalized = normalize(original, language) ?: return@mapNotNull null
+                    if (normalized.isEmpty()) null else Entry(normalized, original, 1L)
+                }
+            val fileEntries = assetEntries + supplementalEntries
 
             // Every listed surface spelling, since normalizing merges انا into أنا and علي into على.
             val originals = HashMap<String, Long>(fileEntries.size * 2)
@@ -1063,6 +1146,7 @@ class WordDictionary private constructor(
                 originals = originals,
                 dialectSpellings = if (language.script == Script.ARABIC) dialect.keys else emptySet(),
                 dialectAliases = dialectAliases,
+                knownForms = knownForms,
             )
         }
 

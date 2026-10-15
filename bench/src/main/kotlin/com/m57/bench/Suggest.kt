@@ -219,7 +219,7 @@ fun main(args: Array<String>) {
 
     val notes = ArrayList<String>()
     if (shown.highlight) notes += "Space replaces `${caret.prefix}` with `${shown.values.first()}` (slot 1 is an auto-correction)."
-    if (input.length > 65) notes += "Long text: the keyboard reads only the last 65 characters, and so did this run."
+    if (input.length > 120) notes += "Long text: the keyboard reads only the last 120 characters, and so did this run."
     if (opts.dialect && language.dialect == null) notes += "${language.name} has no dialect vocabulary, so `--dialect` changed nothing."
     if (shown.values.isEmpty()) notes += "The keyboard would show an empty strip here."
 

@@ -72,11 +72,15 @@ class WordSuggestions(
             executor.execute {
                 try {
                     val dialect = language.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
+                    val knownForms =
+                        language.knownFormsAsset?.let { name ->
+                            assets.open(name).bufferedReader().use { KnownWordForms.read(it) }
+                        } ?: KnownWordForms.EMPTY
                     val dictionary =
                         assets
                             .open(language.wordsAsset)
                             .bufferedReader()
-                            .use { WordDictionary.read(it, language, dialect) }
+                            .use { WordDictionary.read(it, language, dialect, knownForms) }
                     if (dictionary.size == 0) throw IOException("No usable bundled word entries")
 
                     val next = readTable(language.nextAsset)
@@ -351,15 +355,21 @@ class WordSuggestions(
         val model = model(language) ?: return emptyList()
         val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
         val normalized = context.map(::matchKey)
-        val candidates =
-            (scorer.sources.flatten() + model.dictionary.commonWords)
-                .map { written(it, language) }
-                .distinctBy(::candidateKey)
-                .sortedByDescending { scorer.probability(it) }
-        // Reject only a repeated multi-word cycle, not every recently used word.
+
+        // Words seen after this context come first; the common-word list only fills what they leave. Ranked together,
+        // a very frequent word such as "you" wins the pruned rows' unlisted share and lands after "the".
+        fun ranked(words: List<String>) = words.map { written(it, language) }.sortedByDescending { scorer.probability(it) }
+        val seen = scorer.sources.flatten()
+        val candidates = (ranked(seen) + ranked(model.dictionary.commonWords)).distinctBy(::candidateKey)
+        // Reject only a repeated multi-word cycle, not every recently used word: an immediate 2-4 word repeat, or a
+        // four-word run already in the sentence (tapping the first slot otherwise cycles through 5-8 word loops).
         return candidates.filter { candidate ->
             val tail = normalized + matchKey(candidate)
-            (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) }
+            val run = tail.takeLast(4)
+            val repeatsRun = tail.size > 4 && tail.dropLast(1).windowed(4).any { it == run }
+            !repeatsRun && (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) } &&
+                // Arabic single letters are word pieces in the tables, except the conjunction و and dialect ع (on).
+                (language.script != Script.ARABIC || candidate.length > 1 || candidate == "و" || (candidate == "ع" && dialectOn))
         }
     }
 
@@ -386,6 +396,7 @@ class WordSuggestions(
         val dialect = dialectOn && language.dialect != null
         val scorer = Scorer(model, context, language, dialect, learned, userWords)
         val scores = LinkedHashMap<String, Double>()
+        val contractionChoices = ArrayList<String>()
 
         fun consider(
             word: String,
@@ -439,20 +450,105 @@ class WordSuggestions(
             if (startsWithTyped && !exactWords.contains(candidateKey(w))) consider(w, ln(scorer.probability(w)))
         }
 
+        // Apostrophe-free input can also be a real word (ill / I'll, wed / we'd). Offer the
+        // bundled contraction without treating it as an automatic correction of that valid word.
+        if (language.script == Script.LATIN && typed.all { it.isLetter() }) {
+            for (i in 1 until typed.length) {
+                val contraction = typed.substring(0, i) + "'" + typed.substring(i)
+                if (model.dictionary.frequency(contraction) > 0L) {
+                    consider(contraction, ln(scorer.probability(contraction)))
+                    contractionChoices.add(contraction)
+                }
+            }
+        }
+
+        // Rare validated spellings can provide a weak fuzzy match and accidentally switch off
+        // two-edit recovery (perants -> pedants hides parents). Only when all existing choices
+        // have the unobserved-spelling minimum score, let observed alternatives compete with
+        // a two-edit cost. Preserve existing attested matches and the ordinary empty fallback.
+        // This affects strip choices only, never the automatic replacement policy.
+        if (language.script == Script.LATIN && exactWords.isEmpty() && scores.isNotEmpty() &&
+            scores.keys.none { model.dictionary.frequency(it) > 1L }
+        ) {
+            for (c in model.dictionary.distantCompletions(typed, 6, dialect, minFrequency = 300L)) {
+                consider(c.word, ln(scorer.probability(c.word)) - 2 * FUZZY_COST)
+            }
+        }
+
         // 4. Nothing matched at all: a long word with two slips still gets its likely target.
-        if (scores.keys.none { matchKey(it) != matchKey(typed) }) {
+        if (scores.keys.none { candidateKey(it) != candidateKey(typed) }) {
             // Already ordered closest first, then most frequent.
             model.dictionary.distantCompletions(typed, 3, dialect).forEachIndexed { index, c ->
                 scores[c.word] = -index.toDouble()
             }
         }
 
-        val typedNorm = matchKey(typed)
-        return scores.entries
-            .filter { matchKey(it.key) != typedNorm }
-            .sortedByDescending { it.value }
-            .take(3)
-            .map { it.key }
+        val typedNorm = candidateKey(typed)
+        val ranked =
+            scores.entries
+                .filter { candidateKey(it.key) != typedNorm }
+                .sortedByDescending { it.value }
+                .take(3)
+                .map { it.key }
+        val lowerTyped = typed.lowercase(Locale.ROOT)
+        val strongWholeTransposition =
+            language.script == Script.LATIN && typed.length >= 4 &&
+                ranked.take(2).any { candidate ->
+                    candidate.length == typed.length && model.dictionary.frequency(candidate) >= 300L &&
+                        (0 until lowerTyped.length - 1).any { index ->
+                            lowerTyped.substring(0, index) + lowerTyped[index + 1] + lowerTyped[index] + lowerTyped.substring(index + 2) ==
+                                candidateKey(candidate)
+                        }
+                }
+        // Keep a literal completion pickable before fuzzy readings consume both spare slots.
+        // A corpus-observed spelling need not clear the much stricter automatic-fix threshold.
+        val literalCompletion =
+            if (language.script == Script.LATIN && model.dictionary.frequency(typed) == 0L) {
+                exactCandidates
+                    .filter {
+                        it.word.length > typed.length && (it.score > 1.0 || it.word in language.supplementalWords) &&
+                            (typed.length >= 4 || it.word.length == typed.length + 1) &&
+                            (it.score >= 300.0 || it.word in language.supplementalWords || !strongWholeTransposition)
+                    }.maxByOrNull { scorer.probability(it.word) }
+            } else {
+                null
+            }
+        val supplementalCompletion =
+            exactCandidates
+                .filter {
+                    it.word in language.supplementalWords
+                }.maxByOrNull { scorer.probability(it.word) }
+                ?.word
+        // Reserve known auxiliary homographs (shed/she'd), not arbitrary possessives
+        // (days/day's) or unknown typos (alls/youd) that need the ordinary alternatives.
+        val contractionChoice =
+            if (model.dictionary.frequency(typed) > 0L) {
+                language.contractionHints[lowerTyped]?.let { wanted ->
+                    contractionChoices.firstOrNull { candidateKey(it) == candidateKey(wanted) }
+                }
+            } else {
+                null
+            }
+        // A full curated spelling one transposition away is more specific than an unrelated
+        // longer prefix reading (resapwn -> respawn). This never changes replacement policy.
+        val supplementalTypo =
+            if (language.script == Script.LATIN && typed.length >= 5 && model.dictionary.frequency(typed) == 0L &&
+                exactCandidates.isEmpty()
+            ) {
+                val lower = typed.lowercase(Locale.ROOT)
+                (0 until lower.length - 1)
+                    .asSequence()
+                    .map { index -> lower.substring(0, index) + lower[index + 1] + lower[index] + lower.substring(index + 2) }
+                    .firstOrNull { it in language.supplementalWords }
+            } else {
+                null
+            }
+        val preferred = contractionChoice ?: supplementalTypo ?: supplementalCompletion ?: literalCompletion?.word
+        return if (preferred != null && ranked.take(2).none { candidateKey(it) == candidateKey(preferred) }) {
+            (listOf(preferred) + ranked.filter { candidateKey(it) != candidateKey(preferred) }).take(3)
+        } else {
+            ranked
+        }
     }
 
     private companion object {
@@ -471,6 +567,7 @@ class WordSuggestions(
 
         /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
         const val FUZZY_COST = 1.5
+
         const val CLITIC_COST = 2.5
     }
 

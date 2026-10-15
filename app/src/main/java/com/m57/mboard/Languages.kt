@@ -41,10 +41,16 @@ class Language(
     val dialect: Dialect? = null,
     /** Typed forms always rewritten: im → I'm. */
     val contractions: Map<String, String> = emptyMap(),
+    /** Real-word homographs whose contractions should remain manually pickable, not forced. */
+    val contractionHints: Map<String, String> = emptyMap(),
     /** Unknown words that are deliberate and must never be corrected: lol, brb. */
     val keepAsTyped: Set<String> = emptySet(),
+    /** Curated missing spellings: minimum lexical score only, never invented corpus counts. */
+    val supplementalWords: Set<String> = emptySet(),
     /** Misspellings the word list contains as words: corrected, and never offered. */
     val misspellings: Map<String, String> = emptyMap(),
+    /** Valid surface forms used only to prevent destructive corrections, not as ranked completions. */
+    val knownFormsAsset: String? = null,
 ) {
     val layout = Layout.letters(rows, stretch)
     val alphabet = alphabet ?: rows.flatten().filter { it.length == 1 && it[0].isLetter() }.joinToString("")
@@ -141,7 +147,9 @@ object Languages {
                     "y" to "ýÿ",
                 ).mapValues { (_, value) -> value.map(Char::toString) },
             contractions = EnglishWords.CONTRACTIONS,
+            contractionHints = EnglishWords.CONTRACTION_HINTS,
             keepAsTyped = EnglishWords.SLANG,
+            supplementalWords = EnglishWords.SUPPLEMENTAL,
         )
 
     val ARABIC =
@@ -179,6 +187,9 @@ object Languages {
                     nextAsset = "jordanian_next.tsv",
                 ),
             misspellings = ArabicWords.MISSPELLINGS,
+            keepAsTyped = ArabicWords.KEEP_TYPED,
+            supplementalWords = ArabicWords.SUPPLEMENTAL,
+            knownFormsAsset = "known_forms_ar.txt",
         )
 
     /** Globe/space-swipe order; the first entry is the default. */
