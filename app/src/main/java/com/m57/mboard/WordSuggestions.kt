@@ -591,8 +591,12 @@ class WordSuggestions(
         val missingLetterChoice =
             model.dictionary
                 .manualAlternatives(typed)
-                .filter { blockedReading != null && (it.word.length == typed.length || !strongWholeTransposition) }
-                .maxByOrNull { scorer.probability(it.word) }
+                .filter {
+                    blockedReading != null && (it.word.length == typed.length || !strongWholeTransposition) &&
+                        // Keep ordinary alternatives instead of reserving both spare slots for a
+                        // blocked reading and its regular -s inflection (glare/glares, explain/explains).
+                        candidateKey(it.word) != candidateKey(blockedReading + "s")
+                }.maxByOrNull { scorer.probability(it.word) }
                 ?.word
         val completionChoice =
             listOfNotNull(literalCompletion?.word, missingLetterChoice).maxByOrNull { scorer.probability(it) }
