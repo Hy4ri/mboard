@@ -46,6 +46,7 @@ internal class Editor(
 
     private var lastCorrection: Correction? = null
     private var lastSpace = 0L
+    private var pickedSpaceTail: String? = null
 
     init {
         refresh()
@@ -61,6 +62,8 @@ internal class Editor(
     /** A letter, digit, symbol, or separator key. Returns a note when something notable happened. */
     fun type(key: String): String? {
         strip.predictionTrail.reset()
+        val pickedTail = pickedSpaceTail
+        pickedSpaceTail = null
         if (key != Keys.SPACE) lastSpace = 0L
         lastCorrection = null
         var note: String? = null
@@ -90,6 +93,7 @@ internal class Editor(
                 lastSpace = now
             }
         } else {
+            if (pickedTail != null && key in SEPARATORS && text.endsWith(pickedTail)) text = text.dropLast(1)
             text += if (strip.shifted) key.uppercase(Locale.ROOT) else key
         }
         refresh()
@@ -98,6 +102,7 @@ internal class Editor(
 
     /** Replace the whole field, as if the app had set its text; nothing is learned from it. */
     fun set(value: String) {
+        pickedSpaceTail = null
         strip.predictionTrail.reset()
         text = value
         lastSpace = 0L
@@ -106,6 +111,7 @@ internal class Editor(
     }
 
     fun enter() {
+        pickedSpaceTail = null
         strip.predictionTrail.reset()
         lastSpace = 0L
         lastCorrection = null
@@ -115,6 +121,7 @@ internal class Editor(
 
     /** Backspace straight after an auto-correction puts the typed word back and stops correcting it. */
     fun backspace(): String? {
+        pickedSpaceTail = null
         strip.predictionTrail.reset()
         lastSpace = 0L
         val last = lastCorrection
@@ -138,6 +145,7 @@ internal class Editor(
         val word = shown.values.getOrNull(slot) ?: return "nothing in slot ${slot + 1}"
         val context = caret
         text = text.dropLast(context.prefix.length) + word.trimEnd() + " "
+        pickedSpaceTail = (word.trimEnd() + " ").takeLast(33)
         if (' ' !in word.trim()) {
             strip.predictionTrail.record(context.contextWords, word.trim())
             strip.learn(word.trim(), context.contextWords.lastOrNull())

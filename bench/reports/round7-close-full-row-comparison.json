@@ -1,0 +1,495 @@
+{
+  "ar_fresh.typos": {
+    "rows": 1461,
+    "lost": [],
+    "gained": [],
+    "new_wrong": [],
+    "before_outcomes": {
+      "missed": 564,
+      "offered": 637,
+      "fixed": 220,
+      "wrong_fix": 40
+    },
+    "after_outcomes": {
+      "missed": 564,
+      "offered": 637,
+      "fixed": 220,
+      "wrong_fix": 40
+    }
+  },
+  "ar_real_typos.typos": {
+    "rows": 771,
+    "lost": [],
+    "gained": [],
+    "new_wrong": [],
+    "before_outcomes": {
+      "offered": 303,
+      "fixed": 81,
+      "missed": 378,
+      "wrong_fix": 9
+    },
+    "after_outcomes": {
+      "offered": 303,
+      "fixed": 81,
+      "missed": 378,
+      "wrong_fix": 9
+    }
+  },
+  "ar_subs.typos": {
+    "rows": 2919,
+    "lost": [],
+    "gained": [],
+    "new_wrong": [],
+    "before_outcomes": {
+      "offered": 1388,
+      "missed": 930,
+      "wrong_fix": 95,
+      "fixed": 506
+    },
+    "after_outcomes": {
+      "offered": 1388,
+      "missed": 930,
+      "wrong_fix": 95,
+      "fixed": 506
+    }
+  },
+  "ar_tatoeba.typos": {
+    "rows": 2913,
+    "lost": [],
+    "gained": [],
+    "new_wrong": [],
+    "before_outcomes": {
+      "fixed": 474,
+      "missed": 1083,
+      "offered": 1288,
+      "wrong_fix": 68
+    },
+    "after_outcomes": {
+      "fixed": 474,
+      "missed": 1083,
+      "offered": 1288,
+      "wrong_fix": 68
+    }
+  },
+  "en_chat.typos": {
+    "rows": 400,
+    "lost": [],
+    "gained": [
+      {
+        "before": {
+          "context": "do they have",
+          "typed": "vegn",
+          "intended": "vegan",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "veg|vegn|vegas"
+        },
+        "after": {
+          "context": "do they have",
+          "typed": "vegn",
+          "intended": "vegan",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "vegn|vegan|veg"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "servr",
+          "intended": "server",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "serve|servr|service"
+        },
+        "after": {
+          "context": "",
+          "typed": "servr",
+          "intended": "server",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "servr|server|serve"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "fixed": 262,
+      "wrong_fix": 16,
+      "offered": 81,
+      "missed": 41
+    },
+    "after_outcomes": {
+      "fixed": 254,
+      "wrong_fix": 14,
+      "offered": 91,
+      "missed": 41
+    }
+  },
+  "en_fresh.typos": {
+    "rows": 1487,
+    "lost": [],
+    "gained": [
+      {
+        "before": {
+          "context": "he",
+          "typed": "spet",
+          "intended": "spent",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "set|spet|speak"
+        },
+        "after": {
+          "context": "he",
+          "typed": "spet",
+          "intended": "spent",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "spet|spent|set"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "fixed": 903,
+      "wrong_fix": 47,
+      "missed": 215,
+      "offered": 322
+    },
+    "after_outcomes": {
+      "fixed": 870,
+      "wrong_fix": 43,
+      "missed": 217,
+      "offered": 357
+    }
+  },
+  "en_real_typos.typos": {
+    "rows": 4000,
+    "lost": [
+      {
+        "before": {
+          "context": "",
+          "typed": "glars",
+          "intended": "glass",
+          "kind": "other",
+          "outcome": "wrong_fix",
+          "shown": "glare|glars|glass"
+        },
+        "after": {
+          "context": "",
+          "typed": "glars",
+          "intended": "glass",
+          "kind": "other",
+          "outcome": "missed",
+          "shown": "glars|glares|glare"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "exsplain",
+          "intended": "explained",
+          "kind": "phonetic",
+          "outcome": "wrong_fix",
+          "shown": "explain|exsplain|explained"
+        },
+        "after": {
+          "context": "",
+          "typed": "exsplain",
+          "intended": "explained",
+          "kind": "phonetic",
+          "outcome": "missed",
+          "shown": "exsplain|explains|explain"
+        }
+      }
+    ],
+    "gained": [
+      {
+        "before": {
+          "context": "",
+          "typed": "chasr",
+          "intended": "chaser",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "chase|chasr|charlie"
+        },
+        "after": {
+          "context": "",
+          "typed": "chasr",
+          "intended": "chaser",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "chasr|chaser|chase"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "coase",
+          "intended": "coarse",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "case|coase|coast"
+        },
+        "after": {
+          "context": "",
+          "typed": "coase",
+          "intended": "coarse",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "coase|coarse|case"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "sigt",
+          "intended": "sight",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "sit|sigt|sign"
+        },
+        "after": {
+          "context": "",
+          "typed": "sigt",
+          "intended": "sight",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "sigt|sight|sit"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "buring",
+          "intended": "burning",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "bring|buring|bringing"
+        },
+        "after": {
+          "context": "",
+          "typed": "buring",
+          "intended": "burning",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "buring|burning|bring"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "steert",
+          "intended": "street",
+          "kind": "phonetic",
+          "outcome": "wrong_fix",
+          "shown": "steer|steert|steering"
+        },
+        "after": {
+          "context": "",
+          "typed": "steert",
+          "intended": "street",
+          "kind": "phonetic",
+          "outcome": "offered",
+          "shown": "steert|street|steer"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "serect",
+          "intended": "secret",
+          "kind": "other",
+          "outcome": "wrong_fix",
+          "shown": "erect|serect|selected"
+        },
+        "after": {
+          "context": "",
+          "typed": "serect",
+          "intended": "secret",
+          "kind": "other",
+          "outcome": "offered",
+          "shown": "serect|secret|erect"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "missed": 1539,
+      "offered": 698,
+      "fixed": 1146,
+      "wrong_fix": 617
+    },
+    "after_outcomes": {
+      "missed": 1580,
+      "offered": 740,
+      "fixed": 1116,
+      "wrong_fix": 564
+    }
+  },
+  "en_subs.typos": {
+    "rows": 2790,
+    "lost": [],
+    "gained": [
+      {
+        "before": {
+          "context": "look i",
+          "typed": "didt",
+          "intended": "didnt",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "did|didt|didn't"
+        },
+        "after": {
+          "context": "look i",
+          "typed": "didt",
+          "intended": "didnt",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "didt|didnt|did"
+        }
+      },
+      {
+        "before": {
+          "context": "",
+          "typed": "Drid",
+          "intended": "Dried",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "Did|Drid|Didn't"
+        },
+        "after": {
+          "context": "",
+          "typed": "Drid",
+          "intended": "Dried",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "Drid|Dried|Did"
+        }
+      },
+      {
+        "before": {
+          "context": "we must",
+          "typed": "clib",
+          "intended": "climb",
+          "kind": "omission",
+          "outcome": "wrong_fix",
+          "shown": "club|clib|client"
+        },
+        "after": {
+          "context": "we must",
+          "typed": "clib",
+          "intended": "climb",
+          "kind": "omission",
+          "outcome": "offered",
+          "shown": "clib|climb|club"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "offered": 622,
+      "fixed": 1827,
+      "wrong_fix": 79,
+      "missed": 262
+    },
+    "after_outcomes": {
+      "offered": 692,
+      "fixed": 1762,
+      "wrong_fix": 74,
+      "missed": 262
+    }
+  },
+  "en_tatoeba.typos": {
+    "rows": 2960,
+    "lost": [],
+    "gained": [
+      {
+        "before": {
+          "context": "i thought tom would give",
+          "typed": "Marh",
+          "intended": "Mary",
+          "kind": "adjacent",
+          "outcome": "missed",
+          "shown": "Marh|Married|Marry"
+        },
+        "after": {
+          "context": "i thought tom would give",
+          "typed": "Marh",
+          "intended": "Mary",
+          "kind": "adjacent",
+          "outcome": "offered",
+          "shown": "Marh|March|Mary"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "fixed": 1854,
+      "offered": 589,
+      "missed": 413,
+      "wrong_fix": 104
+    },
+    "after_outcomes": {
+      "fixed": 1797,
+      "offered": 650,
+      "missed": 417,
+      "wrong_fix": 96
+    }
+  },
+  "jo_chat_dialect.typos": {
+    "rows": 1199,
+    "lost": [],
+    "gained": [
+      {
+        "before": {
+          "context": "اشتريت",
+          "typed": "بااكيت",
+          "intended": "باكيت",
+          "kind": "doubled",
+          "outcome": "missed",
+          "shown": "بااكيت|بالبيت|بكيت"
+        },
+        "after": {
+          "context": "اشتريت",
+          "typed": "بااكيت",
+          "intended": "باكيت",
+          "kind": "doubled",
+          "outcome": "offered",
+          "shown": "باكيت|بااكيت"
+        }
+      }
+    ],
+    "new_wrong": [],
+    "before_outcomes": {
+      "offered": 503,
+      "fixed": 145,
+      "missed": 516,
+      "wrong_fix": 35
+    },
+    "after_outcomes": {
+      "offered": 504,
+      "fixed": 145,
+      "missed": 515,
+      "wrong_fix": 35
+    }
+  },
+  "jo_human_fresh.typos": {
+    "rows": 1352,
+    "lost": [],
+    "gained": [],
+    "new_wrong": [],
+    "before_outcomes": {
+      "missed": 588,
+      "offered": 535,
+      "fixed": 181,
+      "wrong_fix": 48
+    },
+    "after_outcomes": {
+      "missed": 588,
+      "offered": 535,
+      "fixed": 181,
+      "wrong_fix": 48
+    }
+  }
+}

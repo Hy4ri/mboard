@@ -55,6 +55,7 @@ class MboardService : InputMethodService() {
     private var query = ""
     private var lastShift = 0L
     private var lastSpace = 0L
+    private var pickedSpaceTail: String? = null
     private var privateSession = false
     private var lastClipStamp = 0L
     private var fieldPolicy = SuggestionPolicy.classify(0)
@@ -140,6 +141,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun resetEditorState() {
+        pickedSpaceTail = null
         predictionTrail.reset()
         editorGeneration++
         suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
@@ -350,6 +352,7 @@ class MboardService : InputMethodService() {
         restarting: Boolean,
     ) {
         super.onStartInput(info, restarting)
+        pickedSpaceTail = null
         predictionTrail.reset()
         editorGeneration++
         lastCorrection = null
@@ -930,6 +933,7 @@ class MboardService : InputMethodService() {
         generation: Long,
     ) {
         if (generation != editorGeneration || mode != Mode.KEYS || !settings.suggestions) return
+        pickedSpaceTail = null
         if (fieldPolicy.password) {
             if (expected.isEmpty() && word in words.commonWords(language)) currentInputConnection?.commitText(word, 1)
             return
@@ -968,6 +972,7 @@ class MboardService : InputMethodService() {
         if (!done) {
             message("This app did not accept the completion")
         } else {
+            pickedSpaceTail = value.takeIf { it.endsWith(' ') }?.takeLast(33)
             if (' ' !in word.trim()) {
                 predictionTrail.record(context.contextWords, word.trim())
                 learn(word.trim(), context.contextWords.lastOrNull())
@@ -984,6 +989,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun pasteClipboard() {
+        pickedSpaceTail = null
         predictionTrail.reset()
         if (fieldPolicy.password) return
         val raw =
@@ -1016,6 +1022,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun paste(text: String) {
+        pickedSpaceTail = null
         predictionTrail.reset()
         if (currentInputConnection?.commitText(text, 1) == false) message("This app did not accept the text")
         lastSpace = 0L
@@ -1087,6 +1094,8 @@ class MboardService : InputMethodService() {
         if (mode == Mode.EMOJI_SEARCH || mode == Mode.CALCULATOR) return onInternalKey(key)
         val ic = currentInputConnection ?: return
         val kv = keyboard ?: return
+        val pickedTail = pickedSpaceTail
+        if (key !in setOf(Keys.SHIFT, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)) pickedSpaceTail = null
         if (key != Keys.SPACE) lastSpace = 0L
         pressDeleted = null
         if (key == Keys.BACKSPACE && ic.getSelectedText(0).isNullOrEmpty() && undoCorrection(ic)) {
@@ -1207,6 +1216,14 @@ class MboardService : InputMethodService() {
             }
 
             else -> {
+                // Only absorb the separator we inserted on a pick, never a manually typed space.
+                // Do this after autoCorrectBefore: an explicit literal pick must not be corrected again.
+                if (pickedTail != null && key in separators && key != Keys.SPACE &&
+                    ic.getSelectedText(0).isNullOrEmpty() &&
+                    ic.getTextBeforeCursor(pickedTail.length, 0)?.toString()?.endsWith(pickedTail) == true
+                ) {
+                    ic.deleteSurroundingText(1, 0)
+                }
                 ic.commitText(if (kv.shifted) key.uppercase(Locale.ROOT) else key, 1)
                 if (!kv.capsLocked) kv.shifted = false
             }

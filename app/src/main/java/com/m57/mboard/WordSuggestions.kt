@@ -221,6 +221,18 @@ class WordSuggestions(
         context: List<String> = emptyList(),
         dialectOn: Boolean = false,
         learned: Map<String, Int> = emptyMap(),
+    ): String? =
+        correctionReading(word, language, context, dialectOn, learned)?.takeUnless {
+            model(language)?.dictionary?.hasCompetingReading(word, it) == true
+        }
+
+    /** Pick the original reading before applying whole-decision ambiguity safety. */
+    private fun correctionReading(
+        word: String,
+        language: Language,
+        context: List<String>,
+        dialectOn: Boolean,
+        learned: Map<String, Int>,
     ): String? {
         if (closed) return null
         val model = model(language) ?: return null
@@ -251,8 +263,36 @@ class WordSuggestions(
         language: Language,
     ): String? {
         if (closed) return null
-        return model(language)?.dictionary?.likelyIntended(word)
+        val dictionary = model(language)?.dictionary ?: return null
+        val hint = dictionary.likelyIntended(word) ?: return null
+        if (language.script == Script.ARABIC && word.length >= 4 &&
+            preferLiteral(word, hint, dictionary.completions(word, 8, false), language)
+        ) {
+            return null
+        }
+        return hint
     }
+
+    private fun strongLiteral(
+        typed: String,
+        candidate: WordDictionary.Candidate,
+        language: Language,
+    ): Boolean =
+        candidate.word.startsWith(typed) && candidate.word.length > typed.length &&
+            (candidate.score >= 300.0 || candidate.word in language.supplementalWords)
+
+    /** Demote a reordered word, not a spelling variant such as موسي/موسى or رسالت/رساله. */
+    private fun preferLiteral(
+        typed: String,
+        hint: String,
+        candidates: List<WordDictionary.Candidate>,
+        language: Language,
+    ): Boolean =
+        hint.length == typed.length &&
+            candidates.any {
+                strongLiteral(typed, it, language) &&
+                    (it.word in language.supplementalWords || typed.toList().sorted() == hint.toList().sorted())
+            }
 
     fun commonWords(language: Language): List<String> {
         if (closed) return emptyList()
@@ -424,8 +464,10 @@ class WordSuggestions(
 
         // 2b. Arabic words behind an attached و/ف/ب/ل/ك/لل, which the word list rarely contains.
         var cliticExact = 0
+        val cliticCandidates = ArrayList<WordDictionary.Candidate>()
         if (language.script == Script.ARABIC && typed.length >= 3) {
             for (c in model.dictionary.cliticCompletions(typed, 6, dialect)) {
+                cliticCandidates.add(c)
                 if (candidateKey(c.word) in exactWords) continue
                 cliticExact++
                 consider(c.word, ln(scorer.probability(c.word, c.score.toLong())) - CLITIC_COST)
@@ -502,11 +544,14 @@ class WordSuggestions(
                 }
         // Keep a literal completion pickable before fuzzy readings consume both spare slots.
         // A corpus-observed spelling need not clear the much stricter automatic-fix threshold.
+        val originalReading = correctionReading(typed, language, context, dialectOn, learned)
+        val blockedReading = originalReading?.takeIf { model.dictionary.hasCompetingReading(typed, it) }
         val literalCompletion =
             if (language.script == Script.LATIN && model.dictionary.frequency(typed) == 0L) {
                 exactCandidates
                     .filter {
-                        it.word.length > typed.length && (it.score > 1.0 || it.word in language.supplementalWords) &&
+                        it.word.length > typed.length &&
+                            (it.score > 1.0 || (blockedReading != null && typed.length >= 5) || it.word in language.supplementalWords) &&
                             (typed.length >= 4 || it.word.length == typed.length + 1) &&
                             (it.score >= 300.0 || it.word in language.supplementalWords || !strongWholeTransposition)
                     }.maxByOrNull { scorer.probability(it.word) }
@@ -543,7 +588,47 @@ class WordSuggestions(
             } else {
                 null
             }
-        val preferred = contractionChoice ?: supplementalTypo ?: supplementalCompletion ?: literalCompletion?.word
+        val missingLetterChoice =
+            model.dictionary
+                .manualAlternatives(typed)
+                .filter { blockedReading != null && (it.word.length == typed.length || !strongWholeTransposition) }
+                .maxByOrNull { scorer.probability(it.word) }
+                ?.word
+        val completionChoice =
+            listOfNotNull(literalCompletion?.word, missingLetterChoice).maxByOrNull { scorer.probability(it) }
+        val preferred = contractionChoice ?: supplementalTypo ?: supplementalCompletion ?: completionChoice
+        if (language.script == Script.ARABIC && typed.length >= 4 && model.dictionary.frequency(typed) == 0L) {
+            val direct = exactCandidates.filter { strongLiteral(typed, it, language) }
+            // Reserve fused dialect prefixes only with their explicit عال article, not every possible
+            // one-letter decomposition (كاان must not turn into a promoted ك+أأنت pseudo-completion).
+            val contracted =
+                if (dialect && (typed.startsWith("عال") || typed.startsWith("وعال"))) {
+                    cliticCandidates.filter { strongLiteral(typed, it, language) }
+                } else {
+                    emptyList()
+                }
+            val literal =
+                (direct + contracted)
+                    .distinctBy { candidateKey(it.word) }
+                    .sortedWith(
+                        compareBy<WordDictionary.Candidate> { it.word.length - typed.length }
+                            .thenByDescending { scorer.probability(it.word, it.score.toLong()) },
+                    ).take(2)
+                    .map { it.word }
+            val displacedHint =
+                if (direct.isNotEmpty()) {
+                    model.dictionary.likelyIntended(typed)?.takeIf { preferLiteral(typed, it, direct, language) }
+                } else {
+                    null
+                }
+            if (displacedHint != null) {
+                return (listOfNotNull(preferred ?: literal.firstOrNull(), displacedHint) + ranked).distinctBy(::candidateKey).take(3)
+            }
+            if (contracted.isNotEmpty()) return (literal + ranked).distinctBy(::candidateKey).take(3)
+        }
+        if (blockedReading != null) {
+            return (listOfNotNull(preferred, blockedReading) + ranked).distinctBy(::candidateKey).take(3)
+        }
         return if (preferred != null && ranked.take(2).none { candidateKey(it) == candidateKey(preferred) }) {
             (listOf(preferred) + ranked.filter { candidateKey(it) != candidateKey(preferred) }).take(3)
         } else {

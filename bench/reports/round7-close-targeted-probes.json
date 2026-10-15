@@ -1,0 +1,944 @@
+{
+  "baseline": "loop7c_aux_hints",
+  "candidate": "loop7close_orthographic",
+  "before": [
+    {
+      "group": "en",
+      "input": "Tread depth is 3/32 on rear treis",
+      "target": "tires",
+      "auto": "tries",
+      "strip": [
+        "tries",
+        "treis",
+        "trish"
+      ],
+      "after": "Tread depth is 3/32 on rear tries ",
+      "space_events": [
+        "auto-corrected treis → tries"
+      ],
+      "picked": null
+    },
+    {
+      "group": "en",
+      "input": "Check engine light gave code P0420 catlytic converter or o2 sensr",
+      "target": "sensor",
+      "auto": "sense",
+      "strip": [
+        "sense",
+        "sensr",
+        "sensitive"
+      ],
+      "after": "Check engine light gave code P0420 catlytic converter or o2 sense ",
+      "space_events": [
+        "auto-corrected sensr → sense"
+      ],
+      "picked": null
+    },
+    {
+      "group": "en",
+      "input": "Exhaust manifold gasket is leaking fumes into the cabn",
+      "target": "cabin",
+      "auto": "can",
+      "strip": [
+        "can",
+        "cabn",
+        "can't"
+      ],
+      "after": "Exhaust manifold gasket is leaking fumes into the can ",
+      "space_events": [
+        "auto-corrected cabn → can"
+      ],
+      "picked": null
+    },
+    {
+      "group": "en",
+      "input": "Could you please let me know if we're out of napies",
+      "target": "nappies",
+      "auto": "naples",
+      "strip": [
+        "naples",
+        "napies",
+        "nappies"
+      ],
+      "after": "Could you please let me know if we're out of naples ",
+      "space_events": [
+        "auto-corrected napies → naples"
+      ],
+      "picked": "Could you please let me know if we're out of nappies "
+    },
+    {
+      "group": "en",
+      "input": "Thanks so much for childc",
+      "target": "childcare",
+      "auto": "child",
+      "strip": [
+        "child",
+        "childc",
+        "children"
+      ],
+      "after": "Thanks so much for child ",
+      "space_events": [
+        "auto-corrected childc → child"
+      ],
+      "picked": null
+    },
+    {
+      "group": "en",
+      "input": "teh",
+      "target": "the",
+      "auto": "The",
+      "strip": [
+        "The",
+        "Teh",
+        "There"
+      ],
+      "after": "The ",
+      "space_events": [
+        "auto-corrected Teh → The"
+      ],
+      "picked": "The "
+    },
+    {
+      "group": "en",
+      "input": "mornign",
+      "target": "morning",
+      "auto": "Morning",
+      "strip": [
+        "Morning",
+        "Mornign",
+        "Mornin"
+      ],
+      "after": "Morning ",
+      "space_events": [
+        "auto-corrected Mornign → Morning"
+      ],
+      "picked": "Morning "
+    },
+    {
+      "group": "en",
+      "input": "definately",
+      "target": "definitely",
+      "auto": "Definitely",
+      "strip": [
+        "Definitely",
+        "Definately",
+        "Delicately"
+      ],
+      "after": "Definitely ",
+      "space_events": [
+        "auto-corrected Definately → Definitely"
+      ],
+      "picked": "Definitely "
+    },
+    {
+      "group": "en",
+      "input": "recieve",
+      "target": "receive",
+      "auto": "Receive",
+      "strip": [
+        "Receive",
+        "Recieve",
+        "Received"
+      ],
+      "after": "Receive ",
+      "space_events": [
+        "auto-corrected Recieve → Receive"
+      ],
+      "picked": "Receive "
+    },
+    {
+      "group": "en",
+      "input": "regresion",
+      "target": "regression",
+      "auto": "Regression",
+      "strip": [
+        "Regression",
+        "Regresion",
+        "Regressions"
+      ],
+      "after": "Regression ",
+      "space_events": [
+        "auto-corrected Regresion → Regression"
+      ],
+      "picked": "Regression "
+    },
+    {
+      "group": "en",
+      "input": "availble",
+      "target": "available",
+      "auto": "Available",
+      "strip": [
+        "Available",
+        "Availble"
+      ],
+      "after": "Available ",
+      "space_events": [
+        "auto-corrected Availble → Available"
+      ],
+      "picked": "Available "
+    },
+    {
+      "group": "en",
+      "input": "dont",
+      "target": "don't",
+      "auto": "Don't",
+      "strip": [
+        "Don't",
+        "Dont",
+        "Done"
+      ],
+      "after": "Don't ",
+      "space_events": [
+        "auto-corrected Dont → Don't"
+      ],
+      "picked": "Don't "
+    },
+    {
+      "group": "en",
+      "input": "saty",
+      "target": "stay",
+      "auto": null,
+      "strip": [
+        "Saty",
+        "Say",
+        "Stay"
+      ],
+      "after": "Saty ",
+      "space_events": [],
+      "picked": "Stay "
+    },
+    {
+      "group": "en",
+      "input": "days",
+      "target": "says",
+      "auto": null,
+      "strip": [
+        "Days",
+        "Day",
+        "Says"
+      ],
+      "after": "Days ",
+      "space_events": [],
+      "picked": "Says "
+    },
+    {
+      "group": "en",
+      "input": "shed",
+      "target": "she'd",
+      "auto": null,
+      "strip": [
+        "Shed",
+        "She'd",
+        "She"
+      ],
+      "after": "Shed ",
+      "space_events": [],
+      "picked": "She'd "
+    },
+    {
+      "group": "en",
+      "input": "resapwn",
+      "target": "respawn",
+      "auto": null,
+      "strip": [
+        "Resapwn",
+        "Respawn",
+        "Responsible"
+      ],
+      "after": "Resapwn ",
+      "space_events": [],
+      "picked": "Respawn "
+    },
+    {
+      "group": "ar",
+      "input": "تسلم المدعي اخطار",
+      "target": "إخطار",
+      "auto": null,
+      "strip": [
+        "أخاطر",
+        "اخطار",
+        "أخطأت"
+      ],
+      "after": "تسلم المدعي اخطار ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "ar",
+      "input": "تأجيل جلسة افراغ",
+      "target": "إفراغ",
+      "auto": null,
+      "strip": [
+        "الفراغ",
+        "افراغ",
+        "أفراد"
+      ],
+      "after": "تأجيل جلسة افراغ ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "ar",
+      "input": "علب التجم",
+      "target": "التجميع",
+      "auto": null,
+      "strip": [
+        "النجم",
+        "التجم",
+        "الجميع"
+      ],
+      "after": "علب التجم ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "ar",
+      "input": "سنلتقي في المعر",
+      "target": "المعرض",
+      "auto": null,
+      "strip": [
+        "العمر",
+        "المعر",
+        "المعركة"
+      ],
+      "after": "سنلتقي في المعر ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "ar",
+      "input": "نناقش رواي",
+      "target": "رواية",
+      "auto": null,
+      "strip": [
+        "وراي",
+        "رواي",
+        "رأيت"
+      ],
+      "after": "نناقش رواي ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "ar",
+      "input": "اراء",
+      "target": "آراء",
+      "auto": null,
+      "strip": [
+        "آراء",
+        "اراء",
+        "أراك"
+      ],
+      "after": "اراء ",
+      "space_events": [],
+      "picked": "آراء "
+    },
+    {
+      "group": "ar",
+      "input": "قريه",
+      "target": "قرية",
+      "auto": null,
+      "strip": [
+        "قرية",
+        "قريه",
+        "قريب"
+      ],
+      "after": "قريه ",
+      "space_events": [],
+      "picked": "قرية "
+    },
+    {
+      "group": "jo",
+      "input": "لا تدخل بدون سيفتي",
+      "target": "سيفتي",
+      "auto": "سيأتي",
+      "strip": [
+        "سيأتي",
+        "سيفتي",
+        "سيتي"
+      ],
+      "after": "لا تدخل بدون سيأتي ",
+      "space_events": [
+        "auto-corrected سيفتي → سيأتي"
+      ],
+      "picked": "لا تدخل بدون سيفتي "
+    },
+    {
+      "group": "jo",
+      "input": "مر عالمستو",
+      "target": "عالمستودع",
+      "auto": null,
+      "strip": [
+        "عالمستو",
+        "عالمستشفى",
+        "عالمستوى"
+      ],
+      "after": "مر عالمستو ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "jo",
+      "input": "شكرا كتير لتعام",
+      "target": "لتعاملك",
+      "auto": null,
+      "strip": [
+        "لتعلم",
+        "لتعام",
+        "أتعامل"
+      ],
+      "after": "شكرا كتير لتعام ",
+      "space_events": [],
+      "picked": null
+    },
+    {
+      "group": "jo",
+      "input": "بدك اياه مع الباكي",
+      "target": "الباكيت",
+      "auto": null,
+      "strip": [
+        "الباكي",
+        "الباكر",
+        "الأكياس"
+      ],
+      "after": "بدك اياه مع الباكي ",
+      "space_events": [],
+      "picked": null
+    }
+  ],
+  "after": [
+    {
+      "group": "en",
+      "input": "Tread depth is 3/32 on rear treis",
+      "target": "tires",
+      "auto": null,
+      "strip": [
+        "treis",
+        "tires",
+        "tries"
+      ],
+      "after": "Tread depth is 3/32 on rear treis ",
+      "space_events": [],
+      "picked": "Tread depth is 3/32 on rear tires "
+    },
+    {
+      "group": "en",
+      "input": "Check engine light gave code P0420 catlytic converter or o2 sensr",
+      "target": "sensor",
+      "auto": null,
+      "strip": [
+        "sensr",
+        "sensor",
+        "sense"
+      ],
+      "after": "Check engine light gave code P0420 catlytic converter or o2 sensr ",
+      "space_events": [],
+      "picked": "Check engine light gave code P0420 catlytic converter or o2 sensor "
+    },
+    {
+      "group": "en",
+      "input": "Exhaust manifold gasket is leaking fumes into the cabn",
+      "target": "cabin",
+      "auto": null,
+      "strip": [
+        "cabn",
+        "cabin",
+        "can"
+      ],
+      "after": "Exhaust manifold gasket is leaking fumes into the cabn ",
+      "space_events": [],
+      "picked": "Exhaust manifold gasket is leaking fumes into the cabin "
+    },
+    {
+      "group": "en",
+      "input": "Could you please let me know if we're out of napies",
+      "target": "nappies",
+      "auto": null,
+      "strip": [
+        "napies",
+        "nappies",
+        "naples"
+      ],
+      "after": "Could you please let me know if we're out of napies ",
+      "space_events": [],
+      "picked": "Could you please let me know if we're out of nappies "
+    },
+    {
+      "group": "en",
+      "input": "Thanks so much for childc",
+      "target": "childcare",
+      "auto": null,
+      "strip": [
+        "childc",
+        "childcare",
+        "child"
+      ],
+      "after": "Thanks so much for childc ",
+      "space_events": [],
+      "picked": "Thanks so much for childcare "
+    },
+    {
+      "group": "en",
+      "input": "teh",
+      "target": "the",
+      "auto": "The",
+      "strip": [
+        "The",
+        "Teh",
+        "There"
+      ],
+      "after": "The ",
+      "space_events": [
+        "auto-corrected Teh → The"
+      ],
+      "picked": "The "
+    },
+    {
+      "group": "en",
+      "input": "mornign",
+      "target": "morning",
+      "auto": "Morning",
+      "strip": [
+        "Morning",
+        "Mornign",
+        "Mornin"
+      ],
+      "after": "Morning ",
+      "space_events": [
+        "auto-corrected Mornign → Morning"
+      ],
+      "picked": "Morning "
+    },
+    {
+      "group": "en",
+      "input": "definately",
+      "target": "definitely",
+      "auto": "Definitely",
+      "strip": [
+        "Definitely",
+        "Definately",
+        "Delicately"
+      ],
+      "after": "Definitely ",
+      "space_events": [
+        "auto-corrected Definately → Definitely"
+      ],
+      "picked": "Definitely "
+    },
+    {
+      "group": "en",
+      "input": "recieve",
+      "target": "receive",
+      "auto": "Receive",
+      "strip": [
+        "Receive",
+        "Recieve",
+        "Received"
+      ],
+      "after": "Receive ",
+      "space_events": [
+        "auto-corrected Recieve → Receive"
+      ],
+      "picked": "Receive "
+    },
+    {
+      "group": "en",
+      "input": "regresion",
+      "target": "regression",
+      "auto": "Regression",
+      "strip": [
+        "Regression",
+        "Regresion",
+        "Regressions"
+      ],
+      "after": "Regression ",
+      "space_events": [
+        "auto-corrected Regresion → Regression"
+      ],
+      "picked": "Regression "
+    },
+    {
+      "group": "en",
+      "input": "availble",
+      "target": "available",
+      "auto": "Available",
+      "strip": [
+        "Available",
+        "Availble"
+      ],
+      "after": "Available ",
+      "space_events": [
+        "auto-corrected Availble → Available"
+      ],
+      "picked": "Available "
+    },
+    {
+      "group": "en",
+      "input": "dont",
+      "target": "don't",
+      "auto": "Don't",
+      "strip": [
+        "Don't",
+        "Dont",
+        "Done"
+      ],
+      "after": "Don't ",
+      "space_events": [
+        "auto-corrected Dont → Don't"
+      ],
+      "picked": "Don't "
+    },
+    {
+      "group": "en",
+      "input": "saty",
+      "target": "stay",
+      "auto": null,
+      "strip": [
+        "Saty",
+        "Say",
+        "Stay"
+      ],
+      "after": "Saty ",
+      "space_events": [],
+      "picked": "Stay "
+    },
+    {
+      "group": "en",
+      "input": "days",
+      "target": "says",
+      "auto": null,
+      "strip": [
+        "Days",
+        "Day",
+        "Says"
+      ],
+      "after": "Days ",
+      "space_events": [],
+      "picked": "Says "
+    },
+    {
+      "group": "en",
+      "input": "shed",
+      "target": "she'd",
+      "auto": null,
+      "strip": [
+        "Shed",
+        "She'd",
+        "She"
+      ],
+      "after": "Shed ",
+      "space_events": [],
+      "picked": "She'd "
+    },
+    {
+      "group": "en",
+      "input": "resapwn",
+      "target": "respawn",
+      "auto": null,
+      "strip": [
+        "Resapwn",
+        "Respawn",
+        "Responsible"
+      ],
+      "after": "Resapwn ",
+      "space_events": [],
+      "picked": "Respawn "
+    },
+    {
+      "group": "ar",
+      "input": "تسلم المدعي اخطار",
+      "target": "إخطار",
+      "auto": null,
+      "strip": [
+        "إخطار",
+        "اخطار",
+        "أخطأت"
+      ],
+      "after": "تسلم المدعي اخطار ",
+      "space_events": [],
+      "picked": "تسلم المدعي إخطار "
+    },
+    {
+      "group": "ar",
+      "input": "تأجيل جلسة افراغ",
+      "target": "إفراغ",
+      "auto": null,
+      "strip": [
+        "إفراغ",
+        "افراغ",
+        "أفراد"
+      ],
+      "after": "تأجيل جلسة افراغ ",
+      "space_events": [],
+      "picked": "تأجيل جلسة إفراغ "
+    },
+    {
+      "group": "ar",
+      "input": "علب التجم",
+      "target": "التجميع",
+      "auto": null,
+      "strip": [
+        "التجم",
+        "التجميع",
+        "النجم"
+      ],
+      "after": "علب التجم ",
+      "space_events": [],
+      "picked": "علب التجميع "
+    },
+    {
+      "group": "ar",
+      "input": "سنلتقي في المعر",
+      "target": "المعرض",
+      "auto": null,
+      "strip": [
+        "المعر",
+        "المعرض",
+        "العمر"
+      ],
+      "after": "سنلتقي في المعر ",
+      "space_events": [],
+      "picked": "سنلتقي في المعرض "
+    },
+    {
+      "group": "ar",
+      "input": "نناقش رواي",
+      "target": "رواية",
+      "auto": null,
+      "strip": [
+        "رواي",
+        "رواية",
+        "وراي"
+      ],
+      "after": "نناقش رواي ",
+      "space_events": [],
+      "picked": "نناقش رواية "
+    },
+    {
+      "group": "ar",
+      "input": "اراء",
+      "target": "آراء",
+      "auto": null,
+      "strip": [
+        "آراء",
+        "اراء",
+        "أراك"
+      ],
+      "after": "اراء ",
+      "space_events": [],
+      "picked": "آراء "
+    },
+    {
+      "group": "ar",
+      "input": "قريه",
+      "target": "قرية",
+      "auto": null,
+      "strip": [
+        "قرية",
+        "قريه",
+        "قريب"
+      ],
+      "after": "قريه ",
+      "space_events": [],
+      "picked": "قرية "
+    },
+    {
+      "group": "jo",
+      "input": "لا تدخل بدون سيفتي",
+      "target": "سيفتي",
+      "auto": null,
+      "strip": [
+        "سيفتي",
+        "سيأتي",
+        "سيتي"
+      ],
+      "after": "لا تدخل بدون سيفتي ",
+      "space_events": [],
+      "picked": "لا تدخل بدون سيفتي "
+    },
+    {
+      "group": "jo",
+      "input": "مر عالمستو",
+      "target": "عالمستودع",
+      "auto": null,
+      "strip": [
+        "عالمستو",
+        "عالمستوى",
+        "عالمستودع"
+      ],
+      "after": "مر عالمستو ",
+      "space_events": [],
+      "picked": "مر عالمستودع "
+    },
+    {
+      "group": "jo",
+      "input": "شكرا كتير لتعام",
+      "target": "لتعاملك",
+      "auto": null,
+      "strip": [
+        "لتعام",
+        "لتعاملك",
+        "لتعلم"
+      ],
+      "after": "شكرا كتير لتعام ",
+      "space_events": [],
+      "picked": "شكرا كتير لتعاملك "
+    },
+    {
+      "group": "jo",
+      "input": "بدك اياه مع الباكي",
+      "target": "الباكيت",
+      "auto": null,
+      "strip": [
+        "الباكي",
+        "الباكيت",
+        "الباكر"
+      ],
+      "after": "بدك اياه مع الباكي ",
+      "space_events": [],
+      "picked": "بدك اياه مع الباكيت "
+    }
+  ],
+  "punctuation": [
+    {
+      "version": "before",
+      "mark": "?",
+      "picked": "hello ",
+      "after": "hello ?"
+    },
+    {
+      "version": "before",
+      "mark": ".",
+      "picked": "hello ",
+      "after": "hello ."
+    },
+    {
+      "version": "before",
+      "mark": ",",
+      "picked": "hello ",
+      "after": "hello ,"
+    },
+    {
+      "version": "before",
+      "mark": "!",
+      "picked": "hello ",
+      "after": "hello !"
+    },
+    {
+      "version": "before",
+      "mark": ";",
+      "picked": "hello ",
+      "after": "hello ;"
+    },
+    {
+      "version": "before",
+      "mark": ":",
+      "picked": "hello ",
+      "after": "hello :"
+    },
+    {
+      "version": "before",
+      "mark": "،",
+      "picked": "hello ",
+      "after": "hello ،"
+    },
+    {
+      "version": "before",
+      "mark": "؟",
+      "picked": "hello ",
+      "after": "hello ؟"
+    },
+    {
+      "version": "before",
+      "mark": "؛",
+      "picked": "hello ",
+      "after": "hello ؛"
+    },
+    {
+      "version": "before",
+      "literal_pick": "teh ?"
+    },
+    {
+      "version": "before",
+      "undo_then_space": "teh "
+    },
+    {
+      "version": "after",
+      "mark": "?",
+      "picked": "hello ",
+      "after": "hello?"
+    },
+    {
+      "version": "after",
+      "mark": ".",
+      "picked": "hello ",
+      "after": "hello."
+    },
+    {
+      "version": "after",
+      "mark": ",",
+      "picked": "hello ",
+      "after": "hello,"
+    },
+    {
+      "version": "after",
+      "mark": "!",
+      "picked": "hello ",
+      "after": "hello!"
+    },
+    {
+      "version": "after",
+      "mark": ";",
+      "picked": "hello ",
+      "after": "hello;"
+    },
+    {
+      "version": "after",
+      "mark": ":",
+      "picked": "hello ",
+      "after": "hello:"
+    },
+    {
+      "version": "after",
+      "mark": "،",
+      "picked": "hello ",
+      "after": "hello،"
+    },
+    {
+      "version": "after",
+      "mark": "؟",
+      "picked": "hello ",
+      "after": "hello؟"
+    },
+    {
+      "version": "after",
+      "mark": "؛",
+      "picked": "hello ",
+      "after": "hello؛"
+    },
+    {
+      "version": "after",
+      "literal_pick": "teh?"
+    },
+    {
+      "version": "after",
+      "undo_then_space": "teh "
+    }
+  ],
+  "source_sha256": {
+    "app/src/main/java/com/m57/mboard/WordDictionary.kt": "f250601393483d69ccbcb60247f38141e7046782e91b9a334b012b92fe9551fa",
+    "app/src/main/java/com/m57/mboard/WordSuggestions.kt": "3e7eecabcb290c89c90be77cc994ddd580f9065fb34012ff53c5e0d495be47db",
+    "app/src/main/java/com/m57/mboard/MboardService.kt": "18f733e6f87d3aba29984c40f548c081ea0c93fb8a656350a199885616c3c8dc",
+    "app/src/main/java/com/m57/mboard/ArabicWords.kt": "1b8fbf766dd9e916b32236ee246060a54605f468eee313a257e13fff0ee2e98b",
+    "bench/src/main/kotlin/com/m57/bench/Live.kt": "4df1a4c0dd87abb6eb403b4da45914741428e34e8bedd5cfd260e00e28cfa334"
+  },
+  "apk_sha256": "0035d5dbdd32ec3ddaa929a209f2bc7f3919344239d3e98a21ba485e84895897",
+  "packaged_assets_verified": [
+    "words_en.tsv",
+    "words_ar.tsv",
+    "known_forms_ar.txt",
+    "jordanian.tsv",
+    "NOTICE.txt"
+  ],
+  "device_verified": false
+}

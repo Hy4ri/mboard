@@ -588,6 +588,54 @@ class WordDictionary private constructor(
         return if (bestScore >= 300.0 && !midWord(normalized, best)) best.original else null
     }
 
+    /** Observed full words with a missing letter or one displaced letter: choices, not forced guesses. */
+    fun manualAlternatives(word: String): List<Candidate> {
+        if (language.script != Script.LATIN || word.length !in 4..12 || word.any { !it.isLetter() }) return emptyList()
+        val lower = word.lowercase(Locale.ROOT)
+        if (lower in language.keepAsTyped || lower in language.contractions || exact.containsKey(lower)) return emptyList()
+        synchronized(alternativeCache) { alternativeCache[lower]?.let { return it } }
+        val candidates = HashMap<String, Candidate>()
+
+        fun consider(spelling: String) {
+            val entry = exact[spelling] ?: return
+            if (entry.hidden || entry.frequency <= 1L) return
+            candidates[entry.original] = Candidate(entry.original, entry.frequency.toDouble())
+        }
+        // Retain a three-letter stem. Insertion preserves every typed letter in order (sensr/sensor).
+        for (i in 3..lower.length) {
+            for (letter in language.alphabet) consider(lower.substring(0, i) + letter + lower.substring(i))
+        }
+        // Adjacent swaps are already ordinary one-edit readings. Recover a letter displaced farther
+        // into the word (treis/tires) without opening an unrestricted two-edit dictionary search.
+        if (lower.length >= 5) {
+            for (from in 1 until lower.length) {
+                val rest = lower.removeRange(from, from + 1)
+                for (to in 1..rest.length) {
+                    if (kotlin.math.abs(from - to) > 1) consider(rest.substring(0, to) + lower[from] + rest.substring(to))
+                }
+            }
+        }
+        val result = candidates.values.sortedByDescending { it.score }.take(6)
+        synchronized(alternativeCache) { alternativeCache[lower] = result }
+        return result
+    }
+
+    /** A common short/substituted reading cannot disprove an observed missing/displaced-letter reading. */
+    fun hasCompetingReading(
+        word: String,
+        candidate: String,
+    ): Boolean =
+        (candidate.length <= word.length && manualAlternatives(word).any { it.word != candidate }) ||
+            (
+                language.script == Script.LATIN && word.length >= 5 && candidate.length < word.length &&
+                    complete(word, 1, dialect = false, includeAliases = false).any { it.word.length > word.length }
+            )
+
+    private val alternativeCache =
+        object : LinkedHashMap<String, List<Candidate>>(64, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<Candidate>>?) = size > 128
+        }
+
     /** A typed prefix of a more frequent other word is unfinished, not misspelt: "becau" must not become a guess. */
     private fun midWord(
         normalized: String,
@@ -792,6 +840,7 @@ class WordDictionary private constructor(
         lazySpelling(word, normalized, originals[word] ?: 0L, strict = false)?.let { return it }
         if (exact.containsKey(normalized) || looksInflected(normalized)) return null
         val best = arabicEdits(normalized).firstOrNull() ?: return null
+
         return if (best.second >= 500.0) best.first.original else null
     }
 
