@@ -22,7 +22,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Emoji: type English names or common Arabic words; browse categories; hold an emoji to favorite it.
 - Text tools: arrows, line boundaries, select all, copy/cut/paste, host-app undo/redo, selected-text upper/lowercase, and Arabic mark removal.
 - More tools/settings: text tools, offline calculator, saved phrases, Text Lab, settings, and system keyboard picker. In panels, Return replaces the text-tools slot instead of widening the toolbar.
-- Private: pauses learning/history recording, not ordinary dictionary suggestions. Password fields offer only input-independent bundled choices and block personal phrases, history capture, and automatic correction. The user's suggestions setting controls the strip; apps' no-suggestions flags do not override it. App-requested no-learning fields prevent recording new learned words. Learned words and pairs never leave the device.
+- Private: pauses learning/history recording, not ordinary dictionary suggestions. Password fields offer only input-independent bundled choices and block personal phrases, history capture, and automatic correction. The user's suggestions setting controls the strip; apps' no-suggestions flags do not override it. App-requested no-learning fields prevent recording new learned words. Learned words, next-word pairs and rejected autocorrections stay on the device. Word and pair counts fade in 14-day steps when loaded; a new entry gets a full first window. Undoing a correction remembers that specific replacement across fields, unless recording is paused. Manually picking it clears that rejection; the learned-word protection is independent. Delete learned words clears all three stores.
 - Hide: dismiss the keyboard.
 
 Calculator supports +, -, *, /, decimal numbers (including Arabic digits), parentheses and postfix %. Percentage is mathematical division by 100: `50%` = `0.5`. It is not spreadsheet-style relative percentage. Tap an answer or Enter to insert it. Invalid/divide-by-zero expressions are not inserted. Results are rounded to eight decimal places; this is a convenience tool, not a high-precision financial calculator.
@@ -50,7 +50,7 @@ Native single-choice dialogs replace inline spinners. The page header stays outs
 
 ## Privacy and limits
 
-- No INTERNET or VIBRATE permission.
+- No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024).
 - Clipboard capture runs only while mboard is visible, skips sensitive-marked clips/password/private fields, and reads text only (never resolves content URIs). Android's clipboard access rules still apply.
 - Up to 30 unpinned and 30 pinned clips. Clips larger than 20,000 characters are skipped, never silently truncated.
 - Expired clips are purged from storage when the store is opened/read or its retention changes. While the app process is stopped, expiry is enforced on the next access; this is not a background deletion scheduler.
