@@ -140,6 +140,9 @@ class SentenceReplay(
         var falseCorrections = 0
         var spellingNormalized = 0
         var autoCorrectionChecks = 0
+        var wordsModifiedWrongAutocorrect = 0
+        var wordsModifiedTypoLeft = 0
+        var wordsModifiedCaseOnly = 0
         val byLength = HashMap<Int, IntArray>() // length bucket -> [words, found within 2 letters]
         val misses = StringBuilder("context\ttarget\tshown_after_full_word\tfalse_correction\n")
 
@@ -191,11 +194,22 @@ class SentenceReplay(
                 val fullShown = lastShown?.takeIf { foundAt < 0 } ?: strip.show(full)
                 autoCorrectionChecks++
                 // A correct word changed by space. Hamza/ى/ة spelling fixes (انا → أنا) are counted apart.
-                val corrected = strip.autoCorrection(token, full.sentenceStart, full.contextWords)?.takeIf { !same(it, token) }
+                val rawCorrected = strip.autoCorrection(token, full.sentenceStart, full.contextWords)
+                val corrected = rawCorrected?.takeIf { !same(it, token) }
                 val normalizedOnly = corrected != null && fold(corrected) == fold(token)
                 val wrongCorrection = corrected != null && !normalizedOnly
                 if (wrongCorrection) falseCorrections++
                 if (normalizedOnly) spellingNormalized++
+
+                // Oracle post-separator words_modified proxy counters on correctly typed words:
+                val spaceCommitted = rawCorrected ?: token
+                if (spaceCommitted != token) {
+                    if (same(spaceCommitted, token)) {
+                        wordsModifiedCaseOnly++
+                    } else {
+                        wordsModifiedWrongAutocorrect++
+                    }
+                }
 
                 val bucket = byLength.getOrPut(minOf(token.length, 10)) { IntArray(2) }
                 bucket[0]++
@@ -237,6 +251,15 @@ class SentenceReplay(
             a: Int,
             b: Int,
         ) = if (b == 0) 0.0 else Math.round(a * 10000.0 / b) / 100.0
+        val wordsModifiedTotalChecked = autoCorrectionChecks
+        val wordsModifiedMismatches = wordsModifiedWrongAutocorrect + wordsModifiedTypoLeft + wordsModifiedCaseOnly
+        val wordsModifiedObj =
+            JSONObject()
+                .put("total_checked", wordsModifiedTotalChecked)
+                .put("wrong_autocorrect", wordsModifiedWrongAutocorrect)
+                .put("typo_left", wordsModifiedTypoLeft)
+                .put("case_only", wordsModifiedCaseOnly)
+
         return JSONObject()
             .put("sentences", lines.size)
             .put("words", words)
@@ -259,6 +282,8 @@ class SentenceReplay(
             .put("false_autocorrect_pct", rate(falseCorrections, autoCorrectionChecks))
             .put("false_autocorrect_count", falseCorrections)
             .put("spelling_normalized_pct", rate(spellingNormalized, autoCorrectionChecks))
+            .put("words_modified_ratio_pct", rate(wordsModifiedMismatches, wordsModifiedTotalChecked))
+            .put("words_modified", wordsModifiedObj)
             .put(
                 "found_within_2_letters_by_length",
                 JSONObject().also { j ->
@@ -290,6 +315,9 @@ class TypoReplay(
         val kinds = java.util.TreeMap<String, IntArray>() // [rows, fixed by space, wrong fix, intended in strip]
         val detail = StringBuilder("context\ttyped\tintended\tkind\toutcome\tshown\n")
         var total = 0
+        var typoWordsModifiedWrongAutocorrect = 0
+        var typoWordsModifiedTypoLeft = 0
+        var typoWordsModifiedCaseOnly = 0
         for (row in rows) {
             val cols = row.split('\t')
             if (cols.size < 4) continue
@@ -334,6 +362,18 @@ class TypoReplay(
                     else -> "missed"
                 }
             detail.append("$context\t$typed\t$intended\t$kind\t$outcome\t${shown.values.joinToString("|")}\n")
+
+            // Oracle post-separator words_modified proxy counters on typo rows:
+            val spaceCommitted = if (shown.highlight) shown.values[0] else typed
+            if (spaceCommitted != intended) {
+                if (same(spaceCommitted, intended)) {
+                    typoWordsModifiedCaseOnly++
+                } else if (shown.highlight) {
+                    typoWordsModifiedWrongAutocorrect++
+                } else {
+                    typoWordsModifiedTypoLeft++
+                }
+            }
         }
         detailFile.writeText(detail.toString())
 
@@ -354,12 +394,23 @@ class TypoReplay(
                     .put("in_strip_pct", rate(s[3], s[0])),
             )
         }
+        val typoWordsModifiedTotalChecked = total
+        val typoWordsModifiedMismatches = typoWordsModifiedWrongAutocorrect + typoWordsModifiedTypoLeft + typoWordsModifiedCaseOnly
+        val typoWordsModifiedObj =
+            JSONObject()
+                .put("total_checked", typoWordsModifiedTotalChecked)
+                .put("wrong_autocorrect", typoWordsModifiedWrongAutocorrect)
+                .put("typo_left", typoWordsModifiedTypoLeft)
+                .put("case_only", typoWordsModifiedCaseOnly)
+
         return JSONObject()
             .put("rows", total)
             .put("scored_rows", all[0])
             .put("autofixed_pct", rate(all[1], all[0]))
             .put("wrong_fix_pct", rate(all[2], all[0]))
             .put("in_strip_pct", rate(all[3], all[0]))
+            .put("words_modified_ratio_pct", rate(typoWordsModifiedMismatches, typoWordsModifiedTotalChecked))
+            .put("words_modified", typoWordsModifiedObj)
             .put("by_kind", byKind)
     }
 }

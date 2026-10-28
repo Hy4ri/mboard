@@ -42,6 +42,14 @@ All modes use the keyboard's real engine through `Strip.kt`; live mode adds `Edi
 - `found_before_end_pct`: intended word appears before all letters are typed.
 - `keystroke_savings_pct`: idealized word-entry actions (letters plus space versus letters plus a suggestion tap). Punctuation, navigation, correction backspaces, and the trailing-space interaction with punctuation are not simulated. Do not call this measured typing-speed improvement.
 - `false_autocorrect_pct`: change to an exactly typed corpus word, excluding case and limited Arabic spelling normalization. Source corpora also contain mistakes, and legitimate English contractions can be counted as changes. Inspect the failure TSV, not just the percentage.
+- `words_modified_ratio_pct` and `words_modified`: an **oracle post-separator mismatch proxy**, NOT observed later editing or true live WMR (which measures retroactive edits and human interaction). It evaluates the word as committed at space/separator time against the intended target:
+  - `words_modified_ratio_pct`: percentage of checked words where the post-separator committed word does not exactly match the intended target (`(wrong_autocorrect + typo_left + case_only) / total_checked * 100`).
+  - `words_modified.total_checked`: denominator. For sentence replay, this matches `autoCorrectionChecks` (all scored corpus tokens checked at word boundary). For typo replay, this is the total number of valid typo rows (all rows checked once, including real-word rows, with no distance-bucket double-counting).
+  - Mutually exclusive mismatch cause counts:
+    - `wrong_autocorrect`: word modified by auto-correction to an unintended string (different root/normalized spelling).
+    - `typo_left`: uncorrected error left as-is because auto-correction did not trigger (only occurs on typo replay where typed != intended).
+    - `case_only`: committed word matches intended target ignoring case, but differs in exact case (casing mismatch only).
+  - Clean sentence tokens matching intended word without case difference contribute 0 to mismatches.
 - Typo headline percentages use **non-word rows only**, with `scored_rows` as denominator. Real-word errors are reported separately as `~real_word_typo`; distance buckets beginning with `~` are additional views and do not contribute twice to totals. `rows` is the full input count.
 - Latency is desktop JVM wall time (warm and cold calls mixed), not Android main-thread latency. Loading, editor IPC, UI drawing, scheduling and memory must also be checked on a phone.
 - Default setting scenarios: ordinary field, no saved phrases, no emoji suggestions, no active selection, caret at word end, Shift/caps off. Password/address behavior and mid-word/editor compatibility need separate device acceptance.
@@ -71,3 +79,24 @@ It emits ordered dialect-OFF completion choices and lexical corrections over dic
 Rebuilding downloads and decompresses large subtitle streams; English/Arabic jobs run serially to avoid RAM exhaustion. Defaults retain 30,000 one-word rows, 60,000 two-word rows, eight followers per row. Original curated seeds are immutable inputs in `lm/seeds/`; asset generation is idempotent. The output tables preserve observed totals and follower counts for runtime backoff scoring. Jordanian rows also incorporate original curated continuations with explicitly synthetic counts.
 
 Training totals are approximate counts after singleton-context pruning, and compressed-byte window boundaries can split a line. They should not be described as unpruned complete-corpus maximum-likelihood counts.
+
+## Deferred touch-position experiment
+
+`*_touch_typos.tsv` contains synthetic Gaussian evidence in two extra columns: per-letter likelihood
+maps and raw points. The current runtime and runner do **not** consume this evidence. Touch integration
+was tried and deferred by m57 after two failed quality gates; its complete source, jars and commands
+remain in `bench/reports/quality/research-gaps/engines/touch-v1`, `engines/touch-v2` and `touch-v*-commands.log`.
+Use those frozen engines for experimental replay, not today's label-only runner.
+
+Reproduce a dataset without changing the original four-column datasets:
+
+```sh
+python3 -I bench/scripts/make_typos.py --lang en --in bench/data/en_fresh.txt \
+  --out /tmp/en_fresh_touch_typos.tsv --touch-data --seed 570293 --per-sentence 5 --max 800
+```
+
+This is a tuning proxy, not recorded fingers or Android acceptance. Geometry uses the letter rows from
+`Languages.kt`, including stretched Arabic rows and special-key widths, idealized with zero drawing gap.
+Samples outside the letter area or onto special keys are discarded. The benchmark conditions on changed
+words composed entirely of letter taps, and does not model gestures or the real-world typing-error rate.
+The LM builder rejects touch-evaluation TSVs as training input.

@@ -73,3 +73,36 @@ Independent LLM subagents wrote training messages without reading the benchmark 
 - jo_train_4c.txt: 497 lines (health/occasions)
 
 The cleaned Shami text contributes weight 3; synthetic lines contribute weight 1. Rebuild excludes all exact benchmark sentences again. Original hand-curated `jordanian_next.tsv` rows (immutable seed) add synthetic rank-based counts, not measured observations. The resulting dialect asset combines one- and two-word contexts in the same file; vocabulary tiers combine the curated words and corpus occurrences. Synthetic text is project-authored augmentation; Shami-derived material remains separately attributed under its repository's Apache-2.0 license. Benchmark-only Tatoeba/Birkbeck data is never fed into this training pipeline.
+
+## Arabic stem-context aggregation (experiment, NOT shipped)
+
+Two runtime variants were measured and rejected (see bench/reports/quality/research-gaps/execution.md); the tables are not bundled. The tooling is kept for reproduction.
+
+Deterministic backoff aggregation groups one-word context rows from existing training intermediates (`out_ar/next_ar.tsv` and `out_jo_split/next_jo.tsv`) under a shared stripped stem key. Only contexts with at least two distinct source contexts and at least one stripped source context are retained, preventing redundant single-form duplicates.
+
+Commands:
+```bash
+# MSA stem aggregation from retained training table:
+python3 -I bench/lm/build_ngrams.py --lang ar \
+  --aggregate-stems-from bench/lm/out_ar/next_ar.tsv \
+  --stem-vocab-dir app/src/main/assets \
+  --out-dir bench/lm/out_ar
+
+# Jordanian dialect stem aggregation (split-trained out_jo_split only; never full out_jo):
+python3 -I bench/lm/build_ngrams.py --lang jo \
+  --aggregate-stems-from bench/lm/out_jo_split/next_jo.tsv \
+  --stem-vocab-dir app/src/main/assets \
+  --out-dir bench/lm/out_jo_split
+
+# Copy/prune stem tables into keyboard assets:
+python3 -I bench/lm/make_assets.py --only-arabic-stem \
+  --stem-source-ar bench/lm/out_ar \
+  --stem-source-jo bench/lm/out_jo_split
+```
+
+Limitations:
+- Lexical heuristic, not a full morphological segmenter or CODA analyzer.
+- Strips at most one prefix in longest-first order; stem length must be >= 3 and frequency >= 300.
+- Single-letter prefixes require candidate frequency >= 3 * max(1, word frequency).
+- Retained-count aggregation uses existing training intermediates, not a full corpus retrain. No evaluation sentences or follower counts are ingested. Key-frequency guards use the unchanged bundled lexicon; its Jordanian vocabulary still includes full-Shami spelling coverage. These are tuning replays, not blind unseen-language evidence.
+

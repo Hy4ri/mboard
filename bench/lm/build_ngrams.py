@@ -221,6 +221,158 @@ def format_table(counts_dict: dict, min_word_count: int, min_total: int, max_row
         rows = rows[:max_rows]
     return [r[1] for r in rows]
 
+PREFIXES_ARABIC = [
+    "وبال", "فبال", "وكال", "فكال", "ولل", "فلل", "وال", "فال", "بال", "كال", "عال", "لل", "ال",
+    "و", "ف", "ب", "ل", "ك", "ع"
+]
+
+def normalize_stem_vocab_word(w: str) -> str | None:
+    """Normalize Arabic word matching WordDictionary.normalize."""
+    chars = []
+    for c in w:
+        if c in 'أإآٱ':
+            chars.append('ا')
+        elif c == 'ى':
+            chars.append('ي')
+        elif c == 'ـ':
+            pass
+        elif ('\u064b' <= c <= '\u065f') or c == '\u0670' or ('\u06d6' <= c <= '\u06ed'):
+            pass
+        elif '\u0621' <= c <= '\u064a':
+            chars.append(c)
+        else:
+            return None
+    res = ''.join(chars)
+    return res if res else None
+
+def load_stem_vocab(vocab_dir: str) -> dict[str, int]:
+    """Loads words_ar.tsv + jordanian.tsv merged by max frequency/tier."""
+    vocab: dict[str, int] = {}
+    for name in ("words_ar.tsv", "jordanian.tsv"):
+        if not os.path.isfile(os.path.join(vocab_dir, name)):
+            raise FileNotFoundError(f"Missing stem frequency vocabulary: {name}")
+    words_ar_path = os.path.join(vocab_dir, "words_ar.tsv")
+    if os.path.exists(words_ar_path):
+        with open(words_ar_path, "r", encoding="utf-8") as f:
+            for line in f:
+                parts = line.rstrip("\n").split("\t")
+                if len(parts) >= 2:
+                    try:
+                        freq = int(parts[1])
+                    except ValueError:
+                        continue
+                    norm = normalize_stem_vocab_word(parts[0])
+                    if norm:
+                        vocab[norm] = max(vocab.get(norm, 0), freq)
+
+    tier_map = {"1": 60000, "2": 15000, "3": 4000}
+    jordanian_path = os.path.join(vocab_dir, "jordanian.tsv")
+    if os.path.exists(jordanian_path):
+        with open(jordanian_path, "r", encoding="utf-8") as f:
+            for line in f:
+                parts = line.rstrip("\n").split("\t")
+                if len(parts) >= 2 and parts[1] in tier_map:
+                    freq = tier_map[parts[1]]
+                    norm = normalize_stem_vocab_word(parts[0])
+                    if norm:
+                        vocab[norm] = max(vocab.get(norm, 0), freq)
+
+    return vocab
+
+def arabic_stem_key(word: str, vocab: dict[str, int]) -> str:
+    """Identical to ArabicContext.kt key function."""
+    word_freq = vocab.get(normalize_stem_vocab_word(word), 0)
+    for prefix in PREFIXES_ARABIC:
+        if word.startswith(prefix):
+            candidate = word[len(prefix):]
+            if len(candidate) >= 3:
+                candidate_freq = vocab.get(normalize_stem_vocab_word(candidate), 0)
+                if candidate_freq >= 300:
+                    single_letter = (len(prefix) == 1)
+                    if not single_letter or candidate_freq >= 3 * max(1, word_freq):
+                        return candidate
+    return word
+
+def aggregate_stems(input_file: str, vocab: dict[str, int], lang: str, out_dir: str, min_next_total: int):
+    # Groups: stem_key -> {
+    #     'source_contexts': set(),
+    #     'has_stripped': False,
+    #     'original_row_totals_sum': 0,
+    #     'followers': {follower: count}
+    # }
+    groups: dict[str, dict] = {}
+
+    with open(input_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.rstrip('\n')
+            if not line:
+                continue
+            parts = line.split('\t')
+            if len(parts) < 3:
+                continue
+            ctx = parts[0]
+            if ctx == '<s>' or ' ' in ctx:
+                continue
+            try:
+                row_total = int(parts[1])
+            except ValueError:
+                continue
+
+            follower_counts = {}
+            for item in parts[2:]:
+                if not item:
+                    continue
+                w, _, c = item.rpartition(':')
+                try:
+                    follower_counts[w] = int(c)
+                except ValueError:
+                    continue
+
+            k = arabic_stem_key(ctx, vocab)
+            grp = groups.setdefault(k, {
+                'source_contexts': set(),
+                'has_stripped': False,
+                'original_row_totals_sum': 0,
+                'followers': {}
+            })
+            grp['source_contexts'].add(ctx)
+            if k != ctx:
+                grp['has_stripped'] = True
+            grp['original_row_totals_sum'] += row_total
+            for w, c in follower_counts.items():
+                grp['followers'][w] = grp['followers'].get(w, 0) + c
+
+    filtered_groups = {}
+    for k, grp in groups.items():
+        if len(grp['source_contexts']) >= 2 and grp['has_stripped']:
+            filtered_groups[k] = grp
+
+    counts_dict = {k: grp['followers'] for k, grp in filtered_groups.items()}
+    # format_table prunes min_word_count=2, min_total=min_next_total, max_rows=60000
+    rows = []
+    for ctx, word_map in counts_dict.items():
+        # Total in output row is original full row totals sum
+        total = filtered_groups[ctx]['original_row_totals_sum']
+        if total < min_next_total:
+            continue
+        valid_words = [(w, c) for w, c in word_map.items() if c >= 2]
+        if not valid_words:
+            continue
+        valid_words.sort(key=lambda x: (-x[1], x[0]))
+        top_words = valid_words[:12]
+        words_str = '\t'.join(f'{w}:{c}' for w, c in top_words)
+        rows.append((total, f'{ctx}\t{total}\t{words_str}\n'))
+
+    rows.sort(key=lambda x: -x[0])
+    if len(rows) > 60000:
+        rows = rows[:60000]
+
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f"stem_next_{lang}.tsv")
+    with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
+        f.writelines(r[1] for r in rows)
+    print(f"Wrote {len(rows)} stem rows to {out_path} ({os.path.getsize(out_path)} bytes)", flush=True)
+
 def main():
     parser = argparse.ArgumentParser(description="Build n-gram tables from OpenSubtitles corpus.")
     parser.add_argument("--lang", choices=["en", "ar", "jo"], required=True)
@@ -231,7 +383,25 @@ def main():
     parser.add_argument("--extra-text", nargs="*", default=[], help="FILE or FILE:WEIGHT")
     parser.add_argument("--min-next-total", type=int, default=5)
     parser.add_argument("--min-context-total", type=int, default=8)
+    parser.add_argument("--aggregate-stems-from", type=str, default="", help="TSV file with 1-word contexts to aggregate by Arabic stem")
+    parser.add_argument("--stem-vocab-dir", type=str, default="", help="Directory containing words_ar.tsv and jordanian.tsv")
     args = parser.parse_args()
+
+    if args.aggregate_stems_from or args.stem_vocab_dir:
+        if not (args.aggregate_stems_from and args.stem_vocab_dir):
+            sys.exit("Error: --aggregate-stems-from and --stem-vocab-dir must be provided together.")
+        if args.lang not in ("ar", "jo"):
+            sys.exit(f"Error: --lang must be 'ar' or 'jo' for stem aggregation, got '{args.lang}'.")
+        if os.path.basename(args.aggregate_stems_from) != f"next_{args.lang}.tsv":
+            sys.exit("Error: stem aggregation requires the language's training next_<lang>.tsv, never evaluation TSVs.")
+        if not os.path.isfile(args.aggregate_stems_from):
+            sys.exit(f"Error: input file {args.aggregate_stems_from} does not exist.")
+        if not os.path.isdir(args.stem_vocab_dir):
+            sys.exit(f"Error: vocab dir {args.stem_vocab_dir} does not exist.")
+        vocab = load_stem_vocab(args.stem_vocab_dir)
+        print(f"Loaded {len(vocab)} vocabulary entries for Arabic stem aggregation.")
+        aggregate_stems(args.aggregate_stems_from, vocab, args.lang, args.out_dir, args.min_next_total)
+        return
 
     repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
     exclude_set = load_exclusion_lines(repo_dir)
@@ -242,6 +412,8 @@ def main():
     # Process extra-text files if any
     for spec in args.extra_text:
         extra_file, _, w = spec.partition(':')
+        if extra_file.endswith('_touch_typos.tsv'):
+            sys.exit(f"Error: {extra_file} is a benchmark touch typo dataset and must never be used for LM training")
         if os.path.exists(extra_file):
             print(f"Processing extra text file: {extra_file} weight {w or 1}")
             with open(extra_file, 'r', encoding='utf-8') as f:
