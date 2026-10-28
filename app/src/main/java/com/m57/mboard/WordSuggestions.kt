@@ -20,6 +20,7 @@ class WordSuggestions(
         val next: Map<String, Row>,
         val context: Map<String, Row>,
         val dialectNext: Map<String, Row>,
+        val misspellRules: EnglishMisspellRules,
     )
 
     /** One table row: how often [total] the context was followed by anything, and its best followers. */
@@ -87,7 +88,13 @@ class WordSuggestions(
                     val contextTable = readTable(language.contextAsset)
                     val dialectNext = language.dialect?.let { readTable(it.nextAsset) }.orEmpty()
 
-                    val model = Model(dictionary, next, contextTable, dialectNext)
+                    val misspellRules =
+                        if (language.script == Script.LATIN) {
+                            assets.open("misspell_rules_en.tsv").bufferedReader().use { EnglishMisspellRules.read(it) }
+                        } else {
+                            EnglishMisspellRules.EMPTY
+                        }
+                    val model = Model(dictionary, next, contextTable, dialectNext, misspellRules)
 
                     val readyCallbacks =
                         synchronized(lock) {
@@ -454,8 +461,9 @@ class WordSuggestions(
         }
 
         // 2. Fuzzy completions
+        val fuzzyCandidates = if (typed.length >= 3) model.dictionary.fuzzyCompletions(typed, 6, dialect) else emptyList()
         if (typed.length >= 3) {
-            for (c in model.dictionary.fuzzyCompletions(typed, 6, dialect)) {
+            for (c in fuzzyCandidates) {
                 val frequency = model.dictionary.frequency(c.word)
                 val weight = if (frequency > 0) c.score / frequency else 1.0
                 consider(c.word, ln(scorer.probability(c.word)) + ln(weight) - FUZZY_COST)
@@ -481,6 +489,15 @@ class WordSuggestions(
             for (c in model.dictionary.cliticFuzzyCompletions(typed, 4, dialect)) {
                 if (candidateKey(c.word) in exactWords) continue
                 consider(c.word, ln(scorer.probability(c.word, c.score.toLong())) - CLITIC_COST - FUZZY_COST)
+            }
+        }
+
+        // Original substring rules supply manual choices only when exact and one-edit lookup fail.
+        if (language.script == Script.LATIN && exactCandidates.isEmpty() && fuzzyCandidates.isEmpty()) {
+            for (c in model.dictionary.ruleCompletions(typed, model.misspellRules, 4)) {
+                val frequency = model.dictionary.frequency(c.word)
+                val weight = c.score / maxOf(1L, frequency)
+                consider(c.word, ln(scorer.probability(c.word)) + ln(weight) - FUZZY_COST)
             }
         }
 

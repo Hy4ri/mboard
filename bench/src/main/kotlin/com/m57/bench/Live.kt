@@ -131,6 +131,7 @@ internal class Editor(
             text = text.dropLast(tail.length) + last.original
             strip.rejectedCorrections += last.original
             strip.learn(last.original, null)
+            strip.rejectCorrection(last.original, last.corrected)
             undos++
             refresh()
             return "undid ${last.corrected} → ${last.original}"
@@ -147,6 +148,7 @@ internal class Editor(
         text = text.dropLast(context.prefix.length) + word.trimEnd() + " "
         pickedSpaceTail = (word.trimEnd() + " ").takeLast(33)
         if (' ' !in word.trim()) {
+            strip.acceptCorrection(context.prefix, word.trim())
             strip.predictionTrail.record(context.contextWords, word.trim())
             strip.learn(word.trim(), context.contextWords.lastOrNull())
         } else {

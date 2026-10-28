@@ -6,6 +6,7 @@ Stdlib only. Run with `python3 -I`.
 """
 
 import argparse
+import json
 import math
 import random
 import re
@@ -61,6 +62,156 @@ def build_key_positions(layout_rows):
 
 EN_POSITIONS = build_key_positions(EN_ROWS)
 AR_POSITIONS = build_key_positions(AR_ROWS)
+
+# Actual keyboard layouts from Languages.kt (Languages.ENGLISH and Languages.ARABIC).
+# Provenance: Languages.kt commit fadbdb2eb42a8978b1d6fdd925c8069eff45ee0e sha256 e08e06e71306860138310d3464bc583314f7098c96466b3cdf14094ecb2364ae
+TOUCH_LAYOUT_SPECS = {
+    "en": {
+        "rows": [
+            list("qwertyuiop"),
+            list("asdfghjkl"),
+            ["SHIFT"] + list("zxcvbnm") + ["BACKSPACE"],
+        ],
+        "stretch": False,
+    },
+    "ar": {
+        "rows": [
+            list("ضصثقفغعهخحج"),
+            list("شسيبلاتنمكط"),
+            list("ذئءؤرىةوزظد") + ["BACKSPACE"],
+        ],
+        "stretch": True,
+    },
+}
+
+
+def build_touch_geometry(spec):
+    rows = spec["rows"]
+    stretch = spec["stretch"]
+
+    def key_weight(k):
+        if k in ("SHIFT", "BACKSPACE", "ENTER"):
+            return 1.5
+        return 1.0
+
+    widths = [[key_weight(k) for k in r] for r in rows]
+    row_units = [sum(w) for w in widths]
+    max_units = max(row_units)
+    cells = []
+    char_to_cell = {}
+    letter_cells = []
+    for r_idx, r in enumerate(rows):
+        units = row_units[r_idx]
+        scale = (max_units / units) if stretch else 1.0
+        x = 0.0 if stretch else (max_units - units) / 2.0
+        top = float(r_idx)
+        bottom = float(r_idx + 1)
+        for i, k in enumerate(r):
+            w = widths[r_idx][i] * scale
+            left = x
+            right = x + w
+            cx = (left + right) / 2.0
+            cy = (top + bottom) / 2.0
+            cell = {
+                "key": k,
+                "row": r_idx,
+                "left": left,
+                "top": top,
+                "right": right,
+                "bottom": bottom,
+                "width": w,
+                "cx": cx,
+                "cy": cy,
+            }
+            cells.append(cell)
+            if len(k) == 1:
+                char_to_cell[k] = cell
+                letter_cells.append(cell)
+            x += w
+    return {"cells": cells, "char_to_cell": char_to_cell, "letter_cells": letter_cells, "width": max_units}
+
+
+TOUCH_GEOMETRIES = {lang: build_touch_geometry(spec) for lang, spec in TOUCH_LAYOUT_SPECS.items()}
+
+
+def sample_touch_for_char(intended_char, geo, rng):
+    c = intended_char.lower()
+    if c not in geo["char_to_cell"]:
+        return None
+    cell = geo["char_to_cell"][c]
+    cx = cell["cx"]
+    cy = cell["cy"]
+    w = cell["width"]
+    h = 1.0  # Normalized active row height
+    sigma_x = 0.45 * w
+    sigma_y = 0.55 * h
+    sx = rng.gauss(cx, sigma_x)
+    sy = rng.gauss(cy, sigma_y)
+
+    # Condition on actual letter taps. Outside-screen/special-key taps cannot produce
+    # letter callbacks in KeyboardView, so discard this word instead of fabricating a letter.
+    # Geometry is idealized gap=0 and omits number/bottom rows; no gesture or special-key errors.
+    if not (0.0 <= sx < geo["width"] and 0.0 <= sy < 3.0):
+        return None
+    row_idx = int(sy)
+
+    row_cells = [cell for cell in geo["cells"] if cell["row"] == row_idx]
+    picked_cell = None
+    for rc in row_cells:
+        if rc["left"] <= sx <= rc["right"]:
+            picked_cell = rc
+            break
+    if picked_cell is None:
+        picked_cell = min(row_cells, key=lambda rc: min(abs(rc["left"] - sx), abs(rc["right"] - sx)))
+
+    picked_key = picked_cell["key"]
+    if len(picked_key) != 1:
+        return None
+
+    # KeyboardView likelihood model:
+    # Uses the picked cell's width for sigmaX across all candidates in that tap
+    picked_w = picked_cell["width"]
+    p_sigma_x = 0.45 * picked_w
+    p_sigma_y = 0.55 * h
+    two_sx2 = 2.0 * p_sigma_x * p_sigma_x
+    two_sy2 = 2.0 * p_sigma_y * p_sigma_y
+
+    p_dx = sx - picked_cell["cx"]
+    p_dy = sy - picked_cell["cy"]
+    p_dist2 = (p_dx * p_dx) / two_sx2 + (p_dy * p_dy) / two_sy2
+
+    likelihoods = {picked_key: 1.0}
+    for lc in geo["letter_cells"]:
+        k = lc["key"]
+        if k == picked_key:
+            continue
+        dx = sx - lc["cx"]
+        dy = sy - lc["cy"]
+        dist2 = (dx * dx) / two_sx2 + (dy * dy) / two_sy2
+        log_ratio = max(-8.0, min(0.0, p_dist2 - dist2))
+        likelihoods[k] = math.exp(log_ratio)
+
+    typed_char = picked_key.upper() if intended_char.isupper() else picked_key
+    return typed_char, likelihoods, (round(sx, 4), round(sy, 4))
+
+
+def generate_touch_typo(word, lang, rng):
+    geo = TOUCH_GEOMETRIES[lang]
+    typed_chars = []
+    touches = []
+    raw_points = []
+    for ch in word:
+        sample = sample_touch_for_char(ch, geo, rng)
+        if sample is None:
+            return None
+        t_char, l_map, pt = sample
+        typed_chars.append(t_char)
+        touches.append(l_map)
+        raw_points.append(pt)
+    typed = "".join(typed_chars)
+    if typed == word:
+        return None
+    return typed, "touch", touches, raw_points
 
 
 def get_adjacent_key(char, positions, rng, sigma_x=TOUCH_SIGMA_X, sigma_y=TOUCH_SIGMA_Y):
@@ -355,7 +506,7 @@ def run_selfcheck(lang):
     return output
 
 
-def process_file(lang, in_path, out_path, per_sentence=1, seed=57, max_sentences=None):
+def process_file(lang, in_path, out_path, per_sentence=1, seed=57, max_sentences=None, touch_data=False):
     rng = random.Random(seed)
     positions = EN_POSITIONS if lang == "en" else AR_POSITIONS
 
@@ -365,7 +516,10 @@ def process_file(lang, in_path, out_path, per_sentence=1, seed=57, max_sentences
     if max_sentences is not None and max_sentences < len(raw_lines):
         raw_lines = raw_lines[:max_sentences]
 
-    out_rows = ["context\ttyped\tintended\tkind"]
+    if touch_data:
+        out_rows = ["context\ttyped\tintended\tkind\ttouches\traw_points"]
+    else:
+        out_rows = ["context\ttyped\tintended\tkind"]
 
     for line in raw_lines:
         words = line.split()
@@ -376,10 +530,18 @@ def process_file(lang, in_path, out_path, per_sentence=1, seed=57, max_sentences
         for _ in range(per_sentence):
             idx, word = rng.choice(eligible)
             context = make_context(words[:idx], lang)
-            typo_res = generate_typo(word, lang, positions, rng)
-            if typo_res:
-                typed, kind = typo_res
-                out_rows.append(f"{context}\t{typed}\t{word}\t{kind}")
+            if touch_data:
+                typo_res = generate_touch_typo(word, lang, rng)
+                if typo_res:
+                    typed, kind, touches, raw_points = typo_res
+                    touches_json = json.dumps(touches, separators=(",", ":"), ensure_ascii=False)
+                    points_json = json.dumps(raw_points, separators=(",", ":"), ensure_ascii=False)
+                    out_rows.append(f"{context}\t{typed}\t{word}\t{kind}\t{touches_json}\t{points_json}")
+            else:
+                typo_res = generate_typo(word, lang, positions, rng)
+                if typo_res:
+                    typed, kind = typo_res
+                    out_rows.append(f"{context}\t{typed}\t{word}\t{kind}")
 
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(out_rows) + "\n")
@@ -394,6 +556,7 @@ def main():
     parser.add_argument("--seed", type=int, default=57, help="Random seed")
     parser.add_argument("--max", type=int, default=None, help="Max sentences to process")
     parser.add_argument("--selfcheck", action="store_true", help="Run selfcheck sample mode")
+    parser.add_argument("--touch-data", action="store_true", help="Generate touch-augmented typos with Gaussian sampling and likelihood ratios")
 
     args = parser.parse_args()
 
@@ -405,6 +568,9 @@ def main():
     if not args.lang or not args.in_path or not args.out_path:
         parser.error("--lang, --in, and --out are required unless --selfcheck is specified")
 
+    if args.touch_data and not args.out_path.endswith("_touch_typos.tsv"):
+        parser.error("--touch-data requires --out path ending with _touch_typos.tsv")
+
     process_file(
         lang=args.lang,
         in_path=args.in_path,
@@ -412,6 +578,7 @@ def main():
         per_sentence=args.per_sentence,
         seed=args.seed,
         max_sentences=args.max,
+        touch_data=args.touch_data,
     )
 
 

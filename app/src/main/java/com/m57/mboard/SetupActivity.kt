@@ -450,7 +450,7 @@ class SetupActivity : Activity() {
             column,
             components.toggle(
                 "Learn my words",
-                "Suggest words you type often and the words you usually type next, and stop correcting them · paused by the shield, passwords and email fields",
+                "Learn frequent words, next words and rejected corrections locally · word counts fade over time · recording pauses in protected fields and under the shield",
                 settings.learnWords,
             ) {
                 settings.learnWords = it
@@ -531,10 +531,13 @@ class SetupActivity : Activity() {
             column,
             components.row(
                 "Delete learned words",
-                "${UserWords(this).size()} words learned from your typing, plus their next-word pairs",
+                "${UserWords(this).size()} words learned from your typing, plus next-word pairs and remembered correction rejections",
                 destructive = true,
             ) {
-                confirm("Delete learned words?", "Suggestions go back to the bundled dictionaries only.") {
+                confirm(
+                    "Delete learned words?",
+                    "Erase local words, pairs and remembered correction rejections. Keep the bundled dictionaries.",
+                ) {
                     UserWords(this).clear()
                     settings.markLearnedReset()
                     toast("Learned words deleted")

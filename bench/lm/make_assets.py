@@ -147,9 +147,20 @@ def main():
     ap.add_argument("--dialect-source", default=os.path.join(HERE, "out_jo"))
     ap.add_argument("--only-english-words", action="store_true", help="Refresh English vocabulary only; preserve all continuation and Arabic assets")
     ap.add_argument("--only-jordanian-next", action="store_true", help="Refresh continuation counts only; preserve lexical spelling guards")
+    ap.add_argument("--only-arabic-stem", action="store_true", help="Copy/prune only stem_next_{ar,jo}.tsv into assets; preserve all other assets")
+    ap.add_argument("--stem-source-ar", default=os.path.join(HERE, "out_ar"))
+    ap.add_argument("--stem-source-jo", default=os.path.join(HERE, "out_jo_split"))
     a = ap.parse_args()
-    if a.only_english_words and a.only_jordanian_next:
+    exclusive_modes = [a.only_english_words, a.only_jordanian_next, a.only_arabic_stem]
+    if sum(1 for m in exclusive_modes if m) > 1:
         ap.error("choose only one asset-only mode")
+    if a.only_arabic_stem:
+        ar_rows = read_rows(os.path.join(a.stem_source_ar, "stem_next_ar.tsv"), a.next_rows, a.width)
+        jo_rows = read_rows(os.path.join(a.stem_source_jo, "stem_next_jo.tsv"), a.next_rows, a.width)
+        write_rows(os.path.join(a.assets, "stem_next_ar.tsv"), ar_rows)
+        write_rows(os.path.join(a.assets, "stem_next_jo.tsv"), jo_rows)
+        print("stem_next_ar.tsv and stem_next_jo.tsv copied/pruned; lexical and continuation assets unchanged")
+        return
     if a.only_english_words:
         added, scale, words = english_words(a.assets)
         with open(os.path.join(a.assets, "words_en.tsv"), "w", encoding="utf-8", newline="\n") as f:

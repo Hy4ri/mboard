@@ -120,3 +120,19 @@ Dropped 429 lines with OCR artifacts (capital I for l: Iie, AII, CuIIen; ot/ln),
 
 ## ar_subs.txt cleanup (Luna)
 Dropped 1151 lines: RTL-reversed word order (bigram log-prob of the reversed line beats the forward line by >4 nats, bigrams counted on the cached slice), lines starting/ending with detached punctuation (another RTL-flip sign), digits, Latin, brackets. Refilled to 8000 from the same slice with the same filter, random.Random(57).
+
+## Synthetic touch replay (2026-10-28)
+
+- Files (generated locally, NOT committed; reproduce with the command below): `en_fresh_touch_typos.tsv` (1,752 rows), `ar_fresh_touch_typos.tsv` (1,891),
+  `jo_human_fresh_touch_typos.tsv` (2,504).
+- Inputs: corresponding existing held-out sentence files; existing provenance and license limits
+  still apply. Derived evaluation data only, never bundled or trained on.
+- Generator: `bench/scripts/make_typos.py --touch-data --seed 570293 --per-sentence 5 --max 800`.
+- Noise: Gaussian X sigma 0.45 key pitch, Y sigma 0.55 row height. Position maps use actual letter
+  rows/stretch/special-key widths from `Languages.kt`, with idealized zero gap. Non-letter and
+  out-of-letter-area taps discard the entire sample. Only changed words are emitted.
+- Columns: ordinary context/typed/intended/kind plus per-letter likelihood ratios and synthetic raw
+  coordinates. No intended word or later context enters the decoder input. These are tuning replays,
+  not unseen human touch measurements. They model substitutions, not insertions, omissions or gestures.
+- Repeated generation was byte-identical. SHA-256 identities and row counts:
+  `bench/reports/quality/research-gaps/touch-data.json`.

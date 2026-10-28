@@ -101,7 +101,7 @@ class Strip(
         if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
         val correction =
             words.correction(typed, language, contextWords, dialect, learnedNext(contextWords))?.let { matchCase(it, typed) } ?: return null
-        return if (correction == typed) null else correction
+        return if (correction == typed || userWords.rejects(typed, correction, language)) null else correction
     }
 
     // MboardService.renderSuggestions, ordinary text field, no saved phrases, emoji suggestions off.
@@ -139,6 +139,25 @@ class Strip(
         val keepAt = if (leading != null && leading != typed) 1 else 0
         val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
         return Shown(wordChoices.take(3), autoCorrection != null)
+    }
+
+    // The app calls these only under its normal recording guard (private/password/no-learning off).
+    fun rejectCorrection(
+        typed: String,
+        corrected: String,
+    ) {
+        if (!learning) return
+        userWords.reject(typed, corrected, language)
+        userWords.save()
+    }
+
+    fun acceptCorrection(
+        typed: String,
+        corrected: String,
+    ) {
+        if (!learning || !userWords.rejects(typed, corrected, language)) return
+        userWords.acceptCorrection(typed, corrected, language)
+        userWords.save()
     }
 
     // MboardService.learn in an ordinary field with learning on.

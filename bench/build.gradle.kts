@@ -18,6 +18,7 @@ sourceSets {
                 "com/m57/mboard/Languages.kt",
                 "com/m57/mboard/Layouts.kt",
                 "com/m57/mboard/EnglishWords.kt",
+                "com/m57/mboard/EnglishMisspellRules.kt",
                 "com/m57/mboard/ArabicWords.kt",
                 "com/m57/mboard/WordDictionary.kt",
                 "com/m57/mboard/KnownWordForms.kt",
