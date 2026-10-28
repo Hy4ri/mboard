@@ -627,7 +627,7 @@ class MboardService : InputMethodService() {
             words
                 .correction(typed, language, contextWords, settings.dialectEnabled(language.dialect), learnedNext(contextWords))
                 ?.let { matchCase(it, typed) } ?: return null
-        return if (correction == typed) null else correction
+        return if (correction == typed || userWords.rejects(typed, correction, language)) null else correction
     }
 
     private val separators = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
@@ -720,6 +720,10 @@ class MboardService : InputMethodService() {
         }
         rejectedCorrections += last.original
         learn(last.original, null)
+        if (learningAllowed()) {
+            userWords.reject(last.original, last.corrected, language)
+            userWords.save()
+        }
         return true
     }
 
@@ -974,6 +978,10 @@ class MboardService : InputMethodService() {
         } else {
             pickedSpaceTail = value.takeIf { it.endsWith(' ') }?.takeLast(33)
             if (' ' !in word.trim()) {
+                if (learningAllowed() && userWords.rejects(context.word, word.trim(), language)) {
+                    userWords.acceptCorrection(context.word, word.trim(), language)
+                    userWords.save()
+                }
                 predictionTrail.record(context.contextWords, word.trim())
                 learn(word.trim(), context.contextWords.lastOrNull())
             } else {
@@ -1240,11 +1248,15 @@ class MboardService : InputMethodService() {
         word: String,
         previous: String?,
     ) {
-        if (word.isEmpty() || !settings.learnWords || privateSession || fieldPolicy.reason != SuggestionPolicy.Reason.AVAILABLE) return
-        if ((currentInputEditorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
-        if (keyboard?.layout != language.layout || mode != Mode.KEYS) return
+        if (word.isEmpty() || !learningAllowed()) return
         userWords.record(word, previous, language)
     }
+
+    /** One recording guard for learned words, pairs and correction rejections. */
+    private fun learningAllowed(): Boolean =
+        settings.learnWords && !privateSession && fieldPolicy.reason == SuggestionPolicy.Reason.AVAILABLE &&
+            ((currentInputEditorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING) == 0 &&
+            keyboard?.layout == language.layout && mode == Mode.KEYS
 
     /** Slide left from backspace: [steps] whole words get selected so the user sees what release deletes. */
     private fun deleteSwipe(steps: Int) {
