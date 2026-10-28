@@ -1,0 +1,76 @@
+# Linguistic English substring rewrite rules
+# Format: pattern<TAB>replacement<TAB>cost
+# Rules represent common orthographic confusion patterns in English.
+# Cost is positive (lower cost = more likely confusion).
+
+# ie / ei vowel confusion
+ie	ei	0.35
+ei	ie	0.35
+
+# able / ible suffix confusion
+able	ible	0.40
+ible	able	0.40
+
+# ance / ence suffix confusion
+ance	ence	0.40
+ence	ance	0.40
+ancy	ency	0.45
+ency	ancy	0.45
+ant	ent	0.45
+ent	ant	0.45
+
+# ary / ery suffix confusion
+ary	ery	0.45
+ery	ary	0.45
+
+# sion / tion suffix confusion
+sion	tion	0.45
+tion	sion	0.45
+
+# ph / f consonant digraph confusion
+ph	f	0.40
+f	ph	0.45
+
+# c / s softness confusion
+ce	se	0.45
+se	ce	0.45
+sc	c	0.50
+c	sc	0.55
+
+# k / ck ending/cluster confusion
+ck	k	0.40
+k	ck	0.40
+
+# Repeated consonant pairs (undoubling / doubling confusion)
+cc	c	0.40
+c	cc	0.45
+mm	m	0.40
+m	mm	0.45
+nn	n	0.40
+n	nn	0.45
+pp	p	0.40
+p	pp	0.45
+rr	r	0.40
+r	rr	0.45
+ss	s	0.40
+s	ss	0.45
+tt	t	0.40
+t	tt	0.45
+ll	l	0.40
+l	ll	0.45
+ff	f	0.40
+f	ff	0.45
+
+# Common vowel digraphs
+ea	ee	0.50
+ee	ea	0.50
+ai	ay	0.50
+ay	ai	0.55
+ou	ow	0.50
+ow	ou	0.55
+au	aw	0.50
+aw	au	0.55
+oa	o	0.55
+o	oa	0.55
+ey	y	0.50
+y	ey	0.55

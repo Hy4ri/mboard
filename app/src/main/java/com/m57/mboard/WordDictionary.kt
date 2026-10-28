@@ -287,6 +287,45 @@ class WordDictionary private constructor(
     }
 
     /**
+     * Suggestion-only candidates generated from common English orthographic rewrite rules.
+     * Evaluated when exact and fuzzy prefix matches are absent. Not used for auto-correction.
+     */
+    fun ruleCompletions(
+        word: String,
+        rules: EnglishMisspellRules,
+        limit: Int,
+    ): List<Candidate> {
+        if (language.script != Script.LATIN || limit <= 0) return emptyList()
+        if (word.length !in 5..32) return emptyList()
+        // Reject uppercase letters after the first character (allow sentence-initial caps if normalize handles)
+        if (word.drop(1).any { it.isUpperCase() }) return emptyList()
+        val normalized = normalize(word, language) ?: return emptyList()
+        // Must be all lowercase-safe letters
+        if (normalized.length !in 5..32 || normalized.any { !it.isLowerCase() || it !in language.alphabet }) return emptyList()
+        if (normalized in language.keepAsTyped) return emptyList()
+        if (exact.containsKey(normalized)) return emptyList()
+        if (normalized in language.contractions || normalized in language.contractionHints) return emptyList()
+        if (knownPlural(normalized) || unfinishedPrefix(normalized)) return emptyList()
+
+        val candidates = rules.candidates(normalized)
+        if (candidates.isEmpty()) return emptyList()
+
+        val matched = ArrayList<Candidate>()
+        for ((cand, cost) in candidates) {
+            val entry = exact[cand] ?: continue
+            if (entry.hidden) continue
+            val score = entry.frequency * kotlin.math.exp(-cost)
+            matched.add(Candidate(entry.original, score))
+        }
+
+        if (matched.isEmpty()) return emptyList()
+
+        return matched
+            .sortedWith(compareByDescending<Candidate> { it.score }.thenBy { it.word })
+            .take(limit)
+    }
+
+    /**
      * Last resort for a long word with two slips (definatly → definitely): words sharing the first letter
      * whose start is within two edits of [prefix]. Closer matches always beat more frequent ones.
      */

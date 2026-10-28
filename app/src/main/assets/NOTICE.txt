@@ -48,3 +48,6 @@ https://www.unicode.org/license.txt
 Glyphs themselves are rendered by the device's system emoji font.
 
 All third-party assets are bundled locally. mboard has no INTERNET permission.
+
+English misspell rewrite rules
+misspell_rules_en.tsv contains original directional rewrite patterns representing common English orthographic confusions (such as repeated consonant pairs, vowel digraphs, and suffix variants). It is original work created for mboard, independent of third-party typo corpora or spellchecker rule sets. It provides suggestion-only candidate generation without altering automatic correction.
