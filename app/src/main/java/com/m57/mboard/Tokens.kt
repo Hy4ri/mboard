@@ -128,6 +128,14 @@ object Tokens {
     const val STRIP_HEIGHT = 40
     const val PANEL_HEADER = 48
     const val KEY_GAP = 4
+
+    /** Minimum key row height in landscape (dp); wins over [LANDSCAPE_HEIGHT_FRACTION]. */
+    const val KEY_ROW_MIN = 34
+
+    /** Landscape target for toolbar + strip + keys as a fraction of window height. */
+    const val LANDSCAPE_HEIGHT_FRACTION = 0.60f
+    const val KEY_OUTLINE_WIDTH = 1
+    const val FOCUS_WIDTH = 2
     const val SETTINGS_HEADER = 56
     const val CONTENT_MAX_WIDTH = 640
 
