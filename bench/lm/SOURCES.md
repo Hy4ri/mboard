@@ -119,4 +119,6 @@ corpus license. No binary model is bundled in the app in this experiment.
 
 See `../reports/neural-reranker-299.md` for fixed-seed training, the input/output
 SHA-256 manifest, full quality results, manual-target losses/gains, size and latency.
-The feature remains OFF because the candidate has row-level quality tradeoffs.
+The feature remains OFF for review. The first candidate lost manual typo targets;
+the final candidate limits neural completion scoring to one-letter prefixes and
+preserves every measured typo row. Small old-set prediction declines remain.

@@ -558,7 +558,9 @@ class WordSuggestions(
         }
 
         val typedNorm = candidateKey(typed)
-        val rerankedScores = rerank(scores, model, context, dialect)
+        // A single letter has no reliable edit evidence. Let the neural context order this
+        // broad pool, then leave longer prefixes and all typo recovery to the existing scorer.
+        val rerankedScores = if (typed.length == 1) rerank(scores, model, context, dialect) else scores
         val ranked =
             rerankedScores.entries
                 .filter { candidateKey(it.key) != typedNorm }

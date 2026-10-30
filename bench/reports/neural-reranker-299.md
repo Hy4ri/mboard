@@ -1,5 +1,9 @@
 # Card 299: tiny neural candidate reranker
 
+**Current candidate: v2 (one-letter completions + next words), still OFF pending review.**
+The v1 results below are retained as rejected experimental evidence. See the final
+v2 section for the current source and recommendation.
+
 ## Scope and architecture
 
 Experimental, OFF by default. No app asset is added unless the acceptance contract passes.
@@ -168,7 +172,7 @@ flock /tmp/crew-mboard/bench.lock nix develop -c bash -c '
 python3 -I bench/scripts/quality.py compare \
   --baseline /home/m57/Projects/mboard/bench/results/crew-baseline-dccc420 \
   --candidate bench/results/crew299-on --out bench/reports/299/on-vs-baseline
-# exit 1: expected tradeoff receipt, not a compile/runtime failure
+# exit 2: expected tradeoff receipt, not a compile/runtime failure
 python3 -I bench/scripts/quality.py compare \
   --baseline /home/m57/Projects/mboard/bench/results/crew-baseline-dccc420 \
   --candidate bench/results/crew299-off --out bench/reports/299/off-vs-baseline
@@ -204,3 +208,81 @@ Both probe batches exited 0. They use `flock ... nix develop -c bash -c '...'` a
 
 `teh` stays `the / teh / there`, auto=`the`, in both modes. The `انهم` loss is
 reported deliberately; the demo does not show only successful cases.
+
+# V2: current candidate — preserve spelling evidence after one letter
+
+V1 is committed at `380194c99a4b31c6d566e0ab4fde4e6473dfcd8c` for reproduction.
+Its manual-target losses are not accepted. V2 makes one conservative policy change:
+**rerank next words and one-letter completion pools only**. Once the user supplies two
+or more characters, the existing literal/fuzzy/spelling scores remain authoritative.
+This keeps the neural model from displacing typo recovery with fluent but wrong words.
+It is a general prefix-length policy, not a vocabulary or benchmark exception list.
+
+The same training outputs and weight 0.1 are used. No retraining, evaluation-text
+training or model-size increase occurs. Feature remains OFF; binary models stay outside
+the app, for the lead to review the small older-set prediction tradeoffs before rollout.
+
+| Fresh set | Next top-1 baseline → v2 | Found baseline → v2 | Savings baseline → v2 |
+|---|---:|---:|---:|
+| en_fresh | 16.55 → 16.86 (+0.31) | 84.71 → 84.93 (+0.22) | 40.59 → 40.90 (+0.31) |
+| ar_fresh | 10.35 → 10.53 (+0.18) | 60.63 → 60.95 (+0.32) | 24.51 → 24.77 (+0.26) |
+| jo_human_fresh | 7.10 → 7.48 (+0.38) | 51.11 → 51.51 (+0.40) | 18.26 → 18.46 (+0.20) |
+
+Every clean set improves found-before-end and savings. Every typo set has **zero
+manual targets lost or gained** and zero autocorrect changes over 22,252 aligned rows.
+The strict quality tool still returns `TRADEOFF_APPROVAL_REQUIRED` (exit 2), solely
+because en_chat top-1 falls 0.03 pp, en_chat_learning top-1 falls 0.07 pp, and
+jo_chat_learning next-word top-3 falls 0.06 pp. Those declines are not fresh-set declines.
+The model meets the task's stated fresh-set, unchanged-autocorrect, size and desktop
+latency gates; the lead must review the older-set tradeoff rather than assuming universal
+improvement. Current recommendation: review v2, not v1; do not silently enable it.
+
+## Final gate commands (v2)
+
+```sh
+flock /tmp/crew-mboard/bench.lock nix develop -c bash -c '
+  set -euo pipefail
+  ktlint -F "app/src/main/java/**/*.kt" "bench/src/**/*.kt"
+  ktlint "app/src/main/java/**/*.kt" "bench/src/**/*.kt"
+  ./gradlew assembleDebug
+  cd bench
+  JAVA_OPTS="-Dmboard.neural=true -Dmboard.neural.weight=0.1" \
+    bash run.sh crew299-short-on --assets /tmp/rr299/assets'
+# Formatting, lint, assembleDebug and full ON replay: exit 0 each.
+flock /tmp/crew-mboard/bench.lock nix develop -c bash -c '
+  set -e; cd bench; bash run.sh crew299-short-off'
+# Full OFF replay: see final receipts.
+python3 -I bench/scripts/quality.py compare \
+  --baseline /home/m57/Projects/mboard/bench/results/crew-baseline-dccc420 \
+  --candidate bench/results/crew299-short-on --out bench/reports/299/short-on-vs-baseline
+# exit 2 (three tiny older-set prediction declines; no lost typo rows).
+```
+
+The final source does not change the projection implementation. The measured
+64-candidate, two-projection microbenchmark remains an upper-workload probe for both
+v1 and v2 ordinary lookup paths; v2 computes fewer completion projections.
+
+Final OFF replay and both final probe batches exited 0. OFF again matches **23/23
+TSV files byte for byte**. V2 ON matches **11/11 typo TSV files byte for byte**, not
+just their aggregate metrics. See `short-off-vs-baseline/`, `short-off-exit.log`,
+`short-probes.log`, `short-prediction-probes.log` and `final-clean-deltas.json`.
+`short-clean-miss-row-diffs.json` preserves the final clean miss-row differences.
+
+Final `suggest.sh --json --no-autocap` examples (same explicit experimental asset directory):
+
+| Text | OFF | V2 ON | Auto |
+|---|---|---|---|
+| empty | I / you / and | I / you / the | null both |
+| teh | the / teh / there | the / teh / there | the both |
+| انهم | انهم / إنهم / إنه | انهم / إنهم / إنه | null both |
+| he broke down everg | everg / everglades / everything | everg / everglades / everything | null both |
+| بلا منعا (dialect) | منعا / معنا / مناح | منعا / معنا / مناح | null both |
+
+This demonstrates next-word reranking and the restoration of v1's longer-prefix
+spelling behavior. It does not claim that the current engine fixes every example.
+
+Open items: lead review of three small old-set prediction declines; production flag
+and asset inclusion decision; device responsiveness/typing verification. No install,
+push, merge or publication was performed by this member. No second full training
+reproduction run was executed; fixed-seed deterministic code and recorded input/output
+hashes support reproduction, but cross-JDK bitwise identity is not claimed.

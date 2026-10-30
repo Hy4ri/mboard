@@ -1,0 +1,27 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+MODE=off
+{"mode":"complete","auto":"I","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194244.md","context":["I","think"],"suggestions":["I","it's","it"],"language":"en","text":"I think i","word":"i"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194246.md","context":["he","broke","down"],"suggestions":["everg","everglades","everything"],"language":"en","text":"he broke down everg","word":"everg"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194248.md","context":["I","want"],"suggestions":["to","the","that"],"language":"en","text":"I want t","word":"t"}
+{"mode":"complete","auto":"the","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194250.md","context":[],"suggestions":["the","teh","there"],"language":"en","text":"teh","word":"teh"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194251.md","context":[],"suggestions":["ماذا","من","ما"],"language":"ar","text":"م","word":"م"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194253.md","context":[],"suggestions":["انهم","إنهم","إنه"],"language":"ar","text":"انهم","word":"انهم"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194254.md","context":["قد","لا"],"suggestions":["يجب","يجري","جيبي"],"language":"ar","text":"قد لا يجب","word":"يجب"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194256.md","context":["بلا"],"suggestions":["منعا","معنا","مناح"],"language":"ar","text":"بلا منعا","word":"منعا"}
+MODE=on
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":"I","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194257.md","context":["I","think"],"suggestions":["I","it's","it"],"language":"en","text":"I think i","word":"i"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194259.md","context":["he","broke","down"],"suggestions":["everg","everglades","everything"],"language":"en","text":"he broke down everg","word":"everg"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194300.md","context":["I","want"],"suggestions":["to","the","that"],"language":"en","text":"I want t","word":"t"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":"the","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194302.md","context":[],"suggestions":["the","teh","there"],"language":"en","text":"teh","word":"teh"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194303.md","context":[],"suggestions":["ماذا","من","ما"],"language":"ar","text":"م","word":"م"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194305.md","context":[],"suggestions":["انهم","إنهم","إنه"],"language":"ar","text":"انهم","word":"انهم"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194307.md","context":["قد","لا"],"suggestions":["يجب","يجري","جيبي"],"language":"ar","text":"قد لا يجب","word":"يجب"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-194308.md","context":["بلا"],"suggestions":["منعا","معنا","مناح"],"language":"ar","text":"بلا منعا","word":"منعا"}
