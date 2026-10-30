@@ -404,16 +404,22 @@ class WordSuggestions(
         return hint
     }
 
+    /** A missed-space reading; [strong] when the pair is common enough to lead over a one-word typo candidate. */
+    class Split(
+        val text: String,
+        val strong: Boolean,
+    )
+
     /**
      * Suggest-only: the typed word read as two words with the space missed ("fixit", "fixxit" → "fix it").
-     * Scored with the same next-word model as predictions; null when no reading has two real, frequent halves.
+     * Both halves must be real, frequent words and the pair an observed sequence in the next-word table.
      */
     fun splitSuggestion(
         word: String,
         language: Language,
         context: List<String>,
         dialectOn: Boolean,
-    ): String? {
+    ): Split? {
         if (closed) return null
         val model = model(language) ?: return null
         val readings = model.dictionary.splitReadings(word)
@@ -421,11 +427,33 @@ class WordSuggestions(
         // A longer real word is probably still being typed (thankyo…): leave that to completions.
         val longer = model.dictionary.completions(word, 4, false).filter { !it.word.equals(word, ignoreCase = true) }
         if (longer.any { model.dictionary.frequency(it.word) >= SPLIT_PREFIX_BLOCK }) return null
+        // A listed word stays a word unless it is rare (alot, thankyou); common ones (tome, manor) are not split.
+        val wholeFrequency = model.dictionary.frequency(word)
+        if (wholeFrequency >= SPLIT_LISTED_MAX) return null
+        // A one-word typo reading (godo → good, namme → name) wins over a split: the strip already offers it.
+        if (model.dictionary.correctionOptions(word).isNotEmpty()) return null
         val dialect = dialectOn && language.dialect != null
         val first = Scorer(model, context, language, dialect, emptyMap(), emptyMap())
-        // A rare listed word (manor, Oran) is split only when the pair is a known sequence (a lot, thank you).
-        val listed = model.dictionary.frequency(word) > 0
-        val known = readings.filter { !listed || (model.next[matchKey(it.left)]?.count(candidateKey(it.right)) ?: 0L) > 0L }
+
+        fun share(reading: WordDictionary.SplitReading): Double {
+            val row = model.next[matchKey(reading.left)] ?: return 0.0
+            return row.count(candidateKey(reading.right)).toDouble() / maxOf(row.total, 1L)
+        }
+        // A listed (rare) whole word needs a clearly common pair. Otherwise the pair is an observed sequence, or both
+        // halves are very common words (the next-word table keeps only each word's top followers).
+        val listed = wholeFrequency > 0
+
+        fun common(reading: WordDictionary.SplitReading) =
+            minOf(model.dictionary.frequency(reading.left), model.dictionary.frequency(reading.right)) >= SPLIT_COMMON_HALF
+        val known =
+            readings.filter {
+                if (listed) {
+                    share(it) >= SPLIT_STRONG_SHARE && maxOf(it.left.length, it.right.length) > 2
+                } else {
+                    share(it) >= SPLIT_MIN_SHARE ||
+                        common(it)
+                }
+            }
         val best =
             known.maxByOrNull { reading ->
                 val l = written(reading.left, language)
@@ -433,9 +461,7 @@ class WordSuggestions(
                 val second = Scorer(model, context + l, language, dialect, emptyMap(), emptyMap())
                 ln(first.probability(l)) + ln(second.probability(r)) - if (reading.stray) STRAY_COST else 0.0
             } ?: return null
-        // A one-word typo reading (godo → good, namme → name) wins over a split: the strip already offers it.
-        if (model.dictionary.correctionOptions(word).isNotEmpty()) return null
-        return "${written(best.left, language)} ${written(best.right, language)}"
+        return Split("${written(best.left, language)} ${written(best.right, language)}", share(best) >= SPLIT_STRONG_SHARE)
     }
 
     private fun strongLiteral(
@@ -870,6 +896,10 @@ class WordSuggestions(
         /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
         const val FUZZY_COST = 1.5
         const val STRAY_COST = 3.0
+        const val SPLIT_LISTED_MAX = 6000L
+        const val SPLIT_COMMON_HALF = 100_000L
+        const val SPLIT_MIN_SHARE = 0.002
+        const val SPLIT_STRONG_SHARE = 0.02
         const val SPLIT_PREFIX_BLOCK = 1_000L
 
         const val CLITIC_COST = 2.5

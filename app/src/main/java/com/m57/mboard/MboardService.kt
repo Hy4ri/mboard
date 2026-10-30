@@ -596,15 +596,12 @@ class MboardService : InputMethodService() {
                 null
             }
         // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
-        val split =
+        val splitHint =
             if (!userWords.knows(typed, language)) {
-                words
-                    .splitSuggestion(typed, language, context.contextWords, settings.dialectEnabled(language.dialect))
-                    ?.let { matchCase(it, typed) }
+                words.splitSuggestion(typed, language, context.contextWords, settings.dialectEnabled(language.dialect))
             } else {
                 null
             }
-        val leading = autoCorrection ?: hint ?: split
         // A saved phrase starting with the typed word follows the correction; tapping it replaces the word.
         val phrase =
             if (fieldPolicy.password || typed.length < 2) {
@@ -623,10 +620,18 @@ class MboardService : InputMethodService() {
                     learnedNext(context.contextWords),
                     if (privateSession) emptyMap() else userWords.completions(typed, language),
                 ).map { matchCase(it, typed) }
+        // A split leads only when no one-word typo candidate (fuzzy, two-edit, rule) is ranked, or the pair is very common.
+        val split = splitHint?.text?.let { matchCase(it, typed) }
+        val oneWordTypo = ranked.any { !it.startsWith(typed, ignoreCase = true) }
+        val leading = autoCorrection ?: hint ?: split?.takeIf { splitHint?.strong == true || !oneWordTypo }
         val others =
-            (listOfNotNull(leading, split, phrase) + ranked)
+            (listOfNotNull(leading, phrase) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
+                .toMutableList()
+        if (split != null && split != leading && others.none { it.equals(split, ignoreCase = true) }) {
+            others.add(minOf(1, others.size), split)
+        }
         // The word as typed always keeps a slot, right after a correction or hint, so it can be kept with one tap
         // (tapping it finishes the word with a space and no correction). Single letters are left out.
         val keepAt = if (leading != null && leading != typed) 1 else 0

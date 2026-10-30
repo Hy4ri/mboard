@@ -647,6 +647,8 @@ class WordDictionary private constructor(
      */
     fun splitReadings(word: String): List<SplitReading> {
         if (language.script != Script.LATIN || word.length !in 4..24 || word.any { !it.isLetter() }) return emptyList()
+        // Capitals after the first letter are artefacts (AAnd), not a missed space.
+        if (word.drop(1).any { it.isUpperCase() }) return emptyList()
         val lower = word.lowercase(Locale.ROOT)
         if (lower in language.keepAsTyped || lower in language.contractions) return emptyList()
         val whole = exact[lower]?.frequency ?: 0L
@@ -657,7 +659,7 @@ class WordDictionary private constructor(
             val floor =
                 when (text.length) {
                     1 -> if (text == "a" || text == "i") SPLIT_MIN_SINGLE else return null
-                    2 -> SPLIT_MIN_SHORT
+                    2 -> if (text in SPLIT_SHORT_WORDS) SPLIT_MIN_SHORT else return null
                     else -> SPLIT_MIN_HALF
                 }
             return entry.takeIf { it.frequency >= floor }
@@ -1061,6 +1063,33 @@ class WordDictionary private constructor(
     companion object {
         private const val MAX_PREFIX_SCAN = 400
         private const val MAX_DISTANCE = 2
+
+        /** The only 2-letter halves a split may use; fragments such as th, ha, ya, em are not words here. */
+        private val SPLIT_SHORT_WORDS =
+            setOf(
+                "an",
+                "in",
+                "on",
+                "of",
+                "to",
+                "it",
+                "is",
+                "at",
+                "be",
+                "me",
+                "my",
+                "we",
+                "he",
+                "so",
+                "no",
+                "do",
+                "go",
+                "up",
+                "us",
+                "or",
+                "as",
+                "by",
+            )
         private const val SPLIT_MIN_HALF = 3000L
         private const val SPLIT_MIN_SHORT = 100_000L
         private const val SPLIT_MIN_SINGLE = 1_000_000L

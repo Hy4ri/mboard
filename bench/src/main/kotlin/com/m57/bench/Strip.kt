@@ -131,13 +131,12 @@ class Strip(
                 null
             }
         // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
-        val split =
+        val splitHint =
             if (!userWords.knows(typed, language)) {
-                words.splitSuggestion(typed, language, c.contextWords, dialect)?.let { matchCase(it, typed) }
+                words.splitSuggestion(typed, language, c.contextWords, dialect)
             } else {
                 null
             }
-        val leading = autoCorrection ?: hint ?: split
         val ranked =
             words
                 .rank(
@@ -148,10 +147,18 @@ class Strip(
                     learnedNext(c.contextWords),
                     if (!learning) emptyMap() else userWords.completions(typed, language),
                 ).map { matchCase(it, typed) }
+        // A split leads only when no one-word typo candidate (fuzzy, two-edit, rule) is ranked, or the pair is very common.
+        val split = splitHint?.text?.let { matchCase(it, typed) }
+        val oneWordTypo = ranked.any { !it.startsWith(typed, ignoreCase = true) }
+        val leading = autoCorrection ?: hint ?: split?.takeIf { splitHint?.strong == true || !oneWordTypo }
         val others =
-            (listOfNotNull(leading, split) + ranked)
+            (listOfNotNull(leading) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
+                .toMutableList()
+        if (split != null && split != leading && others.none { it.equals(split, ignoreCase = true) }) {
+            others.add(minOf(1, others.size), split)
+        }
         val keepAt = if (leading != null && leading != typed) 1 else 0
         val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
         // MboardService: Arabizi readings (suggest-only); the app skips them when the caret is inside a word.
