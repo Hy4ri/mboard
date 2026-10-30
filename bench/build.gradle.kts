@@ -23,6 +23,7 @@ sourceSets {
                 "com/m57/mboard/WordDictionary.kt",
                 "com/m57/mboard/KnownWordForms.kt",
                 "com/m57/mboard/WordSuggestions.kt",
+                "com/m57/mboard/NeuralReranker.kt",
                 "com/m57/mboard/PredictionTrail.kt",
                 "com/m57/mboard/UserWords.kt",
                 "android/**",

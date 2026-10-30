@@ -1,0 +1,41 @@
+{
+  "dim": 48,
+  "epochs": 4,
+  "hidden": 128,
+  "inputs": {
+    "ar": {
+      "context_ar.tsv": "43c1284734f039fcd3d7f1354557ac3e78f771f0df8eaee7b42eafa55e30f9cf",
+      "next_ar.tsv": "248447dfd9e0ca0e4258923e973407671aa6f8de2c6914d75b4d4a2d516908c6",
+      "unigram_ar.tsv": "02f112988c679bd55f3c756269e192c22fd0c748f0c8912955f398348ecf9661"
+    },
+    "en": {
+      "context_en.tsv": "8e74db8cd45292c05ddb278279d3ebda231ba17997b14c9d576c54c26905cf11",
+      "next_en.tsv": "916e71f4d37e308a1e1e586b3829668d5d1b20a169c627897987bbb1eb96474d",
+      "unigram_en.tsv": "9d3a746bb8d1a73383e3ba650d81756f61815b22406bfdc75848d9fa07d924f5"
+    },
+    "jo": {
+      "context_jo.tsv": "d4c315e010572b8ace520abad64c5cad0e10f07a71ba7eb057934051d8cb3060",
+      "next_jo.tsv": "1e049fadd83821b7217765e624bed5d0fd0400af7472962ceee46a68faed2b65",
+      "unigram_jo.tsv": "747f57c76fe10223871472cacca37a37c0d9e6cf381a7dbfb5fa0c5bc4bf1d40"
+    }
+  },
+  "learning_rate": 0.05,
+  "outputs": {
+    "rerank_ar.bin": {
+      "bytes": 625224,
+      "sha256": "8180b7f2f269992cad82b0d251fd2621319143261e3be41ce499676e34602dc9"
+    },
+    "rerank_en.bin": {
+      "bytes": 592109,
+      "sha256": "e09972009238802e9fe0e26c6419e2e25a2a6b2dd3280488150b152d91c4d87a"
+    },
+    "rerank_jo.bin": {
+      "bytes": 628667,
+      "sha256": "80a590233aa0bd68b043b407eac8ec1b678e2813527f772b5247ee81a0c7440c"
+    }
+  },
+  "seed": 57485,
+  "threads": 4,
+  "vocab": 10000,
+  "weight_power": 0.5
+}

@@ -1,0 +1,69 @@
+mboard quality: aligned recorded baseline/candidate comparison
+TRADEOFF_APPROVAL_REQUIRED
+Aligned 22252 rows in 11 sets, including real-word rows.
+targets_lost: 41
+targets_gained: 107
+new_wrong: 0
+wrong_removed: 0
+correct_auto_lost: 0
+auto_to_manual: 0
+prediction_declines: 3
+clean_completion_declines: 2
+clean_savings_declines: 1
+new_valid_corruption: 0
+LOST ar_fresh.typos.tsv:259 انهم -> إنهم: انهم|إنهم|إنه => انهم|إنه|إنها
+LOST ar_fresh.typos.tsv:368 طبب -> طلب: طب|طبب|طلب => طب|طبب|طلبت
+LOST ar_fresh.typos.tsv:698 أتسال -> أتساءل: أتسال|اتصال|أتساءل => أتسال|اتصال|أسألك
+LOST ar_fresh.typos.tsv:913 هذا -> هذان: هذا|هذان|هاذا => هذا|هذة|هاذا
+LOST ar_real_typos.typos.tsv:478 بحير -> بحيرة: بخير|بحير|بحيرة => بخير|بحير|بحياتي
+LOST ar_real_typos.typos.tsv:682 خفو -> خوف: خفو|فخور|خوف => خفو|فخور|فخورة
+LOST ar_real_typos.typos.tsv:690 بتي -> بيت: بتي|بيت|بأي => بتي|بأي|بيتر
+LOST ar_subs.typos.tsv:31 عنه -> عنها: عنه|إنه|عنها => عنه|إنه|إنها
+LOST ar_subs.typos.tsv:489 تتد -> تعد: تود|تتد|تعد => تود|تتد|تتكلم
+LOST ar_subs.typos.tsv:536 فعلاه -> فعلته: فعلاه|فعله|فعلته => فعلاه|فعله|فعلا
+LOST ar_subs.typos.tsv:1897 انظى -> انظر: انظري|انظى|انظر => انظري|انظى|أني
+LOST ar_subs.typos.tsv:2189 طلاب -> طالب: طلاب|طلب|طالب => طلاب|طلبت|طلب
+LOST ar_tatoeba.typos.tsv:255 تجن -> تجنب: تكن|تجن|تجنب => تكن|تجن|تجعل
+LOST ar_tatoeba.typos.tsv:521 فيرة -> فطيرة: فيرة|فيريد|فطيرة => فيرة|فيريد|فيرام
+LOST ar_tatoeba.typos.tsv:1157 والديا -> والداي: والديا|والدي|والداي => والديا|والدي|والديك
+LOST ar_tatoeba.typos.tsv:1709 تخف -> تخفي: تخف|تخفيض|تخفي => تخف|تخفيض|تخبرني
+LOST ar_tatoeba.typos.tsv:1822 نعل -> نعلم: زعل|نعل|نعلم => زعل|نعل|تعلم
+LOST ar_tatoeba.typos.tsv:2124 حيا -> حياة: حيا|حياتي|حياة => حيا|حياتي|حيال
+LOST ar_tatoeba.typos.tsv:2153 حلب -> كلب: طلب|حلب|كلب => طلب|حلب|حرب
+LOST en_real_typos.typos.tsv:1482 figer -> finger: figer|fingers|finger => figer|fingers|tiger
+LOST en_real_typos.typos.tsv:1809 cutans -> curtains: cutans|cuts|curtains => cutans|cuts|cans
+LOST en_real_typos.typos.tsv:3442 divid -> divide: divid|divided|divide => divid|divided|division
+LOST en_real_typos.typos.tsv:3863 fiar -> fire: fiar|first|fire => fiar|first|far
+LOST en_real_typos.typos.tsv:3964 revue -> review: revue|revenge|review => revue|revenge|reverend
+LOST jo_chat_dialect.typos.tsv:98 سهن -> سخن: سنه|سهن|سخن => سنه|سهن|سخنة
+LOST jo_chat_dialect.typos.tsv:117 للصب -> للصبح: للصب|الصباح|للصبح => للصب|الصباح|الصبح
+LOST jo_chat_dialect.typos.tsv:372 رايك -> رايح: رأيك|رايك|رايح => رأيك|رايك|رايحة
+LOST jo_chat_dialect.typos.tsv:391 رايك -> رايح: رأيك|رايك|رايح => رأيك|رايك|رايحة
+LOST jo_chat_dialect.typos.tsv:445 اشتريا -> اشتريت: اشتريا|اشتريت|أشتري => اشتريا|اشتري|اشترينا
+LOST jo_chat_dialect.typos.tsv:587 شغالن -> شغالة: شغالين|شغالن|شغالة => شغالين|شغالن|شغال
+LOST jo_chat_dialect.typos.tsv:1056 وراسى -> وراسي: وراسى|وراي|وراسي => وراسى|وراي|ورأسي
+LOST jo_chat_dialect.typos.tsv:1160 بدوا -> بدنا: بدوا|بدنا|بدون => بدوا|بدون|بدو
+LOST jo_human_fresh.typos.tsv:282 تزا -> ازا: تزا|تزال|ازا => تزا|تزال|تمام
+LOST jo_human_fresh.typos.tsv:623 وراهن -> وراهم: وراهن|وراه|وراهم => وراهن|وراه|ورانا
+LOST jo_human_fresh.typos.tsv:770 هل -> هلا: هل|هلأ|هلا => هل|هلق|هلأ
+LOST jo_human_fresh.typos.tsv:880 ابوس -> ابوي: أبوس|ابوس|ابوي => أبوس|ابوس|ابو
+LOST jo_human_fresh.typos.tsv:887 كلوا -> كلنا: كلوا|كلا|كلنا => كلوا|كلا|كلو
+LOST jo_human_fresh.typos.tsv:898 حك -> حكا: حك|حكا|حكالو => حك|حكي|حكت
+LOST jo_human_fresh.typos.tsv:1008 رنة -> رنو: رنة|رنو|رنيت => رنة|رنيت|رنت
+LOST jo_human_fresh.typos.tsv:1024 وقفه -> واقفه: وقفه|وقفت|واقفه => وقفه|وقف|وقفت
+LOST jo_human_fresh.typos.tsv:1028 غشلت -> شغلت: فشلت|غشلت|شغلت => فشلت|غشلت|شغلتين
+Clean sets: found%, saved%, badAC count, next3%, desktop p95 us (baseline -> candidate)
+ar_fresh.json: 60.63->61.73, 24.51->25.07, 7->7, 17.61->18.1, 695->551
+ar_subs.json: 65.72->66.23, 26.93->27.39, 58->58, 20.59->20.67, 380->333
+ar_tatoeba.json: 59.57->60.84, 23.71->24.27, 26->26, 17.27->17.37, 431->349
+en_chat.json: 86.92->87.37, 39.35->39.83, 28->28, 22.51->22.51, 413->442
+en_chat_learning.json: 87.08->87.67, 40.14->40.61, 10->10, 22.36->22.55, 774->527
+en_fresh.json: 84.71->85.71, 40.59->41.42, 15->15, 27.9->27.97, 264->248
+en_subs.json: 86.8->87.3, 41.83->42.39, 89->89, 29.42->29.69, 166->203
+en_tatoeba.json: 85.24->86.33, 40.91->41.76, 51->51, 28.42->28.65, 183->203
+jo_chat_dialect.json: 51.93->51.79, 17.49->17.54, 12->12, 9.37->9.38, 420->380
+jo_chat_learning.json: 58.1->58.84, 21.48->21.66, 12->12, 10.35->10.29, 764->616
+jo_chat_msa.json: 37.18->36.8, 11.23->11.16, 12->12, 3.57->3.61, 568->504
+jo_human_fresh.json: 51.11->52.64, 18.26->18.99, 35->35, 11.51->11.57, 459->386
+Per-language clean completion, savings, prediction and same-baseline p95: comparison.json / summary.txt.
+No general correctness, fresh blind evidence, or Android/editor acceptance is implied.

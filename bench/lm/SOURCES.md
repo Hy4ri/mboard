@@ -106,3 +106,17 @@ Limitations:
 - Single-letter prefixes require candidate frequency >= 3 * max(1, word frequency).
 - Retained-count aggregation uses existing training intermediates, not a full corpus retrain. No evaluation sentences or follower counts are ingested. Key-frequency guards use the unchanged bundled lexicon; its Jordanian vocabulary still includes full-Shami spelling coverage. These are tuning replays, not blind unseen-language evidence.
 
+
+## Tiny neural reranker experiment (card 299, OFF)
+
+`train_reranker.py` and `TrainReranker.java` train tied-embedding, two-word-context
+feed-forward scorers from the training-only `unigram_`, `next_`, and `context_`
+count intermediates above. English/Arabic use the documented excluded subtitle
+windows and evaluation-line exclusions. Jordanian uses `out_jo_split` only, never
+full-Shami `out_jo`. No benchmark text is a training input. The model derivations
+retain the source attribution and data-license terms above; they have no new
+corpus license. No binary model is bundled in the app in this experiment.
+
+See `../reports/neural-reranker-299.md` for fixed-seed training, the input/output
+SHA-256 manifest, full quality results, manual-target losses/gains, size and latency.
+The feature remains OFF because the candidate has row-level quality tradeoffs.

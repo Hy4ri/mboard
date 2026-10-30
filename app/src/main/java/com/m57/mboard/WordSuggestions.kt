@@ -21,6 +21,8 @@ class WordSuggestions(
         val context: Map<String, Row>,
         val dialectNext: Map<String, Row>,
         val misspellRules: EnglishMisspellRules,
+        val neural: NeuralReranker?,
+        val dialectNeural: NeuralReranker?,
     )
 
     /** One table row: how often [total] the context was followed by anything, and its best followers. */
@@ -94,7 +96,16 @@ class WordSuggestions(
                         } else {
                             EnglishMisspellRules.EMPTY
                         }
-                    val model = Model(dictionary, next, contextTable, dialectNext, misspellRules)
+                    val neural = if (NeuralReranker.enabled) NeuralReranker.read(assets.open("rerank_${language.code}.bin")) else null
+                    val dialectNeural =
+                        if (NeuralReranker.enabled &&
+                            language.dialect != null
+                        ) {
+                            NeuralReranker.read(assets.open("rerank_jo.bin"))
+                        } else {
+                            null
+                        }
+                    val model = Model(dictionary, next, contextTable, dialectNext, misspellRules, neural, dialectNeural)
 
                     val readyCallbacks =
                         synchronized(lock) {
@@ -405,7 +416,11 @@ class WordSuggestions(
 
         // Words seen after this context come first; the common-word list only fills what they leave. Ranked together,
         // a very frequent word such as "you" wins the pruned rows' unlisted share and lands after "the".
-        fun ranked(words: List<String>) = words.map { written(it, language) }.sortedByDescending { scorer.probability(it) }
+        fun ranked(words: List<String>): List<String> {
+            if (model.neural == null) return words.map { written(it, language) }.sortedByDescending { scorer.probability(it) }
+            val scores = words.map { written(it, language) }.distinct().associateWith { ln(scorer.probability(it)) }
+            return rerank(scores, model, context, dialectOn).entries.sortedByDescending { it.value }.map { it.key }
+        }
         val seen = scorer.sources.flatten()
         val candidates = (ranked(seen) + ranked(model.dictionary.commonWords)).distinctBy(::candidateKey)
         // Reject only a repeated multi-word cycle, not every recently used word: an immediate 2-4 word repeat, or a
@@ -543,8 +558,9 @@ class WordSuggestions(
         }
 
         val typedNorm = candidateKey(typed)
+        val rerankedScores = rerank(scores, model, context, dialect)
         val ranked =
-            scores.entries
+            rerankedScores.entries
                 .filter { candidateKey(it.key) != typedNorm }
                 .sortedByDescending { it.value }
                 .take(3)
@@ -655,6 +671,24 @@ class WordSuggestions(
         } else {
             ranked
         }
+    }
+
+    /** Adjust only already-created completion/prediction scores, never the correction scorer. */
+    private fun rerank(
+        scores: Map<String, Double>,
+        model: Model,
+        context: List<String>,
+        dialect: Boolean,
+    ): Map<String, Double> {
+        val neural = (if (dialect) model.dialectNeural else model.neural) ?: return scores
+        if (scores.size < 2) return scores
+        val score = neural.scorer(context)
+        val logits = scores.keys.associateWith(score)
+        val known = logits.values.filterNotNull()
+        if (known.size < 2) return scores
+        val mean = known.average()
+        val weight = NeuralReranker.weight
+        return scores.mapValues { (word, original) -> original + weight * ((logits[word] ?: mean) - mean) }
     }
 
     private companion object {
