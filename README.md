@@ -78,3 +78,9 @@ Word lists: Hermit Dave/FrequencyWords, selected entries from the 2018 50k Engli
 Unicode emoji data: Unicode License V3.
 Material Symbols: Google, Apache 2.0. The launcher mark is original mboard artwork.
 Full notices and license texts are bundled in `app/src/main/assets/NOTICE.txt` and `assets/licenses/`.
+
+Continuation TSVs remain the editable source of truth. `:app:compileTables` generates indexed binary
+assets during each build; only those binary continuation tables enter the APK. Loading restores the
+same context strings, candidate comparison keys, counts and row order before suggestions become ready.
+The desktop replay can use the TSV fallback, or the generated binaries with `--assets` pointing to a
+directory containing the ordinary assets plus `app/build/generated/tableAssets/`.

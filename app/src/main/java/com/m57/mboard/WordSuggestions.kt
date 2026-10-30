@@ -268,11 +268,48 @@ class WordSuggestions(
         return table
     }
 
+    /** Build-generated string pool and indexed rows; no runtime normalization or text splitting. */
+    private fun readBinaryTable(name: String): Map<String, Row>? {
+        val input =
+            try {
+                assets.open("$name.bin")
+            } catch (_: IOException) {
+                return null
+            }
+        return java.io.DataInputStream(input.buffered(64 * 1024)).use { stream ->
+            if (stream.readInt() != 0x4d425431) throw IOException("Invalid bundled table: $name")
+            val strings =
+                Array(stream.readInt()) {
+                    val bytes = ByteArray(stream.readInt())
+                    stream.readFully(bytes)
+                    String(bytes, Charsets.UTF_8)
+                }
+            val size = stream.readInt()
+            val rows = HashMap<String, Row>(size * 4 / 3 + 1)
+            repeat(size) {
+                val key = strings[stream.readInt()]
+                val total = stream.readLong()
+                val count = stream.readInt()
+                val words = arrayOfNulls<String>(count)
+                val keys = arrayOfNulls<String>(count)
+                val counts = LongArray(count)
+                repeat(count) { i ->
+                    words[i] = strings[stream.readInt()]
+                    keys[i] = strings[stream.readInt()]
+                    counts[i] = stream.readLong()
+                }
+                rows[key] = Row(total, Array(count) { words[it]!! }, Array(count) { keys[it]!! }, counts)
+            }
+            rows
+        }
+    }
+
     /**
      * `context TAB total TAB word:count ...`; a row without counts (`context TAB word ...`) counts its
      * words by rank. Shared strings keep the tables' memory down.
      */
     private fun readTable(name: String): Map<String, Row> {
+        readBinaryTable(name)?.let { return it }
         val strings = HashMap<String, String>()
 
         fun shared(value: String) = strings.getOrPut(value) { value }
@@ -311,6 +348,7 @@ class WordSuggestions(
      * One comparison key for table keys, context words and candidates: lowercase, no harakat/tatweel and
      * no apostrophes. The corpus tables were built without apostrophes, so "don't" must find "dont".
      */
+    // compileTables in app/build.gradle.kts bakes matchKey/candidateKey into the bundled .bin tables: change both together.
     private fun matchKey(word: String): String =
         word.lowercase(Locale.ROOT).filterNot { c ->
             c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640' || c == '\'' || c == '\u2019'

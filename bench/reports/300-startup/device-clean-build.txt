@@ -1,0 +1,133 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+  mCurrentFocus=Window{a07df6 u0 com.m57.mboard/com.m57.mboard.SetupActivity}
+Performing Streamed Install
+Success
+/data/app/~~UdF1ESitj0TgUSmd8a1Dwg==/com.m57.mboard-TyGhlG-aBOFxlvgqrnEwAw==/base.apk: 1 file pulled, 0 skipped. 26.1 MB/s (18766797 bytes in 0.687s)
+ff61b4ac5712712ba93ff7cab95cf63854b2f910419dffbd789e7234b9300804  app/build/outputs/apk/debug/app-debug.apk
+ff61b4ac5712712ba93ff7cab95cf63854b2f910419dffbd789e7234b9300804  /tmp/crew300-installed-clean.apk
+=== Mboard Startup Measurement on device AS7J6R4407003449 (5 rounds) ===
+--- Round 1 / 5 ---
+Logs:
+10-30 20:39:17.623 13128 13128 I mboard.startup: service onCreate start: elapsedRealtime=377408688 uptimeMillis=135480849
+10-30 20:39:17.729 13128 13196 I mboard.startup: asset load start: jordanian.tsv
+10-30 20:39:17.836 13128 13196 I mboard.startup: asset load end: jordanian.tsv duration=107ms entries=5013
+10-30 20:39:17.836 13128 13196 I mboard.startup: asset load start: known_forms_ar.txt
+10-30 20:39:17.901 13128 13196 I mboard.startup: asset load end: known_forms_ar.txt duration=65ms
+10-30 20:39:17.901 13128 13196 I mboard.startup: asset load start: words_ar.tsv
+10-30 20:39:18.726 13128 13196 I mboard.startup: asset load end: words_ar.tsv duration=824ms entries=25247
+10-30 20:39:18.726 13128 13196 I mboard.startup: asset load start: next_ar.tsv
+10-30 20:39:18.891 13128 13196 I mboard.startup: asset load end: next_ar.tsv duration=164ms entries=30000
+10-30 20:39:18.891 13128 13196 I mboard.startup: asset load start: context_ar.tsv
+10-30 20:39:19.188 13128 13196 I mboard.startup: asset load end: context_ar.tsv duration=297ms entries=60000
+10-30 20:39:19.188 13128 13196 I mboard.startup: asset load start: jordanian_next.tsv
+10-30 20:39:19.347 13128 13196 I mboard.startup: asset load end: jordanian_next.tsv duration=159ms entries=82497
+10-30 20:39:19.381 13128 13196 I mboard.startup: engine ready: language=ar duration=1652ms
+10-30 20:39:19.390 13128 13128 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377410455 uptimeMillis=135482616
+Memory:
+  TOTAL PSS: 189845 KB
+  Java Heap: 69548 KB
+Phase timings:
+  service onCreate -> first suggestion: 1767 ms
+  engine load duration: 1652 ms
+
+--- Round 2 / 5 ---
+Logs:
+10-30 20:39:23.612 13250 13250 I mboard.startup: service onCreate start: elapsedRealtime=377414676 uptimeMillis=135486838
+10-30 20:39:23.718 13250 13313 I mboard.startup: asset load start: jordanian.tsv
+10-30 20:39:23.840 13250 13313 I mboard.startup: asset load end: jordanian.tsv duration=122ms entries=5013
+10-30 20:39:23.840 13250 13313 I mboard.startup: asset load start: known_forms_ar.txt
+10-30 20:39:23.910 13250 13313 I mboard.startup: asset load end: known_forms_ar.txt duration=70ms
+10-30 20:39:23.911 13250 13313 I mboard.startup: asset load start: words_ar.tsv
+10-30 20:39:24.732 13250 13313 I mboard.startup: asset load end: words_ar.tsv duration=822ms entries=25247
+10-30 20:39:24.732 13250 13313 I mboard.startup: asset load start: next_ar.tsv
+10-30 20:39:24.897 13250 13313 I mboard.startup: asset load end: next_ar.tsv duration=165ms entries=30000
+10-30 20:39:24.898 13250 13313 I mboard.startup: asset load start: context_ar.tsv
+10-30 20:39:25.204 13250 13313 I mboard.startup: asset load end: context_ar.tsv duration=307ms entries=60000
+10-30 20:39:25.204 13250 13313 I mboard.startup: asset load start: jordanian_next.tsv
+10-30 20:39:25.363 13250 13313 I mboard.startup: asset load end: jordanian_next.tsv duration=159ms entries=82497
+10-30 20:39:25.403 13250 13313 I mboard.startup: engine ready: language=ar duration=1685ms
+10-30 20:39:25.414 13250 13250 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377416478 uptimeMillis=135488640
+Memory:
+  TOTAL PSS: 190208 KB
+  Java Heap: 69980 KB
+Phase timings:
+  service onCreate -> first suggestion: 1802 ms
+  engine load duration: 1685 ms
+
+--- Round 3 / 5 ---
+Logs:
+10-30 20:39:29.627 13397 13397 I mboard.startup: service onCreate start: elapsedRealtime=377420692 uptimeMillis=135492854
+10-30 20:39:29.737 13397 13481 I mboard.startup: asset load start: jordanian.tsv
+10-30 20:39:29.901 13397 13481 I mboard.startup: asset load end: jordanian.tsv duration=164ms entries=5013
+10-30 20:39:29.901 13397 13481 I mboard.startup: asset load start: known_forms_ar.txt
+10-30 20:39:29.966 13397 13481 I mboard.startup: asset load end: known_forms_ar.txt duration=65ms
+10-30 20:39:29.966 13397 13481 I mboard.startup: asset load start: words_ar.tsv
+10-30 20:39:30.787 13397 13481 I mboard.startup: asset load end: words_ar.tsv duration=821ms entries=25247
+10-30 20:39:30.788 13397 13481 I mboard.startup: asset load start: next_ar.tsv
+10-30 20:39:30.956 13397 13481 I mboard.startup: asset load end: next_ar.tsv duration=169ms entries=30000
+10-30 20:39:30.956 13397 13481 I mboard.startup: asset load start: context_ar.tsv
+10-30 20:39:31.265 13397 13481 I mboard.startup: asset load end: context_ar.tsv duration=309ms entries=60000
+10-30 20:39:31.265 13397 13481 I mboard.startup: asset load start: jordanian_next.tsv
+10-30 20:39:31.422 13397 13481 I mboard.startup: asset load end: jordanian_next.tsv duration=157ms entries=82497
+10-30 20:39:31.464 13397 13481 I mboard.startup: engine ready: language=ar duration=1727ms
+10-30 20:39:31.475 13397 13397 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377422540 uptimeMillis=135494701
+Memory:
+  TOTAL PSS: 190611 KB
+  Java Heap: 70096 KB
+Phase timings:
+  service onCreate -> first suggestion: 1848 ms
+  engine load duration: 1727 ms
+
+--- Round 4 / 5 ---
+Logs:
+10-30 20:39:35.596 13601 13601 I mboard.startup: service onCreate start: elapsedRealtime=377426661 uptimeMillis=135498822
+10-30 20:39:35.699 13601 13680 I mboard.startup: asset load start: jordanian.tsv
+10-30 20:39:35.819 13601 13680 I mboard.startup: asset load end: jordanian.tsv duration=120ms entries=5013
+10-30 20:39:35.819 13601 13680 I mboard.startup: asset load start: known_forms_ar.txt
+10-30 20:39:35.885 13601 13680 I mboard.startup: asset load end: known_forms_ar.txt duration=66ms
+10-30 20:39:35.885 13601 13680 I mboard.startup: asset load start: words_ar.tsv
+10-30 20:39:36.723 13601 13680 I mboard.startup: asset load end: words_ar.tsv duration=838ms entries=25247
+10-30 20:39:36.724 13601 13680 I mboard.startup: asset load start: next_ar.tsv
+10-30 20:39:36.890 13601 13680 I mboard.startup: asset load end: next_ar.tsv duration=167ms entries=30000
+10-30 20:39:36.891 13601 13680 I mboard.startup: asset load start: context_ar.tsv
+10-30 20:39:37.190 13601 13680 I mboard.startup: asset load end: context_ar.tsv duration=300ms entries=60000
+10-30 20:39:37.190 13601 13680 I mboard.startup: asset load start: jordanian_next.tsv
+10-30 20:39:37.354 13601 13680 I mboard.startup: asset load end: jordanian_next.tsv duration=164ms entries=82497
+10-30 20:39:37.391 13601 13680 I mboard.startup: engine ready: language=ar duration=1692ms
+10-30 20:39:37.399 13601 13601 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377428464 uptimeMillis=135500625
+Memory:
+  TOTAL PSS: 189821 KB
+  Java Heap: 69796 KB
+Phase timings:
+  service onCreate -> first suggestion: 1803 ms
+  engine load duration: 1692 ms
+
+--- Round 5 / 5 ---
+Logs:
+10-30 20:39:41.632 13798 13798 I mboard.startup: service onCreate start: elapsedRealtime=377432697 uptimeMillis=135504858
+10-30 20:39:41.740 13798 13863 I mboard.startup: asset load start: jordanian.tsv
+10-30 20:39:41.853 13798 13863 I mboard.startup: asset load end: jordanian.tsv duration=113ms entries=5013
+10-30 20:39:41.854 13798 13863 I mboard.startup: asset load start: known_forms_ar.txt
+10-30 20:39:41.919 13798 13863 I mboard.startup: asset load end: known_forms_ar.txt duration=66ms
+10-30 20:39:41.919 13798 13863 I mboard.startup: asset load start: words_ar.tsv
+10-30 20:39:42.746 13798 13863 I mboard.startup: asset load end: words_ar.tsv duration=827ms entries=25247
+10-30 20:39:42.746 13798 13863 I mboard.startup: asset load start: next_ar.tsv
+10-30 20:39:42.913 13798 13863 I mboard.startup: asset load end: next_ar.tsv duration=167ms entries=30000
+10-30 20:39:42.913 13798 13863 I mboard.startup: asset load start: context_ar.tsv
+10-30 20:39:43.221 13798 13863 I mboard.startup: asset load end: context_ar.tsv duration=308ms entries=60000
+10-30 20:39:43.221 13798 13863 I mboard.startup: asset load start: jordanian_next.tsv
+10-30 20:39:43.379 13798 13863 I mboard.startup: asset load end: jordanian_next.tsv duration=157ms entries=82497
+10-30 20:39:43.419 13798 13863 I mboard.startup: engine ready: language=ar duration=1679ms
+10-30 20:39:43.430 13798 13798 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377434495 uptimeMillis=135506656
+Memory:
+  TOTAL PSS: 190017 KB
+  Java Heap: 69884 KB
+Phase timings:
+  service onCreate -> first suggestion: 1798 ms
+  engine load duration: 1679 ms
+
+=== SUMMARY ACROSS 5 ROUNDS ===
+  service onCreate -> first suggestion (ms): median = 1802, max = 1848 (samples: 1767 1798 1802 1803 1848)
+  engine ready duration (ms): median = 1685, max = 1727 (samples: 1652 1679 1685 1692 1727)
+  TOTAL PSS (KB): median = 190017, max = 190611 (samples: 189821 189845 190017 190208 190611)
+  Java Heap (KB): median = 69884, max = 70096 (samples: 69548 69796 69884 69980 70096)
