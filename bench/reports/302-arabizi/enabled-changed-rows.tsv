@@ -1,0 +1,51 @@
+set	line	kind	context	typed_or_target	intended	before	after	target_lost	explanation
+en_subs.typos.tsv	1003	omission	didnt	sho	show	sho|should|show	sho|should|شو	true	allowlisted Franco token, last-slot Arabic
+en_subs.typos.tsv	2535	transposition		Salam	Salma	Salam|Salami|Salad	Salam|Salami|سلام	false	allowlisted Franco token, last-slot Arabic
+en_tatoeba.typos.tsv	2033	omission	can you	sho	show	sho|should|show	sho|should|شو	true	allowlisted Franco token, last-slot Arabic
+en_chat.misses.tsv	grouped	clean	actors in that	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_chat.misses.tsv	grouped	clean	cant believe they canceled that	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_chat.misses.tsv	grouped	clean	did you get the tickets for the	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_chat_learning.misses.tsv	grouped	clean	actors in that	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_chat_learning.misses.tsv	grouped	clean	cant believe they canceled that	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_chat_learning.misses.tsv	grouped	clean	did you get the tickets for the	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_fresh.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	work together to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	it's Talk	Show	Show	<no miss row>	Show|Should|Showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Didn't	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean		show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean		show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	So there could be some educational value on the	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Here you are giving everyone a	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Why were you masturbating before the	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Seems the Hook ran last night's	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	l've just seen your	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	the Simpson family finally gets the chance to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	I have someplace special I would really like to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	everybody at work loves your	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	when's your next	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Let me	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Wanna	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	Would you like to see the floor	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	a very faint television signal transmitted the opening ceremonies of the Olympic Games as a	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	It would be an honor to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	They'll	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_subs.misses.tsv	grouped	clean	wrote the whole	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Ziri told Rima to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Boldi was watching a	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	The drawings Lyod has made	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Can you	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Can you	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Tom can	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Please don't	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	you can't act surprised when the clowns	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	We met after your	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	but I doubt he'll actually	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	It's time to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Tom and Mary have us to	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	I didn't	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early
+en_tatoeba.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see explanation	allowlisted English-overlapping Franco prefix sho displaces show early

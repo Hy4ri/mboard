@@ -147,7 +147,12 @@ internal class Editor(
         val context = caret
         text = text.dropLast(context.prefix.length) + word.trimEnd() + " "
         pickedSpaceTail = (word.trimEnd() + " ").takeLast(33)
-        if (' ' !in word.trim()) {
+        if (strip.language.script == com.m57.mboard.Script.LATIN &&
+            com.m57.mboard.Arabizi
+                .isReading(word)
+        ) {
+            strip.predictionTrail.reset()
+        } else if (' ' !in word.trim()) {
             strip.acceptCorrection(context.prefix, word.trim())
             strip.predictionTrail.record(context.contextWords, word.trim())
             strip.learn(word.trim(), context.contextWords.lastOrNull())
@@ -339,7 +344,7 @@ internal fun runLive(
         out.flush()
     }
     val started = System.nanoTime()
-    val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect)
+    val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect, opts.arabizi)
     val loadMs = (System.nanoTime() - started) / 1_000_000
     val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty())
     if (tty) out.print("\r\u001b[2K")

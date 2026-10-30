@@ -49,6 +49,75 @@ class WordSuggestions(
     private val states = HashMap<String, State>()
     private val callbacks = HashMap<String, ArrayList<() -> Unit>>()
 
+    /** Arabic lexicon (with Jordanian words) read only for Arabizi lookups on a Latin layout. */
+    @Volatile private var arabiziLexicon: WordDictionary? = null
+
+    @Volatile private var arabiziAllowlist: Set<String> = emptySet()
+    private var arabiziLoading = false
+
+    fun arabiziReady() = arabiziLexicon != null
+
+    fun isArabiziListed(word: String) = word.lowercase(Locale.ROOT) in arabiziAllowlist
+
+    /** Load the Arabic lexicon for [arabizi]; a no-op once loaded. Never blocks the caller. */
+    fun loadArabizi(onReady: () -> Unit) {
+        synchronized(lock) {
+            if (closed || arabiziLoading || arabiziLexicon != null) return
+            arabiziLoading = true
+            executor.execute {
+                try {
+                    val allowlist =
+                        assets.open("arabizi_allowlist.txt").bufferedReader().use { reader ->
+                            reader
+                                .lineSequence()
+                                .map { it.substringBefore('#').trim().lowercase(Locale.ROOT) }
+                                .filter { it.isNotEmpty() }
+                                .toSet()
+                        }
+                    val arabic = Languages.ARABIC
+                    val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
+                    val lexicon = assets.open(arabic.wordsAsset).bufferedReader().use { WordDictionary.read(it, arabic, dialect) }
+                    synchronized(lock) {
+                        if (closed) return@execute
+                        arabiziAllowlist = allowlist
+                        arabiziLexicon = lexicon
+                    }
+                    mainHandler.post { if (!closed) onReady() }
+                } catch (_: IOException) {
+                    synchronized(lock) { arabiziLoading = false }
+                }
+            }
+        }
+    }
+
+    /**
+     * Arabic-script readings of a Franco word such as 7abibi or shu, best first (at most [limit]). A digit
+     * (2 3 5 6 7 8 9) mixed with letters is enough; otherwise [typed] must be explicitly allowlisted and match a
+     * frequent Arabic word. Candidates are only offered, never applied automatically.
+     */
+    fun arabizi(
+        typed: String,
+        language: Language,
+        limit: Int,
+    ): List<String> {
+        if (closed || language.script != Script.LATIN) return emptyList()
+        val lexicon = arabiziLexicon ?: return emptyList()
+        val withDigit = Arabizi.eligible(typed, anyLetters = false)
+        // No broad transliteration fallback: ordinary English typos must keep all their alternatives.
+        if (!withDigit && (!isArabiziListed(typed) || !Arabizi.eligible(typed, anyLetters = true))) return emptyList()
+        val found = LinkedHashMap<String, Double>()
+        for (skeleton in Arabizi.skeletons(typed)) {
+            val entry = lexicon.exactEntry(skeleton) ?: continue
+            if (entry.score > (found[entry.word] ?: 0.0)) found[entry.word] = entry.score
+        }
+        val minimum = if (withDigit) 1.0 else ARABIZI_STRONG
+        return found.entries
+            .filter { it.value >= minimum }
+            .sortedByDescending { it.value }
+            .take(limit)
+            .map { it.key }
+    }
+
     private fun model(language: Language): Model? = models[language.code]
 
     fun state(language: Language): State =
@@ -660,6 +729,9 @@ class WordSuggestions(
     private companion object {
         const val ARABIC_PROCLITICS = "وفبلكع"
 
+        /** Minimum Arabic frequency for a Franco reading of a non-digit, non-English word. */
+        const val ARABIZI_STRONG = 3000.0
+
         /** Sentence-start context in the tables. */
         const val START = "<s>"
 
@@ -682,6 +754,8 @@ class WordSuggestions(
             if (closed) return
             closed = true
             models.clear()
+            arabiziLexicon = null
+            arabiziAllowlist = emptySet()
             states.clear()
             callbacks.clear()
         }

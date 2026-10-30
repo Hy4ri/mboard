@@ -472,6 +472,16 @@ class SetupActivity : Activity() {
         )
         components.add(
             column,
+            components.toggle(
+                "Arabizi suggestions",
+                "On the English layout, offer Arabic words for Franco typing like 7abibi or shu · suggestion only, never automatic",
+                settings.arabiziSuggestions,
+            ) {
+                settings.arabiziSuggestions = it
+            },
+        )
+        components.add(
+            column,
             components.toggle("Automatic capitalization", "Follow the active app's capitalization hints", settings.autoCapitalize) {
                 settings.autoCapitalize =
                     it

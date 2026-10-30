@@ -1,0 +1,24 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193850.md","context":[],"suggestions":["7abibi","حبيبي","حبيب"],"language":"en","text":"7abibi","word":"7abibi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193853.md","context":[],"suggestions":["shu","shut","شو"],"language":"en","text":"shu","word":"shu"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193856.md","context":[],"suggestions":["kifak","kick","كيفك"],"language":"en","text":"kifak","word":"kifak"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193859.md","context":[],"suggestions":["3arabi","عربي"],"language":"en","text":"3arabi","word":"3arabi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193901.md","context":[],"suggestions":["ma3","مع"],"language":"en","text":"ma3","word":"ma3"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193904.md","context":[],"suggestions":["sho","should","شو"],"language":"en","text":"sho","word":"sho"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193906.md","context":[],"suggestions":["inshallah","installation","انشالله"],"language":"en","text":"inshallah","word":"inshallah"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193908.md","context":[],"suggestions":["yalla","gallant","يلا"],"language":"en","text":"yalla","word":"yalla"}
+{"mode":"complete","auto":"had","log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193911.md","context":[],"suggestions":["had","hwad","head"],"language":"en","text":"hwad","word":"hwad"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193916.md","context":[],"suggestions":["rown","rowan","down"],"language":"en","text":"rown","word":"rown"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193920.md","context":[],"suggestions":["lsot","lot","lost"],"language":"en","text":"lsot","word":"lsot"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193922.md","context":[],"suggestions":["hello","hell","yellow"],"language":"en","text":"hello","word":"hello"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193925.md","context":[],"suggestions":["the","there","they"],"language":"en","text":"the","word":"the"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193930.md","context":[],"suggestions":["good","god","goodbye"],"language":"en","text":"good","word":"good"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193933.md","context":["didnt"],"suggestions":["sho","should","شو"],"language":"en","text":"didnt sho","word":"sho"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193937.md","context":["can","you"],"suggestions":["sho","should","شو"],"language":"en","text":"can you sho","word":"sho"}
+{"mode":"next","settings":{"autocorrect":true,"dialect":null,"autocap":true,"language":"en","learning":true},"auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193940-agent.md","context":[],"suggestions":["I","You","And"],"text":"","event":"ready","word":"","jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193940-agent.jsonl"}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["shu","shut","شو"],"text":"shu","ok":true,"word":"shu","seq":1,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["شو"],"suggestions":["you","the","I"],"text":"شو ","ok":true,"word":"","seq":2,"events":["picked شو"]}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["sho","should","شو"],"text":"sho","ok":true,"word":"sho","seq":3,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["sho"],"suggestions":["you","the","I"],"text":"sho ","ok":true,"word":"","seq":4,"events":[]}
+{"mode":"next","auto":null,"keys":0,"context":["sho"],"suggestions":["you","the","I"],"text":"sho ","ok":true,"word":"","seq":5,"events":[]}
+{"corrections":0,"picked":1,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193940-agent.md","keys":2,"text":"sho ","event":"end","commands":5,"undone":0,"jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-193940-agent.jsonl"}

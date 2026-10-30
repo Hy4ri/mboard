@@ -36,6 +36,8 @@ private const val USAGE = """usage: bench/suggest.sh [options] TEXT
   --dialect            Jordanian Arabic vocabulary on (off by default, as in the keyboard)
   --no-autocorrect     autocorrect off (on by default)
   --no-autocap         field without sentence capitalization (default: capitalize at a sentence start)
+  --arabizi            Arabizi suggestions on (off by default, as in the keyboard; English layout only)
+  --no-arabizi         Arabizi suggestions off
   --no-learning        (live) do not learn the words you type or pick (on by default, as in the keyboard)
   --log-dir DIR        where the run log goes (default bench/logs/suggest)
   --assets DIR         dictionary assets (default app/src/main/assets)
@@ -53,6 +55,7 @@ internal class Options(
     val autoCorrect: Boolean,
     val autoCapitalize: Boolean,
     val learning: Boolean,
+    val arabizi: Boolean,
     val assets: File,
     val logDir: File,
 )
@@ -72,6 +75,7 @@ private fun parseOptions(args: Array<String>): Options {
     var agent = false
     var json = false
     var learning = true
+    var arabizi = false
     var assets = File("../app/src/main/assets")
     var logDir = File("logs/suggest")
     val positional = ArrayList<String>()
@@ -117,6 +121,14 @@ private fun parseOptions(args: Array<String>): Options {
                     learning = false
                 }
 
+                "--arabizi" -> {
+                    arabizi = true
+                }
+
+                "--no-arabizi" -> {
+                    arabizi = false
+                }
+
                 "--dialect" -> {
                     dialect = true
                 }
@@ -150,7 +162,20 @@ private fun parseOptions(args: Array<String>): Options {
     if (positional.size > 1 || (positional.isEmpty() && !session)) {
         fail("expected ${if (session) "at most" else "exactly"} one TEXT argument, got ${positional.size}; quote it")
     }
-    return Options(positional.firstOrNull(), live, agent, json, lang, dialect, autoCorrect, autoCapitalize, learning, assets, logDir)
+    return Options(
+        positional.firstOrNull(),
+        live,
+        agent,
+        json,
+        lang,
+        dialect,
+        autoCorrect,
+        autoCapitalize,
+        learning,
+        arabizi,
+        assets,
+        logDir,
+    )
 }
 
 /**
@@ -202,7 +227,7 @@ fun main(args: Array<String>) {
     if (opts.agent) runAgent(opts, language, dialect)
 
     val loadStart = System.nanoTime()
-    val strip = Strip(Context(opts.assets), language, dialect, learning = true, autoCorrect = opts.autoCorrect)
+    val strip = Strip(Context(opts.assets), language, dialect, learning = true, autoCorrect = opts.autoCorrect, arabizi = opts.arabizi)
     val loadMs = (System.nanoTime() - loadStart) / 1_000_000
     val shifted = opts.autoCapitalize && language.cased && sentenceCaps(input)
     strip.shifted = shifted
