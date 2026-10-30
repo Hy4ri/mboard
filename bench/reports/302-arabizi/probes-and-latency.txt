@@ -1,0 +1,29 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190306.md","context":[],"suggestions":["7abibi","حبيبي","حبيب"],"language":"en","text":"7abibi","word":"7abibi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190308.md","context":[],"suggestions":["shu","shut","shit"],"language":"en","text":"shu","word":"shu"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190310.md","context":[],"suggestions":["kifak","kick","كيفك"],"language":"en","text":"kifak","word":"kifak"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190312.md","context":[],"suggestions":["3arabi","عربي"],"language":"en","text":"3arabi","word":"3arabi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190314.md","context":[],"suggestions":["ma3","مع"],"language":"en","text":"ma3","word":"ma3"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190316.md","context":[],"suggestions":["sho","should","show"],"language":"en","text":"sho","word":"sho"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190318.md","context":[],"suggestions":["inshallah","installation","انشالله"],"language":"en","text":"inshallah","word":"inshallah"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190320.md","context":[],"suggestions":["yalla","gallant","يلا"],"language":"en","text":"yalla","word":"yalla"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190322.md","context":[],"suggestions":["hello","hell","yellow"],"language":"en","text":"hello","word":"hello"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190324.md","context":[],"suggestions":["the","there","they"],"language":"en","text":"the","word":"the"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190326.md","context":[],"suggestions":["good","god","goodbye"],"language":"en","text":"good","word":"good"}
+{"mode":"next","settings":{"autocorrect":true,"dialect":null,"autocap":true,"language":"en","learning":true},"auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.md","context":[],"suggestions":["I","You","And"],"text":"","event":"ready","word":"","jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.jsonl"}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["7abibi","حبيبي","حبيب"],"text":"7abibi","ok":true,"word":"7abibi","seq":1,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["حبيبي"],"suggestions":["you","the","I"],"text":"حبيبي ","ok":true,"word":"","seq":2,"events":["picked حبيبي"]}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["ma3","مع"],"text":"ma3","ok":true,"word":"ma3","seq":3,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["ma3"],"suggestions":["you","the","I"],"text":"ma3 ","ok":true,"word":"","seq":4,"events":[]}
+{"mode":"next","auto":null,"keys":0,"context":["ma3"],"suggestions":["you","the","I"],"text":"ma3 ","ok":true,"word":"","seq":5,"events":[]}
+{"corrections":0,"picked":1,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.md","keys":2,"text":"ma3 ","event":"end","commands":5,"undone":0,"jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.jsonl"}
+7abibi skeletons=12 p50_ms=0.0142 p95_ms=0.0196 max_ms=0.1542
+shu skeletons=2 p50_ms=0.0035 p95_ms=0.0065 max_ms=0.0206
+kifak skeletons=6 p50_ms=0.0084 p95_ms=0.0110 max_ms=0.1864
+3arabi skeletons=18 p50_ms=0.0149 p95_ms=0.0190 max_ms=2.1652
+ma3 skeletons=3 p50_ms=0.0026 p95_ms=0.0054 max_ms=0.0580
+sho skeletons=2 p50_ms=0.0008 p95_ms=0.0020 max_ms=0.0138
+inshallah skeletons=36 p50_ms=0.0138 p95_ms=0.0246 max_ms=0.0777
+yalla skeletons=18 p50_ms=0.0058 p95_ms=0.0091 max_ms=0.0349
+aeaeaeaeaeaeae skeletons=600 p50_ms=0.1544 p95_ms=0.2564 max_ms=1.0948
+tatatatatatata skeletons=600 p50_ms=0.0582 p95_ms=0.0749 max_ms=0.8917

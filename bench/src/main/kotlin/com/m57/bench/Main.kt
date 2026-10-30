@@ -10,7 +10,7 @@ import java.util.Locale
 /**
  * Replays text through the keyboard's suggestion code and scores it.
  *
- *   --lang en|ar  --sentences FILE  --typos FILE  --dialect  --learning  --limit N  --label NAME  --out DIR
+ *   --lang en|ar  --sentences FILE  --typos FILE  --dialect  --learning  --arabizi  --limit N  --label NAME  --out DIR
  *
  * Sentences are typed letter by letter; before each letter the strip is read. A user who taps the
  * word as soon as it shows spends (letters typed + 1 tap); typing it out costs (letters + space).
@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
     val out = File(opts["out"] ?: "results").also { it.mkdirs() }
 
     val started = System.nanoTime()
-    val strip = Strip(Context(assets), language, dialect, learning)
+    val strip = Strip(Context(assets), language, dialect, learning, arabizi = "arabizi" in opts)
     val loadMs = (System.nanoTime() - started) / 1_000_000
 
     val report = JSONObject()

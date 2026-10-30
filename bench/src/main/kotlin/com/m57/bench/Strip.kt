@@ -21,6 +21,7 @@ class Strip(
     val dialect: Boolean,
     val learning: Boolean,
     val autoCorrect: Boolean = true,
+    val arabizi: Boolean = false,
 ) {
     val words = WordSuggestions(context)
     val predictionTrail = PredictionTrail()
@@ -36,6 +37,14 @@ class Strip(
 
     init {
         words.load(language) {}
+        if (arabizi && language.script == com.m57.mboard.Script.LATIN) {
+            words.loadArabizi {}
+            val until = System.currentTimeMillis() + 60_000
+            while (!words.arabiziReady()) {
+                check(System.currentTimeMillis() < until) { "arabizi lexicon load timed out" }
+                Thread.sleep(5)
+            }
+        }
         val deadline = System.currentTimeMillis() + 60_000
         while (words.state(language) == WordSuggestions.State.LOADING || words.state(language) == WordSuggestions.State.UNLOADED) {
             check(System.currentTimeMillis() < deadline) { "dictionary load timed out" }
@@ -138,7 +147,14 @@ class Strip(
                 .distinctBy { it.lowercase(Locale.ROOT) }
         val keepAt = if (leading != null && leading != typed) 1 else 0
         val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
-        return Shown(wordChoices.take(3), autoCorrection != null)
+        // MboardService: Arabizi readings (suggest-only); the app skips them when the caret is inside a word.
+        val readings = if (arabizi) words.arabizi(typed, language, 2) else emptyList()
+        return Shown(
+            com.m57.mboard.Arabizi
+                .place(wordChoices, typed, readings)
+                .take(3),
+            autoCorrection != null,
+        )
     }
 
     // The app calls these only under its normal recording guard (private/password/no-learning off).

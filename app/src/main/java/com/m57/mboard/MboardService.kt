@@ -418,6 +418,15 @@ class MboardService : InputMethodService() {
                 updateAuxiliary()
             }
         }
+        if (settings.arabiziSuggestions && requestedLanguage.script == Script.LATIN) {
+            words.loadArabizi {
+                if (!destroyed && generation == editorGeneration && requestedLanguage == language &&
+                    mode == Mode.KEYS && isInputViewShown
+                ) {
+                    updateAuxiliary()
+                }
+            }
+        }
         updateAuxiliary()
     }
 
@@ -608,9 +617,12 @@ class MboardService : InputMethodService() {
         // (tapping it finishes the word with a space and no correction). Single letters are left out.
         val keepAt = if (leading != null && leading != typed) 1 else 0
         val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
+        // Franco typing on the English layout may also offer Arabic-script readings (suggest-only).
+        val readings = if (settings.arabiziSuggestions && !editingInside) words.arabizi(typed, language, 2) else emptyList()
+        val shown = Arabizi.place(wordChoices, typed, readings)
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
-        val values = if (emoji == null) wordChoices else wordChoices.take(2) + emoji
+        val values = if (emoji == null) shown else shown.take(2) + emoji
         strip.render(values, typed, editorGeneration, context.status, highlightFirst = autoCorrection != null && !editingInside)
     }
 
@@ -977,7 +989,10 @@ class MboardService : InputMethodService() {
             message("This app did not accept the completion")
         } else {
             pickedSpaceTail = value.takeIf { it.endsWith(' ') }?.takeLast(33)
-            if (' ' !in word.trim()) {
+            if (language.script == Script.LATIN && Arabizi.isReading(word)) {
+                // An Arabic reading picked on the English layout is not learned into the English stores.
+                predictionTrail.reset()
+            } else if (' ' !in word.trim()) {
                 if (learningAllowed() && userWords.rejects(context.word, word.trim(), language)) {
                     userWords.acceptCorrection(context.word, word.trim(), language)
                     userWords.save()

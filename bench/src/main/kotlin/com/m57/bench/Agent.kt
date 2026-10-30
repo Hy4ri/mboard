@@ -75,7 +75,7 @@ internal fun runAgent(
 ) {
     val out = PrintStream(FileOutputStream(FileDescriptor.out), true, "UTF-8")
     val started = System.nanoTime()
-    val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect)
+    val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect, opts.arabizi)
     val loadMs = (System.nanoTime() - started) / 1_000_000
     var clock = 0L
     val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty()) { clock }

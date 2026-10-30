@@ -45,6 +45,13 @@ class WordDictionary private constructor(
         return exact[normalized]?.frequency ?: 0L
     }
 
+    /** The listed written form and frequency of exactly this word (after spelling normalization), or null. */
+    fun exactEntry(word: String): Candidate? {
+        val normalized = normalize(word, language) ?: return null
+        val entry = exact[normalized]?.takeUnless { it.hidden } ?: return null
+        return Candidate(entry.original, entry.frequency.toDouble())
+    }
+
     /** Exact-prefix completions; score equals frequency. */
     fun completions(
         prefix: String,

@@ -1,0 +1,1737 @@
+set	line	kind	context	typed_or_target	intended	before	after	target_lost	explanation
+en_chat.misses.tsv	28	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
+en_chat.misses.tsv	35	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
+en_chat.misses.tsv	66	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
+en_chat.misses.tsv	174	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
+en_chat.typos.tsv	15	transposition	all	ogod	good	good|ogod|goodbye	good|ogod|أجد	false	A
+en_chat.typos.tsv	16	insertion		liol	lol	lil|liol|lion	lil|liol|ليل	false	A
+en_chat.typos.tsv	17	adjacent	definitely	doan	down	down|doan|don't	down|doan|دون	false	A
+en_chat.typos.tsv	20	transposition	let me know when you	egt	get	get|egt|getting	get|egt|اجت	false	A
+en_chat.typos.tsv	21	doubled	just woke up	whatt	what	what|whatt|what's	what|whatt|وحاطت	false	A
+en_chat.typos.tsv	26	adjacent		ciffee	coffee	coffee|ciffee|coffee's	coffee|ciffee|كفى	false	A
+en_chat.typos.tsv	36	adjacent		snyone	anyone	anyone|snyone|anyone's	anyone|snyone|سنين	false	A
+en_chat.typos.tsv	37	adjacent	i forgot to eat all day and now my	hwad	head	had|hwad|head	had|hwad|حوض	true	A
+en_chat.typos.tsv	46	omission	cant make it tonight unfortunately feeling super	tird	tired	tird|tired|third	tird|tired|ترد	false	A
+en_chat.typos.tsv	51	adjacent	leaving my house now see you	soin	soon	soon|soin|doing	soon|soin|سن	false	A
+en_chat.typos.tsv	53	adjacent		rown	down	rown|rowan|down	rown|rowan|رون	true	A
+en_chat.typos.tsv	54	adjacent	my friends are coming over around	eiggt	eight	eight|eiggt|eighteen	eight|eiggt|اجت	false	A
+en_chat.typos.tsv	55	transposition	should we	boko	book	book|boko|books	book|boko|بك	false	A
+en_chat.typos.tsv	77	adjacent	my laptop battery	doed	died	does|doed|doesn't	does|doed|ضد	false	A
+en_chat.typos.tsv	102	omission	it is way too cold outside	toay	today	today|toay|toast	today|toay|تي	false	A
+en_chat.typos.tsv	105	insertion	i slept for nine hours and	satill	still	still|satill|stiller	still|satill|سطل	false	A
+en_chat.typos.tsv	110	transposition		lsot	lost	lsot|lot|lost	lsot|lot|لست	true	A
+en_chat.typos.tsv	114	adjacent	feeling so unmotivated	yoday	today	today|yoday|today's	today|yoday|يدي	false	A
+en_chat.typos.tsv	127	adjacent		fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_chat.typos.tsv	128	doubled	are	youu	you	you|youu|your	you|youu|يو	false	A
+en_chat.typos.tsv	134	omission	still processing what happened in that	eisode	episode	episode|eisode|episodes	episode|eisode|أسود	false	A
+en_chat.typos.tsv	135	adjacent	did	uou	you	you|uou|your	you|uou|أو	false	A
+en_chat.typos.tsv	140	adjacent	trailer dropped	tiday	today	today|tiday|today's	today|tiday|تيدي	false	A
+en_chat.typos.tsv	147	transposition	need to stop online shopping when im	boerd	bored	bored|boerd|border	bored|boerd|برد	false	A
+en_chat.typos.tsv	175	doubled	dad sent me another random facebook	memme	meme	memme|memento|lemme	memme|memento|مما	false	A
+en_chat.typos.tsv	176	adjacent	need to	byy	buy	by|byy|bye	by|byy|بي	false	A
+en_chat.typos.tsv	181	transposition	my cousin just	ogt	got	got|ogt|gotta	got|ogt|اجت	false	A
+en_chat.typos.tsv	185	adjacent	packing my suitcase at am as	ueual	usual	usual|ueual|usually	usual|ueual|أول	false	A
+en_chat.typos.tsv	186	adjacent		traib	train	train|traib|training	train|traib|تراب	false	A
+en_chat.typos.tsv	216	adjacent	need to buy groceries instead of eating out	sgain	again	again|sgain|against	again|sgain|سجن	false	A
+en_chat.typos.tsv	223	adjacent	started reading that novel	uou	you	you|uou|your	you|uou|أو	false	A
+en_chat.typos.tsv	226	insertion	hit a new personal record at the gym	toeday	today	today|toeday|today's	today|toeday|تيدي	false	A
+en_chat.typos.tsv	234	adjacent	went to a pottery class and	mafe	made	made|mafe|mate	made|mafe|مافي	false	A
+en_chat.typos.tsv	237	doubled	hiking trail had the most beautiful view at the	toop	top	top|toop|too	top|toop|توب	false	A
+en_chat.typos.tsv	238	adjacent	my step count	tofay	today	today|tofay|today's	today|tofay|توفي	false	A
+en_chat.typos.tsv	240	insertion	finally fixed my bike chain	readuy	ready	ready|readuy|readying	ready|readuy|راضي	false	A
+en_chat.typos.tsv	242	transposition	did you make it	ohme	home	home|ohme|homer	home|ohme|أهم	false	A
+en_chat.typos.tsv	264	adjacent	who gave	uou	you	you|uou|your	you|uou|أو	false	A
+en_chat.typos.tsv	269	insertion	my brain refused to process	thuat	that	that|thuat|that's	that|thuat|ذات	false	A
+en_chat.typos.tsv	273	transposition		htat	that	that|htat|that's	that|htat|حطت	false	A
+en_chat.typos.tsv	275	omission	i cannot	beleve	believe	believe|beleve|believed	believe|beleve|بلف	false	A
+en_chat.typos.tsv	279	doubled	that was	ppeak	peak	peak|ppeak|peaks	peak|ppeak|بك	false	A
+en_chat.typos.tsv	282	adjacent		aorry	sorry	sorry|aorry|worry	sorry|aorry|أرى	false	A
+en_chat.typos.tsv	283	omission	did you hear back	frm	from	frm|female|females	frm|female|فرم	false	A
+en_chat.typos.tsv	285	transposition	huge congratulations	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_chat.typos.tsv	306	adjacent	perfect see	uou	you	you|uou|your	you|uou|أو	false	A
+en_chat.typos.tsv	310	adjacent	do we need to	drese	dress	dress|drese|dressed	dress|drese|درس	false	A
+en_chat.typos.tsv	315	adjacent	fine by me	ssve	save	save|ssve|seven	save|ssve|صف	false	A
+en_chat.typos.tsv	333	adjacent		baeely	barely	barely|baeely|basely	barely|baeely|بيلي	false	A
+en_chat.typos.tsv	338	transposition	cat privileges revoked for	hte	the	the|hte|there	the|hte|حتى	false	A
+en_chat.typos.tsv	339	adjacent		sbe	she	she|sbe|she's	she|sbe|صبي	false	A
+en_chat.typos.tsv	344	adjacent	modern economics and	ehy	why	ehy|why|hey	ehy|why|أهي	false	A
+en_chat.typos.tsv	347	doubled	just cite your own rent increase	haaha	haha	haha|haaha|hahaha	haha|haaha|هاه	false	A
+en_chat.typos.tsv	361	adjacent	absolutely i	beed	need	need|beed|been	need|beed|بيض	false	A
+en_chat.typos.tsv	375	transposition	definitely water cooler talk for the next	mnoth	month	month|mnoth|mother	month|mnoth|منذ	false	A
+en_chat.typos.tsv	377	adjacent	gotta love	renote	remote	remote|renote|rented	remote|renote|رنت	false	A
+en_chat.typos.tsv	381	transposition	reheat it in	hte	the	the|hte|there	the|hte|حتى	false	A
+en_chat_learning.misses.tsv	28	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
+en_chat_learning.misses.tsv	35	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
+en_chat_learning.misses.tsv	66	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
+en_chat_learning.misses.tsv	175	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
+en_fresh.misses.tsv	38	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	54	clean	My wife's name is	Lidia	Lidia	Lidia|Lydia|Livia	Lidia|Lydia|لدي	false	B
+en_fresh.misses.tsv	106	clean	Yanni openly expressed his desire to kill	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	168	clean	Donning the Kabyle dress allows	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	199	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	203	clean	Ziri started following	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	225	clean	Yanni taught	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	253	clean	Carlos understood	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	320	clean	Vladimir was drooling on	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_fresh.misses.tsv	376	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	417	clean	Felix was driving from Algiers to	Blida	Blida	Blida|Black|Bridge	Blida|Black|بلدة	false	B
+en_fresh.misses.tsv	467	clean	Oleg realized	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_fresh.misses.tsv	485	clean	My name is	Jabu	Jabu	Jabu|January|Jab	Jabu|January|جاب	false	B
+en_fresh.misses.tsv	528	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_fresh.misses.tsv	534	clean	We were going to	Gifu	Gifu	Gifu|Gift|Gifts	Gifu|Gift|جيف	false	B
+en_fresh.misses.tsv	545	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	566	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_fresh.misses.tsv	687	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	748	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	796	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	797	clean	Rima and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	872	clean	When did Mr	Ogawa	Ogawa	Ogawa|Osaka|Onward	Ogawa|Osaka|اجو	false	B
+en_fresh.misses.tsv	878	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_fresh.misses.tsv	1151	clean		Doni	Doni	Doni|Don't|Doing	Doni|Don't|دون	false	B
+en_fresh.misses.tsv	1162	clean	How many	biros	biros	biros|hiroshi|hiroshima	biros|hiroshi|بروس	false	B
+en_fresh.misses.tsv	1216	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1364	clean	Ziri's words made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1387	clean	Ziri didn't let	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1401	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1413	clean	Ziri found out	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1438	clean	Santiago ordered	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1493	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1510	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1544	clean	Lorenzo went to ask Melissa where	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_fresh.misses.tsv	1689	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1710	clean	I'm from	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
+en_fresh.misses.tsv	1712	clean	Where is	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
+en_fresh.misses.tsv	1937	clean	can bring	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	1945	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	1951	clean		aoke	aoke	woke|aoke|woken	woke|aoke|اوك	false	B
+en_fresh.misses.tsv	2087	clean	Ziri drove	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	2120	clean	Yanni couldn't wait to meet	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.typos.tsv	3	omission	sami and layla	lft	left	oft|lft|often	oft|lft|لفت	false	A
+en_fresh.typos.tsv	4	adjacent	i	mrt	met	met|mrt|metal	met|mrt|مرت	false	A
+en_fresh.typos.tsv	6	transposition	mary said	htat	that	that|htat|that's	that|htat|حطت	false	A
+en_fresh.typos.tsv	7	adjacent	that made me	feek	feel	feel|feek|feeling	feel|feek|فيك	false	A
+en_fresh.typos.tsv	9	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_fresh.typos.tsv	14	adjacent	you are deeply involved	aith	with	with|aith|without	with|aith|إذ	false	A
+en_fresh.typos.tsv	16	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_fresh.typos.tsv	20	insertion	my father trained me not as a	kman	man	kman|kane|kansas	kman|kane|كمان	false	A
+en_fresh.typos.tsv	28	adjacent	i	eish	wish	wish|eish|wishes	wish|eish|ايش	false	A
+en_fresh.typos.tsv	31	doubled	chanterelles	aree	are	are|aree|aren't	are|aree|أرى	false	A
+en_fresh.typos.tsv	35	adjacent	which language do	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_fresh.typos.tsv	38	omission	i	canot	cannot	cannot|canot|cant	cannot|canot|كنت	false	A
+en_fresh.typos.tsv	49	doubled	mary said she thought tom needed to	gget	get	get|gget|getting	get|gget|جيت	false	A
+en_fresh.typos.tsv	52	transposition	you	ogt	got	got|ogt|gotta	got|ogt|اجت	false	A
+en_fresh.typos.tsv	55	doubled	my wifes	namme	name	name|namme|named	name|namme|نام	false	A
+en_fresh.typos.tsv	56	adjacent	i think ill have time to do	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_fresh.typos.tsv	59	adjacent		Maty	Mary	Maty|Matty|May	Maty|Matty|متى	false	A
+en_fresh.typos.tsv	70	doubled	how are	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_fresh.typos.tsv	72	omission		Ilness	Illness	Illness|Ilness|Illnesses	Illness|Ilness|الناس	false	A
+en_fresh.typos.tsv	93	adjacent		Xiri	Ziri	Xiri|Firing|Sirius	Xiri|Firing|كسر	false	A
+en_fresh.typos.tsv	95	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_fresh.typos.tsv	96	adjacent	get tools and mend	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_fresh.typos.tsv	99	adjacent		Xiri	Ziri	Xiri|Firing|Sirius	Xiri|Firing|كسر	false	A
+en_fresh.typos.tsv	105	adjacent		Fhey	They	They|Fhey|They're	They|Fhey|فهي	false	A
+en_fresh.typos.tsv	122	adjacent	he lifted	hrr	her	her|hrr|here	her|hrr|حر	false	A
+en_fresh.typos.tsv	123	adjacent		Wiuld	Would	Would|Wiuld|Wouldn't	Would|Wiuld|ولد	false	A
+en_fresh.typos.tsv	124	doubled		SSave	Save	SSave|Save|Saved	SSave|Save|صف	false	A
+en_fresh.typos.tsv	135	adjacent	he spent a	wrek	week	wrek|wreck|week	wrek|wreck|وراك	true	A
+en_fresh.typos.tsv	138	adjacent	tom came to	prooose	propose	propose|prooose|proposed	propose|prooose|بروس	false	A
+en_fresh.typos.tsv	140	insertion	we	poay	pay	poay|play|pay	poay|play|بي	true	A
+en_fresh.typos.tsv	156	transposition	how i	ohpe	hope	hope|ohpe|open	hope|ohpe|أحب	false	A
+en_fresh.typos.tsv	162	omission	donning the kabyle	drss	dress	dress|drss|dressed	dress|drss|درس	false	A
+en_fresh.typos.tsv	176	adjacent	i have nothing against	thoae	those	thoae|tahoe|those	thoae|tahoe|ذا	true	A
+en_fresh.typos.tsv	196	omission	melanies parents permitted	Emiy	Emily	Emiy|Emily|Eminence	Emiy|Emily|أمي	false	A
+en_fresh.typos.tsv	200	doubled	tom	haad	had	had|haad|hadn't	had|haad|هاد	false	A
+en_fresh.typos.tsv	211	insertion	yanni taught skura	hoqw	how	how|hoqw|how's	how|hoqw|حقو	false	A
+en_fresh.typos.tsv	223	adjacent	they	eode	rode	rode|eode|elder	rode|eode|أود	false	A
+en_fresh.typos.tsv	225	doubled		Alggeria	Algeria	Algeria|Alggeria|Algerian	Algeria|Alggeria|الغير	false	A
+en_fresh.typos.tsv	233	adjacent	ziri gathered	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_fresh.typos.tsv	234	adjacent	he had a bruise on	hiw	his	his|hiw|how	his|hiw|هو	false	A
+en_fresh.typos.tsv	244	insertion		Toum	Tom	Tom|Toum|Tomorrow	Tom|Toum|توم	false	A
+en_fresh.typos.tsv	249	doubled	ive	beeen	been	been|beeen|breen	been|beeen|بين	false	A
+en_fresh.typos.tsv	257	doubled	im	ssorry	sorry	sorry|ssorry	sorry|ssorry|سري	false	A
+en_fresh.typos.tsv	259	adjacent	id	lkke	like	like|lkke|liked	like|lkke|لك	false	A
+en_fresh.typos.tsv	262	omission	samis date hasnt	cme	come	cme|clear|clean	cme|clear|كما	false	A
+en_fresh.typos.tsv	266	adjacent	tom did that only because everyone	elwe	else	else|elwe|elevator	else|elwe|ألو	false	A
+en_fresh.typos.tsv	272	adjacent	give me one	reasom	reason	reason|reasom|reasons	reason|reasom|رسوم	false	A
+en_fresh.typos.tsv	286	adjacent	tom took some	timw	time	time|timw|times	time|timw|تمو	false	A
+en_fresh.typos.tsv	287	adjacent	tom	ajd	and	and|ajd|andy	and|ajd|أجد	false	A
+en_fresh.typos.tsv	303	transposition	i	esll	sell	sell|esll|selling	sell|esll|أصل	false	A
+en_fresh.typos.tsv	309	adjacent	i cant	aee	see	see|aee|are	see|aee|أي	false	A
+en_fresh.typos.tsv	312	doubled		TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_fresh.typos.tsv	320	omission		Wuld	Would	Would|Wuld|Wouldn't	Would|Wuld|ولد	false	A
+en_fresh.typos.tsv	325	adjacent	i know	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_fresh.typos.tsv	335	adjacent	do you think that theres any chance that	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_fresh.typos.tsv	347	doubled	rima	ccan	can	can|ccan|can't	can|ccan|كان	false	A
+en_fresh.typos.tsv	356	adjacent	tom wont be	homr	home	homr|homer|home	homr|homer|هومر	true	A
+en_fresh.typos.tsv	363	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
+en_fresh.typos.tsv	364	doubled	didnt	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_fresh.typos.tsv	385	adjacent	i	hipe	hope	hope|hipe|hoped	hope|hipe|حب	false	A
+en_fresh.typos.tsv	389	adjacent	tom had his	gair	hair	gair|girl|girls	gair|girl|غير	false	A
+en_fresh.typos.tsv	390	adjacent	he shouldve	heen	been	been|heen|henry	been|heen|حين	false	A
+en_fresh.typos.tsv	395	adjacent	every saturday we	ppay	play	ppay|play|pay	ppay|play|بي	false	A
+en_fresh.typos.tsv	398	doubled	layla took the	caar	car	car|caar|care	car|caar|سار	false	A
+en_fresh.typos.tsv	401	transposition	can you fix	uor	our	our|uor|york	our|uor|أر	false	A
+en_fresh.typos.tsv	416	insertion	you look	quiute	quite	quite|quiute	quite|quiute|قط	false	A
+en_fresh.typos.tsv	422	transposition	where are	hte	the	the|hte|there	the|hte|حتى	false	A
+en_fresh.typos.tsv	423	adjacent	tom said that he thought that mary wouldnt do	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_fresh.typos.tsv	424	adjacent	toms not likely to do	tnat	that	that|tnat|that's	that|tnat|تنط	false	A
+en_fresh.typos.tsv	425	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_fresh.typos.tsv	436	adjacent	ludwik l zamenhof designed	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_fresh.typos.tsv	438	doubled	i think that	TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_fresh.typos.tsv	446	adjacent		Oley	Oleg	Oley|Olympic|Okey	Oley|Olympic|إلى	false	A
+en_fresh.typos.tsv	461	adjacent	it	loiks	looks	looks|loiks|lois	looks|loiks|ليكس	false	A
+en_fresh.typos.tsv	477	transposition	well	loko	look	look|loko|looking	look|loko|لك	false	A
+en_fresh.typos.tsv	484	adjacent	tom will likely be	readt	ready	readt|ready|read	readt|ready|ردت	false	A
+en_fresh.typos.tsv	485	adjacent	i cant	wsit	wait	wait|wsit|with	wait|wsit|وسط	false	A
+en_fresh.typos.tsv	496	doubled	were all	eequal	equal	equal|eequal|equally	equal|eequal|يقول	false	A
+en_fresh.typos.tsv	503	adjacent	i wont likely	chanhe	change	change|chanhe|changed	change|chanhe|شأنه	false	A
+en_fresh.typos.tsv	516	insertion	we	wsere	were	were|wsere|weren't	were|wsere|وصار	false	A
+en_fresh.typos.tsv	517	adjacent	it doesnt	mske	make	make|mske|makes	make|mske|مسك	false	A
+en_fresh.typos.tsv	521	adjacent	there	sre	are	are|sre|see	are|sre|سر	false	A
+en_fresh.typos.tsv	522	transposition	its	tihs	this	this|tihs|this'll	this|tihs|تحس	false	A
+en_fresh.typos.tsv	531	omission	is there a	hme	home	hem|hme|hemingway	hem|hme|هم	false	A
+en_fresh.typos.tsv	536	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_fresh.typos.tsv	550	adjacent	this	roae	rose	roae|road|rose	roae|road|راي	true	A
+en_fresh.typos.tsv	552	omission	multiple languages are	soken	spoken	spoken|soken|woken	spoken|soken|سكن	false	A
+en_fresh.typos.tsv	563	insertion		Tiom	Tom	Tom|Tiom|Time	Tom|Tiom|تم	false	A
+en_fresh.typos.tsv	565	insertion	your	shboe	shoe	shoe|shboe|shoes	shoe|shboe|شب	false	A
+en_fresh.typos.tsv	571	doubled	do tom and mary like to	eatt	eat	eat|eatt|earth	eat|eatt|أتت	false	A
+en_fresh.typos.tsv	577	adjacent		Verh	Very	Very|Verh|Vehicle	Very|Verh|فرح	false	A
+en_fresh.typos.tsv	585	adjacent		Tjere	There	There|Tjere|There's	There|Tjere|تجري	false	A
+en_fresh.typos.tsv	595	insertion	tom	saoid	said	said|saoid|sapid	said|saoid|سيد	false	A
+en_fresh.typos.tsv	597	transposition	i wish you a year of	peaec	peace	peace|peaec|peaceful	peace|peaec|بك	false	A
+en_fresh.typos.tsv	601	doubled	a stranger	trried	tried	tried|trried|tarried	tried|trried|تريد	false	A
+en_fresh.typos.tsv	606	insertion		Gfet	Get	Get|Gfet|Getting	Get|Gfet|غفيت	false	A
+en_fresh.typos.tsv	608	omission	ziri	wll	will	all|wll|allow	all|wll|ولـ	false	A
+en_fresh.typos.tsv	611	transposition	you can come whenever	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_fresh.typos.tsv	623	doubled	ziri had to	seee	see	see|seee|seen	see|seee|سي	false	A
+en_fresh.typos.tsv	626	doubled	mary has been doing that since	sshe	she	she|sshe|she's	she|sshe|صح	false	A
+en_fresh.typos.tsv	632	adjacent	im very	buay	busy	busy|buay|buy	busy|buay|بي	false	A
+en_fresh.typos.tsv	644	adjacent	assange published many	leakes	leaked	leakes|leaks|lakes	leakes|leaks|ليكس	false	A
+en_fresh.typos.tsv	654	adjacent	tell tom ill be there in	ghirty	thirty	thirty|ghirty	thirty|ghirty|غرتي	false	A
+en_fresh.typos.tsv	656	doubled	we received	wordd	word	wordd|worded|word	wordd|worded|ورد	true	A
+en_fresh.typos.tsv	658	transposition	i dont get	alogn	along	along|alogn|alone	along|alogn|الجن	false	A
+en_fresh.typos.tsv	665	adjacent	he doesnt	knoa	know	know|knoa|knows	know|knoa|كنا	false	A
+en_fresh.typos.tsv	673	doubled	i asked mary where	sshe	she	she|sshe|she's	she|sshe|صح	false	A
+en_fresh.typos.tsv	678	adjacent	tom and mary will do that the way	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_fresh.typos.tsv	689	adjacent	i have no	reaaon	reason	reason|reaaon|reasons	reason|reaaon|ريان	false	A
+en_fresh.typos.tsv	695	adjacent		Wiol	Will	Will|Wiol|Wild	Will|Wiol|ويل	false	A
+en_fresh.typos.tsv	705	transposition	we went out in	psite	spite	spite|psite|spiteful	spite|psite|بسيط	false	A
+en_fresh.typos.tsv	710	adjacent	i dreamt	avout	about	about|avout|agoutis	about|avout|أفوت	false	A
+en_fresh.typos.tsv	714	omission	lets hope that toms	opiion	opinion	opinion|opiion|opinions	opinion|opiion|ابين	false	A
+en_fresh.typos.tsv	719	adjacent	hes	biried	buried	biried|birdie|buried	biried|birdie|برد	true	A
+en_fresh.typos.tsv	725	insertion	im	Tyom	Tom	Tyom|Tomorrow|Tom	Tyom|Tomorrow|تيم	true	A
+en_fresh.typos.tsv	741	adjacent		Becauwe	Because	Because|Becauwe	Because|Becauwe|بسوي	false	A
+en_fresh.typos.tsv	745	transposition		Hwo	How	Hwo|How|Who	Hwo|How|هو	false	A
+en_fresh.typos.tsv	748	adjacent	god knows	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_fresh.typos.tsv	750	adjacent	tom and	Maey	Mary	Maey|Maybe|May	Maey|Maybe|مي	false	A
+en_fresh.typos.tsv	755	doubled	will	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_fresh.typos.tsv	758	doubled	my bigtoe	naill	nail	nail|naill|nails	nail|naill|نيل	false	A
+en_fresh.typos.tsv	759	transposition		Tihs	This	This|Tihs|This'll	This|Tihs|تحس	false	A
+en_fresh.typos.tsv	765	insertion	rima and	Sikura	Skura	Sikura|Sakura|Situation	Sikura|Sakura|سكر	false	A
+en_fresh.typos.tsv	769	doubled	how much natural gas does	Allgeria	Algeria	Allgeria|Algeria|Algerian	Allgeria|Algeria|الغير	false	A
+en_fresh.typos.tsv	775	omission	tom wants	aother	another	another|aother|atheroma	another|aother|أثر	false	A
+en_fresh.typos.tsv	776	adjacent	did	uou	you	you|uou|your	you|uou|أو	false	A
+en_fresh.typos.tsv	778	doubled	where did he see	tthat	that	that|tthat|that's	that|tthat|تحت	false	A
+en_fresh.typos.tsv	779	adjacent	but unfortunately this will not happen	gery	very	gery|gerry|very	gery|gerry|جيري	true	A
+en_fresh.typos.tsv	781	omission	lets	rde	ride	red|rde|dream	red|rde|رد	false	A
+en_fresh.typos.tsv	784	transposition	i suggest we	egt	get	get|egt|getting	get|egt|اجت	false	A
+en_fresh.typos.tsv	786	doubled		Sammi	Sami	Sammy|Sammi|Dammit	Sammy|Sammi|سام	false	A
+en_fresh.typos.tsv	792	adjacent		Yiu	You	You|Yiu|Your	You|Yiu|يـ	false	A
+en_fresh.typos.tsv	793	insertion	i	likle	like	like|likle|liked	like|likle|لكل	false	A
+en_fresh.typos.tsv	812	doubled	he	llikes	likes	likes|llikes|likest	likes|llikes|ليكس	false	A
+en_fresh.typos.tsv	819	insertion	tom	sauid	said	said|sauid|squid	said|sauid|سيد	false	A
+en_fresh.typos.tsv	822	adjacent	tom doesnt	poan	plan	plan|poan|plane	plan|poan|بأن	false	A
+en_fresh.typos.tsv	829	adjacent	he	daid	said	said|daid|didn't	said|daid|ضد	false	A
+en_fresh.typos.tsv	841	insertion	i suppose	yTom	Tom	yTom	yTom|يتم	false	A
+en_fresh.typos.tsv	849	adjacent	his way of talking	maee	made	made|maee|meet	made|maee|مي	false	A
+en_fresh.typos.tsv	873	adjacent	id	liks	like	liks|like|listen	liks|like|ليكس	false	A
+en_fresh.typos.tsv	890	insertion	i gave	Tomk	Tom	Tomk|Tomorrow|Tom	Tomk|Tomorrow|تمك	true	A
+en_fresh.typos.tsv	892	doubled	my	motherr	mother	mother|motherr|mother's	mother|motherr|مثير	false	A
+en_fresh.typos.tsv	895	insertion	i must warn you that if you do this again you	wuill	will	will|wuill|willing	will|wuill|ويل	false	A
+en_fresh.typos.tsv	908	omission	my students	lke	like	lie|lke|lieutenant	lie|lke|لك	false	A
+en_fresh.typos.tsv	915	adjacent		Shw	She	She|Shw|She's	She|Shw|شو	false	A
+en_fresh.typos.tsv	928	transposition		hTey	They	hTey|they|hey	hTey|they|حتى	false	A
+en_fresh.typos.tsv	932	transposition		aSmi	Sami	aSmi|asking|admit	aSmi|asking|اسم	false	A
+en_fresh.typos.tsv	942	doubled		Alff	Alf	Alf|Alff|Afford	Alf|Alff|ألف	false	A
+en_fresh.typos.tsv	945	insertion	tom forced his	qway	way	away|qway	away|qway|قوي	false	A
+en_fresh.typos.tsv	950	adjacent	my friend	Tereda	Teresa	Tereda|Teresa|Terefah	Tereda|Teresa|تريد	false	A
+en_fresh.typos.tsv	964	doubled	i couldnt	sstay	stay	sstay|stay|staying	sstay|stay|ستي	false	A
+en_fresh.typos.tsv	975	omission	you were	alays	always	always|alays|alas	always|alays|أليس	false	A
+en_fresh.typos.tsv	990	omission	tom isnt	sre	sure	sre|are|see	sre|are|سر	false	A
+en_fresh.typos.tsv	991	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_fresh.typos.tsv	995	insertion		Yuriu	Yuri	Yuri|Yuriu	Yuri|Yuriu|يرى	false	A
+en_fresh.typos.tsv	1011	insertion		Whyu	Why	Why|Whyu|Why'd	Why|Whyu|وهي	false	A
+en_fresh.typos.tsv	1025	transposition	he will like the book	taht	that	that|taht|that's	that|taht|تحت	false	A
+en_fresh.typos.tsv	1035	omission	he	spet	spent	spet|spent|set	spet|spent|سبيت	false	A
+en_fresh.typos.tsv	1043	doubled	make	suree	sure	sure|suree|surely	sure|suree|سري	false	A
+en_fresh.typos.tsv	1044	adjacent		Uoraine	Ukraine	Ukraine|Uoraine	Ukraine|Uoraine|ارن	false	A
+en_fresh.typos.tsv	1046	transposition		hTe	The	hTe|the|there	hTe|the|حتى	false	A
+en_fresh.typos.tsv	1065	doubled	i need	annother	another	another|annother	another|annother|إنذار	false	A
+en_fresh.typos.tsv	1068	adjacent	we had a	verh	very	very|verh|vehicle	very|verh|فرح	false	A
+en_fresh.typos.tsv	1080	doubled	tom and mary	aare	are	are|aare|aren't	are|aare|أرى	false	A
+en_fresh.typos.tsv	1088	adjacent	ill	keave	leave	leave|keave|leaves	leave|keave|كيف	false	A
+en_fresh.typos.tsv	1098	transposition	how	mnay	many	mnay|maybe|may	mnay|maybe|مني	false	A
+en_fresh.typos.tsv	1099	insertion	tom wasnt one of ones	awho	who	who|awho|awhile	who|awho|أوه	false	A
+en_fresh.typos.tsv	1120	doubled	ive never	saidd	said	said|saidd|saddle	said|saidd|سيد	false	A
+en_fresh.typos.tsv	1129	adjacent	tom also owns a	houae	house	house|houae|houses	house|houae|هو	false	A
+en_fresh.typos.tsv	1140	adjacent	they	aant	want	want|aant|wanted	want|aant|أنت	false	A
+en_fresh.typos.tsv	1146	adjacent	overthinking prevents you	frim	from	from|frim|friend	from|frim|فرم	false	A
+en_fresh.typos.tsv	1151	adjacent	tom and mary	swy	say	say|swy|says	say|swy|سوى	false	A
+en_fresh.typos.tsv	1152	omission	what a godawful painting i cant	blieve	believe	believe|blieve|believed	believe|blieve|بلف	false	A
+en_fresh.typos.tsv	1154	insertion	i swear to god i didnt	kiull	kill	kill|kiull|killed	kill|kiull|كل	false	A
+en_fresh.typos.tsv	1167	doubled	mary put away	hher	her	her|hher|here	her|hher|حار	false	A
+en_fresh.typos.tsv	1171	adjacent	tom finally managed to	vuy	buy	guy|vuy|guys	guy|vuy|في	false	A
+en_fresh.typos.tsv	1172	doubled		TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_fresh.typos.tsv	1185	doubled	tom and	Maryy	Mary	Maryy|Mary|Marty	Maryy|Mary|ماري	false	A
+en_fresh.typos.tsv	1189	insertion		Tiom	Tom	Tom|Tiom|Time	Tom|Tiom|تم	false	A
+en_fresh.typos.tsv	1199	adjacent	do	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_fresh.typos.tsv	1223	transposition		Hwo	How	Hwo|How|Who	Hwo|How|هو	false	A
+en_fresh.typos.tsv	1242	adjacent	tom hasnt been himself the last	cew	few	few|cew|cease	few|cew|سو	false	A
+en_fresh.typos.tsv	1243	transposition	i know it would be useless to try to convince	Tmo	Tom	Tmo|Tomorrow|Tom	Tmo|Tomorrow|تم	true	A
+en_fresh.typos.tsv	1266	adjacent	tom wasnt the only one who got up early	tuis	this	tuis|this|this'll	tuis|this|تيس	false	A
+en_fresh.typos.tsv	1278	doubled		Toom	Tom	Toom|Too|Room	Toom|Too|توم	false	A
+en_fresh.typos.tsv	1283	transposition		hTat	That	hTat|that|that's	hTat|that|حطت	false	A
+en_fresh.typos.tsv	1290	transposition	that wasnt a	ogod	good	good|ogod|goodbye	good|ogod|أجد	false	A
+en_fresh.typos.tsv	1291	adjacent		Sre	Are	Sre|Are|See	Sre|Are|سر	false	A
+en_fresh.typos.tsv	1296	adjacent	i had a quick	cotfee	coffee	coffee|cotfee|coffee's	coffee|cotfee|كتفي	false	A
+en_fresh.typos.tsv	1304	insertion		Tiom	Tom	Tom|Tiom|Time	Tom|Tiom|تم	false	A
+en_fresh.typos.tsv	1306	adjacent	ziri didnt let	Tima	Rima	Tima|Time|Times	Tima|Time|تم	false	A
+en_fresh.typos.tsv	1313	doubled		Thaat	That	That|Thaat|That's	That|Thaat|ذات	false	A
+en_fresh.typos.tsv	1315	adjacent	we didnt have much rain	lsst	last	last|lsst|lester	last|lsst|لست	false	A
+en_fresh.typos.tsv	1334	doubled	she managed to	rrun	run	run|rrun|running	run|rrun|رن	false	A
+en_fresh.typos.tsv	1335	insertion		Shwe	She	She|Shwe|She's	She|Shwe|شو	false	A
+en_fresh.typos.tsv	1339	adjacent	tom	amd	and	and|amd|made	and|amd|أمد	false	A
+en_fresh.typos.tsv	1363	transposition	read it	onec	once	one|onec|once	one|onec|أنك	true	A
+en_fresh.typos.tsv	1365	insertion	was this man	nmot	not	not|nmot|nothing	not|nmot|نمت	false	A
+en_fresh.typos.tsv	1370	adjacent	i cant leave	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_fresh.typos.tsv	1372	doubled	kabylie a region in northeastern algeria	hhas	has	has|hhas|hasn't	has|hhas|هس	false	A
+en_fresh.typos.tsv	1376	insertion	tom is	wquite	quite	quite|wquite|white	quite|wquite|وقت	false	A
+en_fresh.typos.tsv	1377	transposition	do	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_fresh.typos.tsv	1383	adjacent		Wsit	Wait	Wait|Wsit|With	Wait|Wsit|وسط	false	A
+en_fresh.typos.tsv	1388	adjacent	he spent the entire afternoon	wirh	with	with|wirh|without	with|wirh|ورح	false	A
+en_fresh.typos.tsv	1399	adjacent	are	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_fresh.typos.tsv	1400	adjacent	tom is doing everything within his power to improve the patients	qualoty	quality	quality|qualoty	quality|qualoty|قلتي	false	A
+en_fresh.typos.tsv	1402	doubled	both	TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_fresh.typos.tsv	1404	transposition		hTey	They	hTey|they|hey	hTey|they|حتى	false	A
+en_fresh.typos.tsv	1412	adjacent	ziri	amd	and	and|amd|made	and|amd|أمد	false	A
+en_fresh.typos.tsv	1419	adjacent	i dont have	plabs	plans	plans|plabs|plastic	plans|plabs|بلبس	false	A
+en_fresh.typos.tsv	1426	adjacent	he put up	jis	his	his|jis|just	his|jis|جيس	false	A
+en_fresh.typos.tsv	1429	omission		Prry	Perry	Prry|Prey|Perry	Prry|Prey|بري	true	A
+en_fresh.typos.tsv	1431	transposition	ziri	ahd	had	and|ahd|had	and|ahd|أحد	true	A
+en_fresh.typos.tsv	1440	transposition	i	hpoe	hope	hope|hpoe|phoebe	hope|hpoe|حب	false	A
+en_fresh.typos.tsv	1442	adjacent	edmundo was walking on	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_fresh.typos.tsv	1446	adjacent	were	aol	all	all|aol|alone	all|aol|أول	false	A
+en_fresh.typos.tsv	1452	adjacent	my french isnt	vety	very	very|vety|vet	very|vety|فتى	false	A
+en_fresh.typos.tsv	1453	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_fresh.typos.tsv	1457	transposition	sami knew very	ewll	well	well|ewll|ellen	well|ewll|أول	false	A
+en_fresh.typos.tsv	1461	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_fresh.typos.tsv	1463	doubled	do you know i tried to	seee	see	see|seee|seen	see|seee|سي	false	A
+en_fresh.typos.tsv	1467	adjacent	she	cwn	can	can|cwn|can't	can|cwn|كون	false	A
+en_fresh.typos.tsv	1469	transposition	has anybody ever called	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_fresh.typos.tsv	1470	adjacent	tom hit	jis	his	his|jis|just	his|jis|جيس	false	A
+en_fresh.typos.tsv	1474	adjacent	mary is as	takl	tall	talk|takl|take	talk|takl|تأكل	false	A
+en_fresh.typos.tsv	1476	doubled	the garden has a	ffew	few	few|ffew|fewer	few|ffew|فيو	false	A
+en_fresh.typos.tsv	1485	adjacent	my	dirst	first	first|dirst|dirty	first|dirst|درست	false	A
+en_real_typos.typos.tsv	7	omission		sorrity	sorority	sorority|sorrity	sorority|sorrity|صرتي	false	A
+en_real_typos.typos.tsv	9	other		pequlea	peculiar	pequlea|peculiar|petulant	pequlea|peculiar|بقول	false	A
+en_real_typos.typos.tsv	26	phonetic		egull	equally	egull|ellen|equal	egull|ellen|أجل	false	A
+en_real_typos.typos.tsv	65	phonetic		bairied	buried	buried|bairied|barrier	buried|bairied|برد	false	A
+en_real_typos.typos.tsv	79	other		sete	suits	see|sete|seen	see|sete|سآتي	false	A
+en_real_typos.typos.tsv	83	phonetic		lisence	license	licence|lisence|license	licence|lisence|لسانك	true	A
+en_real_typos.typos.tsv	86	other		alamina	alumni	alamina|alumina|aluminate	alamina|alumina|الأمن	false	A
+en_real_typos.typos.tsv	143	transposition		vessle	vessel	vessel|vessle|vessels	vessel|vessle|فصل	false	A
+en_real_typos.typos.tsv	154	phonetic		oone	own	one|oone|ones	one|oone|ونا	false	A
+en_real_typos.typos.tsv	160	phonetic		lide	led	life|lide|lie	life|lide|لدي	false	A
+en_real_typos.typos.tsv	164	other		aht	loud	hat|aht|hate	hat|aht|احط	false	A
+en_real_typos.typos.tsv	177	transposition		buired	buried	buried|buired	buried|buired|برد	false	A
+en_real_typos.typos.tsv	197	omission		maks	makes	maks|make|makes	maks|make|ماكس	true	A
+en_real_typos.typos.tsv	201	other		louk	looking	lou|louk|louis	lou|louk|لوك	false	A
+en_real_typos.typos.tsv	205	phonetic		buth	both	buth|butch|but	buth|butch|بوث	false	A
+en_real_typos.typos.tsv	220	other		fuae	friend	fuse|fuae|fuel	fuse|fuae|في	false	A
+en_real_typos.typos.tsv	228	omission		coase	coarse	coase|coarse|case	coase|coarse|كأس	false	A
+en_real_typos.typos.tsv	235	other		guartee	guarantee	guartee|guarantee|guaranteed	guartee|guarantee|غرتي	false	A
+en_real_typos.typos.tsv	238	transposition		wierd	weird	wierd|wider|weird	wierd|wider|ورد	true	A
+en_real_typos.typos.tsv	316	other		hoay	pockets	hay|hoay|hoax	hay|hoay|هي	false	A
+en_real_typos.typos.tsv	344	other		soen	so	son|soen|send	son|soen|سان	false	A
+en_real_typos.typos.tsv	356	transposition		sonud	sound	sound|sonud|sounds	sound|sonud|سند	false	A
+en_real_typos.typos.tsv	367	phonetic		vessal	vessel	vessel|vessal|vessels	vessel|vessal|فصل	false	A
+en_real_typos.typos.tsv	386	other		dimon	diamond	simon|dimon|diamond	simon|dimon|ضمن	true	A
+en_real_typos.typos.tsv	393	phonetic		macien	machine	macien|mackenzie|macing	macien|mackenzie|مكان	false	A
+en_real_typos.typos.tsv	397	phonetic		blef	belief	bled|blef|before	bled|blef|بلف	false	A
+en_real_typos.typos.tsv	406	omission		soroity	sorority	sorority|soroity	sorority|soroity|صرتي	false	A
+en_real_typos.typos.tsv	418	phonetic		neak	neck	neak|near|nearly	neak|near|نيك	false	A
+en_real_typos.typos.tsv	431	phonetic		gaurdine	guardian	gaurdine|gardener|guarding	gaurdine|gardener|جوردن	false	A
+en_real_typos.typos.tsv	435	other		farede	friend	farede|frederick|daredevil	farede|frederick|فريد	false	A
+en_real_typos.typos.tsv	455	other		woine	women	wine|woine|wines	wine|woine|ونا	false	A
+en_real_typos.typos.tsv	478	phonetic		carten	curtain	carte|carten|carter	carte|carten|سرطان	false	A
+en_real_typos.typos.tsv	481	omission		beged	begged	begged|beged|begets	begged|beged|بجد	false	A
+en_real_typos.typos.tsv	505	transposition		quailty	quality	quality|quailty	quality|quailty|قلتي	false	A
+en_real_typos.typos.tsv	513	other		wones	women	wones|wines|woes	wones|wines|ونص	false	A
+en_real_typos.typos.tsv	529	other		alowe	above	alone|alowe|allowed	alone|alowe|ألو	false	A
+en_real_typos.typos.tsv	537	other		muture	mutual	future|muture|metres	future|muture|متر	false	A
+en_real_typos.typos.tsv	569	other		dirwe	bridge	dire|dirwe|director	dire|dirwe|ديرو	false	A
+en_real_typos.typos.tsv	593	phonetic		weomon	women	woman|weomon|women	woman|weomon|ومن	true	A
+en_real_typos.typos.tsv	640	other		nese	never	ness|nese|need	ness|nese|نص	false	A
+en_real_typos.typos.tsv	650	omission		whch	which	which|whch|whichever	which|whch|وحش	false	A
+en_real_typos.typos.tsv	682	other		wimmn	women	wimmn|woman|women	wimmn|woman|ومن	true	A
+en_real_typos.typos.tsv	702	other		sheual	schedule	sheila|sheual|sheqalim	sheila|sheual|شال	false	A
+en_real_typos.typos.tsv	716	phonetic		cheak	cheek	check|cheak|cheap	check|cheak|شك	false	A
+en_real_typos.typos.tsv	739	phonetic		stary	story	stary|stay|start	stary|stay|سترى	false	A
+en_real_typos.typos.tsv	763	transposition		pinao	piano	piano|pinao|pinocchio	piano|pinao|بين	false	A
+en_real_typos.typos.tsv	776	other		buisit	biscuits	bust|buisit|bursitis	bust|buisit|بسيط	false	A
+en_real_typos.typos.tsv	782	other		speail	special	spoil|speail|speak	spoil|speail|سبيل	false	A
+en_real_typos.typos.tsv	784	other		tmera	temperature	tmera|tamer|timer	tmera|tamer|تمر	false	A
+en_real_typos.typos.tsv	789	other		aculy	actually	aculy|adult|apply	aculy|adult|اكلي	false	A
+en_real_typos.typos.tsv	805	other		catian	curtain	catian|cation|cationic	catian|cation|ستان	false	A
+en_real_typos.typos.tsv	813	other		faize	phase	faize|father|fine	faize|father|فاز	false	A
+en_real_typos.typos.tsv	832	phonetic		vallie	valley	vallie|valley|hallie	vallie|valley|فلا	false	A
+en_real_typos.typos.tsv	838	phonetic		tyed	tied	ted|tyed|teddy	ted|tyed|تيد	false	A
+en_real_typos.typos.tsv	847	phonetic		renue	renew	rene|renue|renew	rene|renue|رن	true	A
+en_real_typos.typos.tsv	848	omission		tured	turned	tured|tired|turned	tured|tired|تريد	true	A
+en_real_typos.typos.tsv	853	other		feue	fight	fee|feue|feel	fee|feue|في	false	A
+en_real_typos.typos.tsv	862	phonetic		sucure	secure	secure|sucure|sure	secure|sucure|سكر	false	A
+en_real_typos.typos.tsv	864	phonetic		debait	debate	debt|debait|debate	debt|debait|ضابط	true	A
+en_real_typos.typos.tsv	919	doubled		gonne	gone	gone|gonne|gonna	gone|gonne|جون	false	A
+en_real_typos.typos.tsv	925	doubled		eassier	easier	easier|eassier|sassier	easier|eassier|اصير	false	A
+en_real_typos.typos.tsv	945	other		easly	gradually	easly|easily|easy	easly|easily|أصلي	false	A
+en_real_typos.typos.tsv	958	other		suffient	sufficient	suffient|sufficient|sufficiently	suffient|sufficient|صفنت	false	A
+en_real_typos.typos.tsv	972	other		limm	limited	lim|limm|limit	lim|limm|لم	false	A
+en_real_typos.typos.tsv	981	phonetic		oppeset	opposite	oppeset|opposite|opposed	oppeset|opposite|أبسط	false	A
+en_real_typos.typos.tsv	1003	omission		guiness	guinness	guiness|guineas|guinness	guiness|guineas|جنس	true	A
+en_real_typos.typos.tsv	1004	phonetic		jene	jam	jen|jene|jenny	jen|jene|جين	false	A
+en_real_typos.typos.tsv	1006	phonetic		reccona	raccoon	recon|reccona|reasonable	recon|reccona|راسنا	false	A
+en_real_typos.typos.tsv	1007	other		accle	actually	cycle|accle|accept	cycle|accle|أكل	false	A
+en_real_typos.typos.tsv	1028	omission		dynaic	dynamic	dynamic|dynaic|dynamics	dynamic|dynaic|دينيس	false	A
+en_real_typos.typos.tsv	1039	phonetic		opisit	opposite	opisit|opinion|opposite	opisit|opinion|أبسط	true	A
+en_real_typos.typos.tsv	1054	other		aser	answer	laser|aser|asteroid	laser|aser|اصير	false	A
+en_real_typos.typos.tsv	1107	other		birge	bridge	barge|birge|burger	barge|birge|برج	false	A
+en_real_typos.typos.tsv	1148	other		surty	certainly	surty|surety|surya	surty|surety|صرتي	false	A
+en_real_typos.typos.tsv	1161	other		garatee	guarantee	garatee|grateful|guarantee	garatee|grateful|غرتي	true	A
+en_real_typos.typos.tsv	1172	phonetic		yerd	yard	yerd|herd|yer	yerd|herd|يرد	false	A
+en_real_typos.typos.tsv	1174	insertion		heavey	heavy	heavy|heavey|heaven	heavy|heavey|حافي	false	A
+en_real_typos.typos.tsv	1183	insertion		machiene	machine	machine|machiene|machines	machine|machiene|مشان	false	A
+en_real_typos.typos.tsv	1201	phonetic		mony	many	money|mony|months	money|mony|مني	false	A
+en_real_typos.typos.tsv	1214	other		soreity	sorority	soreity|society|serenity	soreity|society|صرتي	false	A
+en_real_typos.typos.tsv	1226	phonetic		beleive	belief	believe|beleive|believed	believe|beleive|بلف	false	A
+en_real_typos.typos.tsv	1246	omission		trafic	traffic	trafic|traffic|tragic	trafic|traffic|ترافيس	false	A
+en_real_typos.typos.tsv	1270	other		bayt	date	bayt|battle|bathroom	bayt|battle|بيت	false	A
+en_real_typos.typos.tsv	1275	phonetic		beried	buried	buried|beried|believe	buried|beried|برد	false	A
+en_real_typos.typos.tsv	1340	phonetic		steffen	stephen	steffen|stephen	steffen|stephen|ستيفن	false	A
+en_real_typos.typos.tsv	1350	other		baet	date	baet|better|between	baet|better|بيت	false	A
+en_real_typos.typos.tsv	1360	transposition		gaurdian	guardian	guardian|gaurdian|guardians	guardian|gaurdian|جوردن	false	A
+en_real_typos.typos.tsv	1373	other		illution	illusion	illusion|illution	illusion|illution|الوطن	false	A
+en_real_typos.typos.tsv	1379	phonetic		habet	habit	habit|habet|babette	habit|habet|حبيت	false	A
+en_real_typos.typos.tsv	1389	phonetic		guarden	guardian	garden|guarden|guarded	garden|guarden|جوردن	false	A
+en_real_typos.typos.tsv	1410	other		terd	turned	ted|terd|terrible	ted|terd|ترد	false	A
+en_real_typos.typos.tsv	1411	other		muney	months	money|muney|money's	money|muney|مني	false	A
+en_real_typos.typos.tsv	1422	phonetic		woc	woke	soc|woc|society	soc|woc|وك	false	A
+en_real_typos.typos.tsv	1435	phonetic		retane	retain	retake|retane|retainer	retake|retane|ريتني	false	A
+en_real_typos.typos.tsv	1440	insertion		selfe	self	selfe|selfie|self	selfe|selfie|سلفي	true	A
+en_real_typos.typos.tsv	1475	other		sient	scientists	sent|sient|silent	sent|sient|سانت	false	A
+en_real_typos.typos.tsv	1492	other		fihh	thin	fish|fihh|fight	fish|fihh|فيه	false	A
+en_real_typos.typos.tsv	1522	doubled		onn	on	on|onn|one	on|onn|أن	false	A
+en_real_typos.typos.tsv	1539	other		selete	certainly	delete|selete|selected	delete|selete|سألت	false	A
+en_real_typos.typos.tsv	1583	omission		curtan	curtain	curtain|curtan|curtains	curtain|curtan|سرطان	false	A
+en_real_typos.typos.tsv	1612	insertion		phaise	phase	phase|phaise|phaser	phase|phaise|بحس	false	A
+en_real_typos.typos.tsv	1647	transposition		beleive	believe	believe|beleive|believed	believe|beleive|بلف	false	A
+en_real_typos.typos.tsv	1680	other		asluy	actually	asluy|asleep|assume	asluy|asleep|أصلي	false	A
+en_real_typos.typos.tsv	1686	other		arad	around	brad|arad|arab	brad|arad|أراد	false	A
+en_real_typos.typos.tsv	1694	phonetic		liqued	liquid	piqued|liqued|liqueur	piqued|liqued|لقد	false	A
+en_real_typos.typos.tsv	1696	insertion		leaft	left	left|leaft|leather	left|leaft|لفت	false	A
+en_real_typos.typos.tsv	1713	other		garatte	guarantee	garatte|grateful|guarantee	garatte|grateful|غرتي	true	A
+en_real_typos.typos.tsv	1722	adjacent		eneny	enemy	enemy|eneny|enemy's	enemy|eneny|أنني	false	A
+en_real_typos.typos.tsv	1733	phonetic		wimmin	women	wimmin|wilmington	wimmin|wilmington|ومن	false	A
+en_real_typos.typos.tsv	1741	phonetic		gaurdane	guardian	gaurdane|gardener|gardner	gaurdane|gardener|جوردن	false	A
+en_real_typos.typos.tsv	1749	phonetic		ciese	cease	cause|ciese|diesel	cause|ciese|كأس	false	A
+en_real_typos.typos.tsv	1810	phonetic		eather	either	rather|eather|esther	rather|eather|أثر	false	A
+en_real_typos.typos.tsv	1815	other		mimmin	minimum	mimmin|missing|miami	mimmin|missing|ممن	false	A
+en_real_typos.typos.tsv	1817	other		menacollie	melancholy	menacollie	menacollie|مناكل	false	A
+en_real_typos.typos.tsv	1824	phonetic		guardeun	guardian	garden|guardeun|guardedness	garden|guardeun|جوردن	false	A
+en_real_typos.typos.tsv	1826	other		lalay	lodge	lalay|layla|lala	lalay|layla|للي	false	A
+en_real_typos.typos.tsv	1867	phonetic		misterre	mystery	mister|misterre|mistress	mister|misterre|مستر	false	A
+en_real_typos.typos.tsv	1889	phonetic		dodu	date	dod|dodu|doubt	dod|dodu|ضد	false	A
+en_real_typos.typos.tsv	1965	other		yoy	my	you|yoy|your	you|yoy|يي	false	A
+en_real_typos.typos.tsv	2004	transposition		duece	deuce	deuce|duece|decent	deuce|duece|ديك	false	A
+en_real_typos.typos.tsv	2006	other		sohe	searched	she|sohe|she's	she|sohe|صح	false	A
+en_real_typos.typos.tsv	2015	other		sune	suits	sun|sune|sunday	sun|sune|سن	false	A
+en_real_typos.typos.tsv	2043	other		appsate	appreciate	appsate|apparently|appeared	appsate|apparently|أبسط	false	A
+en_real_typos.typos.tsv	2072	phonetic		tipe	type	tipe|tie|tip	tipe|tie|طب	false	A
+en_real_typos.typos.tsv	2083	other		annt	any	annt|anna|annie	annt|anna|أنت	false	A
+en_real_typos.typos.tsv	2134	omission		wery	weary	wery|were|weren't	wery|were|ورى	false	A
+en_real_typos.typos.tsv	2144	other		poitye	poetry	pity|poitye|porter	pity|poitye|بيتي	false	A
+en_real_typos.typos.tsv	2149	insertion		aere	ere	aere|are|were	aere|are|أرى	false	A
+en_real_typos.typos.tsv	2176	other		sertain	certainly	certain|sertain	certain|sertain|سرطان	false	A
+en_real_typos.typos.tsv	2178	other		vared	buried	vared|varied|cared	vared|varied|فريد	false	A
+en_real_typos.typos.tsv	2180	omission		conty	county	county|conty|control	county|conty|كنتي	false	A
+en_real_typos.typos.tsv	2191	omission		belif	belief	belief|belif|believe	belief|belif|بلف	false	A
+en_real_typos.typos.tsv	2220	other		cese	courses	cease|cese|deserve	cease|cese|كأس	false	A
+en_real_typos.typos.tsv	2221	other		vlet	valley	vlet|fletcher|vet	vlet|fletcher|فلت	false	A
+en_real_typos.typos.tsv	2272	transposition		eqaully	equally	equally|eqaully	equally|eqaully|اقلي	false	A
+en_real_typos.typos.tsv	2275	other		einniie	enemy	einniie	einniie|أنني	false	A
+en_real_typos.typos.tsv	2300	other		yousel	usually	youse|yousel|yourself	youse|yousel|يوصل	false	A
+en_real_typos.typos.tsv	2305	other		gauratee	guarantee	gauratee|guarantee|guaranteed	gauratee|guarantee|غرتي	false	A
+en_real_typos.typos.tsv	2310	other		lavh	laugh	lava|lavh|lavinia	lava|lavh|لفه	false	A
+en_real_typos.typos.tsv	2314	phonetic		avot	avoid	avot|avoid|avoiding	avot|avoid|أفوت	false	A
+en_real_typos.typos.tsv	2364	other		biccal	bicycle	biccal|bicycle|bicycles	biccal|bicycle|بكل	false	A
+en_real_typos.typos.tsv	2389	other		unnotie	unnoticed	untie|unnotie|unnoticed	untie|unnotie|أنت	true	A
+en_real_typos.typos.tsv	2393	phonetic		froem	form	from|froem|foreman	from|froem|فرم	false	A
+en_real_typos.typos.tsv	2396	other		ruovd	removed	ruovd|road|round	ruovd|road|رفض	false	A
+en_real_typos.typos.tsv	2417	other		guley	duly	guley|guy|guys	guley|guy|جولي	false	A
+en_real_typos.typos.tsv	2443	other		pteire	particular	pteire|pierre|perez	pteire|pierre|بطير	false	A
+en_real_typos.typos.tsv	2457	other		appoa	approach	papa|appoa|apparently	papa|appoa|أبو	false	A
+en_real_typos.typos.tsv	2470	phonetic		solme	solemn	some|solme|something	some|solme|سلم	false	A
+en_real_typos.typos.tsv	2504	phonetic		metle	metal	metle|mettle|merle	metle|mettle|متل	false	A
+en_real_typos.typos.tsv	2533	phonetic		botome	bottom	bottom|botome|boomer	bottom|botome|بتمي	false	A
+en_real_typos.typos.tsv	2534	phonetic		sollem	solemn	salem|sollem|solemn	salem|sollem|سلام	true	A
+en_real_typos.typos.tsv	2545	phonetic		yorn	yarn	york|yorn|torn	york|yorn|يرن	false	A
+en_real_typos.typos.tsv	2554	phonetic		leagle	legal	league|leagle|leaflets	league|leagle|لأجل	false	A
+en_real_typos.typos.tsv	2563	insertion		drage	drag	drag|drage|dragon	drag|drage|درج	false	A
+en_real_typos.typos.tsv	2590	other		prcede	perceive	prcede|precedent|predecessor	prcede|precedent|بركض	false	A
+en_real_typos.typos.tsv	2611	other		ptal	particular	pal|ptal|palace	pal|ptal|بطل	false	A
+en_real_typos.typos.tsv	2680	phonetic		curatan	curtains	curtain|curatan|curating	curtain|curatan|سرطان	false	A
+en_real_typos.typos.tsv	2694	omission		isue	issue	issue|isue|issues	issue|isue|أسوأ	false	A
+en_real_typos.typos.tsv	2699	other		phuemonia	pneumonia	phuemonia|pneumonia|polemoniaceous	phuemonia|pneumonia|بهمني	false	A
+en_real_typos.typos.tsv	2721	adjacent		woild	would	would|woild|wouldn't	would|woild|ولد	false	A
+en_real_typos.typos.tsv	2729	phonetic		peap	peep	peap|peace|paper	peap|peace|باب	false	A
+en_real_typos.typos.tsv	2738	other		mimmun	minimum	mimmun|misunderstanding|misunderstood	mimmun|misunderstanding|ممن	false	A
+en_real_typos.typos.tsv	2811	phonetic		verce	verse	verge|verce|verde	verge|verce|فارس	false	A
+en_real_typos.typos.tsv	2823	other		gaurtee	guarantee	gaurtee|gauntlet|garter	gaurtee|gauntlet|غرتي	false	A
+en_real_typos.typos.tsv	2833	other		procede	perceive	proceed|procede|procedure	proceed|procede|بركض	false	A
+en_real_typos.typos.tsv	2856	omission		thow	throw	throw|thow|those	throw|thow|ذو	false	A
+en_real_typos.typos.tsv	2874	phonetic		soleom	solemn	soleom|solomon|solemn	soleom|solomon|سلام	true	A
+en_real_typos.typos.tsv	2887	other		sekon	second	sekon|seong|seon	sekon|seong|سيكون	false	A
+en_real_typos.typos.tsv	2893	other		abost	above	about|abost|abstract	about|abost|أبسط	false	A
+en_real_typos.typos.tsv	2946	phonetic		cill	kill	fill|cill|village	fill|cill|كل	false	A
+en_real_typos.typos.tsv	2978	other		mitey	mighty	mite|mitey|mites	mite|mitey|متى	false	A
+en_real_typos.typos.tsv	2986	other		phacialy	specifically	phacialy|facially	phacialy|facially|بحكيلي	false	A
+en_real_typos.typos.tsv	2988	omission		shok	shock	shock|shok|should	shock|shok|شك	false	A
+en_real_typos.typos.tsv	2999	phonetic		lihd	loud	lid|lihd|linda	lid|lihd|لحد	false	A
+en_real_typos.typos.tsv	3033	transposition		omre	more	more|omre|omega	more|omre|أمر	false	A
+en_real_typos.typos.tsv	3049	other		cifye	city	cifye|city|coffee	cifye|city|كفى	false	A
+en_real_typos.typos.tsv	3061	phonetic		gowe	go	howe|gowe|goes	howe|gowe|جو	false	A
+en_real_typos.typos.tsv	3066	insertion		duely	duly	duel|duely|duly	duel|duely|دوالي	true	A
+en_real_typos.typos.tsv	3080	phonetic		telpone	telephoned	telpone|telephone|telephoned	telpone|telephone|طلبنا	true	A
+en_real_typos.typos.tsv	3088	phonetic		solume	solemn	volume|solume|solute	volume|solume|سلم	false	A
+en_real_typos.typos.tsv	3092	phonetic		beauro	bureau	bear|beauro|beaufort	bear|beauro|باور	false	A
+en_real_typos.typos.tsv	3212	other		sutan	southern	stan|sutan|stand	stan|sutan|ستان	false	A
+en_real_typos.typos.tsv	3221	other		phamilia	familiar	phamilia	phamilia|بحمل	false	A
+en_real_typos.typos.tsv	3222	transposition		egde	edge	edge|egde|edges	edge|egde|أجد	false	A
+en_real_typos.typos.tsv	3234	other		wimme	women	gimme|wimme|simmer	gimme|wimme|وما	false	A
+en_real_typos.typos.tsv	3238	adjacent		polocy	policy	policy|polocy|policyholder	policy|polocy|بلكي	false	A
+en_real_typos.typos.tsv	3245	other		aeir	ere	air|aeir|weird	air|aeir|أر	false	A
+en_real_typos.typos.tsv	3262	adjacent		pheumonia	pneumonia	pneumonia|pheumonia	pneumonia|pheumonia|بهمني	false	A
+en_real_typos.typos.tsv	3267	phonetic		enamie	enemy	name|enamie|enamel	name|enamie|أنام	false	A
+en_real_typos.typos.tsv	3274	other		innushl	initials	innushl|inrush|inrushes	innushl|inrush|انشل	false	A
+en_real_typos.typos.tsv	3275	phonetic		opocet	opposite	opocet|operetta|optometrist	opocet|operetta|أبسط	false	A
+en_real_typos.typos.tsv	3295	other		brg	bridge	beg|brg|beginning	beg|brg|برج	false	A
+en_real_typos.typos.tsv	3307	phonetic		corce	coarse	force|corce|forced	force|corce|كركي	false	A
+en_real_typos.typos.tsv	3322	omission		elimiate	eliminate	eliminate|elimiate|eliminated	eliminate|elimiate|الميت	false	A
+en_real_typos.typos.tsv	3328	transposition		dael	deal	deal|dael|darling	deal|dael|ضل	false	A
+en_real_typos.typos.tsv	3330	transposition		sotry	story	sorry|sotry|story	sorry|sotry|سترى	true	A
+en_real_typos.typos.tsv	3365	other		priamay	primary	priamay|primary|primarily	priamay|primary|برمي	false	A
+en_real_typos.typos.tsv	3382	other		pecuilea	peculiar	pecuilea|peculiar|peculiarly	pecuilea|peculiar|بكل	false	A
+en_real_typos.typos.tsv	3397	other		tavit	traffic	tavit|tahiti|taciturn	tavit|tahiti|طفيت	false	A
+en_real_typos.typos.tsv	3463	other		satl	certainly	satl|saturday|salt	satl|saturday|سطل	false	A
+en_real_typos.typos.tsv	3472	other		hase	as	hase|haste|has	hase|haste|هسا	false	A
+en_real_typos.typos.tsv	3478	other		namoia	pneumonia	naomi|namoia|nami	naomi|namoia|نام	false	A
+en_real_typos.typos.tsv	3489	phonetic		veres	various	veres|version|verse	veres|version|فارس	false	A
+en_real_typos.typos.tsv	3538	omission		coure	course	course|coure|court	course|coure|سوري	false	A
+en_real_typos.typos.tsv	3555	other		sitee	city	site|sitee|steel	site|sitee|ستي	false	A
+en_real_typos.typos.tsv	3561	transposition		vioiln	violin	violin|vioiln|violins	violin|vioiln|فلن	false	A
+en_real_typos.typos.tsv	3588	other		auw	our	auw|austin|australia	auw|austin|أو	false	A
+en_real_typos.typos.tsv	3592	other		poipe	poems	poipe|pipe|pope	poipe|pipe|بوب	false	A
+en_real_typos.typos.tsv	3613	phonetic		soned	sound	stoned|soned|someday	stoned|soned|سند	false	A
+en_real_typos.typos.tsv	3630	other		poray	poetry	pray|poray|prayer	pray|poray|بري	false	A
+en_real_typos.typos.tsv	3631	phonetic		wimin	women	woman|wimin|aiming	woman|wimin|ومن	false	A
+en_real_typos.typos.tsv	3632	phonetic		egle	equally	eagle|egle|elevator	eagle|egle|أجل	false	A
+en_real_typos.typos.tsv	3634	other		equlk	equally	equlk|equipment|equal	equlk|equipment|اقولك	false	A
+en_real_typos.typos.tsv	3669	transposition		beleif	belief	belief|beleif|beliefs	belief|beleif|بلف	false	A
+en_real_typos.typos.tsv	3710	omission		worred	worried	worried|worred|worded	worried|worred|ورد	false	A
+en_real_typos.typos.tsv	3729	other		aroad	round	abroad|aroad|arkady	abroad|aroad|أراد	false	A
+en_real_typos.typos.tsv	3730	other		owh	our	own|owh|owner	own|owh|أوه	false	A
+en_real_typos.typos.tsv	3754	doubled		oppossite	opposite	oppossite|opposite|opposites	oppossite|opposite|أبسط	false	A
+en_real_typos.typos.tsv	3769	other		gawn	jam	gawn|gang|gangster	gawn|gang|جون	false	A
+en_real_typos.typos.tsv	3780	phonetic		elseware	elsewhere	elseware|elsewhere	elseware|elsewhere|الصور	false	A
+en_real_typos.typos.tsv	3781	phonetic		sity	city	sit|sity|situation	sit|sity|ستي	false	A
+en_real_typos.typos.tsv	3785	other		praci	practical	praci|practice|practically	praci|practice|برأس	false	A
+en_real_typos.typos.tsv	3788	other		petecu	particular	petecu|peter|pete	petecu|peter|بيتك	false	A
+en_real_typos.typos.tsv	3799	other		wemm	women	wemm	wemm|وام	false	A
+en_real_typos.typos.tsv	3808	adjacent		gaige	gauge	gauge|gaige|gauges	gauge|gaige|جاج	false	A
+en_real_typos.typos.tsv	3816	phonetic		oppost	opposite	oppose|oppost|opposite	oppose|oppost|أبسط	true	A
+en_real_typos.typos.tsv	3830	other		poechre	poetry	poechre|poached|poachers	poechre|poached|بشري	false	A
+en_real_typos.typos.tsv	3838	phonetic		genuss	genius	genus|genuss	genus|genuss|جنس	false	A
+en_real_typos.typos.tsv	3841	other		harf	half	hard|harf|harry	hard|harf|حرف	false	A
+en_real_typos.typos.tsv	3877	phonetic		cirtain	certain	curtain|cirtain|curtains	curtain|cirtain|سرطان	false	A
+en_real_typos.typos.tsv	3878	phonetic		veroes	various	heroes|veroes|veriest	heroes|veroes|فارس	false	A
+en_real_typos.typos.tsv	3911	phonetic		senet	senate	sent|senet|sentence	sent|senet|سانت	false	A
+en_real_typos.typos.tsv	3932	adjacent		abouy	about	about|abouy|abound	about|abouy|ابوي	false	A
+en_real_typos.typos.tsv	3944	doubled		possition	position	possition|position|positions	possition|position|بوسطن	false	A
+en_real_typos.typos.tsv	3953	other		usally	unusually	usually|usally	usually|usally|أصلي	false	A
+en_real_typos.typos.tsv	3971	other		contei	contented	contei|continue|contest	contei|continue|كنت	false	A
+en_real_typos.typos.tsv	3972	other		fliet	flight	fliet|fletcher|flies	fliet|fletcher|فلت	false	A
+en_real_typos.typos.tsv	3978	other		kutere	contented	kutere|katerina|ketene	kutere|katerina|كتير	false	A
+en_real_typos.typos.tsv	3996	other		seud	should	sued|seud|suddenly	sued|seud|سيد	false	A
+en_subs.misses.tsv	66	clean		Bains	Bains	Brains|Bains|Banished	Brains|Bains|بنص	false	B
+en_subs.misses.tsv	207	clean		Chile'll	Chile'll	Chile'll|Chiselled|Chiseller	Chile'll|Chiselled|شلل	false	B
+en_subs.misses.tsv	309	clean		Lathia	Lathia	Lathia|Mathias|Latvia	Lathia|Mathias|لذا	false	B
+en_subs.misses.tsv	349	clean		Whaaa	Whaaa	Whoa|Whaaa|What	Whoa|Whaaa|وها	false	B
+en_subs.misses.tsv	368	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	506	clean	They've called Signor	Silla	Silla	Silla|Silly|Willard	Silla|Silly|صلة	false	B
+en_subs.misses.tsv	526	clean		you'	you'	you'|you	you'|you|يو	false	B
+en_subs.misses.tsv	554	clean	Detective	hudak	hudak	hudak|human|humans	hudak|human|هداك	false	B
+en_subs.misses.tsv	622	clean	Keep	goin'	goin'	goin'	goin'|جون	false	B
+en_subs.misses.tsv	767	clean	WHO is	Omoroca	Omoroca	Omoroca	Omoroca|أمرك	false	B
+en_subs.misses.tsv	883	clean	I am sorely	afeared	afeared	afeared|appeared|afeard	afeared|appeared|أفراد	false	B
+en_subs.misses.tsv	969	clean	Didn't show	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	979	clean	Ride	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	1002	clean		Mackie	Mackie	Mackie|Jackie|Mackenzie	Mackie|Jackie|مسك	false	B
+en_subs.misses.tsv	1079	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
+en_subs.misses.tsv	1305	clean	My name is	Sokun	Sokun	Sokun|Sound|Sounds	Sokun|Sound|سكن	false	B
+en_subs.misses.tsv	1307	clean	I'd like to tell him that he should be proud to be	Wayana	Wayana	Wayana|Watanabe	Wayana|Watanabe|وين	false	B
+en_subs.misses.tsv	1314	clean	They're	tryin'	tryin'	tryin'	tryin'|ترين	false	B
+en_subs.misses.tsv	1438	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	1441	clean		Fawell	Fawell	Fawell|Fall|Fell	Fawell|Fall|فول	false	B
+en_subs.misses.tsv	1499	clean	This is Yuri	Pochenko	Pochenko	Pochenko	Pochenko|بشأنك	false	B
+en_subs.misses.tsv	1557	clean	I don't understand	'Maya'	'Maya'	'Maya'	'Maya'|مي	false	B
+en_subs.misses.tsv	1616	clean		'Did	'Did	'Did	'Did|ضد	false	B
+en_subs.misses.tsv	1807	clean		Devoe	Devoe	Devote|Devoe|Developed	Devote|Devoe|ديف	false	B
+en_subs.misses.tsv	1809	clean		Ayn	Ayn	Any|Ayn|Anything	Any|Ayn|أين	false	B
+en_subs.misses.tsv	1969	clean	jube up	yo'	yo'	yo'	yo'|يـ	false	B
+en_subs.misses.tsv	2107	clean	what	doya	doya	moya|doya|royal	moya|doya|دي	false	B
+en_subs.misses.tsv	2147	clean	Do you like	Bekir	Bekir	Bekir|Beirut|Bemire	Bekir|Beirut|بكير	false	B
+en_subs.misses.tsv	2298	clean	Get	aome	aome	some|aome|something	some|aome|أمي	false	B
+en_subs.misses.tsv	2447	clean		Ra's	Ra's	Ra's|Rash|Rascal	Ra's|Rash|رأس	false	B
+en_subs.misses.tsv	2489	clean	Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
+en_subs.misses.tsv	2592	clean	Não	pise	pise	pise|piece|pieces	pise|piece|بس	false	B
+en_subs.misses.tsv	2722	clean	The t'san	s'at	s'at	s'at|saturday|sat	s'at|saturday|ست	false	B
+en_subs.misses.tsv	2889	clean	just hit	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	2911	clean		Maa	Maa	Maa|Man|Make	Maa|Man|ما	false	B
+en_subs.misses.tsv	2939	clean		Morrie	Morrie	Morris|Morrie|Morrison	Morris|Morrie|مر	false	B
+en_subs.misses.tsv	2946	clean		'Rowan	'Rowan	'Rowan	'Rowan|روان	false	B
+en_subs.misses.tsv	3031	clean	a man you	've	've	've	've|في	false	B
+en_subs.misses.tsv	3063	clean	a big	ol'	ol'	ol'	ol'|الـ	false	B
+en_subs.misses.tsv	3151	clean	Go to	Gerona	Gerona	Gerona|Verona|Geronimo	Gerona|Verona|جارنا	false	B
+en_subs.misses.tsv	3180	clean	The crime	acene	acene	scene|acene|scenes	scene|acene|أكن	false	B
+en_subs.misses.tsv	3191	clean	Which way to Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
+en_subs.misses.tsv	3212	clean		'Look	'Look	'Look	'Look|لوك	false	B
+en_subs.misses.tsv	3263	clean		Maya's	Maya's	Maya's|Man's|Maya	Maya's|Man's|ميس	false	B
+en_subs.misses.tsv	3342	clean	Capturin'	'im	'im	'im	'im|مـ	false	B
+en_subs.misses.tsv	3375	clean		Hehe	Hehe	Hehe|Heh|Hee	Hehe|Heh|هه	false	B
+en_subs.misses.tsv	3483	clean	First they wanted to get the good	alien's	alien's	alien's|aliens	alien's|aliens|النص	false	B
+en_subs.misses.tsv	3505	clean		barji	barji	barji|barking|barbie	barji|barking|برج	false	B
+en_subs.misses.tsv	3517	clean		Ayn	Ayn	Ayn|Any|Anything	Ayn|Any|أين	false	B
+en_subs.misses.tsv	3636	clean		I'dd	I'dd	I'dd|I'd	I'dd|I'd|إد	false	B
+en_subs.misses.tsv	3659	clean	Don't	wory	wory	worry|wory|work	worry|wory|ورى	false	B
+en_subs.misses.tsv	3804	clean		Lawes	Lawes	Lawes|Laws|Lawsuit	Lawes|Laws|لويس	false	B
+en_subs.misses.tsv	3928	clean	I tried to fight	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	3952	clean	you ate the	yada	yada	yoda|yada|yaah	yoda|yada|يد	false	B
+en_subs.misses.tsv	4000	clean	He's buying another dozen issues	'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	4055	clean		Jebby	Jebby	Jebby|Jerry|Jenny	Jebby|Jerry|جيبي	false	B
+en_subs.misses.tsv	4076	clean	You may escape Beringar and	Cassale	Cassale	Cassale|Cassareep|Cassareeps	Cassale|Cassareep|كاسل	false	B
+en_subs.misses.tsv	4279	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
+en_subs.misses.tsv	4336	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	4399	clean		Ferretti	Ferretti	Ferretti|Forgetting|Ferret	Ferretti|Forgetting|فرطت	false	B
+en_subs.misses.tsv	4422	clean	And if you look too far	'll	'll	'll	'll|لـ	false	B
+en_subs.misses.tsv	4457	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
+en_subs.misses.tsv	4466	clean		boyo	boyo	boy|boyo|boys	boy|boyo|بي	false	B
+en_subs.misses.tsv	4482	clean	lea	callot	callot	callot|callous|callow	callot|callous|سألت	false	B
+en_subs.misses.tsv	4548	clean	of millionaire Randall	Nagel	Nagel	Nagel|Angel|Angeles	Nagel|Angel|نغل	false	B
+en_subs.misses.tsv	4621	clean	Good	goin'	goin'	goin'	goin'|جون	false	B
+en_subs.misses.tsv	4704	clean	owari wa	shinai	shinai	sinai|shinai|shining	sinai|shinai|شين	false	B
+en_subs.misses.tsv	4760	clean	We can't blame it all on Kuang	Yumin	Yumin	Yumin|Yumi	Yumin|Yumi|يمين	false	B
+en_subs.misses.tsv	4801	clean	of the	fllm	fllm	film|fllm|fillmore	film|fllm|فلم	false	B
+en_subs.misses.tsv	4832	clean	This is the work of that	Lucena	Lucena	Lucena|License|Lunatic	Lucena|License|لكن	false	B
+en_subs.misses.tsv	4842	clean	You know Andy Garcia	'll	'll	'll	'll|لـ	false	B
+en_subs.misses.tsv	4848	clean	I hate	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	4872	clean	Hart and	Manheim	Manheim	Manheim|Mayhem|Mathematics	Manheim|Mayhem|منهم	false	B
+en_subs.misses.tsv	4877	clean		Bonet	Bonet	Bonet|Bonnet|Bone	Bonet|Bonnet|بنت	false	B
+en_subs.misses.tsv	4931	clean	we are	goin'	goin'	goin'|going	goin'|going|جون	false	B
+en_subs.misses.tsv	4951	clean	My name is	Romy	Romy	Romy|Rome|Royal	Romy|Rome|رمي	false	B
+en_subs.misses.tsv	4957	clean	We wore	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	5065	clean		Bonnie's	Bonnie's	Bonnie's|Bonnie|Bunnies	Bonnie's|Bonnie|بنص	false	B
+en_subs.misses.tsv	5092	clean	Thanks for	showin'	showin'	showin'	showin'|شون	false	B
+en_subs.misses.tsv	5168	clean		Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
+en_subs.misses.tsv	5274	clean	his 'Achilles	heel'	heel'	heel'|heel	heel'|heel|حيل	false	B
+en_subs.misses.tsv	5360	clean		You'	You'	You'|You	You'|You|يو	false	B
+en_subs.misses.tsv	5413	clean		Kerim	Kerim	Kerim|Kermit|Kermis	Kerim|Kermit|كريم	false	B
+en_subs.misses.tsv	5437	clean	Deputy	Burda	Burda	Burda|Bureau|Burden	Burda|Bureau|برد	false	B
+en_subs.misses.tsv	5543	clean	You tell	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	5597	clean	Why are you	goin'	goin'	goin'|going	goin'|going|جون	false	B
+en_subs.misses.tsv	5604	clean	Hi	Perran	Perran	Perran|Permanent|Perrine	Perran|Permanent|برن	false	B
+en_subs.misses.tsv	5617	clean	Before your birth you were Cecilia	Varrega	Varrega	Varrega|Variegate|Variegated	Varrega|Variegate|فارغ	false	B
+en_subs.misses.tsv	5643	clean	While looking in the mirror	Keanu	Keanu	Keanu|Keane	Keanu|Keane|كان	false	B
+en_subs.misses.tsv	5776	clean	why don't we just take	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	5777	clean	why don't we just take 'em with	us'	us'	us'	us'|إس	false	B
+en_subs.misses.tsv	5873	clean		Kesh	Kesh	Kesh|Kessler|Mesh	Kesh|Kessler|كاش	false	B
+en_subs.misses.tsv	5926	clean	Mrs	Goel	Goel	Goel|Goes|Gold	Goel|Goes|جيل	false	B
+en_subs.misses.tsv	5934	clean	that crying	lndian	lndian	indian|lndian|lydian	indian|lndian|لندن	false	B
+en_subs.misses.tsv	5955	clean	We will fight together for	Lukka's	Lukka's	Lukka's|Lukas	Lukka's|Lukas|لوكاس	false	B
+en_subs.misses.tsv	5981	clean	Maybe most times you wait around until you're really hungry but poor	ol'	ol'	ol'|old	ol'|old|الـ	false	B
+en_subs.misses.tsv	6038	clean	The vet told us half of one of	Maris'	Maris'	Maris'	Maris'|مارس	false	B
+en_subs.misses.tsv	6066	clean	You're supposed to fuck	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	6167	clean		Tialita	Tialita	Tialita|Taliban|Totalitarian	Tialita|Taliban|تلت	false	B
+en_subs.misses.tsv	6186	clean	I present	Elyse	Elyse	Elyse|Else|Else's	Elyse|Else|أليس	false	B
+en_subs.misses.tsv	6319	clean		He'a	He'a	He'a|He's|Hear	He'a|He's|هي	false	B
+en_subs.misses.tsv	6334	clean	What you	doin'	doin'	doin'	doin'|دون	false	B
+en_subs.misses.tsv	6388	clean		Jeddediah	Jeddediah	Jeddediah	Jeddediah|جديده	false	B
+en_subs.misses.tsv	6393	clean		'Tis	'Tis	'Tis	'Tis|تيس	false	B
+en_subs.misses.tsv	6419	clean	Killer	uaed	uaed	used|uaed	used|uaed|إيد	false	B
+en_subs.misses.tsv	6487	clean		Kiu	Kiu	Liu|Kiu|Kouji	Liu|Kiu|كي	false	B
+en_subs.misses.tsv	6573	clean	My heart actually quickened at the end of songs	'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	6590	clean	I just did my first oil change on the	Healey	Healey	Healey|Healed|Healy	Healey|Healed|حالي	false	B
+en_subs.misses.tsv	6619	clean		Terek	Terek	Trek|Terek|Teresa	Trek|Terek|ترك	false	B
+en_subs.misses.tsv	6630	clean	Do you think	Gir's	Gir's	Gir's|Girl's	Gir's|Girl's|جرس	false	B
+en_subs.misses.tsv	6695	clean		Sha're	Sha're	Sha're|Share|Shared	Sha're|Share|شر	false	B
+en_subs.misses.tsv	6786	clean	Can we not	aquire	aquire	aquire|squire|acquired	aquire|squire|أقرأ	false	B
+en_subs.misses.tsv	6981	clean	But don't let	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	6984	clean	I can see	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	7114	clean	Say one more word and	you'	you'	you'|you're|you	you'|you're|يو	false	B
+en_subs.misses.tsv	7172	clean	You're standing in for	Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
+en_subs.misses.tsv	7174	clean	I thought the	boss'	boss'	boss'	boss'|بس	false	B
+en_subs.misses.tsv	7196	clean		Borias	Borias	Borias|Boris|Norias	Borias|Boris|برأس	false	B
+en_subs.misses.tsv	7233	clean	I have to look at	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	7304	clean		'The	'The	'The|the	'The|the|ذا	false	B
+en_subs.misses.tsv	7406	clean		Nuria	Nuria	Nuria|Burial|Burials	Nuria|Burial|نرى	false	B
+en_subs.misses.tsv	7425	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
+en_subs.typos.tsv	6	adjacent		Gake	Take	Take|Gake|Game	Take|Gake|جاك	false	A
+en_subs.typos.tsv	7	adjacent	ive given you	qll	all	all|qll|allow	all|qll|قل	false	A
+en_subs.typos.tsv	13	transposition	bastard ill	hcop	chop	hcop|hope|hoping	hcop|hope|حسب	false	A
+en_subs.typos.tsv	16	insertion	as if	huis	his	huis|his|husband	huis|his|هس	false	A
+en_subs.typos.tsv	17	adjacent	im a smart guy alex	amd	and	and|amd|made	and|amd|أمد	false	A
+en_subs.typos.tsv	22	transposition	when were ready ajax will distract them with one of	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_subs.typos.tsv	26	doubled		Loook	Look	Look|Loook|Looking	Look|Loook|لوك	false	A
+en_subs.typos.tsv	33	omission	you may have	mde	made	med|mde|meet	med|mde|مدى	false	A
+en_subs.typos.tsv	48	insertion	how can i get my hands up	yoyu	you	you|yoyu|your	you|yoyu|يي	false	A
+en_subs.typos.tsv	52	insertion		Youi	You	You|Youi|Your	You|Youi|يو	false	A
+en_subs.typos.tsv	66	omission	ill	tlk	talk	tlk|tokyo|token	tlk|tokyo|تلك	false	A
+en_subs.typos.tsv	86	adjacent		Aee	Are	Aee|Are|See	Aee|Are|أي	false	A
+en_subs.typos.tsv	87	adjacent	we wont	neee	need	need|neee|needs	need|neee|ني	false	A
+en_subs.typos.tsv	88	adjacent	he took him	lff	off	off|lff|office	off|lff|لف	false	A
+en_subs.typos.tsv	92	transposition		lieka	likea	like|lieka|likeable	like|lieka|لك	false	A
+en_subs.typos.tsv	93	adjacent	were	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_subs.typos.tsv	96	adjacent	what are	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	111	transposition	ive	ahd	had	had|ahd|and	had|ahd|أحد	false	A
+en_subs.typos.tsv	116	transposition	now with this now	htat	that	that|htat|that's	that|htat|حطت	false	A
+en_subs.typos.tsv	122	adjacent	i didnt say if elliot i	daid	said	daid|did|didn't	daid|did|ضد	false	A
+en_subs.typos.tsv	126	adjacent	ellis	uou	you	you|uou|your	you|uou|أو	false	A
+en_subs.typos.tsv	129	adjacent	this is from a	boik	book	book|boik|books	book|boik|بك	false	A
+en_subs.typos.tsv	138	transposition	we	cannto	cannot	cannto|canton|cannot	cannto|canton|كنت	true	A
+en_subs.typos.tsv	142	insertion		Byut	But	But|Byut|Butt	But|Byut|بيت	false	A
+en_subs.typos.tsv	147	adjacent	a	casr	case	casr|care|car	casr|care|كسر	false	A
+en_subs.typos.tsv	149	omission	its	nne	nine	ne|nne|never	ne|nne|ني	false	A
+en_subs.typos.tsv	152	transposition	youre playing movie	hTe	The	hTe|the|there	hTe|the|حتى	false	A
+en_subs.typos.tsv	153	doubled	so why do you	sttay	stay	stay|sttay|staying	stay|sttay|ستي	false	A
+en_subs.typos.tsv	167	doubled	he said you	ddid	did	did|ddid|didn't	did|ddid|ضد	false	A
+en_subs.typos.tsv	171	insertion	it was a victory formeas well	becausre	because	because|becausre	because|becausre|بكسر	false	A
+en_subs.typos.tsv	172	adjacent	oh	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	182	adjacent		Yoing	Going	Going|Yoing|Young	Going|Yoing|يونغ	false	A
+en_subs.typos.tsv	196	insertion	yeah shes a beaut	alkl	all	all|alkl|allow	all|alkl|الكل	false	A
+en_subs.typos.tsv	198	insertion	a poem is a	vcery	very	very|vcery	very|vcery|فكري	false	A
+en_subs.typos.tsv	211	adjacent	if	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	217	adjacent	well	shere	where	shere|sheer|where	shere|sheer|شر	true	A
+en_subs.typos.tsv	219	doubled	you know i	hhave	have	have|hhave|haven't	have|hhave|حافي	false	A
+en_subs.typos.tsv	224	omission	sounds like a goodidea for a tvshow if youre into that	srt	sort	set|srt|street	set|srt|صرت	false	A
+en_subs.typos.tsv	229	adjacent		Uou	You	You|Uou|Your	You|Uou|أو	false	A
+en_subs.typos.tsv	232	omission	were you sitting down there in front on the	lft	left	oft|lft|often	oft|lft|لفت	false	A
+en_subs.typos.tsv	237	adjacent	were	qll	all	all|qll|allow	all|qll|قل	false	A
+en_subs.typos.tsv	241	adjacent	and after	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_subs.typos.tsv	245	doubled	this is the	Citty	City	Citty|City|City's	Citty|City|كيتي	false	A
+en_subs.typos.tsv	247	adjacent	but i abandon nothing of	whl	who	who|whl|whole	who|whl|وهل	false	A
+en_subs.typos.tsv	254	omission	its a little	ealy	early	early|ealy|elysian	early|ealy|إلى	false	A
+en_subs.typos.tsv	266	adjacent	tell them to	shoit	shoot	shoit|shit|shot	shoit|shit|شوت	false	A
+en_subs.typos.tsv	288	transposition	got a	claer	clear	clear|claer|clearly	clear|claer|كلير	false	A
+en_subs.typos.tsv	291	adjacent	well now that ive gotten up	hefe	here	here|hefe|here's	here|hefe|هيفا	false	A
+en_subs.typos.tsv	300	adjacent	my heart thinks of	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	314	adjacent	ok lets concentrate	snd	and	and|snd|end	and|snd|سند	false	A
+en_subs.typos.tsv	320	doubled	and who	shaall	shall	shall|shaall|shallow	shall|shaall|شال	false	A
+en_subs.typos.tsv	321	adjacent	he	daid	said	said|daid|didn't	said|daid|ضد	false	A
+en_subs.typos.tsv	323	adjacent	sit down and play	Lhdo	Ludo	Lhdo|Ludo	Lhdo|Ludo|لحد	false	A
+en_subs.typos.tsv	326	adjacent	it is now safe to return to	tye	the	the|tye|there	the|tye|تي	false	A
+en_subs.typos.tsv	339	adjacent	a flood has struck and a small crack has developed in my	heaet	heart	heart|heaet|heat	heart|heaet|هات	false	A
+en_subs.typos.tsv	350	adjacent	were	llst	lost	lost|llst	lost|llst|لست	false	A
+en_subs.typos.tsv	352	adjacent	no no they cant take	tnat	that	that|tnat|that's	that|tnat|تنط	false	A
+en_subs.typos.tsv	357	adjacent	i dont know	snyone	anyone	anyone|snyone|anyone's	anyone|snyone|سنين	false	A
+en_subs.typos.tsv	360	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_subs.typos.tsv	365	transposition	was it the happiest day of your	lfie	life	life|lfie|lie	life|lfie|لف	false	A
+en_subs.typos.tsv	371	doubled	shes	quitee	quite	quite|quitee|quieter	quite|quitee|قوتي	false	A
+en_subs.typos.tsv	383	adjacent		Snd	And	And|Snd|End	And|Snd|سند	false	A
+en_subs.typos.tsv	387	doubled	i repeat	tthis	this	this|tthis|this'll	this|tthis|تحس	false	A
+en_subs.typos.tsv	394	adjacent	were	gonns	gonna	gonna|gonns|conns	gonna|gonns|جنس	false	A
+en_subs.typos.tsv	397	doubled	im relieved to	seee	see	see|seee|seen	see|seee|سي	false	A
+en_subs.typos.tsv	399	transposition	duckman its not safe for	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_subs.typos.tsv	417	omission		Cme	Come	Cme|Clear|Clean	Cme|Clear|كما	false	A
+en_subs.typos.tsv	418	transposition	you could actually go to	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	422	adjacent	and then by chance	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	427	adjacent	i am running for condo	boaed	board	board|boaed|boarding	board|boaed|بد	false	A
+en_subs.typos.tsv	429	adjacent		pleaae	please	please|pleaae|pleased	please|pleaae|بلا	false	A
+en_subs.typos.tsv	435	transposition		oYu	You	oYu|you|your	oYu|you|أي	false	A
+en_subs.typos.tsv	440	transposition	mr bronco aint	dwon	down	down|dwon|don't	down|dwon|دون	false	A
+en_subs.typos.tsv	455	adjacent	im not the	heto	hero	hero|heto|heroes	hero|heto|هات	false	A
+en_subs.typos.tsv	467	adjacent	work together to	ahow	show	show|ahow|showed	show|ahow|أهو	false	A
+en_subs.typos.tsv	474	insertion		Yoju	You	You|Yoju|Your	You|Yoju|يجو	false	A
+en_subs.typos.tsv	475	adjacent		Niw	Now	Now|Niw|Nowhere	Now|Niw|نيو	false	A
+en_subs.typos.tsv	476	adjacent	fought	lkke	like	like|lkke|liked	like|lkke|لك	false	A
+en_subs.typos.tsv	479	transposition		oYu	You	oYu|you|your	oYu|you|أي	false	A
+en_subs.typos.tsv	485	doubled	also its	Tallk	Talk	Tallk|Talk|Talking	Tallk|Talk|تلك	false	A
+en_subs.typos.tsv	488	adjacent	well looks like theyre not	ginna	gonna	gonna|ginna|gina	gonna|ginna|جين	false	A
+en_subs.typos.tsv	497	transposition	i said that	htat	that	that|htat|that's	that|htat|حطت	false	A
+en_subs.typos.tsv	501	transposition	theyre gonna take a chance and	cmoe	come	come|cmoe|comes	come|cmoe|كما	false	A
+en_subs.typos.tsv	502	transposition		oHw	How	oHw|how|how's	oHw|how|أهو	false	A
+en_subs.typos.tsv	504	transposition	hes	gnona	gonna	gonna|gnona|gonads	gonna|gnona|جنون	false	A
+en_subs.typos.tsv	527	adjacent		Weee	Were	Were|Weee|Week	Were|Weee|ويا	false	A
+en_subs.typos.tsv	540	adjacent	so	uou	you	you|uou|your	you|uou|أو	false	A
+en_subs.typos.tsv	545	adjacent	me	snd	and	and|snd|end	and|snd|سند	false	A
+en_subs.typos.tsv	548	transposition	the end result is	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	549	adjacent	i	aaid	said	said|aaid|aside	said|aaid|إيد	false	A
+en_subs.typos.tsv	552	adjacent	then as a brilliant	cateer	career	cateer|caterer|career	cateer|caterer|كتير	true	A
+en_subs.typos.tsv	553	transposition	we checked the social security number on	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_subs.typos.tsv	562	doubled	when	yoou	you	you|yoou|your	you|yoou|يو	false	A
+en_subs.typos.tsv	565	adjacent	its like a thing with	yelloe	yellow	yellow|yelloe|yelled	yellow|yelloe|يلا	false	A
+en_subs.typos.tsv	568	omission	she says shes	oay	okay	pay|oay|lay	pay|oay|أي	false	A
+en_subs.typos.tsv	596	insertion	i use my	brauin	brain	brain|brauin|brains	brain|brauin|براين	false	A
+en_subs.typos.tsv	609	adjacent		Sallt	Sally	Sallt|Salt|Sally	Sallt|Salt|سألت	true	A
+en_subs.typos.tsv	613	adjacent		Yiu	You	You|Yiu|Your	You|Yiu|يـ	false	A
+en_subs.typos.tsv	618	omission		Cme	Come	Cme|Clear|Clean	Cme|Clear|كما	false	A
+en_subs.typos.tsv	633	adjacent		Counyy	County	County|Counyy|Countywide	County|Counyy|كوني	false	A
+en_subs.typos.tsv	635	doubled		WWho	Who	WWho|Who|Whole	WWho|Who|وهو	false	A
+en_subs.typos.tsv	649	transposition	so you	mdae	made	made|mdae|mademoiselle	made|mdae|مدى	false	A
+en_subs.typos.tsv	669	doubled	you	ccut	cut	cut|ccut|cute	cut|ccut|سكوت	false	A
+en_subs.typos.tsv	671	transposition	to	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	698	adjacent	thats	hiw	how	hiw|how|his	hiw|how|هو	false	A
+en_subs.typos.tsv	700	insertion		Allk	All	All|Allk|Allow	All|Allk|الك	false	A
+en_subs.typos.tsv	705	adjacent	i	aant	want	want|aant|wanted	want|aant|أنت	false	A
+en_subs.typos.tsv	714	adjacent	well shes notgonna live forever but for as long as she does	shw	she	she|shw|she's	she|shw|شو	false	A
+en_subs.typos.tsv	722	insertion	you wouldnt know where we	cwan	can	can|cwan|can't	can|cwan|كون	false	A
+en_subs.typos.tsv	728	omission		Lst	Last	Let|Lst|Let's	Let|Lst|لست	false	A
+en_subs.typos.tsv	740	adjacent	did you	sre	see	see|sre|are	see|sre|سر	false	A
+en_subs.typos.tsv	745	adjacent	you	sre	are	are|sre|see	are|sre|سر	false	A
+en_subs.typos.tsv	750	omission	how	mch	much	mch|mcgee|mcbride	mch|mcgee|مش	false	A
+en_subs.typos.tsv	753	adjacent	heartbroken people go there and leave	gheir	their	their|gheir|theirs	their|gheir|غير	false	A
+en_subs.typos.tsv	754	adjacent	you made me pay for hey you	wanns	wanna	wanna|wanns|wannabe	wanna|wanns|ونص	false	A
+en_subs.typos.tsv	760	doubled	how does it feel to look	downn	down	down|downn|downstairs	down|downn|دون	false	A
+en_subs.typos.tsv	763	doubled	cant	youu	you	you|youu|your	you|youu|يو	false	A
+en_subs.typos.tsv	773	adjacent	he wasnt	haopy	happy	happy|haopy	happy|haopy|حبي	false	A
+en_subs.typos.tsv	786	adjacent	thats what im thinking	uou	you	you|uou|your	you|uou|أو	false	A
+en_subs.typos.tsv	787	insertion	i	feelo	feel	feel|feelo|feeling	feel|feelo|فيل	false	A
+en_subs.typos.tsv	788	adjacent		Snd	And	And|Snd|End	And|Snd|سند	false	A
+en_subs.typos.tsv	797	doubled	are	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_subs.typos.tsv	803	adjacent	here come the	chrap	cheap	chrap|crap|cheap	chrap|crap|شراب	true	A
+en_subs.typos.tsv	816	omission	well you better grow up right now or youre going to	lse	lose	lse|sleep|less	lse|sleep|لسا	false	A
+en_subs.typos.tsv	821	omission	the	wole	whole	whole|wole|women	whole|wole|ولا	false	A
+en_subs.typos.tsv	839	adjacent	yeah i	sww	saw	saw|sww|sweet	saw|sww|سو	false	A
+en_subs.typos.tsv	842	doubled	not unless	youu	you	you|youu|your	you|youu|يو	false	A
+en_subs.typos.tsv	846	doubled	couldnt	leavve	leave	leave|leavve|leaves	leave|leavve|لف	false	A
+en_subs.typos.tsv	861	transposition		hTe	The	hTe|the|there	hTe|the|حتى	false	A
+en_subs.typos.tsv	866	omission	i gave a handsome price of them and i would	lke	like	lie|lke|lieutenant	lie|lke|لك	false	A
+en_subs.typos.tsv	868	adjacent	well	welcone	welcome	welcome|welcone|welcomed	welcome|welcone|ولكن	false	A
+en_subs.typos.tsv	869	adjacent	who	killee	killed	killed|killee|killer	killed|killee|كيلي	false	A
+en_subs.typos.tsv	879	transposition	well in	taht	that	that|taht|that's	that|taht|تحت	false	A
+en_subs.typos.tsv	884	insertion	they have	aqll	all	all|aqll|allow	all|aqll|أقل	false	A
+en_subs.typos.tsv	917	adjacent		Jabal	Kabal	Jabal|Jambalaya	Jabal|Jambalaya|جبل	false	A
+en_subs.typos.tsv	920	transposition	whatll we	tlak	talk	talk|tlak|take	talk|tlak|تلك	false	A
+en_subs.typos.tsv	921	adjacent	how diplomatic	snd	and	and|snd|end	and|snd|سند	false	A
+en_subs.typos.tsv	922	insertion	its a	biug	big	big|biug|bought	big|biug|بيج	false	A
+en_subs.typos.tsv	930	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_subs.typos.tsv	937	transposition	we caught a	ogod	good	good|ogod|goodbye	good|ogod|أجد	false	A
+en_subs.typos.tsv	943	transposition		hTat	That	hTat|that|that's	hTat|that|حطت	false	A
+en_subs.typos.tsv	949	transposition	they live for one day then	htey	they	they|htey|hey	they|htey|حتى	false	A
+en_subs.typos.tsv	957	doubled	you	llook	look	look|llook|looking	look|llook|لوك	false	A
+en_subs.typos.tsv	966	doubled		Yoou	You	You|Yoou|Your	You|Yoou|يو	false	A
+en_subs.typos.tsv	980	omission	la paz the capital	hih	high	huh|hih|high	huh|hih|هه	true	A
+en_subs.typos.tsv	996	adjacent	its	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_subs.typos.tsv	997	adjacent		IWL	OWL	IWL|WILL|ISLAND	IWL|WILL|أول	false	A
+en_subs.typos.tsv	1005	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
+en_subs.typos.tsv	1008	adjacent	i dont have	timr	time	timr|timer|time	timr|timer|تمر	true	A
+en_subs.typos.tsv	1028	adjacent		Snd	And	And|Snd|End	And|Snd|سند	false	A
+en_subs.typos.tsv	1029	transposition		rPime	Prime	rPime|prime|primed	rPime|prime|ربما	false	A
+en_subs.typos.tsv	1030	insertion	ah	sokn	son	sokn|son|soon	sokn|son|سكن	false	A
+en_subs.typos.tsv	1043	adjacent	raise you	heaz	head	head|heaz|hear	head|heaz|هاظ	false	A
+en_subs.typos.tsv	1054	doubled	ii cant	bbelieve	believe	believe|bbelieve|believed	believe|bbelieve|بلف	false	A
+en_subs.typos.tsv	1055	transposition	did you get him drunk or	ohw	how	how|ohw|how's	how|ohw|أهو	false	A
+en_subs.typos.tsv	1062	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_subs.typos.tsv	1063	doubled		Shoott	Shoot	Shoot|Shoott|Shooting	Shoot|Shoott|شوت	false	A
+en_subs.typos.tsv	1065	doubled		Whatt	What	What|Whatt|What's	What|Whatt|وحاطت	false	A
+en_subs.typos.tsv	1075	doubled		DDana	Dana	DDana|Dana	DDana|Dana|دان	false	A
+en_subs.typos.tsv	1079	adjacent	kryten	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_subs.typos.tsv	1091	transposition		Wati	Wait	Wait|Wati|Watch	Wait|Wati|واطي	false	A
+en_subs.typos.tsv	1097	insertion	dont swallow clean	hius	his	his|hius|house	his|hius|هس	false	A
+en_subs.typos.tsv	1111	adjacent		Ehat	What	What|Ehat|What's	What|Ehat|احط	false	A
+en_subs.typos.tsv	1113	doubled	i couldve	tolld	told	told|tolld|toll	told|tolld|تولد	false	A
+en_subs.typos.tsv	1141	doubled	are	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_subs.typos.tsv	1143	doubled	is	tthat	that	that|tthat|that's	that|tthat|تحت	false	A
+en_subs.typos.tsv	1152	insertion	collins doesnt want his	mobney	money	money|mobney|money's	money|mobney|مبنى	false	A
+en_subs.typos.tsv	1155	transposition	in conversation i	sitll	still	still|sitll|silly	still|sitll|سطل	false	A
+en_subs.typos.tsv	1158	adjacent		Niw	Now	Now|Niw|Nowhere	Now|Niw|نيو	false	A
+en_subs.typos.tsv	1160	insertion	i	gfet	get	get|gfet|getting	get|gfet|غفيت	false	A
+en_subs.typos.tsv	1166	adjacent	youll lose	oue	our	our|oue|ourselves	our|oue|و	false	A
+en_subs.typos.tsv	1171	adjacent	now its on	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_subs.typos.tsv	1172	adjacent	i wish to discuss	tye	the	the|tye|there	the|tye|تي	false	A
+en_subs.typos.tsv	1183	adjacent	we	pode	pose	pode|poetry|powder	pode|poetry|بدى	false	A
+en_subs.typos.tsv	1184	adjacent	ive lost almost	akl	all	all|akl|allow	all|akl|أكل	false	A
+en_subs.typos.tsv	1200	transposition	i mean i was supposed to go to the	amll	mall	all|amll|allow	all|amll|آمل	false	A
+en_subs.typos.tsv	1204	adjacent	im a	gooz	good	good|gooz|goodbye	good|gooz|جوز	false	A
+en_subs.typos.tsv	1206	transposition	and	wlak	walk	walk|wlak|wake	walk|wlak|ولك	false	A
+en_subs.typos.tsv	1209	adjacent	in	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_subs.typos.tsv	1215	adjacent	itll	keeo	keep	keep|keeo|keeps	keep|keeo|كي	false	A
+en_subs.typos.tsv	1221	transposition	obviously	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	1226	adjacent	i think youve	iad	had	aid|iad|jade	aid|iad|إد	false	A
+en_subs.typos.tsv	1233	insertion	antiaircraft or	heavyu	heavy	heavy|heavyu|heavyweight	heavy|heavyu|حافي	false	A
+en_subs.typos.tsv	1242	adjacent		Qill	Will	Will|Qill|Willing	Will|Qill|قل	false	A
+en_subs.typos.tsv	1246	insertion	is	shbe	she	she|shbe|she's	she|shbe|شب	false	A
+en_subs.typos.tsv	1251	adjacent	the best pot in the	woeld	world	world|woeld|world's	world|woeld|ولد	false	A
+en_subs.typos.tsv	1253	transposition	with the assets in	tihs	this	this|tihs|this'll	this|tihs|تحس	false	A
+en_subs.typos.tsv	1279	doubled	you know that id track	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_subs.typos.tsv	1284	adjacent		Loik	Look	Look|Loik|Like	Look|Loik|لك	false	A
+en_subs.typos.tsv	1288	adjacent	i was gonna talk to	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	1300	adjacent		Wvich	Which	Which|Wvich|Whichever	Which|Wvich|وفش	false	A
+en_subs.typos.tsv	1314	adjacent	i dont think he	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_subs.typos.tsv	1316	transposition	id	ilke	like	like|ilke|liked	like|ilke|الك	false	A
+en_subs.typos.tsv	1324	doubled	i	sstill	still	sstill|still|stiller	sstill|still|سطل	false	A
+en_subs.typos.tsv	1326	doubled	im gonna call	youu	you	you|youu|your	you|youu|يو	false	A
+en_subs.typos.tsv	1340	doubled	ephraim doesnt	wwant	want	want|wwant|wanted	want|wwant|وأنت	false	A
+en_subs.typos.tsv	1342	transposition	we have	uor	our	our|uor|york	our|uor|أر	false	A
+en_subs.typos.tsv	1345	doubled	eileen i	llove	love	love|llove|loved	love|llove|لف	false	A
+en_subs.typos.tsv	1349	adjacent	nobody refuses	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_subs.typos.tsv	1354	adjacent	you get us all trussed up	amd	and	and|amd|made	and|amd|أمد	false	A
+en_subs.typos.tsv	1356	insertion	we try to fool them by putting a few fresh ones on	toop	top	too|toop|took	too|toop|توب	false	A
+en_subs.typos.tsv	1364	adjacent	your	kife	life	life|kife|knife	life|kife|كيف	false	A
+en_subs.typos.tsv	1368	insertion	but	zall	all	all|zall|sally	all|zall|زال	false	A
+en_subs.typos.tsv	1372	adjacent	it	wae	was	was|wae|wasn't	was|wae|و	false	A
+en_subs.typos.tsv	1388	adjacent	do you	inow	know	know|inow|knows	know|inow|انو	false	A
+en_subs.typos.tsv	1393	transposition		Ayn	Any	Any|Ayn|Anything	Any|Ayn|أين	false	A
+en_subs.typos.tsv	1395	transposition	it was like it was like a bloke whod just got a paper cut off	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_subs.typos.tsv	1400	adjacent	how can you	cwll	call	call|cwll|called	call|cwll|كول	false	A
+en_subs.typos.tsv	1405	adjacent		Tgere	There	There|Tgere|There's	There|Tgere|تغير	false	A
+en_subs.typos.tsv	1406	omission	technically it was morphine which is what heroin breaks	dwn	down	dwn|dance|dangerous	dwn|dance|دون	false	A
+en_subs.typos.tsv	1411	transposition		Qeulle	Quelle	Qeulle|Queller|Quelled	Qeulle|Queller|قال	false	A
+en_subs.typos.tsv	1415	insertion	ill bring you	thye	the	thye|the|they	thye|the|ذي	false	A
+en_subs.typos.tsv	1416	adjacent	pick one	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	1427	transposition		iMss	Miss	iMss|miss|missing	iMss|miss|أمس	false	A
+en_subs.typos.tsv	1434	transposition	the gentleman says we cant talk about	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	1441	adjacent	but one	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_subs.typos.tsv	1444	adjacent	just	liie	like	like|liie|lie	like|liie|لي	false	A
+en_subs.typos.tsv	1452	adjacent	go have a conversation with	tye	the	the|tye|there	the|tye|تي	false	A
+en_subs.typos.tsv	1458	doubled	and	youu	you	you|youu|your	you|youu|يو	false	A
+en_subs.typos.tsv	1468	adjacent	guy	firrd	fired	fired|firrd|firedamp	fired|firrd|فرد	false	A
+en_subs.typos.tsv	1472	adjacent	we cant	doal	dial	doal|dollars|dollar	doal|dollars|ضل	false	A
+en_subs.typos.tsv	1480	adjacent	but you know its like hes	giben	given	given|giben|givens	given|giben|جبان	false	A
+en_subs.typos.tsv	1482	adjacent		Tio	Too	Too|Tio|Took	Too|Tio|تي	false	A
+en_subs.typos.tsv	1511	adjacent	no no there	muat	must	must|muat|matter	must|muat|مات	false	A
+en_subs.typos.tsv	1519	transposition	im interrupting the toilet bowl to bring	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_subs.typos.tsv	1521	adjacent	but	hlw	how	how|hlw|how's	how|hlw|حلو	false	A
+en_subs.typos.tsv	1522	adjacent		Nahano	Nagano	Nahano|Nathan|Nathaniel	Nahano|Nathan|نحن	false	A
+en_subs.typos.tsv	1546	insertion	kyle you want to	talkk	talk	talk|talkk|talking	talk|talkk|تلك	false	A
+en_subs.typos.tsv	1560	adjacent		Shw	She	She|Shw|She's	She|Shw|شو	false	A
+en_subs.typos.tsv	1561	insertion	you want a	rkoad	road	road|rkoad|roads	road|rkoad|ركض	false	A
+en_subs.typos.tsv	1563	adjacent	when i woke up she was	shw	she	she|shw|she's	she|shw|شو	false	A
+en_subs.typos.tsv	1568	adjacent		Belueve	Believe	Believe|Belueve|Believed	Believe|Belueve|بلف	false	A
+en_subs.typos.tsv	1570	adjacent	i	knoa	know	know|knoa|knows	know|knoa|كنا	false	A
+en_subs.typos.tsv	1571	adjacent	do	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	1578	insertion		Buit	But	Buit|Built|But	Buit|Built|بيت	true	A
+en_subs.typos.tsv	1584	adjacent	will	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_subs.typos.tsv	1591	insertion	youll	geyt	get	get|geyt|getting	get|geyt|جيت	false	A
+en_subs.typos.tsv	1595	adjacent	you cant have a war	amd	and	and|amd|made	and|amd|أمد	false	A
+en_subs.typos.tsv	1610	transposition	when an	officre	officer	officer|officre|office	officer|officre|أفكر	false	A
+en_subs.typos.tsv	1615	insertion		Yuwan	Yuan	Yuan|Yuwan	Yuan|Yuwan|يون	false	A
+en_subs.typos.tsv	1625	insertion		Papoa	Papa	Papa|Papoa|Papal	Papa|Papoa|باب	false	A
+en_subs.typos.tsv	1627	adjacent	because when i get down there this afternoon with the seal team well	beed	need	need|beed|been	need|beed|بيض	false	A
+en_subs.typos.tsv	1636	transposition	and get to a	baot	boat	boat|baot|both	boat|baot|بات	false	A
+en_subs.typos.tsv	1647	adjacent	they	sre	are	are|sre|see	are|sre|سر	false	A
+en_subs.typos.tsv	1648	omission	hey i ordered only three	naes	names	naes|names|nasty	naes|names|نص	false	A
+en_subs.typos.tsv	1650	transposition	look youre	gnona	gonna	gonna|gnona|gonads	gonna|gnona|جنون	false	A
+en_subs.typos.tsv	1651	adjacent		Thay	That	That|Thay|That's	That|Thay|ذي	false	A
+en_subs.typos.tsv	1668	adjacent	now where	sre	are	are|sre|see	are|sre|سر	false	A
+en_subs.typos.tsv	1684	transposition	youre	nto	not	not|nto|nothing	not|nto|نط	false	A
+en_subs.typos.tsv	1686	doubled	i wanna	givve	give	give|givve|given	give|givve|جيف	false	A
+en_subs.typos.tsv	1689	insertion	no but baby is boring shes still	liuke	like	like|liuke|liked	like|liuke|لك	false	A
+en_subs.typos.tsv	1690	adjacent		Sye	She	She|Sye|She's	She|Sye|سي	false	A
+en_subs.typos.tsv	1692	adjacent	why do	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	1698	doubled	our government is collaborating	wwill	will	will|wwill|willing	will|wwill|ويل	false	A
+en_subs.typos.tsv	1704	doubled	lucky	gget	get	get|gget|getting	get|gget|جيت	false	A
+en_subs.typos.tsv	1706	doubled	but i	gguess	guess	guess|gguess|guessed	guess|gguess|جيس	false	A
+en_subs.typos.tsv	1710	omission	hes a	plice	police	police|plice|policeman	police|plice|بلكي	false	A
+en_subs.typos.tsv	1712	adjacent	stars	liks	like	liks|like|listen	liks|like|ليكس	false	A
+en_subs.typos.tsv	1746	transposition	these are people who have	eben	been	been|eben|even	been|eben|ابن	false	A
+en_subs.typos.tsv	1748	doubled	i told them that we	weree	were	were|weree|weren't	were|weree|ورى	false	A
+en_subs.typos.tsv	1749	omission	in a	beter	better	better|beter|beer	better|beter|بيتر	false	A
+en_subs.typos.tsv	1774	omission	and you jane put	dwn	down	dwn|dance|dangerous	dwn|dance|دون	false	A
+en_subs.typos.tsv	1777	adjacent	she	wilda	wilds	wild|wilda|wilderness	wild|wilda|ولد	false	A
+en_subs.typos.tsv	1786	adjacent	i	daid	said	daid|did|didn't	daid|did|ضد	false	A
+en_subs.typos.tsv	1795	adjacent	cant	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	1800	doubled	mommy	saiid	said	said|saiid	said|saiid|سيد	false	A
+en_subs.typos.tsv	1831	transposition	theres not much left in britain for	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_subs.typos.tsv	1836	adjacent	im afraid its my last chance to save this ranch where my pappy	ajd	and	and|ajd|andy	and|ajd|أجد	false	A
+en_subs.typos.tsv	1841	insertion	boss	yoyu	you	you|yoyu|your	you|yoyu|يي	false	A
+en_subs.typos.tsv	1849	insertion	and its taking	oiur	our	our|oiur|ourselves	our|oiur|أر	false	A
+en_subs.typos.tsv	1856	adjacent	thats	youd	your	you|youd|your	you|youd|يود	true	A
+en_subs.typos.tsv	1858	adjacent		Zome	Some	Some|Zome|Something	Some|Zome|زم	false	A
+en_subs.typos.tsv	1872	transposition	i mean whats	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	1879	adjacent	with	wll	all	all|wll|allow	all|wll|ولـ	false	A
+en_subs.typos.tsv	1886	adjacent	maybe with a few days	ahd	and	and|ahd|had	and|ahd|أحد	false	A
+en_subs.typos.tsv	1890	adjacent	utside the salon the atmosphere is	lesa	less	less|lesa|leave	less|lesa|ليس	false	A
+en_subs.typos.tsv	1898	adjacent	well a	wwek	week	week|wwek|weeks	week|wwek|وك	false	A
+en_subs.typos.tsv	1901	adjacent	greiser wrote letters of complaint to his mentor heinrich himmler	heas	head	heas|has|hear	heas|has|هس	false	A
+en_subs.typos.tsv	1902	adjacent	just wink to	tye	the	the|tye|there	the|tye|تي	false	A
+en_subs.typos.tsv	1909	insertion	well im	fiune	fine	fine|fiune|funeral	fine|fiune|فيني	false	A
+en_subs.typos.tsv	1913	doubled	im	goonna	gonna	gonna|goonna	gonna|goonna|جون	false	A
+en_subs.typos.tsv	1923	transposition	the message said only	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	1924	doubled		GGet	Get	GGet|Get|Getting	GGet|Get|جيت	false	A
+en_subs.typos.tsv	1927	transposition	shed come	hoem	home	home|hoem|homer	home|hoem|هم	false	A
+en_subs.typos.tsv	1935	adjacent		Ajd	And	And|Ajd|Andy	And|Ajd|أجد	false	A
+en_subs.typos.tsv	1936	adjacent	each time one died but the	othrr	other	other|othrr|others	other|othrr|أثر	false	A
+en_subs.typos.tsv	1937	transposition		eGt	Get	eGt|get|getting	eGt|get|اجت	false	A
+en_subs.typos.tsv	1939	omission		Pleae	Please	Please|Pleae|Pleasure	Please|Pleae|بل	false	A
+en_subs.typos.tsv	1945	adjacent	and your sisters	sre	are	are|sre|see	are|sre|سر	false	A
+en_subs.typos.tsv	1947	adjacent	jungle boy	glt	got	got|glt|gotta	got|glt|غلط	false	A
+en_subs.typos.tsv	1963	adjacent	youve been	awau	away	away|awau|aware	away|awau|أو	false	A
+en_subs.typos.tsv	1967	adjacent	it	loiks	looks	looks|loiks|lois	looks|loiks|ليكس	false	A
+en_subs.typos.tsv	1968	doubled	peter	yoou	you	you|yoou|your	you|yoou|يو	false	A
+en_subs.typos.tsv	1969	omission	this is my	assciate	associate	associate|assciate|associates	associate|assciate|اسكت	false	A
+en_subs.typos.tsv	1978	adjacent	its	cery	very	very|cery|certainly	very|cery|كاري	false	A
+en_subs.typos.tsv	1979	doubled		WWhy	Why	WWhy|Why|Why'd	WWhy|Why|وهي	false	A
+en_subs.typos.tsv	2000	transposition	i believe today he spoke to me about	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_subs.typos.tsv	2001	doubled	thats	wwhy	why	why|wwhy|why'd	why|wwhy|وهي	false	A
+en_subs.typos.tsv	2002	adjacent		Aol	All	All|Aol|Alone	All|Aol|أول	false	A
+en_subs.typos.tsv	2012	omission	any	bouny	bounty	bounty|bouny|bound	bounty|bouny|بوني	false	A
+en_subs.typos.tsv	2019	adjacent	the house	aas	was	was|aas|as	was|aas|إس	false	A
+en_subs.typos.tsv	2020	doubled	dont	yoou	you	you|yoou|your	you|yoou|يو	false	A
+en_subs.typos.tsv	2029	insertion	but brother	hokw	how	how|hokw|how's	how|hokw|حكو	false	A
+en_subs.typos.tsv	2030	adjacent	there	eill	will	will|eill|silly	will|eill|الـ	false	A
+en_subs.typos.tsv	2036	adjacent		olease	please	please|olease|pleased	please|olease|أليس	false	A
+en_subs.typos.tsv	2038	doubled	i catch the schmuck slippinga halfounce of sedatives	intoo	into	into|intoo|intolerable	into|intoo|انتو	false	A
+en_subs.typos.tsv	2043	omission	i	cme	came	cme|clear|clean	cme|clear|كما	false	A
+en_subs.typos.tsv	2046	adjacent		Tgere	There	There|Tgere|There's	There|Tgere|تغير	false	A
+en_subs.typos.tsv	2056	doubled	at	leastt	least	least|leastt|leastwise	least|leastt|لست	false	A
+en_subs.typos.tsv	2075	transposition	its	Paoc	Paco	Paoc|Pack|Pocket	Paoc|Pack|بك	false	A
+en_subs.typos.tsv	2076	adjacent	theyre	ojly	only	only|ojly|olympic	only|ojly|أجلي	false	A
+en_subs.typos.tsv	2078	doubled	fai	wwant	want	want|wwant|wanted	want|wwant|وأنت	false	A
+en_subs.typos.tsv	2084	adjacent	he has the same	lsst	last	last|lsst|lester	last|lsst|لست	false	A
+en_subs.typos.tsv	2088	adjacent		Wirh	With	With|Wirh|Without	With|Wirh|ورح	false	A
+en_subs.typos.tsv	2095	adjacent	this is the truth	amd	and	and|amd|made	and|amd|أمد	false	A
+en_subs.typos.tsv	2098	doubled	there are	wommen	women	women|wommen|women's	women|wommen|ومن	false	A
+en_subs.typos.tsv	2101	adjacent	everyone	weite	write	write|weite|writer	write|weite|واطي	false	A
+en_subs.typos.tsv	2109	adjacent	no i killed the boss so i	ruj	run	run|ruj|running	run|ruj|روج	false	A
+en_subs.typos.tsv	2112	adjacent		telk	tell	tell|telk|telling	tell|telk|تلك	false	A
+en_subs.typos.tsv	2134	omission		Shll	Shall	Shall|Shll|Shell	Shall|Shll|شلل	false	A
+en_subs.typos.tsv	2138	adjacent	but this was really the	hile	hole	hole|hile|hill	hole|hile|هل	false	A
+en_subs.typos.tsv	2139	insertion	look i already	tolld	told	told|tolld|toll	told|tolld|تولد	false	A
+en_subs.typos.tsv	2149	doubled	and doctors make you sit on this table with that white	ddeli	deli	deli|ddeli|deliver	deli|ddeli|ضل	false	A
+en_subs.typos.tsv	2160	adjacent		Oeave	Leave	Leave|Oeave|Leaves	Leave|Oeave|إيفا	false	A
+en_subs.typos.tsv	2164	doubled	could i	hhave	have	have|hhave|haven't	have|hhave|حافي	false	A
+en_subs.typos.tsv	2166	adjacent	so what	doga	doya	doga|dog|dogs	doga|dog|دوغ	false	A
+en_subs.typos.tsv	2167	insertion	itll understand you but its	goinna	gonna	gonna|goinna	gonna|goinna|جون	false	A
+en_subs.typos.tsv	2178	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_subs.typos.tsv	2179	adjacent		Uou	You	You|Uou|Your	You|Uou|أو	false	A
+en_subs.typos.tsv	2196	adjacent	as sure as i stand here alive sir	uou	you	you|uou|your	you|uou|أو	false	A
+en_subs.typos.tsv	2199	insertion	now that youve got this girl how long is it	gonnsa	gonna	gonna|gonnsa	gonna|gonnsa|جنس	false	A
+en_subs.typos.tsv	2203	transposition	ii	liek	like	like|liek|lie	like|liek|لك	false	A
+en_subs.typos.tsv	2207	transposition	i hope he treats me as a friend and gives me a	chanec	chance	chance|chanec|chances	chance|chanec|شأنك	false	A
+en_subs.typos.tsv	2213	adjacent	youll be investigated and ill	rwport	report	report|rwport|reports	report|rwport|روبرت	false	A
+en_subs.typos.tsv	2214	omission	doubt has made a	hme	home	hem|hme|hemingway	hem|hme|هم	false	A
+en_subs.typos.tsv	2224	adjacent	now this is how most	peoole	people	people|peoole|people's	people|peoole|بول	false	A
+en_subs.typos.tsv	2227	adjacent	and hows the great procreator gonna	oay	pay	pay|oay|lay	pay|oay|أي	false	A
+en_subs.typos.tsv	2229	transposition	hehehes	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	2240	adjacent		Tsll	Tell	Tell|Tsll|Telling	Tell|Tsll|تصل	false	A
+en_subs.typos.tsv	2244	adjacent	man its	yime	time	time|yime|times	time|yime|يما	false	A
+en_subs.typos.tsv	2249	adjacent	no weapons	wiol	will	will|wiol|wild	will|wiol|ويل	false	A
+en_subs.typos.tsv	2261	adjacent	monica said she was	yoing	going	going|yoing|young	going|yoing|يونغ	false	A
+en_subs.typos.tsv	2268	adjacent	i just wanna be	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_subs.typos.tsv	2278	insertion	eva	Unitf	Unit	Unitf|Unfit|Unit	Unitf|Unfit|انتف	true	A
+en_subs.typos.tsv	2282	adjacent		ajd	and	and|ajd|andy	and|ajd|أجد	false	A
+en_subs.typos.tsv	2292	doubled	youll see	wwhy	why	why|wwhy|why'd	why|wwhy|وهي	false	A
+en_subs.typos.tsv	2293	omission	we must	clib	climb	clib|climb|club	clib|climb|كلب	false	A
+en_subs.typos.tsv	2307	adjacent	but youre going	aeay	away	away|aeay	away|aeay|أي	false	A
+en_subs.typos.tsv	2314	adjacent	only	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_subs.typos.tsv	2321	doubled	i was running the da vinci simulation when we	weree	were	were|weree|weren't	were|weree|ورى	false	A
+en_subs.typos.tsv	2331	doubled	and neither	onne	one	one|onne|none	one|onne|أن	false	A
+en_subs.typos.tsv	2332	transposition	gimme	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	2334	adjacent	im hiding	oue	our	our|oue|ourselves	our|oue|و	false	A
+en_subs.typos.tsv	2336	insertion		bNot	Not	bNot|both|bother	bNot|both|بنت	false	A
+en_subs.typos.tsv	2338	adjacent	i am	valm	calm	calm|valm|value	calm|valm|فلم	false	A
+en_subs.typos.tsv	2339	transposition	you look like	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_subs.typos.tsv	2340	adjacent	cant	gelp	help	help|gelp|helped	help|gelp|جلب	false	A
+en_subs.typos.tsv	2342	insertion		Yoiu	You	You|Yoiu|Your	You|Yoiu|يـ	false	A
+en_subs.typos.tsv	2345	doubled		Youu	You	You|Youu|Your	You|Youu|يو	false	A
+en_subs.typos.tsv	2346	adjacent	but their	goak	goal	goal|goak|goa'uld	goal|goak|جاك	false	A
+en_subs.typos.tsv	2348	doubled	you know	hhow	how	how|hhow|how's	how|hhow|هو	false	A
+en_subs.typos.tsv	2351	omission	now i	shll	shall	shall|shll|shell	shall|shll|شلل	false	A
+en_subs.typos.tsv	2354	insertion	thats not what you	ssaid	said	said|ssaid	said|ssaid|سيد	false	A
+en_subs.typos.tsv	2357	adjacent	first reports in	aay	say	aay|say|way	aay|say|أي	false	A
+en_subs.typos.tsv	2358	adjacent	you know he died of mhlium	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_subs.typos.tsv	2359	adjacent	i dont understand	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_subs.typos.tsv	2360	omission	television always goes	beter	better	better|beter|beer	better|beter|بيتر	false	A
+en_subs.typos.tsv	2368	doubled	who	aree	are	are|aree|aren't	are|aree|أرى	false	A
+en_subs.typos.tsv	2385	doubled		Whhy	Why	Why|Whhy|Why'd	Why|Whhy|وهي	false	A
+en_subs.typos.tsv	2386	insertion	get	aomle	aome	male|aomle|aimlessly	male|aomle|آمل	false	A
+en_subs.typos.tsv	2387	adjacent	i tried to kill myself	wirh	with	with|wirh|without	with|wirh|ورح	false	A
+en_subs.typos.tsv	2394	adjacent	peach mind if youll get hit	llay	play	play|llay|playing	play|llay|لي	false	A
+en_subs.typos.tsv	2395	insertion	them and	oure	our	our|oure|ourselves	our|oure|ورا	false	A
+en_subs.typos.tsv	2408	transposition	if not ill cut	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_subs.typos.tsv	2413	insertion	maybe i shouldnt	puyt	put	put|puyt|putting	put|puyt|بيت	false	A
+en_subs.typos.tsv	2422	adjacent	um the people on the	dwrk	dark	dark|dwrk|darkness	dark|dwrk|دورك	false	A
+en_subs.typos.tsv	2425	insertion	theres no telling	hoiw	how	how|hoiw|how's	how|hoiw|هو	false	A
+en_subs.typos.tsv	2434	doubled	there	youu	you	you|youu|your	you|youu|يو	false	A
+en_subs.typos.tsv	2442	adjacent	right	fhis	this	this|fhis|fish	this|fhis|فحص	false	A
+en_subs.typos.tsv	2446	adjacent	so youve informed on me	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	2447	insertion	it appears theyve brought	yuou	you	you|yuou|your	you|yuou|يو	false	A
+en_subs.typos.tsv	2452	transposition		eGt	Get	eGt|get|getting	eGt|get|اجت	false	A
+en_subs.typos.tsv	2454	omission	if you dont surrender theyre gonna	kll	kill	ill|kll|illegal	ill|kll|كل	false	A
+en_subs.typos.tsv	2455	adjacent		Yoy	You	You|Yoy|Your	You|Yoy|يي	false	A
+en_subs.typos.tsv	2458	insertion		Yiou	You	You|Yiou|Your	You|Yiou|يو	false	A
+en_subs.typos.tsv	2468	adjacent		Hiw	How	Hiw|How|His	Hiw|How|هو	false	A
+en_subs.typos.tsv	2478	adjacent	or else everyone in sunnydales gonna be facing	theie	their	their|theie|thief	their|theie|ذا	false	A
+en_subs.typos.tsv	2496	adjacent	whatd	dhe	she	she|dhe|she's	she|dhe|ذا	false	A
+en_subs.typos.tsv	2497	doubled	you know i remember the people	tthat	that	that|tthat|that's	that|tthat|تحت	false	A
+en_subs.typos.tsv	2508	insertion	ah such a pretty	dayu	day	day|dayu|days	day|dayu|دي	false	A
+en_subs.typos.tsv	2516	transposition	youd better	prya	pray	pray|prya|practice	pray|prya|بري	false	A
+en_subs.typos.tsv	2517	doubled		Whatt	What	What|Whatt|What's	What|Whatt|وحاطت	false	A
+en_subs.typos.tsv	2518	adjacent	your uncle wouldve drank	snd	and	and|snd|end	and|snd|سند	false	A
+en_subs.typos.tsv	2529	transposition		Tihs	This	This|Tihs|This'll	This|Tihs|تحس	false	A
+en_subs.typos.tsv	2549	doubled	you got	anyy	any	any|anyy|anything	any|anyy|أني	false	A
+en_subs.typos.tsv	2553	adjacent	i will	gaij	gain	gain|gaij|gained	gain|gaij|جاج	false	A
+en_subs.typos.tsv	2562	transposition	what	eles	else	eles|else|elevator	eles|else|أليس	false	A
+en_subs.typos.tsv	2565	doubled	look this	guyy	guy	guy|guyy|guys	guy|guyy|جي	false	A
+en_subs.typos.tsv	2567	transposition	eh we	raelly	really	really|raelly|rally	really|raelly|رايلي	false	A
+en_subs.typos.tsv	2570	omission	its all	riht	right	right|riht|rights	right|riht|رحت	false	A
+en_subs.typos.tsv	2571	adjacent		Ehat	What	What|Ehat|What's	What|Ehat|احط	false	A
+en_subs.typos.tsv	2575	doubled	he likes	yoou	you	you|yoou|your	you|yoou|يو	false	A
+en_subs.typos.tsv	2579	adjacent	it leads me to wonder he if knows	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_subs.typos.tsv	2580	transposition	they said that the fire extinguisher that	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_subs.typos.tsv	2584	doubled	so what do	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_subs.typos.tsv	2585	insertion	looks like the bastard	huas	has	huas|has|husband	huas|has|هس	false	A
+en_subs.typos.tsv	2587	adjacent	with more than the pictures in the tv	Vuide	Guide	Vuide|Guide|Video	Vuide|Guide|فوضى	false	A
+en_subs.typos.tsv	2592	transposition	has the catholic church earned some special exemption	whne	when	when|whne|where	when|whne|وهنا	false	A
+en_subs.typos.tsv	2593	adjacent	randy	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	2597	adjacent	are	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	2611	adjacent	i was	ginna	gonna	gonna|ginna|gina	gonna|ginna|جين	false	A
+en_subs.typos.tsv	2612	adjacent	do you	csre	care	care|csre|careful	care|csre|كسر	false	A
+en_subs.typos.tsv	2614	doubled	and he	lleft	left	left|lleft|lefty	left|lleft|لفت	false	A
+en_subs.typos.tsv	2617	adjacent	shes been my patient for	jine	nine	jine|mine|nine	jine|mine|جين	true	A
+en_subs.typos.tsv	2630	adjacent	albanian terrorists have a staging area for	gheir	their	their|gheir|theirs	their|gheir|غير	false	A
+en_subs.typos.tsv	2633	doubled	if they cant see we	ccant	cant	cant|ccant|canteen	cant|ccant|كنت	false	A
+en_subs.typos.tsv	2640	insertion	foo has a piece of jade with the	wored	word	wored|word|words	wored|word|ورد	false	A
+en_subs.typos.tsv	2648	transposition	god	tihs	this	this|tihs|this'll	this|tihs|تحس	false	A
+en_subs.typos.tsv	2652	adjacent	okay	Rdd	Red	Rdd|Red|Eddie	Rdd|Red|رد	false	A
+en_subs.typos.tsv	2653	transposition		oYu	You	oYu|you|your	oYu|you|أي	false	A
+en_subs.typos.tsv	2667	adjacent	tealc how the hell are we supposed to trust	uou	you	you|uou|your	you|uou|أو	false	A
+en_subs.typos.tsv	2669	adjacent	help me	gef	get	get|gef|before	get|gef|جيف	false	A
+en_subs.typos.tsv	2670	adjacent	would	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_subs.typos.tsv	2677	transposition	obviously	nto	not	not|nto|nothing	not|nto|نط	false	A
+en_subs.typos.tsv	2684	transposition		Coem	Come	Come|Coem|Coming	Come|Coem|كم	false	A
+en_subs.typos.tsv	2692	insertion		bNot	Not	bNot|both|bother	bNot|both|بنت	false	A
+en_subs.typos.tsv	2702	transposition	its	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	2704	adjacent	i always dress like this	bedore	before	before|bedore|beforehand	before|bedore|بدور	false	A
+en_subs.typos.tsv	2711	adjacent	in	caze	case	case|caze|cases	case|caze|كاز	false	A
+en_subs.typos.tsv	2712	doubled	and i wouldnt lose	aany	any	any|aany|anything	any|aany|أني	false	A
+en_subs.typos.tsv	2723	adjacent		Kove	Move	Kove|Love|Move	Kove|Love|كفى	true	A
+en_subs.typos.tsv	2724	transposition	fortyfive minutes going around	hte	the	the|hte|there	the|hte|حتى	false	A
+en_subs.typos.tsv	2732	adjacent		Yake	Take	Take|Yake|Taken	Take|Yake|ياكي	false	A
+en_subs.typos.tsv	2744	adjacent	i	assyre	assure	assure|assyre|assured	assure|assyre|اصير	false	A
+en_subs.typos.tsv	2751	adjacent		Lkke	Like	Like|Lkke|Liked	Like|Lkke|لك	false	A
+en_subs.typos.tsv	2753	adjacent		Shw	She	She|Shw|She's	She|Shw|شو	false	A
+en_subs.typos.tsv	2755	insertion	i have never seen	uhim	him	uhm|uhim|unimportant	uhm|uhim|أهم	false	A
+en_subs.typos.tsv	2757	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
+en_subs.typos.tsv	2759	adjacent	with karma like hers shes probably not that popular on the party circuit if you	knoa	know	know|knoa|knows	know|knoa|كنا	false	A
+en_subs.typos.tsv	2769	transposition		iLke	Like	iLke|like|liked	iLke|like|الك	false	A
+en_subs.typos.tsv	2773	adjacent	i think you need your	hwad	head	head|hwad|had	head|hwad|حوض	false	A
+en_subs.typos.tsv	2780	adjacent	you do that and im	yonna	gonna	gonna|yonna|tonnage	gonna|yonna|يون	false	A
+en_subs.typos.tsv	2790	adjacent	but i	aill	will	aill|all|will	aill|all|الـ	true	A
+en_subs.typos.tsv	2791	adjacent	i know and after	aml	all	all|aml|almost	all|aml|آمل	false	A
+en_tatoeba.misses.tsv	33	clean	Karl threatened	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	53	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	78	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	136	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	175	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	183	clean	Toki	Pona	Pona	Pona|Pond|Pony	Pona|Pond|بنا	false	B
+en_tatoeba.misses.tsv	190	clean	Why did	Yidir	Yidir	Yidir|Yiddish|Yid	Yidir|Yiddish|يدير	false	B
+en_tatoeba.misses.tsv	205	clean	I swear on the name of Sami	Bakir	Bakir	Bakir|Baird|Baking	Bakir|Baird|بكير	false	B
+en_tatoeba.misses.tsv	250	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	344	clean	Yanni woke up for	suhur	suhur	suhur|suburbs|suburban	suhur|suburbs|سحر	false	B
+en_tatoeba.misses.tsv	470	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	564	clean		Geppetto	Geppetto	Geppetto	Geppetto|جبت	false	B
+en_tatoeba.misses.tsv	582	clean	Rodrigo imitated	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	594	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_tatoeba.misses.tsv	605	clean	Yanni was filming	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	684	clean	Yanni is just messing with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	889	clean		Tirana	Tirana	Tirana|Transfer|Transport	Tirana|Transfer|ترن	false	B
+en_tatoeba.misses.tsv	901	clean	Ziri camped in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
+en_tatoeba.misses.tsv	946	clean	Ivan behaved properly with	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	956	clean	Ziri wants to sue	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	958	clean	Oleg regretfully told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	974	clean		Jodo	Jodo	Joo|Jodo|Jodie	Joo|Jodo|جد	false	B
+en_tatoeba.misses.tsv	1085	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	1215	clean	Yanni will look after	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	1263	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1270	clean	but this is all put to waste by his so called	'mother	'mother	'mother	'mother|مثير	false	B
+en_tatoeba.misses.tsv	1316	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1386	clean	t stand	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1591	clean	Ziri encouraged	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1642	clean	Ziri explained the whole process for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1760	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
+en_tatoeba.misses.tsv	1797	clean	Gabriel told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	1891	clean	I forgave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	1939	clean	I ate a	shawarma	shawarma	shawarma|sharma	shawarma|sharma|شاورما	false	B
+en_tatoeba.misses.tsv	1957	clean	Ziri isn't the best for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2079	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2267	clean	Gunter assured	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2268	clean	Gunter assured Rima that	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	2287	clean	The	Diaoyu	Diaoyu	Diaoyu|Diary|Dialogue	Diaoyu|Diary|دي	false	B
+en_tatoeba.misses.tsv	2413	clean	Jonas dressed as	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	2420	clean	t allow	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2422	clean	t allow Rima to set	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	2510	clean	Santiago invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2515	clean	Yanni is sure	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	2597	clean	Ziri took out his phone and showed	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2599	clean	Ziri took out his phone and showed Rima a few pictures of	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	2600	clean	Ziri took out his phone and showed Rima a few pictures of Walid with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	2829	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	2859	clean	The creature extended its slimy hands to	Damiano	Damiano	Damiano|Damian	Damiano|Damian|ضمن	false	B
+en_tatoeba.misses.tsv	2885	clean	but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	2950	clean	Mary stole	Alice's	Alice's	Alice's|Alice|Aliens	Alice's|Alice|أليكس	false	B
+en_tatoeba.misses.tsv	2996	clean	Mark knew that Jessica had liked	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	3002	clean	Sami probably dropped Layla for	Salima	Salima	Salima|Salinas|Salim	Salima|Salinas|سلم	false	B
+en_tatoeba.misses.tsv	3017	clean		Mayuko	Mayuko	Mayuko|Mayor|Mayor's	Mayuko|Mayor|مايك	false	B
+en_tatoeba.misses.tsv	3027	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	3107	clean	Yanni was frantically talking in Berber but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	3111	clean	Yanni and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	3115	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_tatoeba.misses.tsv	3153	clean	Yanni gave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	3169	clean	Miroslav met	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	3170	clean	Miroslav met Rima and	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	3231	clean	We're going to Algiers with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	3236	clean		Hanako	Hanako	Hank|Hanako|Handsome	Hank|Hanako|هناك	false	B
+en_tatoeba.misses.tsv	3305	clean	Kalman only spent five nights in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
+en_tatoeba.misses.tsv	3311	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	3393	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	3406	clean	As soon as the leopard looked at	Boldi	Boldi	Boldi|Holding|Bodies	Boldi|Holding|بلدي	false	B
+en_tatoeba.misses.tsv	3522	clean	The plant called	chamise	chamise	chamise|chaise|camise	chamise|chaise|شمس	false	B
+en_tatoeba.misses.tsv	3573	clean		France's	France's	France's|Frances|Francesca	France's|Frances|فرانسيس	false	B
+en_tatoeba.misses.tsv	3643	clean		Hamas	Hamas	Hamas|Hamster|Hamsters	Hamas|Hamster|حمص	false	B
+en_tatoeba.misses.tsv	3669	clean	Oleg arrived in front of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	3684	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	3720	clean	Yanni left	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	3911	clean	The legionnaires came in and started beating	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	3956	clean	Adriano tried to drown	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	4000	clean	Karl was disgusted by the dirtiness of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	4020	clean		Laika	Laika	Laila|Laika|Likable	Laila|Laika|لك	false	B
+en_tatoeba.misses.tsv	4036	clean	Igor was aware of	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_tatoeba.misses.tsv	4037	clean	screaming	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_tatoeba.misses.tsv	4044	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
+en_tatoeba.misses.tsv	4171	clean		Yazid	Yazid	Yazid|Yard|Yards	Yazid|Yard|يزيد	false	B
+en_tatoeba.misses.tsv	4250	clean	Yanni will be sharing this room with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	4269	clean	Ziri broke Rima's spell over	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	4315	clean	Thursday came around and still no call from	Janos	Janos	Janos|Janis|Jansen	Janos|Janis|جنس	false	B
+en_tatoeba.misses.tsv	4350	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	4455	clean		Allahu	Allahu	Allahu|Allah|Allahabad	Allahu|Allah|الله	false	B
+en_tatoeba.misses.tsv	4519	clean	When he took his	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
+en_tatoeba.misses.tsv	4586	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	4695	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	4751	clean	According to researchers from the	Carsey	Carsey	Carsey|Casey|Carey	Carsey|Casey|كرسي	false	B
+en_tatoeba.misses.tsv	5114	clean	Yanni showed that to	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	5139	clean	I don't know whether	Oreida	Oreida	Oreida|Oneida|Oneidas	Oreida|Oneida|أريد	false	B
+en_tatoeba.misses.tsv	5191	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5273	clean	Ziri had sincere feelings for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5419	clean	Tom gave	Snapchat	Snapchat	Snapchat|Snapshots|Snapshot	Snapchat|Snapshots|سنابشات	false	B
+en_tatoeba.misses.tsv	5459	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5605	clean	Adriano made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5651	clean	He said the	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
+en_tatoeba.misses.tsv	5713	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5793	clean	Yamanashi Prefecture's capital is	Kofu	Kofu	Kofu|Kouji|Koruna	Kofu|Kouji|كف	false	B
+en_tatoeba.misses.tsv	5823	clean	Leonid was disappointed to hear that	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5824	clean	Leonid was disappointed to hear that Rima would marry	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	5826	clean	I know you still want to look me in the eyes and tell me 'I love	you'	you'	you'|you	you'|you|يو	false	B
+en_tatoeba.misses.tsv	5827	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	5855	clean		Heya	Heya	Hey|Heya|Hear	Hey|Heya|هي	false	B
+en_tatoeba.misses.tsv	5857	clean	Where ya	goin'	goin'	goin'	goin'|جون	false	B
+en_tatoeba.misses.tsv	5887	clean	Ziri invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	5923	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	6090	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	6113	clean	Yankev and	Sheyne	Sheyne	Sheyne|Shyness	Sheyne|Shyness|شين	false	B
+en_tatoeba.misses.tsv	6298	clean	Yanni found	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	6382	clean	Oleg and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	6388	clean		Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
+en_tatoeba.misses.tsv	6390	clean	Tat is separate from	Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
+en_tatoeba.misses.tsv	6470	clean	Yanni's dog started barking upon seeing	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.typos.tsv	4	transposition	he	bceame	became	became|bceame|beamed	became|bceame|بكم	false	A
+en_tatoeba.typos.tsv	16	adjacent	mary needs to make sure that shes	teady	ready	ready|teady|teary	ready|teady|تيدي	false	A
+en_tatoeba.typos.tsv	23	adjacent	she doesnt	knoe	know	know|knoe|knew	know|knoe|كنا	false	A
+en_tatoeba.typos.tsv	28	omission	stay	aay	away	aay|say|way	aay|say|أي	false	A
+en_tatoeba.typos.tsv	29	adjacent	tom didnt	ssem	seem	seem|ssem|seems	seem|ssem|سام	false	A
+en_tatoeba.typos.tsv	32	adjacent	thomas nervously chewed on	hiw	his	hiw|how|his	hiw|how|هو	true	A
+en_tatoeba.typos.tsv	38	adjacent	i thought	uou	you	you|uou|your	you|uou|أو	false	A
+en_tatoeba.typos.tsv	39	adjacent	you	liok	look	look|liok|like	look|liok|لك	false	A
+en_tatoeba.typos.tsv	55	insertion		Tomk	Tom	Tom|Tomk|Tomorrow	Tom|Tomk|تمك	false	A
+en_tatoeba.typos.tsv	56	adjacent	he	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_tatoeba.typos.tsv	61	adjacent		Xiri	Ziri	Xiri|Firing|Sirius	Xiri|Firing|كسر	false	A
+en_tatoeba.typos.tsv	63	doubled		Toom	Tom	Toom|Too|Room	Toom|Too|توم	false	A
+en_tatoeba.typos.tsv	76	adjacent	he ought to take	goid	good	good|goid|going	good|goid|جيد	false	A
+en_tatoeba.typos.tsv	87	adjacent	andy must have practiced	cery	very	very|cery|certainly	very|cery|كاري	false	A
+en_tatoeba.typos.tsv	93	omission	i didnt do that	beause	because	because|beause|beaus	because|beause|بس	false	A
+en_tatoeba.typos.tsv	98	adjacent	this is	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_tatoeba.typos.tsv	101	adjacent	i thought you didnt	cwre	care	care|cwre|careful	care|cwre|سوري	false	A
+en_tatoeba.typos.tsv	102	adjacent	ive	beej	been	been|beej|beer	been|beej|بيج	false	A
+en_tatoeba.typos.tsv	106	transposition	sami	gaev	gave	gave|gaev|gavin	gave|gaev|جيف	false	A
+en_tatoeba.typos.tsv	119	insertion	with a little more patience youd have been able to	soilve	solve	solve|soilve|silver	solve|soilve|سلفي	false	A
+en_tatoeba.typos.tsv	122	omission	a big bomb fell and a great many people	lst	lost	let|lst|let's	let|lst|لست	false	A
+en_tatoeba.typos.tsv	125	adjacent	do	uou	you	you|uou|your	you|uou|أو	false	A
+en_tatoeba.typos.tsv	128	adjacent	i frightened	tye	the	the|tye|there	the|tye|تي	false	A
+en_tatoeba.typos.tsv	138	insertion	id	loike	like	like|loike|looked	like|loike|لك	false	A
+en_tatoeba.typos.tsv	142	adjacent	ziri	tolf	told	told|tolf|golf	told|tolf|تلف	false	A
+en_tatoeba.typos.tsv	143	doubled	the	gguy	guy	guy|gguy|guys	guy|gguy|جي	false	A
+en_tatoeba.typos.tsv	146	adjacent		Ehy	Why	Ehy|Why|Hey	Ehy|Why|أهي	false	A
+en_tatoeba.typos.tsv	148	adjacent	teach me	hlw	how	how|hlw|how's	how|hlw|حلو	false	A
+en_tatoeba.typos.tsv	153	adjacent	mary told herself that she had	maee	made	made|maee|meet	made|maee|مي	false	A
+en_tatoeba.typos.tsv	156	adjacent	its about	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_tatoeba.typos.tsv	157	transposition	did	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_tatoeba.typos.tsv	160	insertion	what kind of food do you	plike	like	pike|plike|pliers	pike|plike|بلكي	false	A
+en_tatoeba.typos.tsv	167	adjacent		Fhis	This	This|Fhis|Fish	This|Fhis|فحص	false	A
+en_tatoeba.typos.tsv	174	doubled	tom	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_tatoeba.typos.tsv	189	omission	i study	beter	better	better|beter|beer	better|beter|بيتر	false	A
+en_tatoeba.typos.tsv	197	adjacent	mary is probably older than you think	sbe	she	she|sbe|she's	she|sbe|صبي	false	A
+en_tatoeba.typos.tsv	208	doubled	i swear on the	nname	name	name|nname|named	name|nname|نام	false	A
+en_tatoeba.typos.tsv	211	insertion	i spent	idloe	idle	idle|idloe|idleness	idle|idloe|اضل	false	A
+en_tatoeba.typos.tsv	215	adjacent	they looked like they	weee	were	were|weee|week	were|weee|ويا	false	A
+en_tatoeba.typos.tsv	216	doubled		Saami	Sami	Salami|Saami|Samir	Salami|Saami|سام	false	A
+en_tatoeba.typos.tsv	220	transposition		Cna	Can	Can|Cna|Can't	Can|Cna|كنا	false	A
+en_tatoeba.typos.tsv	221	doubled		Caare	Care	Care|Caare|Careful	Care|Caare|كاري	false	A
+en_tatoeba.typos.tsv	226	doubled	tom can sing	tthis	this	this|tthis|this'll	this|tthis|تحس	false	A
+en_tatoeba.typos.tsv	228	transposition	i am proud of	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_tatoeba.typos.tsv	241	doubled		TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_tatoeba.typos.tsv	244	adjacent	pour us a coffee	amd	and	and|amd|made	and|amd|أمد	false	A
+en_tatoeba.typos.tsv	248	transposition	ziri showed up at	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	250	adjacent		Diefo	Diego	Diego|Diefo|Deformed	Diego|Diefo|ديف	false	A
+en_tatoeba.typos.tsv	251	adjacent	ive	wpent	spent	went|wpent|spent	went|wpent|وبنت	true	A
+en_tatoeba.typos.tsv	256	omission	please be	sre	sure	sre|are|see	sre|are|سر	false	A
+en_tatoeba.typos.tsv	266	adjacent	we	stilo	still	still|stilo|stiller	still|stilo|سطل	false	A
+en_tatoeba.typos.tsv	273	transposition	how	mnay	many	mnay|maybe|may	mnay|maybe|مني	false	A
+en_tatoeba.typos.tsv	276	adjacent		Sbe	She	She|Sbe|She's	She|Sbe|صبي	false	A
+en_tatoeba.typos.tsv	289	transposition	we	nede	need	need|nede|needs	need|nede|نادي	false	A
+en_tatoeba.typos.tsv	297	insertion	if	yiou	you	you|yiou|your	you|yiou|يو	false	A
+en_tatoeba.typos.tsv	301	omission	ziri	becme	became	becme|become|became	becme|become|بكم	true	A
+en_tatoeba.typos.tsv	315	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	321	adjacent	sami	tolf	told	told|tolf|golf	told|tolf|تلف	false	A
+en_tatoeba.typos.tsv	326	omission	he is not an	opn	open	opn|pond|pony	opn|pond|ابن	false	A
+en_tatoeba.typos.tsv	329	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	331	doubled	i hope tom doesnt	gget	get	get|gget|getting	get|gget|جيت	false	A
+en_tatoeba.typos.tsv	334	doubled	do you girls	havve	have	have|havve|haven't	have|havve|حافي	false	A
+en_tatoeba.typos.tsv	338	adjacent	but i hope she hasnt gotten	tuere	there	there|tuere|there's	there|tuere|ترى	false	A
+en_tatoeba.typos.tsv	347	adjacent		Shw	She	She|Shw|She's	She|Shw|شو	false	A
+en_tatoeba.typos.tsv	361	doubled		Whatt	What	What|Whatt|What's	What|Whatt|وحاطت	false	A
+en_tatoeba.typos.tsv	364	doubled	both tom and mary	hatee	hate	hate|hatee|hated	hate|hatee|حتى	false	A
+en_tatoeba.typos.tsv	365	adjacent		Fhis	This	This|Fhis|Fish	This|Fhis|فحص	false	A
+en_tatoeba.typos.tsv	371	transposition		aYnni	Yanni	aYnni|annie|anniversary	aYnni|annie|أين	false	A
+en_tatoeba.typos.tsv	382	adjacent	you wont be killed but you will suffer	gery	very	gery|gerry|very	gery|gerry|جيري	true	A
+en_tatoeba.typos.tsv	385	adjacent	tom isnt welcome in my	hiuse	house	house|hiuse|houses	house|hiuse|هسا	false	A
+en_tatoeba.typos.tsv	386	adjacent	the prices	aee	are	are|aee|see	are|aee|أي	false	A
+en_tatoeba.typos.tsv	390	omission	shes expecting a call	frm	from	frm|female|females	frm|female|فرم	false	A
+en_tatoeba.typos.tsv	392	omission	the whole	ciy	city	ciy|city|cigarette	ciy|city|كي	false	A
+en_tatoeba.typos.tsv	394	adjacent	i dont	csre	care	care|csre|careful	care|csre|كسر	false	A
+en_tatoeba.typos.tsv	407	doubled		LLayla	Layla	LLayla|Layla	LLayla|Layla|ليلة	false	A
+en_tatoeba.typos.tsv	408	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	413	adjacent	were very	proyd	proud	proud|proyd|production	proud|proyd|بريد	false	A
+en_tatoeba.typos.tsv	422	insertion	too few of americas students are meaningfully engaged by	ytheir	their	their|ytheir|ytterbia	their|ytheir|يثير	false	A
+en_tatoeba.typos.tsv	427	adjacent	tom and mary	wori	work	work|wori|world	work|wori|ورى	false	A
+en_tatoeba.typos.tsv	440	adjacent	gustavo lived there	ubtil	until	until|ubtil|utility	until|ubtil|ابطل	false	A
+en_tatoeba.typos.tsv	443	insertion		Shwe	She	She|Shwe|She's	She|Shwe|شو	false	A
+en_tatoeba.typos.tsv	446	doubled	tom	saidd	said	said|saidd|saddle	said|saidd|سيد	false	A
+en_tatoeba.typos.tsv	452	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	456	adjacent	sami and layla went to	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	460	adjacent	are you the one who wrote all	fhese	these	these|fhese|theseus	these|fhese|فحص	false	A
+en_tatoeba.typos.tsv	478	adjacent	tom said he didnt	feek	feel	feel|feek|feeling	feel|feek|فيك	false	A
+en_tatoeba.typos.tsv	479	adjacent	tom said	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_tatoeba.typos.tsv	489	transposition	everything	ahs	has	has|ahs|ahead	has|ahs|أحس	false	A
+en_tatoeba.typos.tsv	495	insertion	conjunctivitis is commonly known as	poink	pink	poink|pinko|pink	poink|pinko|بينك	true	A
+en_tatoeba.typos.tsv	498	doubled	mary isnt	ssure	sure	sure|ssure|surely	sure|ssure|صور	false	A
+en_tatoeba.typos.tsv	504	insertion	death will make everyones life end in	dyue	due	due|dyue|duel	due|dyue|دي	false	A
+en_tatoeba.typos.tsv	507	doubled		Thaat	That	That|Thaat|That's	That|Thaat|ذات	false	A
+en_tatoeba.typos.tsv	513	adjacent	tom is unlikely to follow	ojr	our	our|ojr|ourselves	our|ojr|أجر	false	A
+en_tatoeba.typos.tsv	515	insertion	productivity	weill	will	weill|well|will	weill|well|ويل	true	A
+en_tatoeba.typos.tsv	519	transposition	he did all of	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_tatoeba.typos.tsv	520	transposition	i knew	htat	that	that|htat|that's	that|htat|حطت	false	A
+en_tatoeba.typos.tsv	526	doubled		Toom	Tom	Toom|Too|Room	Toom|Too|توم	false	A
+en_tatoeba.typos.tsv	530	transposition	ill	egt	get	get|egt|getting	get|egt|اجت	false	A
+en_tatoeba.typos.tsv	544	omission	well	leae	leave	leave|leae|least	leave|leae|لا	false	A
+en_tatoeba.typos.tsv	552	adjacent	did	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_tatoeba.typos.tsv	554	adjacent	im sorry to call you this late at night but i	eeally	really	really|eeally	really|eeally|يلي	false	A
+en_tatoeba.typos.tsv	556	adjacent	weve	gpt	got	got|gpt|gotta	got|gpt|جبت	false	A
+en_tatoeba.typos.tsv	558	doubled	i cant	sttay	stay	stay|sttay|staying	stay|sttay|ستي	false	A
+en_tatoeba.typos.tsv	575	transposition	well never be	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	577	omission	odette fell in	lve	love	lev|lve|over	lev|lve|لف	false	A
+en_tatoeba.typos.tsv	592	doubled	are you sure	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_tatoeba.typos.tsv	606	doubled	tom cut	hhis	his	his|hhis|history	his|hhis|هس	false	A
+en_tatoeba.typos.tsv	614	adjacent	he	aaked	asked	asked|aaked|waked	asked|aaked|أكيد	false	A
+en_tatoeba.typos.tsv	622	transposition	can you carry this bag no	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_tatoeba.typos.tsv	623	doubled		WWhile	While	WWhile|While|Awhile	WWhile|While|وهل	false	A
+en_tatoeba.typos.tsv	624	transposition	i didnt want to be	alnoe	alone	alone|alnoe|aloe	alone|alnoe|ألن	false	A
+en_tatoeba.typos.tsv	625	adjacent		Fhe	The	The|Fhe|There	The|Fhe|فهي	false	A
+en_tatoeba.typos.tsv	629	adjacent		Hkw	How	How|Hkw|How's	How|Hkw|حكو	false	A
+en_tatoeba.typos.tsv	643	insertion		Samoi	Sami	Samoi|Samir|Samoan	Samoi|Samir|سام	false	A
+en_tatoeba.typos.tsv	654	adjacent	his wife is	eorn	worn	worn|eorn|ernie	worn|eorn|ارن	false	A
+en_tatoeba.typos.tsv	662	transposition	when was the last time you	wree	were	were|wree|week	were|wree|ورى	false	A
+en_tatoeba.typos.tsv	667	doubled	youre	aafraid	afraid	afraid|aafraid	afraid|aafraid|أفراد	false	A
+en_tatoeba.typos.tsv	668	doubled		Samii	Sami	Samir|Samii|Sami	Samir|Samii|سامي	true	A
+en_tatoeba.typos.tsv	672	transposition		aYnni	Yanni	aYnni|annie|anniversary	aYnni|annie|أين	false	A
+en_tatoeba.typos.tsv	682	transposition	what kind of food did	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_tatoeba.typos.tsv	685	omission	listen it wasnt meant	lke	like	lie|lke|lieutenant	lie|lke|لك	false	A
+en_tatoeba.typos.tsv	694	adjacent	mary reached for	uer	her	her|uer|here	her|uer|أر	false	A
+en_tatoeba.typos.tsv	705	insertion	are you absolutely	surwe	sure	sure|surwe|surely	sure|surwe|صورو	false	A
+en_tatoeba.typos.tsv	718	omission	ive never borrowed	mony	money	money|mony|months	money|mony|مني	false	A
+en_tatoeba.typos.tsv	747	omission	i	enoy	enjoy	enjoy|enoy|enough	enjoy|enoy|أني	false	A
+en_tatoeba.typos.tsv	750	doubled	we dont	hhave	have	have|hhave|haven't	have|hhave|حافي	false	A
+en_tatoeba.typos.tsv	757	omission	tom	offred	offered	offered|offred|offed	offered|offred|أفراد	false	A
+en_tatoeba.typos.tsv	758	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	769	omission	tom had no	coice	choice	choice|coice|voice	choice|coice|كويس	false	A
+en_tatoeba.typos.tsv	771	adjacent	im pleased	wirh	with	with|wirh|without	with|wirh|ورح	false	A
+en_tatoeba.typos.tsv	778	doubled	how much would it cost me to	haave	have	have|haave|haven't	have|haave|حافي	false	A
+en_tatoeba.typos.tsv	779	transposition	algeria	hsa	has	has|hsa|hear	has|hsa|هسا	false	A
+en_tatoeba.typos.tsv	793	doubled		YYou	You	YYou|You|Your	YYou|You|يو	false	A
+en_tatoeba.typos.tsv	796	transposition		Seh	She	She|Seh|She's	She|Seh|صح	false	A
+en_tatoeba.typos.tsv	803	adjacent	what	wull	will	will|wull|willing	will|wull|ولـ	false	A
+en_tatoeba.typos.tsv	808	transposition	they know they	cna	can	can|cna|can't	can|cna|كنا	false	A
+en_tatoeba.typos.tsv	822	doubled	i	havve	have	have|havve|haven't	have|havve|حافي	false	A
+en_tatoeba.typos.tsv	823	adjacent	make sure	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_tatoeba.typos.tsv	828	adjacent	tom has	theee	three	there|theee|there's	there|theee|ذي	false	A
+en_tatoeba.typos.tsv	831	adjacent	there are some problems with	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	843	adjacent	tom	eose	rose	else|eose|rose	else|eose|إس	true	A
+en_tatoeba.typos.tsv	851	adjacent	mary is	quute	quite	quite|quute	quite|quute|قط	false	A
+en_tatoeba.typos.tsv	852	adjacent	are	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_tatoeba.typos.tsv	853	adjacent	what do	uou	you	you|uou|your	you|uou|أو	false	A
+en_tatoeba.typos.tsv	862	adjacent	have	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_tatoeba.typos.tsv	864	transposition	i would	ilke	like	like|ilke|liked	like|ilke|الك	false	A
+en_tatoeba.typos.tsv	865	adjacent	the	vity	city	city|vity|vital	city|vity|فتى	false	A
+en_tatoeba.typos.tsv	878	adjacent	tom has	aleays	always	always|aleays	always|aleays|أليس	false	A
+en_tatoeba.typos.tsv	888	omission		Zii	Ziri	Zi|Zii|Zip	Zi|Zii|زي	false	A
+en_tatoeba.typos.tsv	896	transposition		Tihs	This	This|Tihs|This'll	This|Tihs|تحس	false	A
+en_tatoeba.typos.tsv	904	omission	wed better	leae	leave	leave|leae|least	leave|leae|لا	false	A
+en_tatoeba.typos.tsv	913	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	915	doubled	we	weree	were	were|weree|weren't	were|weree|ورى	false	A
+en_tatoeba.typos.tsv	919	adjacent	tom couldnt	oay	pay	pay|oay|lay	pay|oay|أي	false	A
+en_tatoeba.typos.tsv	925	insertion		oIvan	Ivan	oIvan|ocean|orange	oIvan|ocean|إيفان	false	A
+en_tatoeba.typos.tsv	926	adjacent	yanni purchased	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	935	transposition		hTat	That	hTat|that|that's	hTat|that|حطت	false	A
+en_tatoeba.typos.tsv	939	transposition		iLfe	Life	iLfe|life|lifetime	iLfe|life|ألف	false	A
+en_tatoeba.typos.tsv	941	transposition	mennad put the water in	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	946	adjacent	she	aaid	said	said|aaid|aside	said|aaid|إيد	false	A
+en_tatoeba.typos.tsv	963	adjacent	im going to	buu	buy	buy|buu|but	buy|buu|بـ	false	A
+en_tatoeba.typos.tsv	965	doubled		Toom	Tom	Toom|Too|Room	Toom|Too|توم	false	A
+en_tatoeba.typos.tsv	978	transposition	the hyena	iwll	will	will|iwll|willing	will|iwll|أول	false	A
+en_tatoeba.typos.tsv	979	adjacent	i	deel	feel	feel|deel|feeling	feel|deel|ديل	false	A
+en_tatoeba.typos.tsv	986	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	997	adjacent		Gaboe	Gabor	Gaboe|Gable|Gabe	Gaboe|Gable|غبي	false	A
+en_tatoeba.typos.tsv	1003	omission	were	stll	still	still|stll|stole	still|stll|سطل	false	A
+en_tatoeba.typos.tsv	1009	adjacent	there is nothing	eithrr	either	either|eithrr	either|eithrr|أثر	false	A
+en_tatoeba.typos.tsv	1018	adjacent	i live in a small	tkwn	town	town|tkwn|towns	town|tkwn|تكون	false	A
+en_tatoeba.typos.tsv	1024	adjacent	this	fiy	fig	fit|fiy|fight	fit|fiy|في	false	A
+en_tatoeba.typos.tsv	1030	doubled	where does	TTom	Tom	TTom|Tomorrow|Tom	TTom|Tomorrow|تم	true	A
+en_tatoeba.typos.tsv	1034	adjacent	is this	cooo	cool	cool|cooo|colonel	cool|cooo|سو	false	A
+en_tatoeba.typos.tsv	1061	adjacent	can i give	uou	you	you|uou|your	you|uou|أو	false	A
+en_tatoeba.typos.tsv	1065	adjacent	tom didnt	aay	say	say|aay|way	say|aay|أي	false	A
+en_tatoeba.typos.tsv	1069	adjacent		Hkw	How	How|Hkw|How's	How|Hkw|حكو	false	A
+en_tatoeba.typos.tsv	1073	adjacent	sami owned a	cuain	chain	chain|cuain|chains	chain|cuain|كان	false	A
+en_tatoeba.typos.tsv	1076	adjacent	tom	tolf	told	told|tolf|golf	told|tolf|تلف	false	A
+en_tatoeba.typos.tsv	1077	doubled	do	youu	you	you|youu|your	you|youu|يو	false	A
+en_tatoeba.typos.tsv	1079	adjacent	tom	amd	and	and|amd|made	and|amd|أمد	false	A
+en_tatoeba.typos.tsv	1086	adjacent	you want to grow up to be big and strong	loke	like	like|loke|looked	like|loke|لك	false	A
+en_tatoeba.typos.tsv	1087	transposition	the artist after losing his son spent the rest of	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_tatoeba.typos.tsv	1090	doubled		SShe	She	SShe|She|She's	SShe|She|صح	false	A
+en_tatoeba.typos.tsv	1094	doubled	tom mustve known mary wouldnt	waant	want	want|waant|wanted	want|waant|وأنت	false	A
+en_tatoeba.typos.tsv	1102	adjacent	ziri passed the	soor	door	door|soor|sorry	door|soor|صور	false	A
+en_tatoeba.typos.tsv	1114	adjacent	you should let other	peolle	people	people|peolle|people's	people|peolle|بل	false	A
+en_tatoeba.typos.tsv	1117	adjacent	why doesnt she want to	jelp	help	help|jelp|helped	help|jelp|جلب	false	A
+en_tatoeba.typos.tsv	1127	transposition	he didnt play favorites he was a	ocol	cool	cool|ocol|cooler	cool|ocol|أكل	false	A
+en_tatoeba.typos.tsv	1133	doubled	i doubt very seriously	tthat	that	that|tthat|that's	that|tthat|تحت	false	A
+en_tatoeba.typos.tsv	1134	adjacent	she was satisfied with	tye	the	the|tye|there	the|tye|تي	false	A
+en_tatoeba.typos.tsv	1139	adjacent		Eho	Who	Who|Eho|Should	Who|Eho|آه	false	A
+en_tatoeba.typos.tsv	1143	adjacent	i lost my earbuds good thing i still have	Appoe	Apple	Appoe|Appear|Appears	Appoe|Appear|أبي	false	A
+en_tatoeba.typos.tsv	1146	adjacent	i would like to	aee	see	see|aee|are	see|aee|أي	false	A
+en_tatoeba.typos.tsv	1151	transposition	keep in mind ziri was a fourteen year old boy at	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	1153	adjacent	tom read	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	1154	adjacent	i	bekieve	believe	believe|bekieve|believed	believe|bekieve|بكفي	false	A
+en_tatoeba.typos.tsv	1155	omission	lets not stay at the same hotel we stayed at	lst	last	let|lst|let's	let|lst|لست	false	A
+en_tatoeba.typos.tsv	1156	omission	my phone is	mued	muted	mud|mued|murder	mud|mued|مواد	false	A
+en_tatoeba.typos.tsv	1174	transposition	mary probably doesnt know how	mcuh	much	much|mcuh|muhammad	much|mcuh|مسح	false	A
+en_tatoeba.typos.tsv	1178	adjacent	tom is going to	atay	stay	stay|atay|staying	stay|atay|أتى	false	A
+en_tatoeba.typos.tsv	1182	omission		Opn	Open	Opn|Pond|Pony	Opn|Pond|ابن	false	A
+en_tatoeba.typos.tsv	1197	doubled	tom wanted to ask mary a	ffew	few	few|ffew|fewer	few|ffew|فيو	false	A
+en_tatoeba.typos.tsv	1203	doubled	ill be at	hhome	home	home|hhome|homer	home|hhome|هم	false	A
+en_tatoeba.typos.tsv	1211	doubled	very well who	aree	are	are|aree|aren't	are|aree|أرى	false	A
+en_tatoeba.typos.tsv	1212	doubled	why did	yoou	you	you|yoou|your	you|yoou|يو	false	A
+en_tatoeba.typos.tsv	1226	adjacent	you	mudt	must	must|mudt|must've	must|mudt|مضت	false	A
+en_tatoeba.typos.tsv	1230	adjacent		Uou	You	You|Uou|Your	You|Uou|أو	false	A
+en_tatoeba.typos.tsv	1242	transposition		Rmia	Rima	Rmia|Rialto|Ria	Rmia|Rialto|رمي	false	A
+en_tatoeba.typos.tsv	1251	adjacent		Eami	Sami	Nami|Eami|Emily	Nami|Eami|أمي	false	A
+en_tatoeba.typos.tsv	1260	transposition	he	todl	told	told|todl|today	told|todl|تضل	false	A
+en_tatoeba.typos.tsv	1261	transposition		Saim	Sami	Saim|Said|Same	Saim|Said|سام	false	A
+en_tatoeba.typos.tsv	1265	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	1270	doubled		MMom	Mom	MMom|Mom|Moment	MMom|Mom|مم	false	A
+en_tatoeba.typos.tsv	1304	adjacent	it gets me instantly	haed	hard	had|haed|head	had|haed|هاد	false	A
+en_tatoeba.typos.tsv	1309	insertion	jack	Juill	Jill	Juill|Jill|Jillian	Juill|Jill|جيل	false	A
+en_tatoeba.typos.tsv	1311	doubled	i want to	giive	give	give|giive|given	give|giive|جيف	false	A
+en_tatoeba.typos.tsv	1314	adjacent	i wont take	lesa	less	less|lesa|leave	less|lesa|ليس	false	A
+en_tatoeba.typos.tsv	1315	adjacent	are	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_tatoeba.typos.tsv	1319	insertion		Samki	Sami	Samki|Samir|Saki	Samki|Samir|سمك	false	A
+en_tatoeba.typos.tsv	1320	transposition	do you have	ayn	any	any|ayn|anything	any|ayn|أين	false	A
+en_tatoeba.typos.tsv	1323	adjacent	dont buy	thay	that	that|thay|that's	that|thay|ذي	false	A
+en_tatoeba.typos.tsv	1324	transposition	ziri felt miserable trying to get people to	lkie	like	like|lkie|lie	like|lkie|لك	false	A
+en_tatoeba.typos.tsv	1325	insertion	i	atye	ate	atye|attention|aye	atye|attention|أتى	false	A
+en_tatoeba.typos.tsv	1330	adjacent	i was the only adult	othrr	other	other|othrr|others	other|othrr|أثر	false	A
+en_tatoeba.typos.tsv	1331	doubled	she	saiid	said	said|saiid	said|saiid|سيد	false	A
+en_tatoeba.typos.tsv	1344	adjacent	tom	amd	and	and|amd|made	and|amd|أمد	false	A
+en_tatoeba.typos.tsv	1352	adjacent	ziri	toom	took	toom|too|room	toom|too|توم	false	A
+en_tatoeba.typos.tsv	1358	adjacent	well well	Ahat	What	Ahat|What|What's	Ahat|What|احط	false	A
+en_tatoeba.typos.tsv	1377	doubled	do your kids	eatt	eat	eat|eatt|earth	eat|eatt|أتت	false	A
+en_tatoeba.typos.tsv	1379	doubled	she	wiill	will	will|wiill|willing	will|wiill|ويل	false	A
+en_tatoeba.typos.tsv	1381	transposition	im	pruod	proud	proud|pruod|production	proud|pruod|برد	false	A
+en_tatoeba.typos.tsv	1382	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	1386	adjacent	i will have spent all this	miney	money	money|miney|mine	money|miney|مني	false	A
+en_tatoeba.typos.tsv	1394	adjacent	your	yead	head	head|yead|yeah	head|yead|يد	false	A
+en_tatoeba.typos.tsv	1402	transposition	some called	ihm	him	him|ihm|himself	him|ihm|أهم	false	A
+en_tatoeba.typos.tsv	1409	insertion		yTom	Tom	yTom	yTom|يتم	false	A
+en_tatoeba.typos.tsv	1416	transposition	this mountain isnt a	olfty	lofty	lofty|olfty	lofty|olfty|الفتى	false	A
+en_tatoeba.typos.tsv	1417	insertion	tom	weill	will	weill|well|will	weill|well|ويل	true	A
+en_tatoeba.typos.tsv	1420	doubled	coal charcoal	coall	coal	call|coall|called	call|coall|كل	false	A
+en_tatoeba.typos.tsv	1424	adjacent	i imagine that tom	qill	will	will|qill|willing	will|qill|قل	false	A
+en_tatoeba.typos.tsv	1426	doubled	i	haad	had	had|haad|hadn't	had|haad|هاد	false	A
+en_tatoeba.typos.tsv	1446	transposition	i know that	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_tatoeba.typos.tsv	1447	omission	tom and mary made it clear that they didnt	lke	like	lie|lke|lieutenant	lie|lke|لك	false	A
+en_tatoeba.typos.tsv	1461	adjacent	ziri encouraged rima to accept	Uslam	Islam	Uslam|Islam|Islamic	Uslam|Islam|أسلم	false	A
+en_tatoeba.typos.tsv	1466	doubled	why is it always my responsibility to	payy	pay	pay|payy|paying	pay|payy|بي	false	A
+en_tatoeba.typos.tsv	1467	adjacent	that	aas	was	was|aas|as	was|aas|إس	false	A
+en_tatoeba.typos.tsv	1476	transposition	tom said he thought mary would be	reday	ready	ready|reday|readying	ready|reday|راضي	false	A
+en_tatoeba.typos.tsv	1477	omission	i	hte	hate	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	1486	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	1497	insertion	i	camre	came	camre|came|care	camre|came|سمر	false	A
+en_tatoeba.typos.tsv	1501	doubled		AAre	Are	AAre|Are|Aren't	AAre|Are|أرى	false	A
+en_tatoeba.typos.tsv	1503	omission	they	mared	marked	marked|mared|mare	marked|mared|مريض	false	A
+en_tatoeba.typos.tsv	1504	adjacent	any truly influential person	eill	will	will|eill|silly	will|eill|الـ	false	A
+en_tatoeba.typos.tsv	1508	adjacent	do	uou	you	you|uou|your	you|uou|أو	false	A
+en_tatoeba.typos.tsv	1515	doubled	they explored	neww	new	new|neww|news	new|neww|نيو	false	A
+en_tatoeba.typos.tsv	1517	insertion	the label	hase	has	hase|haste|has	hase|haste|هسا	true	A
+en_tatoeba.typos.tsv	1520	adjacent	as soon as	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_tatoeba.typos.tsv	1534	doubled	i can	havve	have	have|havve|haven't	have|havve|حافي	false	A
+en_tatoeba.typos.tsv	1536	doubled	my relationship with my neighbors	hhas	has	has|hhas|hasn't	has|hhas|هس	false	A
+en_tatoeba.typos.tsv	1539	adjacent	close	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_tatoeba.typos.tsv	1545	omission	he	bnt	bent	bnt	bnt|بنت	false	A
+en_tatoeba.typos.tsv	1561	omission	adapting to anothers	habis	habits	habits|habis|habit	habits|habis|حبس	false	A
+en_tatoeba.typos.tsv	1581	doubled	he said that	wworried	worried	worried|wworried|worriedly	worried|wworried|ورد	false	A
+en_tatoeba.typos.tsv	1583	adjacent	i	hppe	hope	hope|hppe|happened	hope|hppe|حب	false	A
+en_tatoeba.typos.tsv	1599	adjacent		Theie	Their	Their|Theie|Thief	Their|Theie|ذا	false	A
+en_tatoeba.typos.tsv	1603	insertion		Aree	Are	Are|Aree|Aren't	Are|Aree|أرى	false	A
+en_tatoeba.typos.tsv	1611	omission		Bannas	Bananas	Bananas|Bannas|Banns	Bananas|Bannas|بنص	false	A
+en_tatoeba.typos.tsv	1613	omission	i didnt feel much	lke	like	lie|lke|lieutenant	lie|lke|لك	false	A
+en_tatoeba.typos.tsv	1615	adjacent	i love the russian language i find it	veey	very	very|veey|vey	very|veey|فيي	false	A
+en_tatoeba.typos.tsv	1620	adjacent	have you decided	ehat	what	what|ehat|what's	what|ehat|احط	false	A
+en_tatoeba.typos.tsv	1629	adjacent	he came at seven	minutea	minutes	minutes|minutea|minute	minutes|minutea|منتا	false	A
+en_tatoeba.typos.tsv	1632	adjacent	they said that theyd	wsit	wait	wait|wsit|with	wait|wsit|وسط	false	A
+en_tatoeba.typos.tsv	1639	omission	gustavo built a	moel	model	moel|model|molly	moel|model|ميل	false	A
+en_tatoeba.typos.tsv	1641	adjacent	could	yiu	you	you|yiu|your	you|yiu|يـ	false	A
+en_tatoeba.typos.tsv	1653	adjacent	if you	qill	will	will|qill|willing	will|qill|قل	false	A
+en_tatoeba.typos.tsv	1654	omission		Hallowen	Halloween	Halloween|Hallowen|Hallowed	Halloween|Hallowen|حلوين	false	A
+en_tatoeba.typos.tsv	1659	insertion	mary followed her friend to the hotel because she did	noit	not	not|noit|nothing	not|noit|نط	false	A
+en_tatoeba.typos.tsv	1666	adjacent	i want to go to	gead	grad	head|gead|heads	head|gead|جيد	false	A
+en_tatoeba.typos.tsv	1670	omission		Menna	Mennad	Jenna|Menna|Menace	Jenna|Menna|من	false	A
+en_tatoeba.typos.tsv	1677	adjacent		Wikl	Will	Will|Wikl|Willing	Will|Wikl|وكل	false	A
+en_tatoeba.typos.tsv	1681	adjacent	i think im	fime	fine	time|fime|fine	time|fime|فيما	true	A
+en_tatoeba.typos.tsv	1683	doubled	tom said that he didnt have enough	timee	time	time|timee|times	time|timee|تمي	false	A
+en_tatoeba.typos.tsv	1685	adjacent	why should i	leaen	learn	leaen|leaven|learn	leaen|leaven|لن	true	A
+en_tatoeba.typos.tsv	1692	omission	do you think tom	tauht	taught	taught|tauht|taunting	taught|tauht|تحت	false	A
+en_tatoeba.typos.tsv	1695	transposition	just give	ihm	him	him|ihm|himself	him|ihm|أهم	false	A
+en_tatoeba.typos.tsv	1696	adjacent	he did what he thought	aas	was	aas|was|as	aas|was|إس	false	A
+en_tatoeba.typos.tsv	1698	transposition	they wont allow you to do	htat	that	that|htat|that's	that|htat|حطت	false	A
+en_tatoeba.typos.tsv	1703	transposition	is there anything in	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	1707	adjacent	sami	uad	had	had|uad|hadn't	had|uad|إد	false	A
+en_tatoeba.typos.tsv	1709	doubled		Youu	You	You|Youu|Your	You|Youu|يو	false	A
+en_tatoeba.typos.tsv	1711	doubled		Yoou	You	You|Yoou|Your	You|Yoou|يو	false	A
+en_tatoeba.typos.tsv	1719	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
+en_tatoeba.typos.tsv	1722	adjacent	algerias gross foreign reserves	aee	are	are|aee|see	are|aee|أي	false	A
+en_tatoeba.typos.tsv	1726	adjacent	dont	gice	give	give|gice|given	give|gice|جيسي	false	A
+en_tatoeba.typos.tsv	1736	adjacent		Tyis	This	This|Tyis|This'll	This|Tyis|تيس	false	A
+en_tatoeba.typos.tsv	1745	adjacent	who did you	aay	say	say|aay|way	say|aay|أي	false	A
+en_tatoeba.typos.tsv	1748	doubled	the farmgirl would be	hhis	his	his|hhis|history	his|hhis|هس	false	A
+en_tatoeba.typos.tsv	1751	omission	tom and mary	swoe	swore	swore|swoe|sweet	swore|swoe|سوى	false	A
+en_tatoeba.typos.tsv	1774	doubled	tom	liikes	likes	likes|liikes|likest	likes|liikes|ليكس	false	A
+en_tatoeba.typos.tsv	1779	adjacent	leon	folloqed	followed	followed|folloqed	followed|folloqed|فلقد	false	A
+en_tatoeba.typos.tsv	1783	adjacent		Aami	Sami	Ami|Aami|Samir	Ami|Aami|أمي	false	A
+en_tatoeba.typos.tsv	1789	doubled	tom said he thought that	MMary	Mary	MMary|Mary|Mary's	MMary|Mary|ماري	false	A
+en_tatoeba.typos.tsv	1800	doubled	hes	mucch	much	much|mucch|mucho	much|mucch|مسح	false	A
+en_tatoeba.typos.tsv	1807	adjacent	i	nred	need	need|nred|needs	need|nred|نريد	false	A
+en_tatoeba.typos.tsv	1808	adjacent	i	cwn	can	can|cwn|can't	can|cwn|كون	false	A
+en_tatoeba.typos.tsv	1809	adjacent	he gave the children	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	1819	adjacent	who	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_tatoeba.typos.tsv	1824	adjacent	mary	ssid	said	said|ssid|side	said|ssid|سيد	false	A
+en_tatoeba.typos.tsv	1825	adjacent	digits are to numbers	whay	what	what|whay|why	what|whay|وهي	false	A
+en_tatoeba.typos.tsv	1834	insertion	why dont	youi	you	you|youi|your	you|youi|يو	false	A
+en_tatoeba.typos.tsv	1841	omission	many	peope	people	people|peope|property	people|peope|بوب	false	A
+en_tatoeba.typos.tsv	1850	doubled	tom doesnt ever	wwin	win	win|wwin|window	win|wwin|وين	false	A
+en_tatoeba.typos.tsv	1854	adjacent		Shw	She	She|Shw|She's	She|Shw|شو	false	A
+en_tatoeba.typos.tsv	1857	insertion	my	teacherr	teacher	teacher|teacherr|teachers	teacher|teacherr|تشير	false	A
+en_tatoeba.typos.tsv	1859	adjacent	we dont want to scare	peolle	people	people|peolle|people's	people|peolle|بل	false	A
+en_tatoeba.typos.tsv	1860	omission	tom is	beter	better	better|beter|beer	better|beter|بيتر	false	A
+en_tatoeba.typos.tsv	1866	adjacent	why	hesitaye	hesitate	hesitate|hesitaye|hesitated	hesitate|hesitaye|حصتي	false	A
+en_tatoeba.typos.tsv	1872	adjacent	i dont know	hiw	how	how|hiw|his	how|hiw|هو	false	A
+en_tatoeba.typos.tsv	1880	adjacent	i overheard tom	ajd	and	and|ajd|andy	and|ajd|أجد	false	A
+en_tatoeba.typos.tsv	1884	doubled	i dont think that	Toom	Tom	Toom|Too|Room	Toom|Too|توم	false	A
+en_tatoeba.typos.tsv	1888	transposition	dont	oyu	you	you|oyu|your	you|oyu|أي	false	A
+en_tatoeba.typos.tsv	1903	adjacent		Tima	Rima	Tima|Time|Times	Tima|Time|تم	false	A
+en_tatoeba.typos.tsv	1918	transposition	ziri brought a doctor to check up on	ihs	his	his|ihs|inside	his|ihs|أحس	false	A
+en_tatoeba.typos.tsv	1919	adjacent	he cant move freely in the	Wwst	West	Wwst|West|Waste	Wwst|West|وسط	false	A
+en_tatoeba.typos.tsv	1926	doubled	otherwise we will have to cancel	tthis	this	this|tthis|this'll	this|tthis|تحس	false	A
+en_tatoeba.typos.tsv	1938	adjacent	i thought tom would give	Marh	Mary	Marh|March|Mary	Marh|March|مره	true	A
+en_tatoeba.typos.tsv	1939	transposition		Levae	Leave	Leave|Levae|Leaves	Leave|Levae|لف	false	A
+en_tatoeba.typos.tsv	1942	doubled		WWere	Were	WWere|Were|Weren't	WWere|Were|ورا	false	A
+en_tatoeba.typos.tsv	1949	omission		Pleae	Please	Please|Pleae|Pleasure	Please|Pleae|بل	false	A
+en_tatoeba.typos.tsv	1953	adjacent	i assumed	Yom	Tom	Yom|Home|Tomorrow	Yom|Home|يوم	false	A
+en_tatoeba.typos.tsv	1954	adjacent		Oir	Our	Our|Oir|Ourselves	Our|Oir|أر	false	A
+en_tatoeba.typos.tsv	1956	adjacent	living in	fhe	the	the|fhe|there	the|fhe|فهي	false	A
+en_tatoeba.typos.tsv	1960	adjacent	gabor	hwd	had	had|hwd|hadn't	had|hwd|حوض	false	A
+en_tatoeba.typos.tsv	1961	adjacent	i didnt have my	srat	seat	seat|srat|state	seat|srat|صرت	false	A
+en_tatoeba.typos.tsv	1969	transposition	sami was standing in	ihs	his	his|ihs|inside	his|ihs|أحس	false	A
+en_tatoeba.typos.tsv	1970	adjacent	they	wwre	were	were|wwre|weren't	were|wwre|ورا	false	A
+en_tatoeba.typos.tsv	1972	adjacent	the	tqll	tall	tall|tqll|taller	tall|tqll|تقل	false	A
+en_tatoeba.typos.tsv	1974	doubled	i dont	ccare	care	care|ccare|careful	care|ccare|سكر	false	A
+en_tatoeba.typos.tsv	1977	transposition	there are some tools with	wihch	which	which|wihch|whichever	which|wihch|وحش	false	A
+en_tatoeba.typos.tsv	1980	adjacent	the city in which she was born was invaded by the	enemu	enemy	enemy|enemu|enemies	enemy|enemu|أنام	false	A
+en_tatoeba.typos.tsv	1992	adjacent	i usually dont get up	ubtil	until	until|ubtil|utility	until|ubtil|ابطل	false	A
+en_tatoeba.typos.tsv	1995	adjacent	sami knew	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_tatoeba.typos.tsv	2015	transposition	daniel saw the book on	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	2026	doubled	let me	ttry	try	try|ttry|trying	try|ttry|ترى	false	A
+en_tatoeba.typos.tsv	2045	adjacent	i cant tell you exactly	ehat	what	what|ehat|what's	what|ehat|احط	false	A
+en_tatoeba.typos.tsv	2056	adjacent		Laula	Layla	Laula|Paula|Layla	Laula|Paula|لأول	true	A
+en_tatoeba.typos.tsv	2077	transposition	the	mna	man	man|mna|many	man|mna|من	false	A
+en_tatoeba.typos.tsv	2082	adjacent	yuri	ean	ran	ean|want|wanted	ean|want|أن	false	A
+en_tatoeba.typos.tsv	2083	transposition	im disgusted by	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_tatoeba.typos.tsv	2093	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	2095	adjacent		Feee	Free	Free|Feee|Feel	Free|Feee|في	false	A
+en_tatoeba.typos.tsv	2097	transposition	do	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_tatoeba.typos.tsv	2101	transposition	leon told	mAelia	Amelia	mAelia|amelia|malia	mAelia|amelia|ميل	false	A
+en_tatoeba.typos.tsv	2103	adjacent		Ziei	Ziri	Ziei|Ziegfeld|Zeitgeist	Ziei|Ziegfeld|زي	false	A
+en_tatoeba.typos.tsv	2105	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	2108	adjacent	i	lofe	love	lofe|life|love	lofe|life|لف	true	A
+en_tatoeba.typos.tsv	2110	insertion	i am going to the	paerk	park	park|paerk|parking	park|paerk|بارك	false	A
+en_tatoeba.typos.tsv	2111	transposition	why cant you	stya	stay	stay|stya|start	stay|stya|ستي	false	A
+en_tatoeba.typos.tsv	2115	adjacent		Mowt	Most	Most|Mowt|Mother	Most|Mowt|موت	false	A
+en_tatoeba.typos.tsv	2138	adjacent		Yoday	Today	Today|Yoday|Today's	Today|Yoday|يدي	false	A
+en_tatoeba.typos.tsv	2149	adjacent	heres a list of the	peolle	people	people|peolle|people's	people|peolle|بل	false	A
+en_tatoeba.typos.tsv	2164	transposition		oYu	You	oYu|you|your	oYu|you|أي	false	A
+en_tatoeba.typos.tsv	2166	adjacent	its	veey	very	very|veey|vey	very|veey|فيي	false	A
+en_tatoeba.typos.tsv	2169	omission	how much	mre	more	mrs|mre|meet	mrs|mre|مر	false	A
+en_tatoeba.typos.tsv	2189	adjacent	tom said that mary	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_tatoeba.typos.tsv	2192	adjacent	he returned to the	arny	army	any|arny|anything	any|arny|أرني	false	A
+en_tatoeba.typos.tsv	2199	adjacent	i just	beed	need	need|beed|been	need|beed|بيض	false	A
+en_tatoeba.typos.tsv	2206	insertion	mary said	sehe	she	she|sehe|see	she|sehe|صح	false	A
+en_tatoeba.typos.tsv	2226	adjacent	tom has finally told	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	2228	omission	i	lve	live	lev|lve|over	lev|lve|لف	false	A
+en_tatoeba.typos.tsv	2231	omission	gender dysphoria	usualy	usually	usualy|usually|usual	usualy|usually|أصلي	false	A
+en_tatoeba.typos.tsv	2247	insertion	was it tom	whoi	who	who|whoi|which	who|whoi|وهو	false	A
+en_tatoeba.typos.tsv	2251	doubled	youre a	hhero	hero	hero|hhero|heroes	hero|hhero|حار	false	A
+en_tatoeba.typos.tsv	2252	adjacent	i	hwd	had	had|hwd|hadn't	had|hwd|حوض	false	A
+en_tatoeba.typos.tsv	2262	transposition	james and amanda were kissing at	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	2272	adjacent	i	gope	hope	hope|gope|goes	hope|gope|غبي	false	A
+en_tatoeba.typos.tsv	2276	adjacent		Uanni	Yanni	Uanni|Hannibal|Unanimous	Uanni|Hannibal|أن	false	A
+en_tatoeba.typos.tsv	2280	adjacent	she isnt my wife	Dhe	She	Dhe|She|She's	Dhe|She|ذا	false	A
+en_tatoeba.typos.tsv	2292	transposition	what is the largest organ in	hte	the	the|hte|there	the|hte|حتى	false	A
+en_tatoeba.typos.tsv	2294	adjacent	im sorry to	rysh	rush	rush|rysh|rushing	rush|rysh|ريش	false	A
+en_tatoeba.typos.tsv	2297	adjacent	its a very cynical outlook	amd	and	and|amd|made	and|amd|أمد	false	A
+en_tatoeba.typos.tsv	2301	insertion	i	likoe	like	like|likoe|liked	like|likoe|لك	false	A
+en_tatoeba.typos.tsv	2309	insertion	the farmer uses a different	toiol	tool	tool|toiol|toilet	tool|toiol|طويل	false	A
+en_tatoeba.typos.tsv	2319	adjacent	i know tom isnt afraid to	walo	walk	walo|walk|wall	walo|walk|ولو	false	A
+en_tatoeba.typos.tsv	2335	omission	youre no	bettr	better	better|bettr|betrayed	better|bettr|بيتر	false	A
+en_tatoeba.typos.tsv	2336	adjacent	i was the director for	tjree	three	three|tjree|tree	three|tjree|تجري	false	A
+en_tatoeba.typos.tsv	2338	adjacent	when ziris gps went out he	ueed	used	used|ueed|heed	used|ueed|إيد	false	A
+en_tatoeba.typos.tsv	2340	adjacent	youve done your country a	greay	great	greay|greasy|great	greay|greasy|جرى	true	A
+en_tatoeba.typos.tsv	2342	transposition	it is me that painted	tihs	this	this|tihs|this'll	this|tihs|تحس	false	A
+en_tatoeba.typos.tsv	2346	adjacent	which ones tom and	whoch	which	which|whoch|whichever	which|whoch|وحش	false	A
+en_tatoeba.typos.tsv	2348	adjacent	im not going to tell the	girk	girl	girl|girk|girls	girl|girk|غيرك	false	A
+en_tatoeba.typos.tsv	2360	omission	wed better	huor	humor	hour|huor|hurry	hour|huor|حر	false	A
+en_tatoeba.typos.tsv	2372	adjacent	do you like	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	2386	doubled	you still have plenty of time	lleft	left	left|lleft|lefty	left|lleft|لفت	false	A
+en_tatoeba.typos.tsv	2398	omission	the	houe	house	houe|house|hours	houe|house|هو	false	A
+en_tatoeba.typos.tsv	2410	adjacent	tom said that i shouldve asked mary to do	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_tatoeba.typos.tsv	2419	adjacent	tom didnt like the story	avout	about	about|avout|agoutis	about|avout|أفوت	false	A
+en_tatoeba.typos.tsv	2433	adjacent	mary told tom that	Nohn	John	Nohn|John|None	Nohn|John|نحن	false	A
+en_tatoeba.typos.tsv	2435	adjacent	i could sense that tom and mary	wrre	were	were|wrre|weren't	were|wrre|ورا	false	A
+en_tatoeba.typos.tsv	2439	transposition	ill	amke	make	make|amke|makes	make|amke|أمك	false	A
+en_tatoeba.typos.tsv	2447	doubled		SShe	She	SShe|She|She's	SShe|She|صح	false	A
+en_tatoeba.typos.tsv	2450	adjacent	what	doea	does	does|doea|doesn't	does|doea|دي	false	A
+en_tatoeba.typos.tsv	2461	adjacent		Sye	She	She|Sye|She's	She|Sye|سي	false	A
+en_tatoeba.typos.tsv	2476	adjacent	i asked	Mady	Mary	Mady|Madly|May	Mady|Madly|مدى	false	A
+en_tatoeba.typos.tsv	2487	adjacent	its not going to rain today if you	yake	take	take|yake|taken	take|yake|ياكي	false	A
+en_tatoeba.typos.tsv	2491	insertion	at	thwe	the	the|thwe|there	the|thwe|ذو	false	A
+en_tatoeba.typos.tsv	2498	transposition		hWen	When	hWen|when|henry	hWen|when|هون	false	A
+en_tatoeba.typos.tsv	2521	doubled	he doesnt	haave	have	have|haave|haven't	have|haave|حافي	false	A
+en_tatoeba.typos.tsv	2523	transposition	when you were in boston	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_tatoeba.typos.tsv	2535	transposition		oYu	You	oYu|you|your	oYu|you|أي	false	A
+en_tatoeba.typos.tsv	2536	doubled	he	ssaid	said	said|ssaid	said|ssaid|سيد	false	A
+en_tatoeba.typos.tsv	2539	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	2540	adjacent	there were	tyree	three	three|tyree|tree	three|tyree|تيري	false	A
+en_tatoeba.typos.tsv	2542	transposition	tom is hoping to	eran	earn	earn|eran|earned	earn|eran|ارن	false	A
+en_tatoeba.typos.tsv	2546	doubled	i have no patience quick to anger feel lost lonely	uglly	ugly	ugly|uglly|gully	ugly|uglly|أجلي	false	A
+en_tatoeba.typos.tsv	2560	transposition		hTe	The	hTe|the|there	hTe|the|حتى	false	A
+en_tatoeba.typos.tsv	2566	doubled	my prayers	werre	were	were|werre|weren't	were|werre|ورا	false	A
+en_tatoeba.typos.tsv	2572	transposition	if	yuo	you	you|yuo|your	you|yuo|يـ	false	A
+en_tatoeba.typos.tsv	2578	omission	i didnt know who tom was planning to go to	Bostn	Boston	Bostn|Boston|Bosnia	Bostn|Boston|بوسطن	false	A
+en_tatoeba.typos.tsv	2585	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	2591	adjacent	at	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
+en_tatoeba.typos.tsv	2592	transposition		hSe	She	hSe|she|she's	hSe|she|هسا	false	A
+en_tatoeba.typos.tsv	2597	adjacent	no i dont think it will	cpear	clear	cpear|caper|clear	cpear|caper|كبير	true	A
+en_tatoeba.typos.tsv	2614	adjacent	theyre the kind of friends that can tell	eacb	each	each|eacb|ecbolic	each|eacb|اكب	false	A
+en_tatoeba.typos.tsv	2622	adjacent	tom and	Mady	Mary	Mady|Madly|May	Mady|Madly|مدى	false	A
+en_tatoeba.typos.tsv	2623	omission	she caught me by the arm and stopped me	frm	from	frm|female|females	frm|female|فرم	false	A
+en_tatoeba.typos.tsv	2637	adjacent	we should have done that	lsst	last	last|lsst|lester	last|lsst|لست	false	A
+en_tatoeba.typos.tsv	2638	doubled	how did	yyou	you	you|yyou|your	you|yyou|يو	false	A
+en_tatoeba.typos.tsv	2645	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	2653	adjacent	he	gpt	got	got|gpt|gotta	got|gpt|جبت	false	A
+en_tatoeba.typos.tsv	2664	adjacent	tom is doing	weol	well	well|weol|welcome	well|weol|ويل	false	A
+en_tatoeba.typos.tsv	2668	doubled	i	hhave	have	have|hhave|haven't	have|hhave|حافي	false	A
+en_tatoeba.typos.tsv	2674	adjacent	sami	snd	and	and|snd|end	and|snd|سند	false	A
+en_tatoeba.typos.tsv	2677	adjacent	she	hss	has	has|hss|hasn't	has|hss|هس	false	A
+en_tatoeba.typos.tsv	2686	adjacent	tom is a	shikl	shill	shikl|shillings|shilling	shikl|shillings|شكل	false	A
+en_tatoeba.typos.tsv	2692	transposition	i was	treatde	treated	treated|treatde|treader	treated|treatde|ترتدي	false	A
+en_tatoeba.typos.tsv	2693	insertion	father why are	yoyu	you	you|yoyu|your	you|yoyu|يي	false	A
+en_tatoeba.typos.tsv	2701	transposition	mary and her husband	liev	live	live|liev|lives	live|liev|لف	false	A
+en_tatoeba.typos.tsv	2702	transposition	this is my	drema	dream	dream|drema|dreams	dream|drema|دراما	false	A
+en_tatoeba.typos.tsv	2706	adjacent	his	aon	son	son|aon|won't	son|aon|أن	false	A
+en_tatoeba.typos.tsv	2719	doubled	we dont	hhave	have	have|hhave|haven't	have|hhave|حافي	false	A
+en_tatoeba.typos.tsv	2720	doubled		Laylla	Layla	Layla|Laylla|Lallation	Layla|Laylla|ليلة	false	A
+en_tatoeba.typos.tsv	2721	adjacent	i was held for	theee	three	there|theee|there's	there|theee|ذي	false	A
+en_tatoeba.typos.tsv	2738	doubled	tom goes to boston more often than	Maary	Mary	Maary|Mary|Mary's	Maary|Mary|ماري	false	A
+en_tatoeba.typos.tsv	2757	doubled		DDid	Did	DDid|Did|Didn't	DDid|Did|ضد	false	A
+en_tatoeba.typos.tsv	2760	adjacent	its a	sjn	sin	sun|sjn|since	sun|sjn|سجن	false	A
+en_tatoeba.typos.tsv	2761	adjacent	well talk again when you	gyys	guys	guys|gyys	guys|gyys|جيس	false	A
+en_tatoeba.typos.tsv	2768	insertion		Yoju	You	You|Yoju|Your	You|Yoju|يجو	false	A
+en_tatoeba.typos.tsv	2778	adjacent	im	sorty	sorry	sorty|story|sorry	sorty|story|صرتي	true	A
+en_tatoeba.typos.tsv	2789	transposition		iDd	Did	iDd|did|didn't	iDd|did|إد	false	A
+en_tatoeba.typos.tsv	2792	transposition		Tmo	Tom	Tom|Tmo|Tomorrow	Tom|Tmo|تم	false	A
+en_tatoeba.typos.tsv	2796	adjacent	my computer has got to be	usefil	useful	useful|usefil|usefulness	useful|usefil|أسفل	false	A
+en_tatoeba.typos.tsv	2797	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
+en_tatoeba.typos.tsv	2798	omission	i	hpe	hope	hpe|phenomenon|phew	hpe|phenomenon|حب	false	A
+en_tatoeba.typos.tsv	2805	doubled		Yoou	You	You|Yoou|Your	You|Yoou|يو	false	A
+en_tatoeba.typos.tsv	2815	adjacent		Sbe	She	She|Sbe|She's	She|Sbe|صبي	false	A
+en_tatoeba.typos.tsv	2818	doubled	i dont have the	mmoney	money	money|mmoney|money's	money|mmoney|مني	false	A
+en_tatoeba.typos.tsv	2819	omission	tom waited for mary to	cme	come	cme|clear|clean	cme|clear|كما	false	A
+en_tatoeba.typos.tsv	2820	omission	yanni was frantically talking in berber but	Skra	Skura	Skra|Skating|Skate	Skra|Skating|سكر	false	A
+en_tatoeba.typos.tsv	2829	adjacent	i dont know whether it is	rrue	true	true|rrue|rue	true|rrue|روي	false	A
+en_tatoeba.typos.tsv	2830	omission	damiano became the new	fce	face	fce|feces|feck	fce|feces|فك	false	A
+en_tatoeba.typos.tsv	2831	insertion	tom	maty	may	maty|matty|may	maty|matty|متى	true	A
+en_tatoeba.typos.tsv	2841	adjacent		Yom	Tom	Tom|Yom|Home	Tom|Yom|يوم	false	A
+en_tatoeba.typos.tsv	2845	adjacent	hes	tbe	the	the|tbe|there	the|tbe|طب	false	A
+en_tatoeba.typos.tsv	2848	adjacent	she came	ijto	into	into|ijto|intolerable	into|ijto|اجت	false	A
+en_tatoeba.typos.tsv	2860	doubled	this	cuup	cup	cup|cuup|cups	cup|cuup|كوب	false	A
+en_tatoeba.typos.tsv	2864	insertion	the houses	werde	were	were|werde|weren't	were|werde|ورد	false	A
+en_tatoeba.typos.tsv	2879	adjacent		Tyese	These	These|Tyese|Theseus	These|Tyese|تيس	false	A
+en_tatoeba.typos.tsv	2884	adjacent		Oir	Our	Our|Oir|Ourselves	Our|Oir|أر	false	A
+en_tatoeba.typos.tsv	2897	transposition	what will become of his children after	hsi	his	his|hsi|shit	his|hsi|هس	false	A
+en_tatoeba.typos.tsv	2898	doubled	as of tomorrow this email address	wwill	will	will|wwill|willing	will|wwill|ويل	false	A
+en_tatoeba.typos.tsv	2900	adjacent	most of the finnish people are very friendly to	Chibese	Chinese	Chibese|Chinese	Chibese|Chinese|شبس	false	A
+en_tatoeba.typos.tsv	2906	adjacent	my mother	aas	was	was|aas|as	was|aas|إس	false	A
+en_tatoeba.typos.tsv	2911	transposition	i wasnt wearing shoes at	taht	that	that|taht|that's	that|taht|تحت	false	A
+en_tatoeba.typos.tsv	2914	transposition	tom is unable to	hlep	help	help|hlep|helped	help|hlep|حليب	false	A
+en_tatoeba.typos.tsv	2918	adjacent	ive put	kff	off	off|kff|office	off|kff|كف	false	A
+en_tatoeba.typos.tsv	2923	adjacent	i	knoe	know	know|knoe|knew	know|knoe|كنا	false	A
+en_tatoeba.typos.tsv	2926	insertion		Wahy	Why	Wahy|Why|Way	Wahy|Why|وهي	false	A
+en_tatoeba.typos.tsv	2927	omission	babur established the	Muhal	Mughal	Muhal|Muhammad|Muhammadan	Muhal|Muhammad|محل	false	A
+en_tatoeba.typos.tsv	2929	doubled	frogs	eatt	eat	eat|eatt|earth	eat|eatt|أتت	false	A
+en_tatoeba.typos.tsv	2951	adjacent	i asked	yoy	you	you|yoy|your	you|yoy|يي	false	A
+en_tatoeba.typos.tsv	2954	adjacent	jessica has	aleays	always	always|aleays	always|aleays|أليس	false	A
+en_tatoeba.typos.tsv	2961	transposition	it matters not how a man dies but	ohw	how	how|ohw|how's	how|ohw|أهو	false	A

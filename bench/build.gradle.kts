@@ -20,6 +20,7 @@ sourceSets {
                 "com/m57/mboard/EnglishWords.kt",
                 "com/m57/mboard/EnglishMisspellRules.kt",
                 "com/m57/mboard/ArabicWords.kt",
+                "com/m57/mboard/Arabizi.kt",
                 "com/m57/mboard/WordDictionary.kt",
                 "com/m57/mboard/KnownWordForms.kt",
                 "com/m57/mboard/WordSuggestions.kt",

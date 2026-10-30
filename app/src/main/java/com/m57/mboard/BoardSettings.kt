@@ -37,6 +37,9 @@ class BoardSettings(
     var emojiSuggestions: Boolean
         get() = prefs.getBoolean("emoji_suggestions", false)
         set(value) = prefs.edit().putBoolean("emoji_suggestions", value).apply()
+    var arabiziSuggestions: Boolean
+        get() = prefs.getBoolean("arabizi_suggestions", false)
+        set(value) = prefs.edit().putBoolean("arabizi_suggestions", value).apply()
     var autoCapitalize: Boolean
         get() = prefs.getBoolean("capitalize", true)
         set(value) = prefs.edit().putBoolean("capitalize", value).apply()
