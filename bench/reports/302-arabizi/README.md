@@ -70,9 +70,10 @@ Zero gained targets. All automatic fixes, wrong fixes, false autocorrections, ne
 headline non-word typo in-strip rates remain unchanged. `sho` is a valid English word, so its two lost
 intended targets are real-word typo rows, not visible in the non-word headline rate.
 
-**The requested zero-lost-English-row target is not met.** It conflicts with simultaneously offering
+**The initial zero-lost-English-row target is not met.** It conflicts with simultaneously offering
 Arabic for `sho`, preserving literal `sho`, and keeping best English suggestion `should` in three slots.
-The lead was notified. No context-specific exception or vocabulary/ranking change was invented.
+The lead reviewed and accepted exactly these two opt-in sho/show losses. No other target loss is
+accepted. No context-specific exception or vocabulary/ranking change was invented.
 
 The same overlap adds 47 clean miss rows, all for `show`/`Show`: typing prefix `sho` now displaces its
 third-slot English completion. Enabled clean deltas (percentage points):
@@ -128,5 +129,5 @@ input p95 0.2564 ms at the 600-skeleton bound. This excludes lexicon lookup, edi
 Final enabled full-run desktop p95 is retained: e.g. en_chat 413 →466 µs, en_subs 166 →210 µs,
 en_tatoeba 183 →233 µs. These single full-run timings are not Android performance acceptance.
 
-Open: the lead's decision on `sho` overlap versus zero lost English rows, and physical-device settings/
-pick acceptance. No phone port was supplied to this worker. No push or merge by this worker.
+Lead review accepted the two opt-in sho/show rows. Physical-device settings/pick acceptance remains
+open. No phone port was supplied to this worker. No push or merge by this worker.
