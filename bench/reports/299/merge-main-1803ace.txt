@@ -1,0 +1,9 @@
+61790de745cd35530473f8c1b2c75e052cba5d19
+100644 37417bf1ebb9e9dfb98fc28c9d0bee7033eeb504 1	README.md
+100644 1fe23b9f3488b8bb3e2e2763633ac099a9a2c4f1 2	README.md
+100644 e0e6f4cd651990b030bdafb009b72b286241ee9d 3	README.md
+
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging app/src/main/java/com/m57/mboard/WordSuggestions.kt
+Auto-merging bench/build.gradle.kts

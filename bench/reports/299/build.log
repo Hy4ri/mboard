@@ -1,0 +1,92 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+KTLINT_FORMAT_EXIT=0
+KTLINT_EXIT=0
+Calculating task graph as no cached configuration is available for tasks: assembleDebug
+
+> Configure project :app
+WARNING: The option setting 'android.aapt2FromMavenOverride=/nix/store/8vcpd7fs10ps6q51w8h2cpd6lpc0j2id-androidsdk/libexec/android-sdk/build-tools/37.0.0/aapt2' is experimental.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:javaPreCompileDebug FROM-CACHE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkDebugAarMetadata
+> Task :app:desugarDebugFileDependencies FROM-CACHE
+> Task :app:extractDeepLinksDebug FROM-CACHE
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:processDebugNavigationResources FROM-CACHE
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mapDebugSourceSetPaths
+> Task :app:mergeDebugJniLibFolders
+> Task :app:compileDebugNavigationResources FROM-CACHE
+> Task :app:mergeLibDexDebug FROM-CACHE
+> Task :app:validateSigningDebug
+> Task :app:processDebugMainManifest FROM-CACHE
+> Task :app:mergeDebugNativeLibs NO-SOURCE
+> Task :app:writeDebugAppMetadata
+> Task :app:stripDebugDebugSymbols NO-SOURCE
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:processDebugManifest FROM-CACHE
+> Task :app:processDebugManifestForPackage FROM-CACHE
+> Task :app:mergeExtDexDebug FROM-CACHE
+> Task :app:generateDebugResources FROM-CACHE
+> Task :app:packageDebugResources FROM-CACHE
+> Task :app:mergeDebugResources FROM-CACHE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets FROM-CACHE
+> Task :app:parseDebugLocalResources FROM-CACHE
+> Task :app:generateDebugRFile FROM-CACHE
+> Task :app:processDebugResources FROM-CACHE
+
+> Task :app:compileDebugKotlin
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/KeyboardAccessibility.kt:92:14 'fun setBoundsInParent(p0: Rect!): Unit' is deprecated. Deprecated in Java.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/KeyboardAccessibility.kt:194:40 'static fun obtain(p0: Int): AccessibilityEvent!' is deprecated. Deprecated in Java.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/KeyboardAccessibility.kt:206:36 'static fun obtain(p0: Int): AccessibilityEvent!' is deprecated. Deprecated in Java.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/NeuralReranker.kt:60:36 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'String?'.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/OneHandSurface.kt:93:18 'fun announceForAccessibility(p0: CharSequence!): Unit' is deprecated. Deprecated in Java.
+
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:mergeDebugJavaResource
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:mergeProjectDexDebug
+> Task :app:packageDebug
+> Task :app:assembleDebug
+> Task :app:createDebugApkListingFileRedirect
+
+[Incubating] Problems report is available at: file:///home/m57/Projects/mboard-299/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 28s
+34 actionable tasks: 17 executed, 17 from cache
+Configuration cache entry stored.
+ASSEMBLE_DEBUG_EXIT=0
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :processResources NO-SOURCE
+
+> Task :compileKotlin
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/WordDictionary.kt:856:21 Expression is unused.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/WordDictionary.kt:860:21 Expression is unused.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/WordDictionary.kt:1269:33 Expression is unused.
+w: file:///home/m57/Projects/mboard-299/app/src/main/java/com/m57/mboard/WordDictionary.kt:1273:33 Expression is unused.
+w: file:///home/m57/Projects/mboard-299/bench/src/main/kotlin/com/m57/bench/Suggest.kt:242:99 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Dialect'.
+
+> Task :compileJava NO-SOURCE
+> Task :classes UP-TO-DATE
+> Task :jar
+> Task :startScripts
+> Task :installDist
+
+[Incubating] Problems report is available at: file:///home/m57/Projects/mboard-299/bench/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 10s
+4 actionable tasks: 4 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.0/userguide/configuration_cache_enabling.html
+BENCH_COMPILE_EXIT=0

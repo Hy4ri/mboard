@@ -1,0 +1,2534 @@
+{
+  "ar_fresh.misses": {
+    "new_misses": [],
+    "removed_misses": [
+      {
+        "context": "تناولن العشاء",
+        "target": "معا",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "هو",
+        "count": 20
+      },
+      {
+        "context": "إنها",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "هل",
+        "target": "هو",
+        "count": 3
+      },
+      {
+        "context": "لكنه",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "شهر مايو",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "كانت حزينة جدا",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "عيد ميلاد المسيح احتفال مسيحي",
+        "target": "و",
+        "count": 1
+      }
+    ]
+  },
+  "ar_subs.misses": {
+    "new_misses": [
+      {
+        "context": "في بلد لايوجد",
+        "target": "به",
+        "count": 1
+      },
+      {
+        "context": "أنا أحضرت هذه ولكن مالفترض أني أفعل",
+        "target": "به",
+        "count": 1
+      },
+      {
+        "context": "وربما تكونين محقة بشأني لكني",
+        "target": "لن",
+        "count": 1
+      },
+      {
+        "context": "اسمحي",
+        "target": "لى",
+        "count": 1
+      },
+      {
+        "context": "تحدثت مع ابن",
+        "target": "عمه",
+        "count": 1
+      },
+      {
+        "context": "هل لديك معرفة",
+        "target": "به",
+        "count": 1
+      },
+      {
+        "context": "هكذا ستستطيع أن تركض و",
+        "target": "أن",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "",
+        "target": "هو",
+        "count": 31
+      },
+      {
+        "context": "هل",
+        "target": "هو",
+        "count": 4
+      },
+      {
+        "context": "لأنه",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "ما الذي جعلك تعتقد",
+        "target": "أني",
+        "count": 1
+      },
+      {
+        "context": "هو الذي يعتمد",
+        "target": "عليه",
+        "count": 1
+      },
+      {
+        "context": "عن أي شيء آخر",
+        "target": "من",
+        "count": 1
+      },
+      {
+        "context": "لهذا",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "حينما قلت",
+        "target": "لي",
+        "count": 1
+      },
+      {
+        "context": "في حالة إن حدث",
+        "target": "لي",
+        "count": 1
+      },
+      {
+        "context": "العقيد قال أني قد أكون",
+        "target": "ذا",
+        "count": 1
+      },
+      {
+        "context": "مع كايت",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "أنا أحب الطريقة التي قولها",
+        "target": "به",
+        "count": 1
+      },
+      {
+        "context": "لقد اتصل",
+        "target": "سيد",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "صح",
+        "count": 5
+      },
+      {
+        "context": "إلي",
+        "target": "أي",
+        "count": 1
+      },
+      {
+        "context": "سأفكر",
+        "target": "بك",
+        "count": 1
+      },
+      {
+        "context": "مثل اشياء لها علاقة بيده",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "أنت جيد يا",
+        "target": "سيد",
+        "count": 1
+      },
+      {
+        "context": "يا",
+        "target": "سيد",
+        "count": 1
+      },
+      {
+        "context": "إذا",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "لعرف شخص ما تنطبق",
+        "target": "عليه",
+        "count": 1
+      },
+      {
+        "context": "لكني أعرف مكانها",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "عندما قلت أعرجوا علي في أي وقت",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "المريخ الآن بلا حقل مغناطيسي",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "أنا",
+        "target": "ذا",
+        "count": 1
+      },
+      {
+        "context": "أنا لست",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "سأفتح الجرح",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "إن المكان",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "مع وجود كثافة بالغيوم",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "دعوه",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "لا تلمسوا الثلاجة",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "ألم تفكر يوما أن هذا السلوك",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "وهو ما يفسر",
+        "target": "لم",
+        "count": 1
+      }
+    ]
+  },
+  "ar_tatoeba.misses": {
+    "new_misses": [
+      {
+        "context": "يبلغ عدد سكان اليابان حوالي مئة",
+        "target": "و",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "ليس شيئا",
+        "target": "ذا",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "هو",
+        "count": 90
+      },
+      {
+        "context": "شعر توم بالتعب بعد أن أمضى اليوم بكامله",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "هن",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "محمد",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "هو",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "هو",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "عمي",
+        "target": "هو",
+        "count": 2
+      },
+      {
+        "context": "هل سبق لك",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "هل",
+        "target": "هو",
+        "count": 2
+      },
+      {
+        "context": "كانت نتيجة التصويت 28 صوتا بنعم",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "و يعني هذا",
+        "target": "أنه",
+        "count": 1
+      },
+      {
+        "context": "كان لدى سامي ما يكفي من العلم كي يجيب على أسئلة سهلة و هذا ما سمح",
+        "target": "له",
+        "count": 1
+      },
+      {
+        "context": "القمر",
+        "target": "جميل",
+        "count": 1
+      },
+      {
+        "context": "كانت ليلى تسير",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "استجابت الشرطة",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "هم حتى",
+        "target": "لم",
+        "count": 1
+      },
+      {
+        "context": "الطبيب",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "التغيير",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "بالصحة",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "لماذا",
+        "target": "هو",
+        "count": 1
+      }
+    ]
+  },
+  "en_chat.misses": {
+    "new_misses": [],
+    "removed_misses": [
+      {
+        "context": "my ping",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "why",
+        "target": "is",
+        "count": 2
+      },
+      {
+        "context": "battery is",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "fine",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "literally did not see that twist coming",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "modern economics and why housing",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "at least your friday",
+        "target": "is",
+        "count": 1
+      }
+    ]
+  },
+  "en_chat_learning.misses": {
+    "new_misses": [
+      {
+        "context": "weather app lied to me",
+        "target": "it",
+        "count": 1
+      },
+      {
+        "context": "read the sequel",
+        "target": "it",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "heading out",
+        "target": "now",
+        "count": 1
+      },
+      {
+        "context": "my ping",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "storage full notification",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "why",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "hit a new personal record",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "battery is",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "are you watching the game",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "literally did not see that twist coming",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "modern economics and why housing",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "at least your friday",
+        "target": "is",
+        "count": 1
+      }
+    ]
+  },
+  "en_fresh.misses": {
+    "new_misses": [
+      {
+        "context": "I prefer reading to watching",
+        "target": "TV",
+        "count": 1
+      },
+      {
+        "context": "I wish you",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "She's a better liar than",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Tom's daughter drew him",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "I'll see if Tom's",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "watching",
+        "target": "TV",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "I should have brought",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "My father trained me not as",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The poet went mad",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Their coats were uniform",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "It is being sold",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "His conduct",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "How",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "This bullseye in my windshield",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I'm satisfied with my level",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "I wished for",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The only time I eat popcorn",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Sami was liked",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "He was the first person to fly",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "I know that Tom thinks that Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Hugo",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I don't want to go to",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Why",
+        "target": "is",
+        "count": 2
+      },
+      {
+        "context": "Mary",
+        "target": "is",
+        "count": 3
+      },
+      {
+        "context": "There are",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Tom probably doesn't know whether Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "My sister Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "This candle you see here is the last one",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "a region",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "This is the man who's suspected",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Perry finally sailed into Tokyo Bay",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "They think they're stronger than",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Tom hadn't used",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "How flexible",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "The salt shaker",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I asked them to play me",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Monday",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "aoke feature",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Something",
+        "target": "is",
+        "count": 1
+      }
+    ]
+  },
+  "en_subs.misses": {
+    "new_misses": [
+      {
+        "context": "Clearly you were better at being single than",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Yet",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Why",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "t got shit to say till I see",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Gorgeous",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "if",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "I didn't realise",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Vampires are a dime",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "It took longer at the book store than",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Even the smallest speck of dirt can scratch the film rendering",
+        "target": "it",
+        "count": 1
+      },
+      {
+        "context": "I think we should at least spend some time trying to figure out",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "and I see",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "they",
+        "target": "uh",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "Is it",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "is that",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "How",
+        "target": "is",
+        "count": 3
+      },
+      {
+        "context": "It could mean",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "by",
+        "count": 3
+      },
+      {
+        "context": "The goddamn desk drawer",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "How could you say that men are beaten down",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Now there's a movie that would've been better",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "The end result is",
+        "target": "the",
+        "count": 1
+      },
+      {
+        "context": "and everything'll go just as smooth as",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "This little mosque was once a chapel",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Why",
+        "target": "is",
+        "count": 2
+      },
+      {
+        "context": "this isn't exactly where",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "He's back",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "granted",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "black as",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "the newspaper presented an appeal on the grounds of what were considered",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "I was once told that",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Is that",
+        "target": "a",
+        "count": 3
+      },
+      {
+        "context": "Wants to hear all the news",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "You are cordially invited to attend a supper party",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Near",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "By",
+        "count": 3
+      },
+      {
+        "context": "the artillery",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I'm a dying man and",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "not always",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "how long",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "'This kind does not go out except",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "is it",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Our shelter",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Christian Corail came",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "Don't thou see that",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "then how",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "the government's budget for the construction",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "But I fear that day",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "grant",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "There are",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Who are",
+        "target": "the",
+        "count": 1
+      },
+      {
+        "context": "Every child of school age",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "J' That I get home safe",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "I'm not",
+        "target": "a",
+        "count": 3
+      },
+      {
+        "context": "Here nothing",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "At this point he probably",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "The signal is 5",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "in exchange for",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "But White",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "My ideal",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Today I attended",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "What you see before you",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Help me get",
+        "target": "the",
+        "count": 1
+      },
+      {
+        "context": "I've traveled",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "I've traveled a good deal and",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "our very best psychiatrist",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "She was sending me",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "It's grown",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "How can you pay back",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "How much cable",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "as the more perceptive of you probably realize",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "But I'm not prepared to swear black",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "The facility will be trashed",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "I wanna go to",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "It's like being in a stuffy room and opening",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Or just get a card that has",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "That has",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "That has a skull",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "I would never put with one that has",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Here's a woman who's read",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Then how",
+        "target": "is",
+        "count": 1
+      }
+    ]
+  },
+  "en_tatoeba.misses": {
+    "new_misses": [
+      {
+        "context": "All the books",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Tom is better at chess than",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "The boy was lying on his stomach watching",
+        "target": "TV",
+        "count": 1
+      },
+      {
+        "context": "Was this made",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Tom and Mary slumped",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "A single person produces more meat than",
+        "target": "I",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "Mary",
+        "target": "is",
+        "count": 16
+      },
+      {
+        "context": "I was baking",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The daisy",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Popcorn",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tom was stabbed",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "My uncles will spend New Year's Eve",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Tom opened",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The corporal",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "during this trip I tried to feel good",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "says or implies that brown people are inherently criminals is someone I do not take seriously",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "February",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "My flat",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "By",
+        "count": 1
+      },
+      {
+        "context": "Why",
+        "target": "is",
+        "count": 5
+      },
+      {
+        "context": "from which it makes",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Water is",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "We spent",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Boldi was watching",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "I smell",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Your name sounds like a swear word",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Matthew's recipe for potato salad",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "If a towel",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I'm not",
+        "target": "a",
+        "count": 2
+      },
+      {
+        "context": "Tom and Mary were married for",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Tom isn't as interested in doing that as Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tom is loved",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "I don't want Tom",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "He came",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "Yanni has the mental age of",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "Tom is much nicer than Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Someday I hope",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Mennad too started",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "He tried to figure out the answer",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Peter",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "The old mosque",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I had lived in Sendai for ten years before",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "This picture shows how stupid",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "It's been over",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "This candy",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I was really still",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "told",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Tom doesn't think Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Can a city exist without having",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Oregon",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "They aren't ripe",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "Meg",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "We had 11 missiles shot",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "The video",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tom is working hard to get the project finished",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "How much are",
+        "target": "the",
+        "count": 1
+      },
+      {
+        "context": "Except for",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "My dream is to study English",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "I hope that",
+        "target": "I",
+        "count": 2
+      },
+      {
+        "context": "I was helped",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "I don't think that Tom knows why",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "but I think Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "The Vatican",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tell Tom and Mary John",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "More hot air is coming out of the Kremlin and nothing",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "How",
+        "target": "is",
+        "count": 2
+      },
+      {
+        "context": "That's not",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "I'm ready for",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "time at",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The demand",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I was ratted out",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "What decade",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Yanni was sent overseas for a work trip",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "there are",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The room is",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "The thieves used",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "He was loved",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "The wide blade or the third prong",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "When",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I found Tom",
+        "target": "in",
+        "count": 1
+      },
+      {
+        "context": "Even 30 minutes",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tom doesn't know why Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "I've been told that",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "Yamanashi Prefecture's capital",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Tom said Mary",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Share",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "They said they had to go to",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "That apple",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "She defended herself",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "The entire frame",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "You're coming",
+        "target": "at",
+        "count": 1
+      },
+      {
+        "context": "Russian",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "Russian is spoken",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "Nothing",
+        "target": "is",
+        "count": 1
+      },
+      {
+        "context": "she will not get",
+        "target": "a",
+        "count": 1
+      },
+      {
+        "context": "he would have arrived",
+        "target": "by",
+        "count": 1
+      },
+      {
+        "context": "I hope",
+        "target": "I",
+        "count": 1
+      },
+      {
+        "context": "There are",
+        "target": "a",
+        "count": 1
+      }
+    ]
+  },
+  "jo_chat_dialect.misses": {
+    "new_misses": [],
+    "removed_misses": [
+      {
+        "context": "",
+        "target": "فش",
+        "count": 3
+      },
+      {
+        "context": "القهوة تبعت هاد المحل بتعدل الراس",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "بدي اخذ حبة معمول",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "تعال نفطر حمص ومسبحة وفول",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "فنجان القهوة الصباحي",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "بدي اكل صحن فاصوليا بيضا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي صحن فتة حمص",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اليوم لفينا دوالي",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "مبارح فرطنا ضحك",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "استمتع باللحظة والاجواء الحلوة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا دوري بلايستيشن بالويكند والتحدي",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "مشروعك الجديد",
+        "target": "شو",
+        "count": 1
+      },
+      {
+        "context": "قاعد بدرس",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "المدير حكالي",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "كل ما افتح الكتاب بنعس فورا",
+        "target": "شو",
+        "count": 1
+      },
+      {
+        "context": "في تنزيلات خرافية بمول سيتي سنتر بدك ننزل نمر",
+        "target": "عليه",
+        "count": 1
+      },
+      {
+        "context": "الكروكا طلعت الغلط عليه مية بالمية والتامين",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "المكيف خربان بنص هالشوب",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "البرد دخل بالعظام ومش راضي يطلع حتى",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "موجة الصقيع",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "صاحبنا مفكر حاله اينشتاين وهو مش عارف يربط حذائه",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "فصلت ضحك",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "بدي كبسة زر تخفي كل المسؤوليات واعيش بجزيرة لحالي",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اللاعب انصاب برباط صليبي وشكلو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "الفريق محتاج مهاجم هداف بعرف ينهي الهجمة",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "نهائي دوري الابطال",
+        "target": "رح",
+        "count": 1
+      }
+    ]
+  },
+  "jo_chat_learning.misses": {
+    "new_misses": [],
+    "removed_misses": [
+      {
+        "context": "",
+        "target": "فش",
+        "count": 2
+      },
+      {
+        "context": "القهوة تبعت هاد المحل بتعدل الراس",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "بدنا ناكل سندويشات جبنة بيضا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا نعمل قلاية بندورة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي اخذ حبة معمول",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "وجبات الزنجر السبايسي",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا ناكل سندويشات فاهيتا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي اجيب ساندويش كبدة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اكل الشارع زاكي",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "تعال نفطر حمص ومسبحة وفول",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "فنجان القهوة الصباحي",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "اليوم بدي اطبخ بامية خضرا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي اكل صحن فاصوليا بيضا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي اطلب وافل بالنوتيلا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اليوم الشيف عملنا فريكة مفلفلة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "تعال ناكل دونات محشية كاسترد",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "الزيت والزعتر الصبح",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "طلبنا بيتزا مارغريتا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا سندويشة سنيورة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدي صحن فتة حمص",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "الحمص",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا حبة قطايف جوز مقلية ومقرمشة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "تعال نمر ناخذ شاورما صاج",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "ابعتلي مسج",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "كنت مشغول",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "بمر عليك بسيارتي وبنطلع",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "الجمعة الجاي بدنا نشوي بدبين",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اعطيني رنة",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "الوالد بده اياك بموضوع شخصي",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "رايح",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اخذت اخوي الصغير ع الملاهي يلعب ويفرح",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اختي جهزت بان كيك",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اليوم لفينا دوالي",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "ركبت رفوف خشب",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "مبارح فرطنا ضحك",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "تعال نلعب لعبة شدة الليلة بالكافيه ونتسلى",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "استمتع باللحظة والاجواء الحلوة",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "سواقتك فنانة",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "بدنا نوقف",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اشتقت لسهرات الصيف ع السطح والنسيم العليل",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "تربيتك واصلك الطيب بظهروا بتعاملك المحترم",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اليوم في كويز مفاجئ ولا",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "قاعد بدرس",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "العلامة اللي اخذتها بتخزي",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "هسا بعثولي عرض شغل",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "مش عارف كيف بدي ادرس خمس مواد باسبوع واحد",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "سوق الجمعة بكون معجوق ع الاخر",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "بدي اطلب اونلاين",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "كل اشي صار غالي وما",
+        "target": "ضل",
+        "count": 1
+      },
+      {
+        "context": "شفت جاكيت جلد بجنن",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "المحل مش راضي يرجع البضاعة بحكي الترجيع ممنوع",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "هاد البراند غالي ع الفاضي وجودته",
+        "target": "زي",
+        "count": 1
+      },
+      {
+        "context": "المحل عامل خصم للطلاب عشرين بالمية",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "الفراولة اليوم شكلها بشهي وسعر الكيلو دينار واحد",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "ركبت كوستر اليوم والسائق كان بسوق",
+        "target": "زي",
+        "count": 1
+      },
+      {
+        "context": "بدي اطلب اوبر",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "عبيت بنزين بتسعين ليرة والعداد تحرك نص حركة",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "سائق الباص صار يطوش",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "اشارة خلدا بتفتح عشر ثواني",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "شارع الستين بالسلط منظره بجنن",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "طريق ياجوز سالكة",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "موقع طقس العرب بحكي في تساقط زخات رعدية",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "بدنا نروح ع وادي رم نقضي ليلة تحت النجوم",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "تحذير من الانزلاق ع الطرقات",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "الطقس هسا مستقر",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "البرد دخل بالعظام ومش راضي يطلع حتى",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "الشباب اتفقوا بالقروب نطلع نطش ونتعشى",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "انت كيف بتتحمل تقعد مع هاد الشخص دمه ثقيل",
+        "target": "زي",
+        "count": 1
+      },
+      {
+        "context": "فصلت ضحك",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "بدي كبسة زر تخفي كل المسؤوليات واعيش بجزيرة لحالي",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "والله الجلسة معك ما بتنمل",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "حاسس حالي صاير زي العجايز",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "دوري الدرجة الاولى فيه مواهب شابة ممتازة",
+        "target": "بس",
+        "count": 1
+      },
+      {
+        "context": "اللاعب جدد عقده",
+        "target": "مع",
+        "count": 1
+      }
+    ]
+  },
+  "jo_chat_msa.misses": {
+    "new_misses": [],
+    "removed_misses": [
+      {
+        "context": "",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "القهوة تبعت هاد المحل بتعدل الراس",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "حابب اتعلم مهارة جديدة بالتصميم والتصوير واستغل وقت فراغي",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "صاحبنا مفكر حاله اينشتاين وهو مش عارف يربط حذائه",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "الفريق محتاج مهاجم هداف بعرف ينهي الهجمة",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "امي طلبت مني اجيب ربطتين خبز طازة وكرتونة بيض",
+        "target": "من",
+        "count": 1
+      }
+    ]
+  },
+  "jo_human_fresh.misses": {
+    "new_misses": [
+      {
+        "context": "طب سؤال فش عندكم تنزيلات ع اشي زي محلات الاواعي طب فش عروض",
+        "target": "طب",
+        "count": 1
+      },
+      {
+        "context": "يا عمي طب مهو الكل رمى",
+        "target": "طب",
+        "count": 1
+      },
+      {
+        "context": "لإنو صار عندي عقد نفسيه",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "نامت ع وجهها",
+        "target": "طب",
+        "count": 1
+      }
+    ],
+    "removed_misses": [
+      {
+        "context": "مرات بتبذل كل جهدك",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "وحياه اختي مش",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "وحياه اختي مش رح يزداد جمالك اذا اتدلعتي بالكتابه اصلا",
+        "target": "فش",
+        "count": 1
+      },
+      {
+        "context": "انتي بدك تدمريني ولك هو انا ناقصني طبعا انتي ساعيتها",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "و من حظي انو المنطقه شعبيه و في كتير زلام بالشوارع",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "بالرغم من انك ع الأغلب",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "وصرت اسمع مصطفى كامل",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "امها لا ولك شو تمشكلو والله بدبحها الشب منيح وكريم وما",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "لإنو الجو قلب عواصف",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "هو",
+        "count": 4
+      },
+      {
+        "context": "هي قبلك بتكون صاحيه",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "حكيتلو شو رأيك تجبلي اغراض زاكيه تناولني ياهم عالباب و تروح عالسريع اهلي طالعين",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "بس كانو مخليني اتمنى ارجع صف سادس كنت يوم الجمعه امضيها برقص ع اغاني ردح عراقي",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "بيوم عيد زواجنا كالعاده بعمل حالي ناسيه مشان اشوف ازا",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "و بنحكاش معهم و النقاش معهم عقيم",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "و بنحكاش معهم و النقاش معهم عقيم و مش",
+        "target": "من",
+        "count": 1
+      },
+      {
+        "context": "طب سؤال",
+        "target": "فش",
+        "count": 1
+      },
+      {
+        "context": "طب سؤال فش عندكم تنزيلات ع اشي زي محلات الاواعي طب",
+        "target": "فش",
+        "count": 1
+      },
+      {
+        "context": "بالنهايه و النهايه و النهايه بتكتشف انو الراحه",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "بتلاحظو انو",
+        "target": "فش",
+        "count": 1
+      },
+      {
+        "context": "الله بس لا يحرمني من طلته هالقمر كل عام",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "هسا",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "بلله يا شب ترجع ورا",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "طب انا شو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "و انا الف",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "يعني مش شرط اذا حلوه وموظفه وراكبه سياره يعني طلباتها خرافيه طب يا عمي جرب شو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "تردوش عهالحكي يا جماعه",
+        "target": "فش",
+        "count": 1
+      },
+      {
+        "context": "صفنت شوي و استنتجت انو اخوي",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "وضلو قاعدين عالبرنده",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "ما اكتفيناش بالامتحان الرباني تاع الجنه",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "عصير و قعدت تهديني و تحكيلي احكي يا عمري شو صاير معك و بوعدك ما حد",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اقلكن مهرا اكثركن بركه والي بيطلع عراتب العريس الله بيرزقو",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "وكمان مش يكون شب كل دقايق",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "لا يختي",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "انا قاعد بحكي عن هبه",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "فرح دخلت ع غرفتها متدايقه و هبه رجعت شغلت المسجل ع اغنيه مخادع",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "عليه حكالو تعال ضروري قام اخوي حمل حالو و ضل نازل ابصر بس شكلها طوشه يعني",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "ضروري قام اخوي حمل حالو و ضل نازل ابصر بس شكلها طوشه يعني رح يطول لإنو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "مع انو الكل رمى وكنا فوق العشر ولاد انتفاضه عملنا عالتوته بس الكل قال عمر زوربا",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "لإنو صار عندي عقد نفسيه و حاله توحد و خلل ذهني",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "انا مش مصدق انها بدها تتجوز بكرا بكرا",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "شبكه و الحمام بطل حدا يفوتو ع حظي اخر اشي اتجرأت و حكيت خليني اطلع برا",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "حاليا في اشي تغير مش عارف شو",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "بس ان شاء الله",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "و بزعلك و بخليك تخبط راسك بالحيط و بخليك ما تنام ولا توكل و بحرق دمك",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "بشوف انه الزواج من اجنبيه صحيح اله اجابيات كتيير بس تتجوز وحده بنت عيله و ناس",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "اما",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "اما هو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اما هو رح يبكي كل يوم",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اما هو رح يبكي كل يوم رح يتوجع كل يوم",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اما هو رح يبكي كل يوم رح يتوجع كل يوم رح يموت الف مره كل يوم",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "حجمها ضليت اركض و بلشت اتعب و اعرق للحظه حسيت ملامحي صارت تنقط يعني تخيلت عيني",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "حتى اخر مره وقعت طاحونتي العقل من الكف الي سلخني ياه عشان الطبخه مالحه",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "زهقت كمان انو اكبر اكشن ممكن يصير بحياتي",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "و نا بالسوق",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "شاي اللي",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "تحكيش",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "زحت كل الكنابيات و غيرت الديكور",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "وبفكرو انو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "الليرات بتروح وبتيجي يا كبير بس راحه بنتك بدهاش ليرات بدها حدا بخاف",
+        "target": "ع",
+        "count": 1
+      },
+      {
+        "context": "ازا جد سمحت لحالي احبو يمكن يصير حب من طرف واحد و اتعذب و اسهر الليالي",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "ولا صبحتو متنشطين و متحمسين و بدكو تبدو بدايه",
+        "target": "صح",
+        "count": 1
+      },
+      {
+        "context": "رحت من الوجع شقلبت عالأرض و صرت ارقص زومبا عالشقلوب اجا",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "في شباب ماخدين فكره عن الزواج انو",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "فجأه سمع صوت اشي نمزع بعديها صوت كف حامي و انفتح الباب و دفشتني امي برا",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "و تضرب كف",
+        "target": "مع",
+        "count": 1
+      },
+      {
+        "context": "",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "اي حدا دارس بكليه العشق و الغرام",
+        "target": "و",
+        "count": 1
+      },
+      {
+        "context": "مسكني",
+        "target": "هو",
+        "count": 1
+      },
+      {
+        "context": "انا بحكي عن تجربه ويلي مابيرضى يمثل بهاي المرحله بيعتبروه معقد وبحلم بشيء مش",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "ساعيتها لا",
+        "target": "رح",
+        "count": 1
+      },
+      {
+        "context": "ساعيتها لا رح تشوفي مروان",
+        "target": "ولا",
+        "count": 1
+      },
+      {
+        "context": "و بعد ما طار الباص اخد تنورتي معو يعني نمزعت و ضلت معلقه بالباب و طايره",
+        "target": "مع",
+        "count": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,656 @@
+{
+  "baseline": "/home/m57/Projects/mboard/bench/results/crew-baseline-dccc420",
+  "candidate": "/home/m57/Projects/mboard-299/bench/results/crew299-off",
+  "input_hashes": {
+    "baseline": {
+      "ar_fresh.json": "419f9a33affe4dda0ba6338789a7ace71939252f7eaceca52f283d9201a24077",
+      "ar_fresh.misses.tsv": "c1eb9bb9990384af169c6944293bce9c987e99ddcabfd340d295b7cce5bf7502",
+      "ar_fresh.typos.tsv": "ff91ecc949ce26ca847bd0a71ffa1210487f0c7a0d220ef39fdaf505eb240f2e",
+      "ar_real_typos.json": "5faceac0eda6041a92040856896977713aeb737278f15e460c71897bc89a1c51",
+      "ar_real_typos.typos.tsv": "3429948a503a4e32352a1ae248f7e20fb650b36056bee8db655dd06a14ed8391",
+      "ar_subs.json": "29754b4ffaf16a7d2dd0c39cd7ead72ff4686e5de180c5dff47713ce1a9a9886",
+      "ar_subs.misses.tsv": "b7e0133b3423a9dc11d1a37dadfac5fb1e9b1c7faa9eca86f0e7fe273ae80659",
+      "ar_subs.typos.tsv": "0173b4b21e7da18359319d5a7556c02383cd9ba6e900963f0d79945dc2735346",
+      "ar_tatoeba.json": "f7dc0a1180ab64d02fa8b309bb0d26b13e7c7f25aab2cfa240c659734b3ba8be",
+      "ar_tatoeba.misses.tsv": "be86402e2d701b5986024fbd714e440ed8f715a34fe165260201c5d1e4f4d4ed",
+      "ar_tatoeba.typos.tsv": "2cde07df7ea10b3cdee7c7b2f816bcc881c6300564c5fc5820e738730ee33030",
+      "en_chat.json": "d801a229c5c4353fa44802575a04d9242807839153c21379923b532288df0fa5",
+      "en_chat.misses.tsv": "b3bf01efe78eabe48a9ce6c6bc7b560a16c3019eb559db8275daca3430a85795",
+      "en_chat.typos.tsv": "b019293df286f6080b0637ee98f7baa9d8da6e82fe326528b8a35a529865307c",
+      "en_chat_learning.json": "da8f2a2cfcf39dc57ee53afb1598203ef74166be55855a1bd083f3aee8a6ccad",
+      "en_chat_learning.misses.tsv": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b",
+      "en_fresh.json": "7bf082920c858f022299b5edc7490455313eaff96dbedba37c26e7996c751435",
+      "en_fresh.misses.tsv": "d233037a6fd2fbc6fdd7ac100c06adaaf011db4cc1bc44f200784f08e275cc37",
+      "en_fresh.typos.tsv": "2cbfa57b8928591df6066bc0baf6677801e5f2d04e3c71b42acf101572edf510",
+      "en_real_typos.json": "b416f1e1487b94c91169c4df51876f55a459a5178b24a8643a1805b584204aae",
+      "en_real_typos.typos.tsv": "d536465922fc064bece5993373514063991300a7856c660f34e557f46b3031ae",
+      "en_subs.json": "827a257138de0a0ea26cad800fc82a2e37ff6d3e56e4f77ad6bdd3b32a7e3956",
+      "en_subs.misses.tsv": "9b869d016bb7ef6302c227db42465f68ce2c8c15cf4dff34c3b5af2ad9577682",
+      "en_subs.typos.tsv": "4233789462ad0f879f1482b8dac7669c714ca26ab531172326a2cdbf01f192f7",
+      "en_tatoeba.json": "c40bd32f97ef0f85d71b75a92d68537715cf6121e3b43273b57a895a7c8159db",
+      "en_tatoeba.misses.tsv": "21670052d807cb21e89670640d8408c66c0ef542527c0ee234c5ea52f4543f7b",
+      "en_tatoeba.typos.tsv": "2c1e1125d10b6e5d27de546a7513b25282b13a25dc3c0bb8aacf8efc77554749",
+      "jo_chat_dialect.json": "5ac322c6f8b9df8c86eedce97c506efdd0615c96ed1cb2b810ec79df3a34bdda",
+      "jo_chat_dialect.misses.tsv": "87ae22503c48146463d1631dee6d62c1a3d0e663fd86c554bd0cf9cb10b80f31",
+      "jo_chat_dialect.typos.tsv": "ccb7de3c0a683c6067fd7c2acc309b5909f9936837a16767dce9e48f7b6d0969",
+      "jo_chat_learning.json": "8304b03ee2e3fb1266dd5e64743a9bae2599c9c70477ad4942cb8d5c6fcb9898",
+      "jo_chat_learning.misses.tsv": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8",
+      "jo_chat_msa.json": "e58e218a4151b82121ba7f792c5ef6d639779c3bd3d010fdfbaed64a26c191b1",
+      "jo_chat_msa.misses.tsv": "0c35ed06eac195076508b306ad2e26618081a9b213c6869f1b29ad3a5a9e4ef5",
+      "jo_human_fresh.json": "1e7b5b063778f5eaca0b096bd0f8eab16bb8b36d309d46d255e4270aad4ad8a0",
+      "jo_human_fresh.misses.tsv": "c50ae2f8f7f0fb77a2028b19b4b3e0c0c878c128c687a88ec5805621e4cb55d7",
+      "jo_human_fresh.typos.tsv": "51e9142dbbc586bbbe3046778da59e5ebc0c0810716c82497d558156f8336372"
+    },
+    "candidate": {
+      "ar_fresh.json": "6cee1cce168ab68498ae91740329cf209e8220578e1dc899d5418d3d90718e38",
+      "ar_fresh.misses.tsv": "c1eb9bb9990384af169c6944293bce9c987e99ddcabfd340d295b7cce5bf7502",
+      "ar_fresh.typos.tsv": "ff91ecc949ce26ca847bd0a71ffa1210487f0c7a0d220ef39fdaf505eb240f2e",
+      "ar_real_typos.json": "f47ceff18c0a17ed3bc5a309dd23301a7604a5f1504ea9964e73c1dad89d83d1",
+      "ar_real_typos.typos.tsv": "3429948a503a4e32352a1ae248f7e20fb650b36056bee8db655dd06a14ed8391",
+      "ar_subs.json": "10476a7c400251a01276a1a9b5f653df701ffc7e75da5b7dbb38c62be2d1b18a",
+      "ar_subs.misses.tsv": "b7e0133b3423a9dc11d1a37dadfac5fb1e9b1c7faa9eca86f0e7fe273ae80659",
+      "ar_subs.typos.tsv": "0173b4b21e7da18359319d5a7556c02383cd9ba6e900963f0d79945dc2735346",
+      "ar_tatoeba.json": "455eb485ddef6743050882a1f81e66bbcb3248db29f6a22cbb69978d2ab5e6fb",
+      "ar_tatoeba.misses.tsv": "be86402e2d701b5986024fbd714e440ed8f715a34fe165260201c5d1e4f4d4ed",
+      "ar_tatoeba.typos.tsv": "2cde07df7ea10b3cdee7c7b2f816bcc881c6300564c5fc5820e738730ee33030",
+      "en_chat.json": "4fe1f04ce25cf91cdb230a78fc6dbabb6be7c7f7f0a6600aefa2a4597e784595",
+      "en_chat.misses.tsv": "b3bf01efe78eabe48a9ce6c6bc7b560a16c3019eb559db8275daca3430a85795",
+      "en_chat.typos.tsv": "b019293df286f6080b0637ee98f7baa9d8da6e82fe326528b8a35a529865307c",
+      "en_chat_learning.json": "bf03d4c1c1cb19f25edc6b74d95fb476045090f21d8f013a86b5513580a49a6f",
+      "en_chat_learning.misses.tsv": "f2a407b5d525f167b02a4ea078d00236fe2fd014cb91ad109dd3d626d9ebca4b",
+      "en_fresh.json": "a313bb58d2ecf76f065978014c6d2756c465c798542ca9278b0a5ee90108c1d1",
+      "en_fresh.misses.tsv": "d233037a6fd2fbc6fdd7ac100c06adaaf011db4cc1bc44f200784f08e275cc37",
+      "en_fresh.typos.tsv": "2cbfa57b8928591df6066bc0baf6677801e5f2d04e3c71b42acf101572edf510",
+      "en_real_typos.json": "883e5cf9407746ec47a8edbb6834055a50e48e832b13830b404a32dee49325b0",
+      "en_real_typos.typos.tsv": "d536465922fc064bece5993373514063991300a7856c660f34e557f46b3031ae",
+      "en_subs.json": "2ca4c778ff50706c04c519129c90100f5702702355e2371d3725aed111282717",
+      "en_subs.misses.tsv": "9b869d016bb7ef6302c227db42465f68ce2c8c15cf4dff34c3b5af2ad9577682",
+      "en_subs.typos.tsv": "4233789462ad0f879f1482b8dac7669c714ca26ab531172326a2cdbf01f192f7",
+      "en_tatoeba.json": "c5c0a017c680d3f5205d2b4e3850b13c42e4b5614eb356b578ee32572050b031",
+      "en_tatoeba.misses.tsv": "21670052d807cb21e89670640d8408c66c0ef542527c0ee234c5ea52f4543f7b",
+      "en_tatoeba.typos.tsv": "2c1e1125d10b6e5d27de546a7513b25282b13a25dc3c0bb8aacf8efc77554749",
+      "jo_chat_dialect.json": "f385f46824b85c518c744903254d4990a9de387cf4a7b012b6cb52a85529c179",
+      "jo_chat_dialect.misses.tsv": "87ae22503c48146463d1631dee6d62c1a3d0e663fd86c554bd0cf9cb10b80f31",
+      "jo_chat_dialect.typos.tsv": "ccb7de3c0a683c6067fd7c2acc309b5909f9936837a16767dce9e48f7b6d0969",
+      "jo_chat_learning.json": "e794099d1e1c85fc231fbb8c734b45e84f64762fa9b7c2be98c4112ee81b0d0f",
+      "jo_chat_learning.misses.tsv": "55cea167935764b684d583962b765079663cc6d687cb078a3bfde54be8ef1ef8",
+      "jo_chat_msa.json": "b875c879e1a77940310714aa9c725ec3f52cee84e5ce340746893cc380b769c3",
+      "jo_chat_msa.misses.tsv": "0c35ed06eac195076508b306ad2e26618081a9b213c6869f1b29ad3a5a9e4ef5",
+      "jo_human_fresh.json": "0f848dcf678386ffdf290015d8fd70dd32db97622c639dd6464a6d09dc7f9d48",
+      "jo_human_fresh.misses.tsv": "c50ae2f8f7f0fb77a2028b19b4b3e0c0c878c128c687a88ec5805621e4cb55d7",
+      "jo_human_fresh.typos.tsv": "51e9142dbbc586bbbe3046778da59e5ebc0c0810716c82497d558156f8336372"
+    }
+  },
+  "counts": {
+    "targets_lost": 0,
+    "targets_gained": 0,
+    "new_wrong": 0,
+    "wrong_removed": 0,
+    "correct_auto_lost": 0,
+    "auto_to_manual": 0,
+    "new_valid_corruption": 0
+  },
+  "default_gate": "ROW_GATE_PASS",
+  "sets": {
+    "ar_fresh.typos.tsv": {
+      "rows": 1461,
+      "before_outcomes": {
+        "missed": 564,
+        "offered": 637,
+        "fixed": 220,
+        "wrong_fix": 40
+      },
+      "after_outcomes": {
+        "missed": 564,
+        "offered": 637,
+        "fixed": 220,
+        "wrong_fix": 40
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "ar_real_typos.typos.tsv": {
+      "rows": 771,
+      "before_outcomes": {
+        "offered": 303,
+        "fixed": 81,
+        "missed": 378,
+        "wrong_fix": 9
+      },
+      "after_outcomes": {
+        "offered": 303,
+        "fixed": 81,
+        "missed": 378,
+        "wrong_fix": 9
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "ar_subs.typos.tsv": {
+      "rows": 2919,
+      "before_outcomes": {
+        "offered": 1388,
+        "missed": 930,
+        "wrong_fix": 95,
+        "fixed": 506
+      },
+      "after_outcomes": {
+        "offered": 1388,
+        "missed": 930,
+        "wrong_fix": 95,
+        "fixed": 506
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "ar_tatoeba.typos.tsv": {
+      "rows": 2913,
+      "before_outcomes": {
+        "fixed": 474,
+        "missed": 1083,
+        "offered": 1288,
+        "wrong_fix": 68
+      },
+      "after_outcomes": {
+        "fixed": 474,
+        "missed": 1083,
+        "offered": 1288,
+        "wrong_fix": 68
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en_chat.typos.tsv": {
+      "rows": 400,
+      "before_outcomes": {
+        "fixed": 254,
+        "wrong_fix": 14,
+        "offered": 91,
+        "missed": 41
+      },
+      "after_outcomes": {
+        "fixed": 254,
+        "wrong_fix": 14,
+        "offered": 91,
+        "missed": 41
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en_fresh.typos.tsv": {
+      "rows": 1487,
+      "before_outcomes": {
+        "fixed": 870,
+        "wrong_fix": 43,
+        "missed": 217,
+        "offered": 357
+      },
+      "after_outcomes": {
+        "fixed": 870,
+        "wrong_fix": 43,
+        "missed": 217,
+        "offered": 357
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en_real_typos.typos.tsv": {
+      "rows": 4000,
+      "before_outcomes": {
+        "missed": 1576,
+        "offered": 744,
+        "fixed": 1116,
+        "wrong_fix": 564
+      },
+      "after_outcomes": {
+        "missed": 1576,
+        "offered": 744,
+        "fixed": 1116,
+        "wrong_fix": 564
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en_subs.typos.tsv": {
+      "rows": 2790,
+      "before_outcomes": {
+        "offered": 692,
+        "fixed": 1762,
+        "wrong_fix": 74,
+        "missed": 262
+      },
+      "after_outcomes": {
+        "offered": 692,
+        "fixed": 1762,
+        "wrong_fix": 74,
+        "missed": 262
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "en_tatoeba.typos.tsv": {
+      "rows": 2960,
+      "before_outcomes": {
+        "fixed": 1797,
+        "offered": 651,
+        "missed": 416,
+        "wrong_fix": 96
+      },
+      "after_outcomes": {
+        "fixed": 1797,
+        "offered": 651,
+        "missed": 416,
+        "wrong_fix": 96
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "jo_chat_dialect.typos.tsv": {
+      "rows": 1199,
+      "before_outcomes": {
+        "offered": 504,
+        "fixed": 145,
+        "missed": 515,
+        "wrong_fix": 35
+      },
+      "after_outcomes": {
+        "offered": 504,
+        "fixed": 145,
+        "missed": 515,
+        "wrong_fix": 35
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    },
+    "jo_human_fresh.typos.tsv": {
+      "rows": 1352,
+      "before_outcomes": {
+        "missed": 588,
+        "offered": 535,
+        "fixed": 181,
+        "wrong_fix": 48
+      },
+      "after_outcomes": {
+        "missed": 588,
+        "offered": 535,
+        "fixed": 181,
+        "wrong_fix": 48
+      },
+      "targets_lost": [],
+      "targets_gained": [],
+      "new_wrong": [],
+      "wrong_removed": [],
+      "correct_auto_lost": [],
+      "auto_to_manual": []
+    }
+  },
+  "clean_metrics": {
+    "ar_fresh.json": {
+      "found_before_end_pct": {
+        "baseline": 60.63,
+        "candidate": 60.63
+      },
+      "keystroke_savings_pct": {
+        "baseline": 24.51,
+        "candidate": 24.51
+      },
+      "false_autocorrect_count": {
+        "baseline": 7,
+        "candidate": 7
+      },
+      "next_word_top1_pct": {
+        "baseline": 10.35,
+        "candidate": 10.35
+      },
+      "next_word_top3_pct": {
+        "baseline": 17.61,
+        "candidate": 17.61
+      },
+      "p95_us": {
+        "baseline": 695,
+        "candidate": 513
+      }
+    },
+    "ar_subs.json": {
+      "found_before_end_pct": {
+        "baseline": 65.72,
+        "candidate": 65.72
+      },
+      "keystroke_savings_pct": {
+        "baseline": 26.93,
+        "candidate": 26.93
+      },
+      "false_autocorrect_count": {
+        "baseline": 58,
+        "candidate": 58
+      },
+      "next_word_top1_pct": {
+        "baseline": 11.71,
+        "candidate": 11.71
+      },
+      "next_word_top3_pct": {
+        "baseline": 20.59,
+        "candidate": 20.59
+      },
+      "p95_us": {
+        "baseline": 380,
+        "candidate": 312
+      }
+    },
+    "ar_tatoeba.json": {
+      "found_before_end_pct": {
+        "baseline": 59.57,
+        "candidate": 59.57
+      },
+      "keystroke_savings_pct": {
+        "baseline": 23.71,
+        "candidate": 23.71
+      },
+      "false_autocorrect_count": {
+        "baseline": 26,
+        "candidate": 26
+      },
+      "next_word_top1_pct": {
+        "baseline": 10.16,
+        "candidate": 10.16
+      },
+      "next_word_top3_pct": {
+        "baseline": 17.27,
+        "candidate": 17.27
+      },
+      "p95_us": {
+        "baseline": 431,
+        "candidate": 301
+      }
+    },
+    "en_chat.json": {
+      "found_before_end_pct": {
+        "baseline": 86.92,
+        "candidate": 86.92
+      },
+      "keystroke_savings_pct": {
+        "baseline": 39.35,
+        "candidate": 39.35
+      },
+      "false_autocorrect_count": {
+        "baseline": 28,
+        "candidate": 28
+      },
+      "next_word_top1_pct": {
+        "baseline": 13.03,
+        "candidate": 13.03
+      },
+      "next_word_top3_pct": {
+        "baseline": 22.51,
+        "candidate": 22.51
+      },
+      "p95_us": {
+        "baseline": 413,
+        "candidate": 386
+      }
+    },
+    "en_chat_learning.json": {
+      "found_before_end_pct": {
+        "baseline": 87.08,
+        "candidate": 87.08
+      },
+      "keystroke_savings_pct": {
+        "baseline": 40.14,
+        "candidate": 40.14
+      },
+      "false_autocorrect_count": {
+        "baseline": 10,
+        "candidate": 10
+      },
+      "next_word_top1_pct": {
+        "baseline": 13.18,
+        "candidate": 13.18
+      },
+      "next_word_top3_pct": {
+        "baseline": 22.36,
+        "candidate": 22.36
+      },
+      "p95_us": {
+        "baseline": 774,
+        "candidate": 486
+      }
+    },
+    "en_fresh.json": {
+      "found_before_end_pct": {
+        "baseline": 84.71,
+        "candidate": 84.71
+      },
+      "keystroke_savings_pct": {
+        "baseline": 40.59,
+        "candidate": 40.59
+      },
+      "false_autocorrect_count": {
+        "baseline": 15,
+        "candidate": 15
+      },
+      "next_word_top1_pct": {
+        "baseline": 16.55,
+        "candidate": 16.55
+      },
+      "next_word_top3_pct": {
+        "baseline": 27.9,
+        "candidate": 27.9
+      },
+      "p95_us": {
+        "baseline": 264,
+        "candidate": 222
+      }
+    },
+    "en_subs.json": {
+      "found_before_end_pct": {
+        "baseline": 86.8,
+        "candidate": 86.8
+      },
+      "keystroke_savings_pct": {
+        "baseline": 41.83,
+        "candidate": 41.83
+      },
+      "false_autocorrect_count": {
+        "baseline": 89,
+        "candidate": 89
+      },
+      "next_word_top1_pct": {
+        "baseline": 17.13,
+        "candidate": 17.13
+      },
+      "next_word_top3_pct": {
+        "baseline": 29.42,
+        "candidate": 29.42
+      },
+      "p95_us": {
+        "baseline": 166,
+        "candidate": 158
+      }
+    },
+    "en_tatoeba.json": {
+      "found_before_end_pct": {
+        "baseline": 85.24,
+        "candidate": 85.24
+      },
+      "keystroke_savings_pct": {
+        "baseline": 40.91,
+        "candidate": 40.91
+      },
+      "false_autocorrect_count": {
+        "baseline": 51,
+        "candidate": 51
+      },
+      "next_word_top1_pct": {
+        "baseline": 16.45,
+        "candidate": 16.45
+      },
+      "next_word_top3_pct": {
+        "baseline": 28.42,
+        "candidate": 28.42
+      },
+      "p95_us": {
+        "baseline": 183,
+        "candidate": 162
+      }
+    },
+    "jo_chat_dialect.json": {
+      "found_before_end_pct": {
+        "baseline": 51.93,
+        "candidate": 51.93
+      },
+      "keystroke_savings_pct": {
+        "baseline": 17.49,
+        "candidate": 17.49
+      },
+      "false_autocorrect_count": {
+        "baseline": 12,
+        "candidate": 12
+      },
+      "next_word_top1_pct": {
+        "baseline": 5.51,
+        "candidate": 5.51
+      },
+      "next_word_top3_pct": {
+        "baseline": 9.37,
+        "candidate": 9.37
+      },
+      "p95_us": {
+        "baseline": 420,
+        "candidate": 357
+      }
+    },
+    "jo_chat_learning.json": {
+      "found_before_end_pct": {
+        "baseline": 58.1,
+        "candidate": 58.1
+      },
+      "keystroke_savings_pct": {
+        "baseline": 21.48,
+        "candidate": 21.48
+      },
+      "false_autocorrect_count": {
+        "baseline": 12,
+        "candidate": 12
+      },
+      "next_word_top1_pct": {
+        "baseline": 6.14,
+        "candidate": 6.14
+      },
+      "next_word_top3_pct": {
+        "baseline": 10.35,
+        "candidate": 10.35
+      },
+      "p95_us": {
+        "baseline": 764,
+        "candidate": 564
+      }
+    },
+    "jo_chat_msa.json": {
+      "found_before_end_pct": {
+        "baseline": 37.18,
+        "candidate": 37.18
+      },
+      "keystroke_savings_pct": {
+        "baseline": 11.23,
+        "candidate": 11.23
+      },
+      "false_autocorrect_count": {
+        "baseline": 12,
+        "candidate": 12
+      },
+      "next_word_top1_pct": {
+        "baseline": 1.52,
+        "candidate": 1.52
+      },
+      "next_word_top3_pct": {
+        "baseline": 3.57,
+        "candidate": 3.57
+      },
+      "p95_us": {
+        "baseline": 568,
+        "candidate": 462
+      }
+    },
+    "jo_human_fresh.json": {
+      "found_before_end_pct": {
+        "baseline": 51.11,
+        "candidate": 51.11
+      },
+      "keystroke_savings_pct": {
+        "baseline": 18.26,
+        "candidate": 18.26
+      },
+      "false_autocorrect_count": {
+        "baseline": 35,
+        "candidate": 35
+      },
+      "next_word_top1_pct": {
+        "baseline": 7.1,
+        "candidate": 7.1
+      },
+      "next_word_top3_pct": {
+        "baseline": 11.51,
+        "candidate": 11.51
+      },
+      "p95_us": {
+        "baseline": 459,
+        "candidate": 356
+      }
+    }
+  },
+  "new_valid_corruption": {
+    "ar_fresh.json": [],
+    "ar_subs.json": [],
+    "ar_tatoeba.json": [],
+    "en_chat.json": [],
+    "en_chat_learning.json": [],
+    "en_fresh.json": [],
+    "en_subs.json": [],
+    "en_tatoeba.json": [],
+    "jo_chat_dialect.json": [],
+    "jo_chat_learning.json": [],
+    "jo_chat_msa.json": [],
+    "jo_human_fresh.json": []
+  },
+  "limitations": "Historical metrics do not bind results to jars. Row gate is not full acceptance; lint/build/state/device gates remain separate. Exact case-insensitive membership, no Arabic folding."
+}

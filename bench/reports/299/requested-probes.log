@@ -1,0 +1,13 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+MODE=shipped
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200012.md","context":["I","am","going","to"],"suggestions":["be","do","get"],"language":"en","text":"I am going to ","word":""}
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200014.md","context":["شو"],"suggestions":["في","بدك","صار"],"language":"ar","text":"شو ","word":""}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200015.md","context":[],"suggestions":["kifak","kick","kicked"],"language":"en","text":"kifak","word":"kifak"}
+MODE=off
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=false
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200017.md","context":["I","am","going","to"],"suggestions":["be","do","get"],"language":"en","text":"I am going to ","word":""}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=false
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200019.md","context":["شو"],"suggestions":["في","صار","بدك"],"language":"ar","text":"شو ","word":""}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=false
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-200020.md","context":[],"suggestions":["kifak","kick","kicked"],"language":"en","text":"kifak","word":"kifak"}
+PROBES_EXIT=0

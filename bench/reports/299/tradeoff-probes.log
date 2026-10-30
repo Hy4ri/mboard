@@ -1,0 +1,15 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+MODE=off
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191815.md","context":["he","broke","down"],"suggestions":["everg","everglades","everything"],"language":"en","text":"he broke down everg","word":"everg"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191816.md","context":["قد","لا"],"suggestions":["يجب","يجري","جيبي"],"language":"ar","text":"قد لا يجب","word":"يجب"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191818.md","context":[],"suggestions":["انهم","إنهم","إنه"],"language":"ar","text":"انهم","word":"انهم"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191820.md","context":["بلا"],"suggestions":["منعا","معنا","مناح"],"language":"ar","text":"بلا منعا","word":"منعا"}
+MODE=on
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191821.md","context":["he","broke","down"],"suggestions":["everg","everglades","every"],"language":"en","text":"he broke down everg","word":"everg"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191823.md","context":["قد","لا"],"suggestions":["يجب","يجري","يحب"],"language":"ar","text":"قد لا يجب","word":"يجب"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191825.md","context":[],"suggestions":["انهم","إنه","إنها"],"language":"ar","text":"انهم","word":"انهم"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-191826.md","context":["بلا"],"suggestions":["منعا","معنا","منها"],"language":"ar","text":"بلا منعا","word":"منعا"}

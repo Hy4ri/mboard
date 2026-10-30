@@ -1,0 +1,18 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+MODE=off
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190800.md","context":["I","want"],"suggestions":["to","you","a"],"language":"en","text":"I want ","word":""}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190802.md","context":["in","the"],"suggestions":["me","morning","middle"],"language":"en","text":"in the m","word":"m"}
+{"mode":"complete","auto":"the","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190804.md","context":[],"suggestions":["the","teh","there"],"language":"en","text":"teh","word":"teh"}
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190806.md","context":["أنا","لا"],"suggestions":["أعرف","أريد","أستطيع"],"language":"ar","text":"أنا لا ","word":""}
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190807.md","context":["بدي","اروح"],"suggestions":["ع","عالبيت","اتعشى"],"language":"ar","text":"بدي اروح ","word":""}
+MODE=on
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190809.md","context":["I","want"],"suggestions":["to","you","a"],"language":"en","text":"I want ","word":""}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190811.md","context":["in","the"],"suggestions":["me","morning","middle"],"language":"en","text":"in the m","word":"m"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"complete","auto":"the","log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190813.md","context":[],"suggestions":["the","teh","there"],"language":"en","text":"teh","word":"teh"}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190814.md","context":["أنا","لا"],"suggestions":["أعرف","أريد","أستطيع"],"language":"ar","text":"أنا لا ","word":""}
+Picked up JAVA_TOOL_OPTIONS: -Dmboard.neural=true -Dmboard.neural.weight=0.1
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-299/bench/logs/suggest/20261030-190816.md","context":["بدي","اروح"],"suggestions":["ع","عالبيت","اتعشى"],"language":"ar","text":"بدي اروح ","word":""}

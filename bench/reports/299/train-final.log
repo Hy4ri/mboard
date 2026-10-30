@@ -1,0 +1,19 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+lang=en V=10000 D=48 H=128 rows=360000
+epoch 1 weighted-xent 5.2045  157s
+epoch 2 weighted-xent 4.8375  155s
+epoch 3 weighted-xent 4.7241  155s
+epoch 4 weighted-xent 4.6552  152s
+wrote bench/lm/out_reranker/rerank_en.bin 592109 bytes
+lang=ar V=10000 D=48 H=128 rows=360000
+epoch 1 weighted-xent 5.5282  141s
+epoch 2 weighted-xent 5.0369  138s
+epoch 3 weighted-xent 4.8919  132s
+epoch 4 weighted-xent 4.8124  132s
+wrote bench/lm/out_reranker/rerank_ar.bin 625224 bytes
+lang=jo V=10000 D=48 H=128 rows=91786
+epoch 1 weighted-xent 6.7828  35s
+epoch 2 weighted-xent 6.2925  33s
+epoch 3 weighted-xent 5.8412  33s
+epoch 4 weighted-xent 5.3835  37s
+wrote bench/lm/out_reranker/rerank_jo.bin 628667 bytes
