@@ -1,0 +1,2 @@
+d4fab995c622d593ae678b947b9ef6da8223b6639a0e86c6f66a36105bad4f43  app/build/generated/wordAssets/words_ar.tsv.bin
+02a6e0499f68d8ffa8ef465b40e2aba2adbb58d82286bc6f874fd04863d6c50a  app/build/generated/wordAssets/words_en.tsv.bin

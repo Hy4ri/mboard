@@ -1,0 +1,35 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+  mCurrentFocus=Window{d503347 u0 com.m57.mboard/com.m57.mboard.SetupActivity}
+Performing Streamed Install
+Success
+=== Mboard Startup Measurement on device AS7J6R4407003449 (1 rounds) ===
+--- Round 1 / 1 ---
+Logs:
+10-30 20:49:00.852 18963 18963 I mboard.startup: service onCreate start: elapsedRealtime=377991917 uptimeMillis=136064078
+10-30 20:49:00.958 18963 19047 I mboard.startup: asset load start: words_en.tsv
+10-30 20:49:02.011 18963 19047 I mboard.startup: dictionary en parse-normalize duration=1048ms
+10-30 20:49:02.094 18963 19047 I mboard.startup: dictionary en supplemental duration=83ms
+10-30 20:49:02.149 18963 19047 I mboard.startup: dictionary en merge duration=55ms
+10-30 20:49:02.410 18963 19047 I mboard.startup: dictionary en sort duration=261ms
+10-30 20:49:02.964 18963 19047 I mboard.startup: dictionary en indexes duration=554ms
+10-30 20:49:03.017 18963 19047 I mboard.startup: asset load end: words_en.tsv duration=2059ms entries=125549
+10-30 20:49:03.017 18963 19047 I mboard.startup: asset load start: next_en.tsv
+10-30 20:49:03.174 18963 19047 I mboard.startup: asset load end: next_en.tsv duration=157ms entries=30000
+10-30 20:49:03.174 18963 19047 I mboard.startup: asset load start: context_en.tsv
+10-30 20:49:03.460 18963 19047 I mboard.startup: asset load end: context_en.tsv duration=286ms entries=60000
+10-30 20:49:03.460 18963 19047 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 20:49:03.462 18963 19047 I mboard.startup: asset load end: misspell_rules_en.tsv duration=2ms
+10-30 20:49:03.480 18963 19047 I mboard.startup: engine ready: language=en duration=2523ms
+10-30 20:49:03.488 18963 18963 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=377994553 uptimeMillis=136066714
+Memory:
+  TOTAL PSS: 175669 KB
+  Java Heap: 57484 KB
+Phase timings:
+  service onCreate -> first suggestion: 2636 ms
+  engine load duration: 2523 ms
+
+=== SUMMARY ACROSS 1 ROUNDS ===
+  service onCreate -> first suggestion (ms): median = 2636, max = 2636 (samples: 2636)
+  engine ready duration (ms): median = 2523, max = 2523 (samples: 2523)
+  TOTAL PSS (KB): median = 175669, max = 175669 (samples: 175669)
+  Java Heap (KB): median = 57484, max = 57484 (samples: 57484)

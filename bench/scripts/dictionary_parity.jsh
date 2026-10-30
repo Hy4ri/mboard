@@ -15,7 +15,9 @@ for (var code : List.of("en", "ar")) {
         var p = line.split("\t");
         dialect.put(p[0], p[1].equals("1") ? 60000L : p[1].equals("2") ? 15000L : 4000L);
     }
-    var dictionary = WordDictionary.read(Files.newBufferedReader(assets.resolve("words_" + code + ".tsv")),language,dialect);
+    var dictionary = Boolean.getBoolean("mboard.binary")
+        ? (WordDictionary) WordDictionary.class.getMethod("readBinary", InputStream.class, Language.class, Map.class).invoke(null, Files.newInputStream(assets.resolve("words_" + code + ".tsv.bin")), language, dialect)
+        : WordDictionary.read(Files.newBufferedReader(assets.resolve("words_" + code + ".tsv")),language,dialect);
     var prefixes = new TreeSet<String>();
     var words = new TreeSet<String>();
     for (var line : Files.readAllLines(assets.resolve("words_" + code + ".tsv"))) words.add(line.split("\t")[0]);

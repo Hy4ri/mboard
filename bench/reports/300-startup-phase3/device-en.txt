@@ -1,0 +1,134 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+  mCurrentFocus=Window{c1bd904 u0 com.hihonor.android.launcher/com.hihonor.android.launcher.unihome.UniHomeLauncher}
+    mShowingDream=false mDreamingLockscreen=false
+Performing Streamed Install
+Success
+/data/app/~~Fkjh6LJvVCrE2wgmYnpRvA==/com.m57.mboard-HJ_lLowcEFmin6b42iv1-w==/base.apk: 1 file pulled, 0 skipped. 39.4 MB/s (19246937 bytes in 0.465s)
+e4caf98f38a6f99858d9367262141fc2678709c972dbe0cebfac6554ea4f2a09  app/build/outputs/apk/debug/app-debug.apk
+e4caf98f38a6f99858d9367262141fc2678709c972dbe0cebfac6554ea4f2a09  /tmp/crew300p3-installed.apk
+=== Mboard Startup Measurement on device AS7J6R4407003449 (5 rounds) ===
+--- Round 1 / 5 ---
+Logs:
+10-30 21:00:30.584 25082 25082 I mboard.startup: service onCreate start: elapsedRealtime=378681649 uptimeMillis=136753811
+10-30 21:00:31.626 25082 25174 I mboard.startup: asset load start: words_en.tsv
+10-30 21:00:32.047 25082 25174 I mboard.startup: dictionary en supplemental duration=75ms
+10-30 21:00:32.097 25082 25174 I mboard.startup: dictionary en merge duration=51ms
+10-30 21:00:32.167 25082 25174 I mboard.startup: dictionary en sort duration=70ms
+10-30 21:00:32.352 25082 25174 I mboard.startup: dictionary en indexes duration=185ms
+10-30 21:00:32.404 25082 25174 I mboard.startup: asset load end: words_en.tsv duration=777ms entries=125549
+10-30 21:00:32.404 25082 25174 I mboard.startup: asset load start: next_en.tsv
+10-30 21:00:32.573 25082 25174 I mboard.startup: asset load end: next_en.tsv duration=170ms entries=30000
+10-30 21:00:32.573 25082 25174 I mboard.startup: asset load start: context_en.tsv
+10-30 21:00:32.847 25082 25174 I mboard.startup: asset load end: context_en.tsv duration=274ms entries=60000
+10-30 21:00:32.847 25082 25174 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 21:00:32.850 25082 25174 I mboard.startup: asset load end: misspell_rules_en.tsv duration=3ms
+10-30 21:00:32.872 25082 25174 I mboard.startup: engine ready: language=en duration=1245ms
+10-30 21:00:32.879 25082 25082 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=378683944 uptimeMillis=136756106
+Memory:
+  TOTAL PSS: 171843 KB
+  Java Heap: 55196 KB
+Phase timings:
+  service onCreate -> first suggestion: 2295 ms
+  engine load duration: 1245 ms
+
+--- Round 2 / 5 ---
+Logs:
+10-30 21:00:37.548 25237 25237 I mboard.startup: service onCreate start: elapsedRealtime=378688613 uptimeMillis=136760774
+10-30 21:00:37.646 25237 25298 I mboard.startup: asset load start: words_en.tsv
+10-30 21:00:38.113 25237 25298 I mboard.startup: dictionary en supplemental duration=86ms
+10-30 21:00:38.177 25237 25298 I mboard.startup: dictionary en merge duration=63ms
+10-30 21:00:38.248 25237 25298 I mboard.startup: dictionary en sort duration=72ms
+10-30 21:00:38.427 25237 25298 I mboard.startup: dictionary en indexes duration=179ms
+10-30 21:00:38.478 25237 25298 I mboard.startup: asset load end: words_en.tsv duration=833ms entries=125549
+10-30 21:00:38.478 25237 25298 I mboard.startup: asset load start: next_en.tsv
+10-30 21:00:38.645 25237 25298 I mboard.startup: asset load end: next_en.tsv duration=166ms entries=30000
+10-30 21:00:38.645 25237 25298 I mboard.startup: asset load start: context_en.tsv
+10-30 21:00:38.920 25237 25298 I mboard.startup: asset load end: context_en.tsv duration=275ms entries=60000
+10-30 21:00:38.920 25237 25298 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 21:00:38.923 25237 25298 I mboard.startup: asset load end: misspell_rules_en.tsv duration=3ms
+10-30 21:00:38.941 25237 25298 I mboard.startup: engine ready: language=en duration=1296ms
+10-30 21:00:38.948 25237 25237 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=378690013 uptimeMillis=136762175
+Memory:
+  TOTAL PSS: 170841 KB
+  Java Heap: 55096 KB
+Phase timings:
+  service onCreate -> first suggestion: 1400 ms
+  engine load duration: 1296 ms
+
+--- Round 3 / 5 ---
+Logs:
+10-30 21:00:43.481 25359 25359 I mboard.startup: service onCreate start: elapsedRealtime=378694546 uptimeMillis=136766707
+10-30 21:00:43.586 25359 25422 I mboard.startup: asset load start: words_en.tsv
+10-30 21:00:44.054 25359 25422 I mboard.startup: dictionary en supplemental duration=87ms
+10-30 21:00:44.105 25359 25422 I mboard.startup: dictionary en merge duration=51ms
+10-30 21:00:44.176 25359 25422 I mboard.startup: dictionary en sort duration=71ms
+10-30 21:00:44.355 25359 25422 I mboard.startup: dictionary en indexes duration=179ms
+10-30 21:00:44.407 25359 25422 I mboard.startup: asset load end: words_en.tsv duration=821ms entries=125549
+10-30 21:00:44.407 25359 25422 I mboard.startup: asset load start: next_en.tsv
+10-30 21:00:44.575 25359 25422 I mboard.startup: asset load end: next_en.tsv duration=168ms entries=30000
+10-30 21:00:44.575 25359 25422 I mboard.startup: asset load start: context_en.tsv
+10-30 21:00:44.850 25359 25422 I mboard.startup: asset load end: context_en.tsv duration=274ms entries=60000
+10-30 21:00:44.850 25359 25422 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 21:00:44.852 25359 25422 I mboard.startup: asset load end: misspell_rules_en.tsv duration=2ms
+10-30 21:00:44.877 25359 25422 I mboard.startup: engine ready: language=en duration=1291ms
+10-30 21:00:44.885 25359 25359 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=378695950 uptimeMillis=136768111
+Memory:
+  TOTAL PSS: 170842 KB
+  Java Heap: 55100 KB
+Phase timings:
+  service onCreate -> first suggestion: 1404 ms
+  engine load duration: 1291 ms
+
+--- Round 4 / 5 ---
+Logs:
+10-30 21:00:49.578 25482 25482 I mboard.startup: service onCreate start: elapsedRealtime=378700643 uptimeMillis=136772805
+10-30 21:00:49.680 25482 25548 I mboard.startup: asset load start: words_en.tsv
+10-30 21:00:50.153 25482 25548 I mboard.startup: dictionary en supplemental duration=87ms
+10-30 21:00:50.203 25482 25548 I mboard.startup: dictionary en merge duration=50ms
+10-30 21:00:50.274 25482 25548 I mboard.startup: dictionary en sort duration=71ms
+10-30 21:00:50.455 25482 25548 I mboard.startup: dictionary en indexes duration=181ms
+10-30 21:00:50.506 25482 25548 I mboard.startup: asset load end: words_en.tsv duration=827ms entries=125549
+10-30 21:00:50.506 25482 25548 I mboard.startup: asset load start: next_en.tsv
+10-30 21:00:50.672 25482 25548 I mboard.startup: asset load end: next_en.tsv duration=166ms entries=30000
+10-30 21:00:50.672 25482 25548 I mboard.startup: asset load start: context_en.tsv
+10-30 21:00:50.948 25482 25548 I mboard.startup: asset load end: context_en.tsv duration=276ms entries=60000
+10-30 21:00:50.948 25482 25548 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 21:00:50.951 25482 25548 I mboard.startup: asset load end: misspell_rules_en.tsv duration=2ms
+10-30 21:00:50.976 25482 25548 I mboard.startup: engine ready: language=en duration=1296ms
+10-30 21:00:50.983 25482 25482 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=378702048 uptimeMillis=136774209
+Memory:
+  TOTAL PSS: 170974 KB
+  Java Heap: 55168 KB
+Phase timings:
+  service onCreate -> first suggestion: 1405 ms
+  engine load duration: 1296 ms
+
+--- Round 5 / 5 ---
+Logs:
+10-30 21:00:55.572 25604 25604 I mboard.startup: service onCreate start: elapsedRealtime=378706637 uptimeMillis=136778798
+10-30 21:00:55.704 25604 25671 I mboard.startup: asset load start: words_en.tsv
+10-30 21:00:56.167 25604 25671 I mboard.startup: dictionary en supplemental duration=87ms
+10-30 21:00:56.220 25604 25671 I mboard.startup: dictionary en merge duration=53ms
+10-30 21:00:56.288 25604 25671 I mboard.startup: dictionary en sort duration=68ms
+10-30 21:00:56.467 25604 25671 I mboard.startup: dictionary en indexes duration=179ms
+10-30 21:00:56.520 25604 25671 I mboard.startup: asset load end: words_en.tsv duration=816ms entries=125549
+10-30 21:00:56.520 25604 25671 I mboard.startup: asset load start: next_en.tsv
+10-30 21:00:56.686 25604 25671 I mboard.startup: asset load end: next_en.tsv duration=167ms entries=30000
+10-30 21:00:56.686 25604 25671 I mboard.startup: asset load start: context_en.tsv
+10-30 21:00:56.957 25604 25671 I mboard.startup: asset load end: context_en.tsv duration=271ms entries=60000
+10-30 21:00:56.958 25604 25671 I mboard.startup: asset load start: misspell_rules_en.tsv
+10-30 21:00:56.960 25604 25671 I mboard.startup: asset load end: misspell_rules_en.tsv duration=3ms
+10-30 21:00:56.981 25604 25671 I mboard.startup: engine ready: language=en duration=1278ms
+10-30 21:00:56.989 25604 25604 I mboard.startup: first suggestion rendered: count=3 elapsedRealtime=378708054 uptimeMillis=136780215
+Memory:
+  TOTAL PSS: 170926 KB
+  Java Heap: 55096 KB
+Phase timings:
+  service onCreate -> first suggestion: 1417 ms
+  engine load duration: 1278 ms
+
+=== SUMMARY ACROSS 5 ROUNDS ===
+  service onCreate -> first suggestion (ms): median = 1405, max = 2295 (samples: 1400 1404 1405 1417 2295)
+  engine ready duration (ms): median = 1291, max = 1296 (samples: 1245 1278 1291 1296 1296)
+  TOTAL PSS (KB): median = 170926, max = 171843 (samples: 170841 170842 170926 170974 171843)
+  Java Heap (KB): median = 55100, max = 55196 (samples: 55096 55096 55100 55168 55196)

@@ -99,3 +99,87 @@ android.sourceSets.getByName("main").assets.directories.add(compiledTables.get()
 tasks.named("preBuild").configure { dependsOn(compileTables) }
 // Do not ship both representations of these tables.
 android.androidResources.ignoreAssetsPatterns.addAll(listOf("next_en.tsv", "next_ar.tsv", "context_en.tsv", "context_ar.tsv", "jordanian_next.tsv"))
+
+val compileWords = tasks.register("compileWords") {
+    val sources = fileTree("src/main/assets") { include("words_en.tsv", "words_ar.tsv") }
+    val destination = layout.buildDirectory.dir("generated/wordAssets").get().asFile
+    inputs.files(sources)
+    outputs.dir(destination)
+    doLast {
+        destination.mkdirs()
+        // Change together with WordDictionary.normalize. English alphabet: Languages.ENGLISH.alphabet.
+        fun normalizeWord(value: String, latin: Boolean): String? {
+            if (latin) {
+                val result = value.lowercase(Locale.ROOT)
+                val letters = "abcdefghijklmnopqrstuvwxyz"
+                return if (result.isNotEmpty() && result.first() in letters && result.last() in letters &&
+                    result.all { it in letters || it == '\'' }) result else null
+            }
+            val result = buildString(value.length) {
+                value.forEach { char ->
+                    when (char) {
+                        'أ', 'إ', 'آ', 'ٱ' -> append('ا')
+                        'ى' -> append('ي')
+                        'ـ', in '\u064B'..'\u065F', '\u0670', in '\u06D6'..'\u06ED' -> Unit
+                        else -> {
+                            if (!char.isLetter() || Character.UnicodeScript.of(char.code) != Character.UnicodeScript.ARABIC) return null
+                            append(char)
+                        }
+                    }
+                }
+            }
+            return if (result.isNotEmpty() && result.all { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC }) result else null
+        }
+        sources.forEach { source ->
+            data class Word(val original: String, val normalized: String, val frequency: Long)
+            val words = source.useLines { lines -> lines.mapNotNull { line ->
+                val tab = line.indexOf('\t')
+                if (tab <= 0) return@mapNotNull null
+                val original = line.substring(0, tab)
+                val frequency = line.substring(tab + 1).trim().toLongOrNull() ?: return@mapNotNull null
+                val normalized = normalizeWord(original, source.name == "words_en.tsv") ?: return@mapNotNull null
+                Word(original, normalized, frequency)
+            }.toList() }
+            DataOutputStream(BufferedOutputStream(FileOutputStream(File(destination, source.name + ".bin")))).use { stream ->
+                fun text(value: String) {
+                    val bytes = value.toByteArray(Charsets.UTF_8)
+                    stream.writeInt(bytes.size)
+                    stream.write(bytes)
+                }
+                stream.writeInt(0x4d425732)
+                stream.writeInt(words.size)
+                val ordered = if (source.name == "words_en.tsv") words.sortedBy { it.normalized } else words
+                ordered.forEach { word ->
+                    text(word.original)
+                    text(if (word.normalized == word.original) "" else word.normalized)
+                    stream.writeLong(word.frequency)
+                }
+                // Prefix ties follow the same normalized-word order as WordDictionary.assemble.
+                val canonical = LinkedHashMap<String, Int>()
+                ordered.forEachIndexed { index, word ->
+                    val previous = canonical[word.normalized]
+                    if (previous == null || word.frequency > ordered[previous].frequency) canonical[word.normalized] = index
+                }
+                val prefixes = LinkedHashMap<String, MutableList<Int>>()
+                canonical.values.sortedBy { ordered[it].normalized }.forEach { index ->
+                    val word = ordered[index]
+                    for (length in 1..minOf(3, word.normalized.length)) {
+                        val best = prefixes.getOrPut(word.normalized.substring(0, length)) { ArrayList() }
+                        val position = best.indexOfFirst { ordered[it].frequency < word.frequency }
+                        if (position < 0) best.add(index) else best.add(position, index)
+                        if (best.size > 8) best.removeAt(8)
+                    }
+                }
+                stream.writeInt(prefixes.size)
+                prefixes.forEach { (prefix, indices) ->
+                    text(prefix)
+                    stream.writeInt(indices.size)
+                    indices.forEach { stream.writeInt(it) }
+                }
+            }
+        }
+    }
+}
+android.sourceSets.getByName("main").assets.directories.add(layout.buildDirectory.dir("generated/wordAssets").get().asFile.path)
+tasks.named("preBuild").configure { dependsOn(compileWords) }
+android.androidResources.ignoreAssetsPatterns.addAll(listOf("words_en.tsv", "words_ar.tsv"))

@@ -84,3 +84,8 @@ assets during each build; only those binary continuation tables enter the APK. L
 same context strings, candidate comparison keys, counts and row order before suggestions become ready.
 The desktop replay can use the TSV fallback, or the generated binaries with `--assets` pointing to a
 directory containing the ordinary assets plus `app/build/generated/tableAssets/`.
+
+`:app:compileWords` also compiles `words_en.tsv` and `words_ar.tsv` into normalized word assets.
+English assets include sorted entries and short-prefix indices; supplemental vocabulary still joins
+at runtime. Arabic dialect merging keeps the original path. `jordanian.tsv` and known Arabic forms
+remain text assets because their small load cost does not require another binary format.

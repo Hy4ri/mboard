@@ -1236,6 +1236,77 @@ class WordDictionary private constructor(
                             }.toList()
                     }
 
+            return assemble(assetEntries, language, dialect, knownForms)
+        }
+
+        /** Pre-normalized source entries. Missing binaries use read(); malformed binaries never do. */
+        @JvmStatic
+        @JvmOverloads
+        @Throws(java.io.IOException::class)
+        fun readBinary(
+            input: java.io.InputStream,
+            language: Language,
+            dialect: Map<String, Long> = emptyMap(),
+            knownForms: KnownWordForms = KnownWordForms.EMPTY,
+        ): WordDictionary {
+            try {
+                val prepared = HashMap<String, List<String>>()
+                val entries =
+                    java.io.DataInputStream(input.buffered(64 * 1024)).use { stream ->
+                        if (stream.readInt() != 0x4d425732) throw java.io.IOException("Invalid word table magic")
+                        val size = stream.readInt()
+                        if (size !in 1..1_000_000) throw java.io.IOException("Invalid word table size")
+
+                        fun text(): String {
+                            val length = stream.readInt()
+                            if (length !in 0..4096) throw java.io.IOException("Invalid word table string")
+                            val bytes = ByteArray(length)
+                            stream.readFully(bytes)
+                            return String(bytes, Charsets.UTF_8)
+                        }
+                        val entries =
+                            List(size) {
+                                val original = text()
+                                val normalized = text().ifEmpty { original }
+                                Entry(normalized, original, stream.readLong(), hidden = original in language.misspellings)
+                            }
+                        if (language.script == Script.LATIN &&
+                            (1 until entries.size).any { entries[it - 1].normalized > entries[it].normalized }
+                        ) {
+                            throw java.io.IOException("Unsorted word table")
+                        }
+                        val prefixCount = stream.readInt()
+                        if (prefixCount !in 0..1_000_000) throw java.io.IOException("Invalid prefix count")
+                        repeat(prefixCount) {
+                            val prefix = text()
+                            val count = stream.readInt()
+                            if (count !in 1..8) throw java.io.IOException("Invalid prefix size")
+                            prepared[prefix] = List(count) { entries[stream.readInt()].normalized }
+                        }
+                        if (stream.read() != -1) throw java.io.IOException("Trailing word table bytes")
+                        entries
+                    }
+                return assemble(entries, language, dialect, knownForms, sorted = language.script == Script.LATIN, prepared = prepared)
+            } catch (error: RuntimeException) {
+                throw java.io.IOException("Malformed word table", error)
+            }
+        }
+
+        private fun assemble(
+            assetEntries: List<Entry>,
+            language: Language,
+            dialect: Map<String, Long>,
+            knownForms: KnownWordForms,
+            sorted: Boolean = false,
+            prepared: Map<String, List<String>>? = null,
+        ): WordDictionary {
+            var phase = android.os.SystemClock.elapsedRealtime()
+
+            fun measured(name: String) {
+                val now = android.os.SystemClock.elapsedRealtime()
+                android.util.Log.i("mboard.startup", "dictionary ${language.code} $name duration=${now - phase}ms")
+                phase = now
+            }
             val supplementalEntries =
                 language.supplementalWords.filterNot { original -> assetEntries.any { it.original == original } }.mapNotNull { original ->
                     val normalized = normalize(original, language) ?: return@mapNotNull null
@@ -1243,6 +1314,7 @@ class WordDictionary private constructor(
                 }
             val fileEntries = assetEntries + supplementalEntries
 
+            measured("supplemental")
             // Every listed surface spelling, since normalizing merges انا into أنا and علي into على.
             val originals = HashMap<String, Long>(fileEntries.size * 2)
             val spellings = HashMap<String, MutableList<Spelling>>()
@@ -1276,8 +1348,25 @@ class WordDictionary private constructor(
                 }
             }
 
-            val entries = mergedMap.values.sortedWith(compareBy<Entry> { it.normalized }.thenByDescending { it.frequency })
+            measured("merge")
+            val entries =
+                if (sorted && dialect.isEmpty()) {
+                    val ordered = ArrayList<Entry>(mergedMap.size)
+                    var previous: String? = null
+                    for (entry in assetEntries) {
+                        if (entry.normalized != previous) ordered.add(mergedMap.getValue(entry.normalized))
+                        previous = entry.normalized
+                    }
+                    for (entry in supplementalEntries) {
+                        val index = ordered.binarySearchBy(entry.normalized) { it.normalized }
+                        if (index < 0) ordered.add(-index - 1, mergedMap.getValue(entry.normalized))
+                    }
+                    ordered
+                } else {
+                    mergedMap.values.sortedWith(compareBy<Entry> { it.normalized }.thenByDescending { it.frequency })
+                }
 
+            measured("sort")
             val dialectAliases = HashMap<String, MutableList<Spelling>>()
             if (dialect.isNotEmpty()) {
                 for ((orig, freq) in dialect) {
@@ -1295,15 +1384,33 @@ class WordDictionary private constructor(
 
             val short = HashMap<String, MutableList<Entry>>()
             val exact = HashMap<String, Entry>(entries.size * 2)
+            val usePrepared = prepared != null && dialect.isEmpty() && language.misspellings.isEmpty()
+            if (usePrepared) {
+                for ((prefix, words) in prepared!!) {
+                    short[prefix] = words.mapTo(ArrayList()) { mergedMap.getValue(it) }
+                }
+                // Supplemental entries can be new words or spelling aliases. Include their canonical
+                // entries and preserve normalized-word tie order, exactly like the ordinary loop.
+                for (entry in supplementalEntries) {
+                    val canonical = mergedMap.getValue(entry.normalized)
+                    for (length in 1..minOf(3, canonical.normalized.length)) {
+                        val prefix = canonical.normalized.substring(0, length)
+                        val best = short.getOrPut(prefix) { ArrayList() }
+                        if (best.none { it.normalized == canonical.normalized }) best.add(canonical)
+                        best.sortWith(compareByDescending<Entry> { it.frequency }.thenBy { it.normalized })
+                        if (best.size > 8) best.removeAt(8)
+                    }
+                }
+            }
 
             entries.forEach { entry ->
-                if (!entry.hidden) {
+                if (!usePrepared && !entry.hidden) {
                     for (length in 1..minOf(3, entry.normalized.length)) {
                         val key = entry.normalized.substring(0, length)
                         insertBestEntry(short.getOrPut(key) { ArrayList() }, entry, limit = 8)
                     }
                 }
-                exact.merge(entry.normalized, entry) { a, b -> if (b.frequency > a.frequency) b else a }
+                exact[entry.normalized] = entry
                 if (language.script == Script.LATIN) originals.merge(entry.original, entry.frequency, ::maxOf)
             }
 
@@ -1314,6 +1421,7 @@ class WordDictionary private constructor(
                 }
             }
 
+            measured("indexes")
             return WordDictionary(
                 entries = entries,
                 shortPrefixes = short,
@@ -1328,6 +1436,7 @@ class WordDictionary private constructor(
             )
         }
 
+        // Change together with compileWords.normalizeWord in app/build.gradle.kts.
         private fun normalize(
             value: String,
             language: Language,
@@ -1384,6 +1493,8 @@ class WordDictionary private constructor(
             entry: Entry,
             limit: Int,
         ) {
+            // Equal-frequency entries append after existing ties, then fall outside the limit.
+            if (best.size == limit && best.last().frequency >= entry.frequency) return
             val position = best.indexOfFirst { it.frequency < entry.frequency }
             if (position < 0) best.add(entry) else best.add(position, entry)
             if (best.size > limit) best.removeAt(limit)

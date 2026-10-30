@@ -1,0 +1,6 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+IOException: Invalid word table magic
+IOException: Invalid word table size
+EOFException: null
+IOException: Trailing word table bytes
+IOException probes passed=4

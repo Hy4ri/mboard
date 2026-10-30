@@ -100,3 +100,8 @@ This is a tuning proxy, not recorded fingers or Android acceptance. Geometry use
 Samples outside the letter area or onto special keys are discarded. The benchmark conditions on changed
 words composed entirely of letter taps, and does not model gestures or the real-world typing-error rate.
 The LM builder rejects touch-evaluation TSVs as training input.
+
+To inspect build-generated word assets, pass `-R-Dmboard.binary=true` to
+`bench/scripts/dictionary_parity.jsh`, with `mboard.assets` pointing to an overlay of source assets
+and `app/build/generated/{tableAssets,wordAssets}/`. Without the flag, the inspector reads TSV words.
+The reflection call allows the same script to inspect an older jar without a binary-word API.

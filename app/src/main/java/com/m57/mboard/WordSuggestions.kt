@@ -80,7 +80,7 @@ class WordSuggestions(
                         }
                     val arabic = Languages.ARABIC
                     val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
-                    val lexicon = assets.open(arabic.wordsAsset).bufferedReader().use { WordDictionary.read(it, arabic, dialect) }
+                    val lexicon = readDictionary(arabic, dialect, KnownWordForms.EMPTY)
                     synchronized(lock) {
                         if (closed) return@execute
                         arabiziAllowlist = allowlist
@@ -170,11 +170,7 @@ class WordSuggestions(
 
                     val dictStart = SystemClock.elapsedRealtime()
                     Log.i("mboard.startup", "asset load start: ${language.wordsAsset}")
-                    val dictionary =
-                        assets
-                            .open(language.wordsAsset)
-                            .bufferedReader()
-                            .use { WordDictionary.read(it, language, dialect, knownForms) }
+                    val dictionary = readDictionary(language, dialect, knownForms)
                     val dictDuration = SystemClock.elapsedRealtime() - dictStart
                     Log.i(
                         "mboard.startup",
@@ -229,6 +225,24 @@ class WordSuggestions(
                     mainHandler.post { if (!closed) failedCallbacks.forEach { it() } }
                 }
             }
+        }
+    }
+
+    private fun readDictionary(
+        language: Language,
+        dialect: Map<String, Long>,
+        knownForms: KnownWordForms,
+    ): WordDictionary {
+        val binary =
+            try {
+                assets.open("${language.wordsAsset}.bin")
+            } catch (_: IOException) {
+                null
+            }
+        return if (binary != null) {
+            WordDictionary.readBinary(binary, language, dialect, knownForms)
+        } else {
+            assets.open(language.wordsAsset).bufferedReader().use { WordDictionary.read(it, language, dialect, knownForms) }
         }
     }
 
