@@ -116,3 +116,39 @@ spelling behavior remains the same as the baseline.
 
 No tests were added. No install, push, merge or publication was performed by this
 member. Device responsiveness and physical typing acceptance remain open.
+
+## Integration inspection and requested final probes
+
+Main inspected at `1803aceaee31518ad464d075ab7b19e8b865d1a6` (#301 docs + #302 Arabizi).
+No rebase, checkout, real merge or main edit was done.
+
+```sh
+git merge-tree $(git merge-base HEAD main) HEAD main
+git merge-tree --write-tree HEAD main
+```
+
+The write-tree dry run exits **1**, with **README.md as the only conflicted path**.
+Both branches edit the long Everyday typing suggestion bullet; main also adds the
+Arabizi bullet immediately after it. The lead should retain the neural explanation
+and the Arabizi bullet when resolving that documentation conflict.
+
+`WordSuggestions.kt` and `bench/build.gradle.kts` auto-merge without conflict.
+`MboardService.kt` and `bench/.../Strip.kt` have no #299 edits and take main's #302
+changes without conflict. This is merge-tree evidence, not a merged-source build;
+the lead still owns the final integrated build and bench. Raw dry-run receipt:
+`299/merge-main-1803ace.txt`.
+
+Requested `suggest.sh` probes ran under the shared lock with the actual app assets.
+The shipped mode uses no feature properties; the diagnostic comparison sets
+`JAVA_TOOL_OPTIONS=-Dmboard.neural=false`. All commands exited **0**.
+
+| Input | Shipped default ON | Diagnostic OFF | Auto |
+|---|---|---|---|
+| I am going to (trailing space) | be / do / get | be / do / get | null both |
+| شو (trailing space, Arabic + dialect) | في / بدك / صار | في / صار / بدك | null both |
+| kifak | kifak / kick / kicked | kifak / kick / kicked | null both |
+
+`kifak` is unchanged by this reranker. This branch does not contain #302's optional
+Arabizi implementation; the merge-tree inspection is against main that contains it.
+Full JSON replies: `299/requested-probes.log`. No engine/asset source changed after
+the shipped-default full gates in this report, so those results remain current.
