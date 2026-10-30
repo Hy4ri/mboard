@@ -347,8 +347,8 @@ class WordSuggestions(
     /**
      * One comparison key for table keys, context words and candidates: lowercase, no harakat/tatweel and
      * no apostrophes. The corpus tables were built without apostrophes, so "don't" must find "dont".
+     * compileTables in app/build.gradle.kts bakes matchKey and candidateKey into the bundled .bin tables: change both together.
      */
-    // compileTables in app/build.gradle.kts bakes matchKey/candidateKey into the bundled .bin tables: change both together.
     private fun matchKey(word: String): String =
         word.lowercase(Locale.ROOT).filterNot { c ->
             c in '\u064B'..'\u065F' || c == '\u0670' || c == '\u0640' || c == '\'' || c == '\u2019'
