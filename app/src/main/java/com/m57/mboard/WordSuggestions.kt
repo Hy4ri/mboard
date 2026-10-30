@@ -51,9 +51,13 @@ class WordSuggestions(
 
     /** Arabic lexicon (with Jordanian words) read only for Arabizi lookups on a Latin layout. */
     @Volatile private var arabiziLexicon: WordDictionary? = null
+
+    @Volatile private var arabiziAllowlist: Set<String> = emptySet()
     private var arabiziLoading = false
 
     fun arabiziReady() = arabiziLexicon != null
+
+    fun isArabiziListed(word: String) = word.lowercase(Locale.ROOT) in arabiziAllowlist
 
     /** Load the Arabic lexicon for [arabizi]; a no-op once loaded. Never blocks the caller. */
     fun loadArabizi(onReady: () -> Unit) {
@@ -62,11 +66,20 @@ class WordSuggestions(
             arabiziLoading = true
             executor.execute {
                 try {
+                    val allowlist =
+                        assets.open("arabizi_allowlist.txt").bufferedReader().use { reader ->
+                            reader
+                                .lineSequence()
+                                .map { it.substringBefore('#').trim().lowercase(Locale.ROOT) }
+                                .filter { it.isNotEmpty() }
+                                .toSet()
+                        }
                     val arabic = Languages.ARABIC
                     val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
                     val lexicon = assets.open(arabic.wordsAsset).bufferedReader().use { WordDictionary.read(it, arabic, dialect) }
                     synchronized(lock) {
                         if (closed) return@execute
+                        arabiziAllowlist = allowlist
                         arabiziLexicon = lexicon
                     }
                     mainHandler.post { if (!closed) onReady() }
@@ -79,7 +92,7 @@ class WordSuggestions(
 
     /**
      * Arabic-script readings of a Franco word such as 7abibi or shu, best first (at most [limit]). A digit
-     * (2 3 5 6 7 8 9) mixed with letters is enough; otherwise [typed] must be no English word and match a
+     * (2 3 5 6 7 8 9) mixed with letters is enough; otherwise [typed] must be allowlisted or no English word/prefix and match a
      * frequent Arabic word. Candidates are only offered, never applied automatically.
      */
     fun arabizi(
@@ -93,7 +106,11 @@ class WordSuggestions(
         if (!withDigit) {
             if (!Arabizi.eligible(typed, anyLetters = true)) return emptyList()
             val english = model(language)?.dictionary ?: return emptyList()
-            if (english.frequency(typed) > 0L || english.completions(typed, 1, dialect = false).isNotEmpty()) return emptyList()
+            if (!isArabiziListed(typed) &&
+                (english.frequency(typed) > 0L || english.completions(typed, 1, dialect = false).isNotEmpty())
+            ) {
+                return emptyList()
+            }
         }
         val found = LinkedHashMap<String, Double>()
         for (skeleton in Arabizi.skeletons(typed)) {
@@ -745,6 +762,7 @@ class WordSuggestions(
             closed = true
             models.clear()
             arabiziLexicon = null
+            arabiziAllowlist = emptySet()
             states.clear()
             callbacks.clear()
         }

@@ -1,0 +1,16 @@
+# Franco spellings that may offer an Arabic reading despite an English dictionary match.
+# One lowercase spelling per line. Readings must still exist in the Arabic/Jordanian lexicons.
+# These keep the typed word and best English suggestion; Arabic takes only the last slot.
+shu
+sho
+yalla
+inshallah
+wallah
+habibi
+habibti
+khalas
+mashallah
+ya3ni
+yani
+salam
+walla

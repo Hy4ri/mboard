@@ -151,7 +151,7 @@ class Strip(
         val readings = if (arabizi) words.arabizi(typed, language, 2) else emptyList()
         return Shown(
             com.m57.mboard.Arabizi
-                .place(wordChoices, typed, readings)
+                .place(wordChoices, typed, readings, lastSlotOnly = words.isArabiziListed(typed))
                 .take(3),
             autoCorrection != null,
         )

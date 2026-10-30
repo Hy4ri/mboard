@@ -619,7 +619,7 @@ class MboardService : InputMethodService() {
         val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
         // Franco typing on the English layout may also offer Arabic-script readings (suggest-only).
         val readings = if (settings.arabiziSuggestions && !editingInside) words.arabizi(typed, language, 2) else emptyList()
-        val shown = Arabizi.place(wordChoices, typed, readings)
+        val shown = Arabizi.place(wordChoices, typed, readings, lastSlotOnly = words.isArabiziListed(typed))
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) shown else shown.take(2) + emoji

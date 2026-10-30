@@ -1,8 +1,4 @@
 set	line	kind	context	typed_or_target	intended	before	after	target_lost	explanation
-en_chat.misses.tsv	28	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
-en_chat.misses.tsv	35	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
-en_chat.misses.tsv	66	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
-en_chat.misses.tsv	174	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
 en_chat.typos.tsv	15	transposition	all	ogod	good	good|ogod|goodbye	good|ogod|أجد	false	A
 en_chat.typos.tsv	16	insertion		liol	lol	lil|liol|lion	lil|liol|ليل	false	A
 en_chat.typos.tsv	17	adjacent	definitely	doan	down	down|doan|don't	down|doan|دون	false	A
@@ -60,52 +56,6 @@ en_chat.typos.tsv	361	adjacent	absolutely i	beed	need	need|beed|been	need|beed|�
 en_chat.typos.tsv	375	transposition	definitely water cooler talk for the next	mnoth	month	month|mnoth|mother	month|mnoth|منذ	false	A
 en_chat.typos.tsv	377	adjacent	gotta love	renote	remote	remote|renote|rented	remote|renote|رنت	false	A
 en_chat.typos.tsv	381	transposition	reheat it in	hte	the	the|hte|there	the|hte|حتى	false	A
-en_chat_learning.misses.tsv	28	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
-en_chat_learning.misses.tsv	35	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
-en_chat_learning.misses.tsv	66	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
-en_chat_learning.misses.tsv	175	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
-en_fresh.misses.tsv	38	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	54	clean	My wife's name is	Lidia	Lidia	Lidia|Lydia|Livia	Lidia|Lydia|لدي	false	B
-en_fresh.misses.tsv	106	clean	Yanni openly expressed his desire to kill	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_fresh.misses.tsv	168	clean	Donning the Kabyle dress allows	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	199	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	203	clean	Ziri started following	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	225	clean	Yanni taught	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_fresh.misses.tsv	253	clean	Carlos understood	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	320	clean	Vladimir was drooling on	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
-en_fresh.misses.tsv	376	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	417	clean	Felix was driving from Algiers to	Blida	Blida	Blida|Black|Bridge	Blida|Black|بلدة	false	B
-en_fresh.misses.tsv	467	clean	Oleg realized	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_fresh.misses.tsv	485	clean	My name is	Jabu	Jabu	Jabu|January|Jab	Jabu|January|جاب	false	B
-en_fresh.misses.tsv	528	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_fresh.misses.tsv	534	clean	We were going to	Gifu	Gifu	Gifu|Gift|Gifts	Gifu|Gift|جيف	false	B
-en_fresh.misses.tsv	545	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	566	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
-en_fresh.misses.tsv	687	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	748	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	796	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	797	clean	Rima and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_fresh.misses.tsv	872	clean	When did Mr	Ogawa	Ogawa	Ogawa|Osaka|Onward	Ogawa|Osaka|اجو	false	B
-en_fresh.misses.tsv	878	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_fresh.misses.tsv	1151	clean		Doni	Doni	Doni|Don't|Doing	Doni|Don't|دون	false	B
-en_fresh.misses.tsv	1162	clean	How many	biros	biros	biros|hiroshi|hiroshima	biros|hiroshi|بروس	false	B
-en_fresh.misses.tsv	1216	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1364	clean	Ziri's words made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1387	clean	Ziri didn't let	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1401	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1413	clean	Ziri found out	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1438	clean	Santiago ordered	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1493	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1510	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1544	clean	Lorenzo went to ask Melissa where	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_fresh.misses.tsv	1689	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1710	clean	I'm from	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
-en_fresh.misses.tsv	1712	clean	Where is	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
-en_fresh.misses.tsv	1937	clean	can bring	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_fresh.misses.tsv	1945	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	1951	clean		aoke	aoke	woke|aoke|woken	woke|aoke|اوك	false	B
-en_fresh.misses.tsv	2087	clean	Ziri drove	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_fresh.misses.tsv	2120	clean	Yanni couldn't wait to meet	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
 en_fresh.typos.tsv	3	omission	sami and layla	lft	left	oft|lft|often	oft|lft|لفت	false	A
 en_fresh.typos.tsv	4	adjacent	i	mrt	met	met|mrt|metal	met|mrt|مرت	false	A
 en_fresh.typos.tsv	6	transposition	mary said	htat	that	that|htat|that's	that|htat|حطت	false	A
@@ -572,128 +522,6 @@ en_real_typos.typos.tsv	3971	other		contei	contented	contei|continue|contest	con
 en_real_typos.typos.tsv	3972	other		fliet	flight	fliet|fletcher|flies	fliet|fletcher|فلت	false	A
 en_real_typos.typos.tsv	3978	other		kutere	contented	kutere|katerina|ketene	kutere|katerina|كتير	false	A
 en_real_typos.typos.tsv	3996	other		seud	should	sued|seud|suddenly	sued|seud|سيد	false	A
-en_subs.misses.tsv	66	clean		Bains	Bains	Brains|Bains|Banished	Brains|Bains|بنص	false	B
-en_subs.misses.tsv	207	clean		Chile'll	Chile'll	Chile'll|Chiselled|Chiseller	Chile'll|Chiselled|شلل	false	B
-en_subs.misses.tsv	309	clean		Lathia	Lathia	Lathia|Mathias|Latvia	Lathia|Mathias|لذا	false	B
-en_subs.misses.tsv	349	clean		Whaaa	Whaaa	Whoa|Whaaa|What	Whoa|Whaaa|وها	false	B
-en_subs.misses.tsv	368	clean		'cause	'cause	'cause	'cause|كأس	false	B
-en_subs.misses.tsv	506	clean	They've called Signor	Silla	Silla	Silla|Silly|Willard	Silla|Silly|صلة	false	B
-en_subs.misses.tsv	526	clean		you'	you'	you'|you	you'|you|يو	false	B
-en_subs.misses.tsv	554	clean	Detective	hudak	hudak	hudak|human|humans	hudak|human|هداك	false	B
-en_subs.misses.tsv	622	clean	Keep	goin'	goin'	goin'	goin'|جون	false	B
-en_subs.misses.tsv	767	clean	WHO is	Omoroca	Omoroca	Omoroca	Omoroca|أمرك	false	B
-en_subs.misses.tsv	883	clean	I am sorely	afeared	afeared	afeared|appeared|afeard	afeared|appeared|أفراد	false	B
-en_subs.misses.tsv	969	clean	Didn't show	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	979	clean	Ride	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	1002	clean		Mackie	Mackie	Mackie|Jackie|Mackenzie	Mackie|Jackie|مسك	false	B
-en_subs.misses.tsv	1079	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
-en_subs.misses.tsv	1305	clean	My name is	Sokun	Sokun	Sokun|Sound|Sounds	Sokun|Sound|سكن	false	B
-en_subs.misses.tsv	1307	clean	I'd like to tell him that he should be proud to be	Wayana	Wayana	Wayana|Watanabe	Wayana|Watanabe|وين	false	B
-en_subs.misses.tsv	1314	clean	They're	tryin'	tryin'	tryin'	tryin'|ترين	false	B
-en_subs.misses.tsv	1438	clean		'cause	'cause	'cause	'cause|كأس	false	B
-en_subs.misses.tsv	1441	clean		Fawell	Fawell	Fawell|Fall|Fell	Fawell|Fall|فول	false	B
-en_subs.misses.tsv	1499	clean	This is Yuri	Pochenko	Pochenko	Pochenko	Pochenko|بشأنك	false	B
-en_subs.misses.tsv	1557	clean	I don't understand	'Maya'	'Maya'	'Maya'	'Maya'|مي	false	B
-en_subs.misses.tsv	1616	clean		'Did	'Did	'Did	'Did|ضد	false	B
-en_subs.misses.tsv	1807	clean		Devoe	Devoe	Devote|Devoe|Developed	Devote|Devoe|ديف	false	B
-en_subs.misses.tsv	1809	clean		Ayn	Ayn	Any|Ayn|Anything	Any|Ayn|أين	false	B
-en_subs.misses.tsv	1969	clean	jube up	yo'	yo'	yo'	yo'|يـ	false	B
-en_subs.misses.tsv	2107	clean	what	doya	doya	moya|doya|royal	moya|doya|دي	false	B
-en_subs.misses.tsv	2147	clean	Do you like	Bekir	Bekir	Bekir|Beirut|Bemire	Bekir|Beirut|بكير	false	B
-en_subs.misses.tsv	2298	clean	Get	aome	aome	some|aome|something	some|aome|أمي	false	B
-en_subs.misses.tsv	2447	clean		Ra's	Ra's	Ra's|Rash|Rascal	Ra's|Rash|رأس	false	B
-en_subs.misses.tsv	2489	clean	Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
-en_subs.misses.tsv	2592	clean	Não	pise	pise	pise|piece|pieces	pise|piece|بس	false	B
-en_subs.misses.tsv	2722	clean	The t'san	s'at	s'at	s'at|saturday|sat	s'at|saturday|ست	false	B
-en_subs.misses.tsv	2889	clean	just hit	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	2911	clean		Maa	Maa	Maa|Man|Make	Maa|Man|ما	false	B
-en_subs.misses.tsv	2939	clean		Morrie	Morrie	Morris|Morrie|Morrison	Morris|Morrie|مر	false	B
-en_subs.misses.tsv	2946	clean		'Rowan	'Rowan	'Rowan	'Rowan|روان	false	B
-en_subs.misses.tsv	3031	clean	a man you	've	've	've	've|في	false	B
-en_subs.misses.tsv	3063	clean	a big	ol'	ol'	ol'	ol'|الـ	false	B
-en_subs.misses.tsv	3151	clean	Go to	Gerona	Gerona	Gerona|Verona|Geronimo	Gerona|Verona|جارنا	false	B
-en_subs.misses.tsv	3180	clean	The crime	acene	acene	scene|acene|scenes	scene|acene|أكن	false	B
-en_subs.misses.tsv	3191	clean	Which way to Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
-en_subs.misses.tsv	3212	clean		'Look	'Look	'Look	'Look|لوك	false	B
-en_subs.misses.tsv	3263	clean		Maya's	Maya's	Maya's|Man's|Maya	Maya's|Man's|ميس	false	B
-en_subs.misses.tsv	3342	clean	Capturin'	'im	'im	'im	'im|مـ	false	B
-en_subs.misses.tsv	3375	clean		Hehe	Hehe	Hehe|Heh|Hee	Hehe|Heh|هه	false	B
-en_subs.misses.tsv	3483	clean	First they wanted to get the good	alien's	alien's	alien's|aliens	alien's|aliens|النص	false	B
-en_subs.misses.tsv	3505	clean		barji	barji	barji|barking|barbie	barji|barking|برج	false	B
-en_subs.misses.tsv	3517	clean		Ayn	Ayn	Ayn|Any|Anything	Ayn|Any|أين	false	B
-en_subs.misses.tsv	3636	clean		I'dd	I'dd	I'dd|I'd	I'dd|I'd|إد	false	B
-en_subs.misses.tsv	3659	clean	Don't	wory	wory	worry|wory|work	worry|wory|ورى	false	B
-en_subs.misses.tsv	3804	clean		Lawes	Lawes	Lawes|Laws|Lawsuit	Lawes|Laws|لويس	false	B
-en_subs.misses.tsv	3928	clean	I tried to fight	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	3952	clean	you ate the	yada	yada	yoda|yada|yaah	yoda|yada|يد	false	B
-en_subs.misses.tsv	4000	clean	He's buying another dozen issues	'cause	'cause	'cause	'cause|كأس	false	B
-en_subs.misses.tsv	4055	clean		Jebby	Jebby	Jebby|Jerry|Jenny	Jebby|Jerry|جيبي	false	B
-en_subs.misses.tsv	4076	clean	You may escape Beringar and	Cassale	Cassale	Cassale|Cassareep|Cassareeps	Cassale|Cassareep|كاسل	false	B
-en_subs.misses.tsv	4279	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
-en_subs.misses.tsv	4336	clean		'cause	'cause	'cause	'cause|كأس	false	B
-en_subs.misses.tsv	4399	clean		Ferretti	Ferretti	Ferretti|Forgetting|Ferret	Ferretti|Forgetting|فرطت	false	B
-en_subs.misses.tsv	4422	clean	And if you look too far	'll	'll	'll	'll|لـ	false	B
-en_subs.misses.tsv	4457	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
-en_subs.misses.tsv	4466	clean		boyo	boyo	boy|boyo|boys	boy|boyo|بي	false	B
-en_subs.misses.tsv	4482	clean	lea	callot	callot	callot|callous|callow	callot|callous|سألت	false	B
-en_subs.misses.tsv	4548	clean	of millionaire Randall	Nagel	Nagel	Nagel|Angel|Angeles	Nagel|Angel|نغل	false	B
-en_subs.misses.tsv	4621	clean	Good	goin'	goin'	goin'	goin'|جون	false	B
-en_subs.misses.tsv	4704	clean	owari wa	shinai	shinai	sinai|shinai|shining	sinai|shinai|شين	false	B
-en_subs.misses.tsv	4760	clean	We can't blame it all on Kuang	Yumin	Yumin	Yumin|Yumi	Yumin|Yumi|يمين	false	B
-en_subs.misses.tsv	4801	clean	of the	fllm	fllm	film|fllm|fillmore	film|fllm|فلم	false	B
-en_subs.misses.tsv	4832	clean	This is the work of that	Lucena	Lucena	Lucena|License|Lunatic	Lucena|License|لكن	false	B
-en_subs.misses.tsv	4842	clean	You know Andy Garcia	'll	'll	'll	'll|لـ	false	B
-en_subs.misses.tsv	4848	clean	I hate	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	4872	clean	Hart and	Manheim	Manheim	Manheim|Mayhem|Mathematics	Manheim|Mayhem|منهم	false	B
-en_subs.misses.tsv	4877	clean		Bonet	Bonet	Bonet|Bonnet|Bone	Bonet|Bonnet|بنت	false	B
-en_subs.misses.tsv	4931	clean	we are	goin'	goin'	goin'|going	goin'|going|جون	false	B
-en_subs.misses.tsv	4951	clean	My name is	Romy	Romy	Romy|Rome|Royal	Romy|Rome|رمي	false	B
-en_subs.misses.tsv	4957	clean	We wore	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	5065	clean		Bonnie's	Bonnie's	Bonnie's|Bonnie|Bunnies	Bonnie's|Bonnie|بنص	false	B
-en_subs.misses.tsv	5092	clean	Thanks for	showin'	showin'	showin'	showin'|شون	false	B
-en_subs.misses.tsv	5168	clean		Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
-en_subs.misses.tsv	5274	clean	his 'Achilles	heel'	heel'	heel'|heel	heel'|heel|حيل	false	B
-en_subs.misses.tsv	5360	clean		You'	You'	You'|You	You'|You|يو	false	B
-en_subs.misses.tsv	5413	clean		Kerim	Kerim	Kerim|Kermit|Kermis	Kerim|Kermit|كريم	false	B
-en_subs.misses.tsv	5437	clean	Deputy	Burda	Burda	Burda|Bureau|Burden	Burda|Bureau|برد	false	B
-en_subs.misses.tsv	5543	clean	You tell	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	5597	clean	Why are you	goin'	goin'	goin'|going	goin'|going|جون	false	B
-en_subs.misses.tsv	5604	clean	Hi	Perran	Perran	Perran|Permanent|Perrine	Perran|Permanent|برن	false	B
-en_subs.misses.tsv	5617	clean	Before your birth you were Cecilia	Varrega	Varrega	Varrega|Variegate|Variegated	Varrega|Variegate|فارغ	false	B
-en_subs.misses.tsv	5643	clean	While looking in the mirror	Keanu	Keanu	Keanu|Keane	Keanu|Keane|كان	false	B
-en_subs.misses.tsv	5776	clean	why don't we just take	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	5777	clean	why don't we just take 'em with	us'	us'	us'	us'|إس	false	B
-en_subs.misses.tsv	5873	clean		Kesh	Kesh	Kesh|Kessler|Mesh	Kesh|Kessler|كاش	false	B
-en_subs.misses.tsv	5926	clean	Mrs	Goel	Goel	Goel|Goes|Gold	Goel|Goes|جيل	false	B
-en_subs.misses.tsv	5934	clean	that crying	lndian	lndian	indian|lndian|lydian	indian|lndian|لندن	false	B
-en_subs.misses.tsv	5955	clean	We will fight together for	Lukka's	Lukka's	Lukka's|Lukas	Lukka's|Lukas|لوكاس	false	B
-en_subs.misses.tsv	5981	clean	Maybe most times you wait around until you're really hungry but poor	ol'	ol'	ol'|old	ol'|old|الـ	false	B
-en_subs.misses.tsv	6038	clean	The vet told us half of one of	Maris'	Maris'	Maris'	Maris'|مارس	false	B
-en_subs.misses.tsv	6066	clean	You're supposed to fuck	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	6167	clean		Tialita	Tialita	Tialita|Taliban|Totalitarian	Tialita|Taliban|تلت	false	B
-en_subs.misses.tsv	6186	clean	I present	Elyse	Elyse	Elyse|Else|Else's	Elyse|Else|أليس	false	B
-en_subs.misses.tsv	6319	clean		He'a	He'a	He'a|He's|Hear	He'a|He's|هي	false	B
-en_subs.misses.tsv	6334	clean	What you	doin'	doin'	doin'	doin'|دون	false	B
-en_subs.misses.tsv	6388	clean		Jeddediah	Jeddediah	Jeddediah	Jeddediah|جديده	false	B
-en_subs.misses.tsv	6393	clean		'Tis	'Tis	'Tis	'Tis|تيس	false	B
-en_subs.misses.tsv	6419	clean	Killer	uaed	uaed	used|uaed	used|uaed|إيد	false	B
-en_subs.misses.tsv	6487	clean		Kiu	Kiu	Liu|Kiu|Kouji	Liu|Kiu|كي	false	B
-en_subs.misses.tsv	6573	clean	My heart actually quickened at the end of songs	'cause	'cause	'cause	'cause|كأس	false	B
-en_subs.misses.tsv	6590	clean	I just did my first oil change on the	Healey	Healey	Healey|Healed|Healy	Healey|Healed|حالي	false	B
-en_subs.misses.tsv	6619	clean		Terek	Terek	Trek|Terek|Teresa	Trek|Terek|ترك	false	B
-en_subs.misses.tsv	6630	clean	Do you think	Gir's	Gir's	Gir's|Girl's	Gir's|Girl's|جرس	false	B
-en_subs.misses.tsv	6695	clean		Sha're	Sha're	Sha're|Share|Shared	Sha're|Share|شر	false	B
-en_subs.misses.tsv	6786	clean	Can we not	aquire	aquire	aquire|squire|acquired	aquire|squire|أقرأ	false	B
-en_subs.misses.tsv	6981	clean	But don't let	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	6984	clean	I can see	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	7114	clean	Say one more word and	you'	you'	you'|you're|you	you'|you're|يو	false	B
-en_subs.misses.tsv	7172	clean	You're standing in for	Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
-en_subs.misses.tsv	7174	clean	I thought the	boss'	boss'	boss'	boss'|بس	false	B
-en_subs.misses.tsv	7196	clean		Borias	Borias	Borias|Boris|Norias	Borias|Boris|برأس	false	B
-en_subs.misses.tsv	7233	clean	I have to look at	'em	'em	'em	'em|أم	false	B
-en_subs.misses.tsv	7304	clean		'The	'The	'The|the	'The|the|ذا	false	B
-en_subs.misses.tsv	7406	clean		Nuria	Nuria	Nuria|Burial|Burials	Nuria|Burial|نرى	false	B
-en_subs.misses.tsv	7425	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
 en_subs.typos.tsv	6	adjacent		Gake	Take	Take|Gake|Game	Take|Gake|جاك	false	A
 en_subs.typos.tsv	7	adjacent	ive given you	qll	all	all|qll|allow	all|qll|قل	false	A
 en_subs.typos.tsv	13	transposition	bastard ill	hcop	chop	hcop|hope|hoping	hcop|hope|حسب	false	A
@@ -841,6 +669,7 @@ en_subs.typos.tsv	966	doubled		Yoou	You	You|Yoou|Your	You|Yoou|يو	false	A
 en_subs.typos.tsv	980	omission	la paz the capital	hih	high	huh|hih|high	huh|hih|هه	true	A
 en_subs.typos.tsv	996	adjacent	its	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
 en_subs.typos.tsv	997	adjacent		IWL	OWL	IWL|WILL|ISLAND	IWL|WILL|أول	false	A
+en_subs.typos.tsv	1003	omission	didnt	sho	show	sho|should|show	sho|should|شو	true	A
 en_subs.typos.tsv	1005	transposition		Yuo	You	You|Yuo|Your	You|Yuo|يـ	false	A
 en_subs.typos.tsv	1008	adjacent	i dont have	timr	time	timr|timer|time	timr|timer|تمر	true	A
 en_subs.typos.tsv	1028	adjacent		Snd	And	And|Snd|End	And|Snd|سند	false	A
@@ -1088,6 +917,7 @@ en_subs.typos.tsv	2516	transposition	youd better	prya	pray	pray|prya|practice	pr
 en_subs.typos.tsv	2517	doubled		Whatt	What	What|Whatt|What's	What|Whatt|وحاطت	false	A
 en_subs.typos.tsv	2518	adjacent	your uncle wouldve drank	snd	and	and|snd|end	and|snd|سند	false	A
 en_subs.typos.tsv	2529	transposition		Tihs	This	This|Tihs|This'll	This|Tihs|تحس	false	A
+en_subs.typos.tsv	2535	transposition		Salam	Salma	Salam|Salami|Salad	Salam|Salami|سلام	false	A
 en_subs.typos.tsv	2549	doubled	you got	anyy	any	any|anyy|anything	any|anyy|أني	false	A
 en_subs.typos.tsv	2553	adjacent	i will	gaij	gain	gain|gaij|gained	gain|gaij|جاج	false	A
 en_subs.typos.tsv	2562	transposition	what	eles	else	eles|else|elevator	eles|else|أليس	false	A
@@ -1138,121 +968,6 @@ en_subs.typos.tsv	2773	adjacent	i think you need your	hwad	head	head|hwad|had	he
 en_subs.typos.tsv	2780	adjacent	you do that and im	yonna	gonna	gonna|yonna|tonnage	gonna|yonna|يون	false	A
 en_subs.typos.tsv	2790	adjacent	but i	aill	will	aill|all|will	aill|all|الـ	true	A
 en_subs.typos.tsv	2791	adjacent	i know and after	aml	all	all|aml|almost	all|aml|آمل	false	A
-en_tatoeba.misses.tsv	33	clean	Karl threatened	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	53	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_tatoeba.misses.tsv	78	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	136	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	175	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	183	clean	Toki	Pona	Pona	Pona|Pond|Pony	Pona|Pond|بنا	false	B
-en_tatoeba.misses.tsv	190	clean	Why did	Yidir	Yidir	Yidir|Yiddish|Yid	Yidir|Yiddish|يدير	false	B
-en_tatoeba.misses.tsv	205	clean	I swear on the name of Sami	Bakir	Bakir	Bakir|Baird|Baking	Bakir|Baird|بكير	false	B
-en_tatoeba.misses.tsv	250	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	344	clean	Yanni woke up for	suhur	suhur	suhur|suburbs|suburban	suhur|suburbs|سحر	false	B
-en_tatoeba.misses.tsv	470	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	564	clean		Geppetto	Geppetto	Geppetto	Geppetto|جبت	false	B
-en_tatoeba.misses.tsv	582	clean	Rodrigo imitated	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	594	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
-en_tatoeba.misses.tsv	605	clean	Yanni was filming	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	684	clean	Yanni is just messing with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	889	clean		Tirana	Tirana	Tirana|Transfer|Transport	Tirana|Transfer|ترن	false	B
-en_tatoeba.misses.tsv	901	clean	Ziri camped in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
-en_tatoeba.misses.tsv	946	clean	Ivan behaved properly with	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	956	clean	Ziri wants to sue	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	958	clean	Oleg regretfully told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	974	clean		Jodo	Jodo	Joo|Jodo|Jodie	Joo|Jodo|جد	false	B
-en_tatoeba.misses.tsv	1085	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_tatoeba.misses.tsv	1215	clean	Yanni will look after	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	1263	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1270	clean	but this is all put to waste by his so called	'mother	'mother	'mother	'mother|مثير	false	B
-en_tatoeba.misses.tsv	1316	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1386	clean	t stand	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1591	clean	Ziri encouraged	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1642	clean	Ziri explained the whole process for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1760	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
-en_tatoeba.misses.tsv	1797	clean	Gabriel told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	1891	clean	I forgave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	1939	clean	I ate a	shawarma	shawarma	shawarma|sharma	shawarma|sharma|شاورما	false	B
-en_tatoeba.misses.tsv	1957	clean	Ziri isn't the best for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2079	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2267	clean	Gunter assured	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2268	clean	Gunter assured Rima that	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	2287	clean	The	Diaoyu	Diaoyu	Diaoyu|Diary|Dialogue	Diaoyu|Diary|دي	false	B
-en_tatoeba.misses.tsv	2413	clean	Jonas dressed as	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	2420	clean	t allow	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2422	clean	t allow Rima to set	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	2510	clean	Santiago invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2515	clean	Yanni is sure	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	2597	clean	Ziri took out his phone and showed	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2599	clean	Ziri took out his phone and showed Rima a few pictures of	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	2600	clean	Ziri took out his phone and showed Rima a few pictures of Walid with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	2829	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	2859	clean	The creature extended its slimy hands to	Damiano	Damiano	Damiano|Damian	Damiano|Damian|ضمن	false	B
-en_tatoeba.misses.tsv	2885	clean	but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	2950	clean	Mary stole	Alice's	Alice's	Alice's|Alice|Aliens	Alice's|Alice|أليكس	false	B
-en_tatoeba.misses.tsv	2996	clean	Mark knew that Jessica had liked	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	3002	clean	Sami probably dropped Layla for	Salima	Salima	Salima|Salinas|Salim	Salima|Salinas|سلم	false	B
-en_tatoeba.misses.tsv	3017	clean		Mayuko	Mayuko	Mayuko|Mayor|Mayor's	Mayuko|Mayor|مايك	false	B
-en_tatoeba.misses.tsv	3027	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_tatoeba.misses.tsv	3107	clean	Yanni was frantically talking in Berber but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	3111	clean	Yanni and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	3115	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
-en_tatoeba.misses.tsv	3153	clean	Yanni gave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	3169	clean	Miroslav met	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	3170	clean	Miroslav met Rima and	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	3231	clean	We're going to Algiers with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	3236	clean		Hanako	Hanako	Hank|Hanako|Handsome	Hank|Hanako|هناك	false	B
-en_tatoeba.misses.tsv	3305	clean	Kalman only spent five nights in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
-en_tatoeba.misses.tsv	3311	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	3393	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	3406	clean	As soon as the leopard looked at	Boldi	Boldi	Boldi|Holding|Bodies	Boldi|Holding|بلدي	false	B
-en_tatoeba.misses.tsv	3522	clean	The plant called	chamise	chamise	chamise|chaise|camise	chamise|chaise|شمس	false	B
-en_tatoeba.misses.tsv	3573	clean		France's	France's	France's|Frances|Francesca	France's|Frances|فرانسيس	false	B
-en_tatoeba.misses.tsv	3643	clean		Hamas	Hamas	Hamas|Hamster|Hamsters	Hamas|Hamster|حمص	false	B
-en_tatoeba.misses.tsv	3669	clean	Oleg arrived in front of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	3684	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_tatoeba.misses.tsv	3720	clean	Yanni left	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	3911	clean	The legionnaires came in and started beating	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	3956	clean	Adriano tried to drown	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	4000	clean	Karl was disgusted by the dirtiness of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	4020	clean		Laika	Laika	Laila|Laika|Likable	Laila|Laika|لك	false	B
-en_tatoeba.misses.tsv	4036	clean	Igor was aware of	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
-en_tatoeba.misses.tsv	4037	clean	screaming	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
-en_tatoeba.misses.tsv	4044	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
-en_tatoeba.misses.tsv	4171	clean		Yazid	Yazid	Yazid|Yard|Yards	Yazid|Yard|يزيد	false	B
-en_tatoeba.misses.tsv	4250	clean	Yanni will be sharing this room with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	4269	clean	Ziri broke Rima's spell over	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	4315	clean	Thursday came around and still no call from	Janos	Janos	Janos|Janis|Jansen	Janos|Janis|جنس	false	B
-en_tatoeba.misses.tsv	4350	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	4455	clean		Allahu	Allahu	Allahu|Allah|Allahabad	Allahu|Allah|الله	false	B
-en_tatoeba.misses.tsv	4519	clean	When he took his	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
-en_tatoeba.misses.tsv	4586	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	4695	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	4751	clean	According to researchers from the	Carsey	Carsey	Carsey|Casey|Carey	Carsey|Casey|كرسي	false	B
-en_tatoeba.misses.tsv	5114	clean	Yanni showed that to	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	5139	clean	I don't know whether	Oreida	Oreida	Oreida|Oneida|Oneidas	Oreida|Oneida|أريد	false	B
-en_tatoeba.misses.tsv	5191	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5273	clean	Ziri had sincere feelings for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5419	clean	Tom gave	Snapchat	Snapchat	Snapchat|Snapshots|Snapshot	Snapchat|Snapshots|سنابشات	false	B
-en_tatoeba.misses.tsv	5459	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5605	clean	Adriano made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5651	clean	He said the	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
-en_tatoeba.misses.tsv	5713	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5793	clean	Yamanashi Prefecture's capital is	Kofu	Kofu	Kofu|Kouji|Koruna	Kofu|Kouji|كف	false	B
-en_tatoeba.misses.tsv	5823	clean	Leonid was disappointed to hear that	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5824	clean	Leonid was disappointed to hear that Rima would marry	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
-en_tatoeba.misses.tsv	5826	clean	I know you still want to look me in the eyes and tell me 'I love	you'	you'	you'|you	you'|you|يو	false	B
-en_tatoeba.misses.tsv	5827	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
-en_tatoeba.misses.tsv	5855	clean		Heya	Heya	Hey|Heya|Hear	Hey|Heya|هي	false	B
-en_tatoeba.misses.tsv	5857	clean	Where ya	goin'	goin'	goin'	goin'|جون	false	B
-en_tatoeba.misses.tsv	5887	clean	Ziri invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	5923	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	6090	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	6113	clean	Yankev and	Sheyne	Sheyne	Sheyne|Shyness	Sheyne|Shyness|شين	false	B
-en_tatoeba.misses.tsv	6298	clean	Yanni found	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
-en_tatoeba.misses.tsv	6382	clean	Oleg and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
-en_tatoeba.misses.tsv	6388	clean		Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
-en_tatoeba.misses.tsv	6390	clean	Tat is separate from	Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
-en_tatoeba.misses.tsv	6470	clean	Yanni's dog started barking upon seeing	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
 en_tatoeba.typos.tsv	4	transposition	he	bceame	became	became|bceame|beamed	became|bceame|بكم	false	A
 en_tatoeba.typos.tsv	16	adjacent	mary needs to make sure that shes	teady	ready	ready|teady|teary	ready|teady|تيدي	false	A
 en_tatoeba.typos.tsv	23	adjacent	she doesnt	knoe	know	know|knoe|knew	know|knoe|كنا	false	A
@@ -1596,6 +1311,7 @@ en_tatoeba.typos.tsv	1992	adjacent	i usually dont get up	ubtil	until	until|ubtil
 en_tatoeba.typos.tsv	1995	adjacent	sami knew	yhat	that	that|yhat|that's	that|yhat|يحط	false	A
 en_tatoeba.typos.tsv	2015	transposition	daniel saw the book on	hte	the	the|hte|there	the|hte|حتى	false	A
 en_tatoeba.typos.tsv	2026	doubled	let me	ttry	try	try|ttry|trying	try|ttry|ترى	false	A
+en_tatoeba.typos.tsv	2033	omission	can you	sho	show	sho|should|show	sho|should|شو	true	A
 en_tatoeba.typos.tsv	2045	adjacent	i cant tell you exactly	ehat	what	what|ehat|what's	what|ehat|احط	false	A
 en_tatoeba.typos.tsv	2056	adjacent		Laula	Layla	Laula|Paula|Layla	Laula|Paula|لأول	true	A
 en_tatoeba.typos.tsv	2077	transposition	the	mna	man	man|mna|many	man|mna|من	false	A
@@ -1735,3 +1451,337 @@ en_tatoeba.typos.tsv	2929	doubled	frogs	eatt	eat	eat|eatt|earth	eat|eatt|أتت	
 en_tatoeba.typos.tsv	2951	adjacent	i asked	yoy	you	you|yoy|your	you|yoy|يي	false	A
 en_tatoeba.typos.tsv	2954	adjacent	jessica has	aleays	always	always|aleays	always|aleays|أليس	false	A
 en_tatoeba.typos.tsv	2961	transposition	it matters not how a man dies but	ohw	how	how|ohw|how's	how|ohw|أهو	false	A
+en_chat.misses.tsv	grouped	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
+en_chat.misses.tsv	grouped	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
+en_chat.misses.tsv	grouped	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
+en_chat.misses.tsv	grouped	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
+en_chat.misses.tsv	grouped	clean	actors in that	show	show	<no miss row>	show|should|showed	see policy C	C
+en_chat.misses.tsv	grouped	clean	cant believe they canceled that	show	show	<no miss row>	show|should|showed	see policy C	C
+en_chat.misses.tsv	grouped	clean	did you get the tickets for the	show	show	<no miss row>	show|should|showed	see policy C	C
+en_chat_learning.misses.tsv	grouped	clean	do you want anything from trader	joes	joes	joes|jesus|joe	joes|jesus|جيس	false	B
+en_chat_learning.misses.tsv	grouped	clean	anyone want to split a	boba	boba	bob|boba|boat	bob|boba|بوب	false	B
+en_chat_learning.misses.tsv	grouped	clean	why does every email start with 'per my last	email'	email'	email'	email'|آمل	false	B
+en_chat_learning.misses.tsv	grouped	clean	mom called to ask how to reset her	wifi	wifi	wifi|wife|wife's	wifi|wife|وفي	false	B
+en_chat_learning.misses.tsv	grouped	clean	actors in that	show	show	<no miss row>	show|should|showed	see policy C	C
+en_chat_learning.misses.tsv	grouped	clean	cant believe they canceled that	show	show	<no miss row>	show|should|showed	see policy C	C
+en_chat_learning.misses.tsv	grouped	clean	did you get the tickets for the	show	show	<no miss row>	show|should|showed	see policy C	C
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	My wife's name is	Lidia	Lidia	Lidia|Lydia|Livia	Lidia|Lydia|لدي	false	B
+en_fresh.misses.tsv	grouped	clean	Yanni openly expressed his desire to kill	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	grouped	clean	Donning the Kabyle dress allows	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri started following	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Yanni taught	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	grouped	clean	Carlos understood	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Vladimir was drooling on	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Felix was driving from Algiers to	Blida	Blida	Blida|Black|Bridge	Blida|Black|بلدة	false	B
+en_fresh.misses.tsv	grouped	clean	Oleg realized	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_fresh.misses.tsv	grouped	clean	My name is	Jabu	Jabu	Jabu|January|Jab	Jabu|January|جاب	false	B
+en_fresh.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_fresh.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_fresh.misses.tsv	grouped	clean	We were going to	Gifu	Gifu	Gifu|Gift|Gifts	Gifu|Gift|جيف	false	B
+en_fresh.misses.tsv	grouped	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_fresh.misses.tsv	grouped	clean	Rima and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	grouped	clean	When did Mr	Ogawa	Ogawa	Ogawa|Osaka|Onward	Ogawa|Osaka|اجو	false	B
+en_fresh.misses.tsv	grouped	clean		Doni	Doni	Doni|Don't|Doing	Doni|Don't|دون	false	B
+en_fresh.misses.tsv	grouped	clean	How many	biros	biros	biros|hiroshi|hiroshima	biros|hiroshi|بروس	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri's words made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri didn't let	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri found out	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Santiago ordered	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Lorenzo went to ask Melissa where	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_fresh.misses.tsv	grouped	clean	I'm from	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
+en_fresh.misses.tsv	grouped	clean	Where is	Bejaia	Bejaia	Bejaia|Belgian|Bearable	Bejaia|Belgian|بيجي	false	B
+en_fresh.misses.tsv	grouped	clean	can bring	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	grouped	clean		aoke	aoke	woke|aoke|woken	woke|aoke|اوك	false	B
+en_fresh.misses.tsv	grouped	clean	Ziri drove	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_fresh.misses.tsv	grouped	clean	Yanni couldn't wait to meet	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_fresh.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		Bains	Bains	Brains|Bains|Banished	Brains|Bains|بنص	false	B
+en_subs.misses.tsv	grouped	clean		Chile'll	Chile'll	Chile'll|Chiselled|Chiseller	Chile'll|Chiselled|شلل	false	B
+en_subs.misses.tsv	grouped	clean		Lathia	Lathia	Lathia|Mathias|Latvia	Lathia|Mathias|لذا	false	B
+en_subs.misses.tsv	grouped	clean		Whaaa	Whaaa	Whoa|Whaaa|What	Whoa|Whaaa|وها	false	B
+en_subs.misses.tsv	grouped	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean		'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean	They've called Signor	Silla	Silla	Silla|Silly|Willard	Silla|Silly|صلة	false	B
+en_subs.misses.tsv	grouped	clean		you'	you'	you'|you	you'|you|يو	false	B
+en_subs.misses.tsv	grouped	clean	Detective	hudak	hudak	hudak|human|humans	hudak|human|هداك	false	B
+en_subs.misses.tsv	grouped	clean	Keep	goin'	goin'	goin'	goin'|جون	false	B
+en_subs.misses.tsv	grouped	clean	WHO is	Omoroca	Omoroca	Omoroca	Omoroca|أمرك	false	B
+en_subs.misses.tsv	grouped	clean	I am sorely	afeared	afeared	afeared|appeared|afeard	afeared|appeared|أفراد	false	B
+en_subs.misses.tsv	grouped	clean	Didn't show	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	Ride	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean		Mackie	Mackie	Mackie|Jackie|Mackenzie	Mackie|Jackie|مسك	false	B
+en_subs.misses.tsv	grouped	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean		'Cause	'Cause	'Cause	'Cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean	My name is	Sokun	Sokun	Sokun|Sound|Sounds	Sokun|Sound|سكن	false	B
+en_subs.misses.tsv	grouped	clean	I'd like to tell him that he should be proud to be	Wayana	Wayana	Wayana|Watanabe	Wayana|Watanabe|وين	false	B
+en_subs.misses.tsv	grouped	clean	They're	tryin'	tryin'	tryin'	tryin'|ترين	false	B
+en_subs.misses.tsv	grouped	clean		Fawell	Fawell	Fawell|Fall|Fell	Fawell|Fall|فول	false	B
+en_subs.misses.tsv	grouped	clean	This is Yuri	Pochenko	Pochenko	Pochenko	Pochenko|بشأنك	false	B
+en_subs.misses.tsv	grouped	clean	I don't understand	'Maya'	'Maya'	'Maya'	'Maya'|مي	false	B
+en_subs.misses.tsv	grouped	clean		'Did	'Did	'Did	'Did|ضد	false	B
+en_subs.misses.tsv	grouped	clean		Devoe	Devoe	Devote|Devoe|Developed	Devote|Devoe|ديف	false	B
+en_subs.misses.tsv	grouped	clean		Ayn	Ayn	Any|Ayn|Anything	Any|Ayn|أين	false	B
+en_subs.misses.tsv	grouped	clean	jube up	yo'	yo'	yo'	yo'|يـ	false	B
+en_subs.misses.tsv	grouped	clean	what	doya	doya	moya|doya|royal	moya|doya|دي	false	B
+en_subs.misses.tsv	grouped	clean	Do you like	Bekir	Bekir	Bekir|Beirut|Bemire	Bekir|Beirut|بكير	false	B
+en_subs.misses.tsv	grouped	clean	Get	aome	aome	some|aome|something	some|aome|أمي	false	B
+en_subs.misses.tsv	grouped	clean		Ra's	Ra's	Ra's|Rash|Rascal	Ra's|Rash|رأس	false	B
+en_subs.misses.tsv	grouped	clean	Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
+en_subs.misses.tsv	grouped	clean	Não	pise	pise	pise|piece|pieces	pise|piece|بس	false	B
+en_subs.misses.tsv	grouped	clean	The t'san	s'at	s'at	s'at|saturday|sat	s'at|saturday|ست	false	B
+en_subs.misses.tsv	grouped	clean	just hit	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean		Maa	Maa	Maa|Man|Make	Maa|Man|ما	false	B
+en_subs.misses.tsv	grouped	clean		Morrie	Morrie	Morris|Morrie|Morrison	Morris|Morrie|مر	false	B
+en_subs.misses.tsv	grouped	clean		'Rowan	'Rowan	'Rowan	'Rowan|روان	false	B
+en_subs.misses.tsv	grouped	clean	a man you	've	've	've	've|في	false	B
+en_subs.misses.tsv	grouped	clean	a big	ol'	ol'	ol'	ol'|الـ	false	B
+en_subs.misses.tsv	grouped	clean	Go to	Gerona	Gerona	Gerona|Verona|Geronimo	Gerona|Verona|جارنا	false	B
+en_subs.misses.tsv	grouped	clean	The crime	acene	acene	scene|acene|scenes	scene|acene|أكن	false	B
+en_subs.misses.tsv	grouped	clean	Which way to Sam	Kotr	Kotr	Kotr|Korea|Korean	Kotr|Korea|كتر	false	B
+en_subs.misses.tsv	grouped	clean		'Look	'Look	'Look	'Look|لوك	false	B
+en_subs.misses.tsv	grouped	clean		Maya's	Maya's	Maya's|Man's|Maya	Maya's|Man's|ميس	false	B
+en_subs.misses.tsv	grouped	clean	Capturin'	'im	'im	'im	'im|مـ	false	B
+en_subs.misses.tsv	grouped	clean		Hehe	Hehe	Hehe|Heh|Hee	Hehe|Heh|هه	false	B
+en_subs.misses.tsv	grouped	clean	First they wanted to get the good	alien's	alien's	alien's|aliens	alien's|aliens|النص	false	B
+en_subs.misses.tsv	grouped	clean		barji	barji	barji|barking|barbie	barji|barking|برج	false	B
+en_subs.misses.tsv	grouped	clean		Ayn	Ayn	Ayn|Any|Anything	Ayn|Any|أين	false	B
+en_subs.misses.tsv	grouped	clean		I'dd	I'dd	I'dd|I'd	I'dd|I'd|إد	false	B
+en_subs.misses.tsv	grouped	clean	Don't	wory	wory	worry|wory|work	worry|wory|ورى	false	B
+en_subs.misses.tsv	grouped	clean		Lawes	Lawes	Lawes|Laws|Lawsuit	Lawes|Laws|لويس	false	B
+en_subs.misses.tsv	grouped	clean	I tried to fight	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	you ate the	yada	yada	yoda|yada|yaah	yoda|yada|يد	false	B
+en_subs.misses.tsv	grouped	clean	He's buying another dozen issues	'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean		Jebby	Jebby	Jebby|Jerry|Jenny	Jebby|Jerry|جيبي	false	B
+en_subs.misses.tsv	grouped	clean	You may escape Beringar and	Cassale	Cassale	Cassale|Cassareep|Cassareeps	Cassale|Cassareep|كاسل	false	B
+en_subs.misses.tsv	grouped	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
+en_subs.misses.tsv	grouped	clean	What are you	doin'	doin'	doin'|doing	doin'|doing|دون	false	B
+en_subs.misses.tsv	grouped	clean		Ferretti	Ferretti	Ferretti|Forgetting|Ferret	Ferretti|Forgetting|فرطت	false	B
+en_subs.misses.tsv	grouped	clean	And if you look too far	'll	'll	'll	'll|لـ	false	B
+en_subs.misses.tsv	grouped	clean		boyo	boyo	boy|boyo|boys	boy|boyo|بي	false	B
+en_subs.misses.tsv	grouped	clean	lea	callot	callot	callot|callous|callow	callot|callous|سألت	false	B
+en_subs.misses.tsv	grouped	clean	of millionaire Randall	Nagel	Nagel	Nagel|Angel|Angeles	Nagel|Angel|نغل	false	B
+en_subs.misses.tsv	grouped	clean	Good	goin'	goin'	goin'	goin'|جون	false	B
+en_subs.misses.tsv	grouped	clean	owari wa	shinai	shinai	sinai|shinai|shining	sinai|shinai|شين	false	B
+en_subs.misses.tsv	grouped	clean	We can't blame it all on Kuang	Yumin	Yumin	Yumin|Yumi	Yumin|Yumi|يمين	false	B
+en_subs.misses.tsv	grouped	clean	of the	fllm	fllm	film|fllm|fillmore	film|fllm|فلم	false	B
+en_subs.misses.tsv	grouped	clean	This is the work of that	Lucena	Lucena	Lucena|License|Lunatic	Lucena|License|لكن	false	B
+en_subs.misses.tsv	grouped	clean	You know Andy Garcia	'll	'll	'll	'll|لـ	false	B
+en_subs.misses.tsv	grouped	clean	I hate	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	Hart and	Manheim	Manheim	Manheim|Mayhem|Mathematics	Manheim|Mayhem|منهم	false	B
+en_subs.misses.tsv	grouped	clean		Bonet	Bonet	Bonet|Bonnet|Bone	Bonet|Bonnet|بنت	false	B
+en_subs.misses.tsv	grouped	clean	we are	goin'	goin'	goin'|going	goin'|going|جون	false	B
+en_subs.misses.tsv	grouped	clean	My name is	Romy	Romy	Romy|Rome|Royal	Romy|Rome|رمي	false	B
+en_subs.misses.tsv	grouped	clean	We wore	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean		Bonnie's	Bonnie's	Bonnie's|Bonnie|Bunnies	Bonnie's|Bonnie|بنص	false	B
+en_subs.misses.tsv	grouped	clean	Thanks for	showin'	showin'	showin'	showin'|شون	false	B
+en_subs.misses.tsv	grouped	clean		Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
+en_subs.misses.tsv	grouped	clean	his 'Achilles	heel'	heel'	heel'|heel	heel'|heel|حيل	false	B
+en_subs.misses.tsv	grouped	clean		You'	You'	You'|You	You'|You|يو	false	B
+en_subs.misses.tsv	grouped	clean		Kerim	Kerim	Kerim|Kermit|Kermis	Kerim|Kermit|كريم	false	B
+en_subs.misses.tsv	grouped	clean	Deputy	Burda	Burda	Burda|Bureau|Burden	Burda|Bureau|برد	false	B
+en_subs.misses.tsv	grouped	clean	You tell	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	Why are you	goin'	goin'	goin'|going	goin'|going|جون	false	B
+en_subs.misses.tsv	grouped	clean	Hi	Perran	Perran	Perran|Permanent|Perrine	Perran|Permanent|برن	false	B
+en_subs.misses.tsv	grouped	clean	Before your birth you were Cecilia	Varrega	Varrega	Varrega|Variegate|Variegated	Varrega|Variegate|فارغ	false	B
+en_subs.misses.tsv	grouped	clean	While looking in the mirror	Keanu	Keanu	Keanu|Keane	Keanu|Keane|كان	false	B
+en_subs.misses.tsv	grouped	clean	why don't we just take	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	why don't we just take 'em with	us'	us'	us'	us'|إس	false	B
+en_subs.misses.tsv	grouped	clean		Kesh	Kesh	Kesh|Kessler|Mesh	Kesh|Kessler|كاش	false	B
+en_subs.misses.tsv	grouped	clean	Mrs	Goel	Goel	Goel|Goes|Gold	Goel|Goes|جيل	false	B
+en_subs.misses.tsv	grouped	clean	that crying	lndian	lndian	indian|lndian|lydian	indian|lndian|لندن	false	B
+en_subs.misses.tsv	grouped	clean	We will fight together for	Lukka's	Lukka's	Lukka's|Lukas	Lukka's|Lukas|لوكاس	false	B
+en_subs.misses.tsv	grouped	clean	Maybe most times you wait around until you're really hungry but poor	ol'	ol'	ol'|old	ol'|old|الـ	false	B
+en_subs.misses.tsv	grouped	clean	The vet told us half of one of	Maris'	Maris'	Maris'	Maris'|مارس	false	B
+en_subs.misses.tsv	grouped	clean	You're supposed to fuck	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean		Tialita	Tialita	Tialita|Taliban|Totalitarian	Tialita|Taliban|تلت	false	B
+en_subs.misses.tsv	grouped	clean	I present	Elyse	Elyse	Elyse|Else|Else's	Elyse|Else|أليس	false	B
+en_subs.misses.tsv	grouped	clean		He'a	He'a	He'a|He's|Hear	He'a|He's|هي	false	B
+en_subs.misses.tsv	grouped	clean	What you	doin'	doin'	doin'	doin'|دون	false	B
+en_subs.misses.tsv	grouped	clean		Jeddediah	Jeddediah	Jeddediah	Jeddediah|جديده	false	B
+en_subs.misses.tsv	grouped	clean		'Tis	'Tis	'Tis	'Tis|تيس	false	B
+en_subs.misses.tsv	grouped	clean	Killer	uaed	uaed	used|uaed	used|uaed|إيد	false	B
+en_subs.misses.tsv	grouped	clean		Kiu	Kiu	Liu|Kiu|Kouji	Liu|Kiu|كي	false	B
+en_subs.misses.tsv	grouped	clean	My heart actually quickened at the end of songs	'cause	'cause	'cause	'cause|كأس	false	B
+en_subs.misses.tsv	grouped	clean	I just did my first oil change on the	Healey	Healey	Healey|Healed|Healy	Healey|Healed|حالي	false	B
+en_subs.misses.tsv	grouped	clean		Terek	Terek	Trek|Terek|Teresa	Trek|Terek|ترك	false	B
+en_subs.misses.tsv	grouped	clean	Do you think	Gir's	Gir's	Gir's|Girl's	Gir's|Girl's|جرس	false	B
+en_subs.misses.tsv	grouped	clean		Sha're	Sha're	Sha're|Share|Shared	Sha're|Share|شر	false	B
+en_subs.misses.tsv	grouped	clean	Can we not	aquire	aquire	aquire|squire|acquired	aquire|squire|أقرأ	false	B
+en_subs.misses.tsv	grouped	clean	But don't let	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	I can see	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean	Say one more word and	you'	you'	you'|you're|you	you'|you're|يو	false	B
+en_subs.misses.tsv	grouped	clean	You're standing in for	Kalle	Kalle	Kalle|Kaleidoscopes|Malleable	Kalle|Kaleidoscopes|كل	false	B
+en_subs.misses.tsv	grouped	clean	I thought the	boss'	boss'	boss'	boss'|بس	false	B
+en_subs.misses.tsv	grouped	clean		Borias	Borias	Borias|Boris|Norias	Borias|Boris|برأس	false	B
+en_subs.misses.tsv	grouped	clean	I have to look at	'em	'em	'em	'em|أم	false	B
+en_subs.misses.tsv	grouped	clean		'The	'The	'The|the	'The|the|ذا	false	B
+en_subs.misses.tsv	grouped	clean		Nuria	Nuria	Nuria|Burial|Burials	Nuria|Burial|نرى	false	B
+en_subs.misses.tsv	grouped	clean	work together to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	it's Talk	Show	Show	<no miss row>	Show|Should|Showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Didn't	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	So there could be some educational value on the	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Here you are giving everyone a	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Why were you masturbating before the	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Seems the Hook ran last night's	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	l've just seen your	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	the Simpson family finally gets the chance to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	I have someplace special I would really like to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	everybody at work loves your	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	when's your next	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Let me	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Wanna	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	Would you like to see the floor	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	a very faint television signal transmitted the opening ceremonies of the Olympic Games as a	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see policy C	C
+en_subs.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	It would be an honor to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	They'll	show	show	<no miss row>	show|should|showed	see policy C	C
+en_subs.misses.tsv	grouped	clean	wrote the whole	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Karl threatened	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean		Boldi	Boldi	Bold|Boldi|Holding	Bold|Boldi|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Toki	Pona	Pona	Pona|Pond|Pony	Pona|Pond|بنا	false	B
+en_tatoeba.misses.tsv	grouped	clean	Why did	Yidir	Yidir	Yidir|Yiddish|Yid	Yidir|Yiddish|يدير	false	B
+en_tatoeba.misses.tsv	grouped	clean	I swear on the name of Sami	Bakir	Bakir	Bakir|Baird|Baking	Bakir|Baird|بكير	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni woke up for	suhur	suhur	suhur|suburbs|suburban	suhur|suburbs|سحر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri asked	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Geppetto	Geppetto	Geppetto	Geppetto|جبت	false	B
+en_tatoeba.misses.tsv	grouped	clean	Rodrigo imitated	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_tatoeba.misses.tsv	grouped	clean		Damiano	Damiano	Damian|Damiano	Damian|Damiano|ضمن	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni was filming	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni is just messing with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean		Tirana	Tirana	Tirana|Transfer|Transport	Tirana|Transfer|ترن	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri camped in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ivan behaved properly with	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri wants to sue	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Oleg regretfully told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Jodo	Jodo	Joo|Jodo|Jodie	Joo|Jodo|جد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni will look after	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	but this is all put to waste by his so called	'mother	'mother	'mother	'mother|مثير	false	B
+en_tatoeba.misses.tsv	grouped	clean	t stand	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri encouraged	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri explained the whole process for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
+en_tatoeba.misses.tsv	grouped	clean		Martino	Martino	Martin|Martino|Martini	Martin|Martino|مرتين	false	B
+en_tatoeba.misses.tsv	grouped	clean	Gabriel told	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	I forgave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	I ate a	shawarma	shawarma	shawarma|sharma	shawarma|sharma|شاورما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri isn't the best for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Gunter assured	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Gunter assured Rima that	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	The	Diaoyu	Diaoyu	Diaoyu|Diary|Dialogue	Diaoyu|Diary|دي	false	B
+en_tatoeba.misses.tsv	grouped	clean	Jonas dressed as	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	t allow	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	t allow Rima to set	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Santiago invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni is sure	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri took out his phone and showed	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri took out his phone and showed Rima a few pictures of	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri took out his phone and showed Rima a few pictures of Walid with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	The creature extended its slimy hands to	Damiano	Damiano	Damiano|Damian	Damiano|Damian|ضمن	false	B
+en_tatoeba.misses.tsv	grouped	clean	but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Mary stole	Alice's	Alice's	Alice's|Alice|Aliens	Alice's|Alice|أليكس	false	B
+en_tatoeba.misses.tsv	grouped	clean	Mark knew that Jessica had liked	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Sami probably dropped Layla for	Salima	Salima	Salima|Salinas|Salim	Salima|Salinas|سلم	false	B
+en_tatoeba.misses.tsv	grouped	clean		Mayuko	Mayuko	Mayuko|Mayor|Mayor's	Mayuko|Mayor|مايك	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni was frantically talking in Berber but	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni and	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni gave	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Miroslav met	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Miroslav met Rima and	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	We're going to Algiers with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean		Hanako	Hanako	Hank|Hanako|Handsome	Hank|Hanako|هناك	false	B
+en_tatoeba.misses.tsv	grouped	clean	Kalman only spent five nights in	Chrea	Chrea	Chrea|Cream|Created	Chrea|Cream|شر	false	B
+en_tatoeba.misses.tsv	grouped	clean	As soon as the leopard looked at	Boldi	Boldi	Boldi|Holding|Bodies	Boldi|Holding|بلدي	false	B
+en_tatoeba.misses.tsv	grouped	clean	The plant called	chamise	chamise	chamise|chaise|camise	chamise|chaise|شمس	false	B
+en_tatoeba.misses.tsv	grouped	clean		France's	France's	France's|Frances|Francesca	France's|Frances|فرانسيس	false	B
+en_tatoeba.misses.tsv	grouped	clean		Hamas	Hamas	Hamas|Hamster|Hamsters	Hamas|Hamster|حمص	false	B
+en_tatoeba.misses.tsv	grouped	clean	Oleg arrived in front of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni left	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	The legionnaires came in and started beating	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Adriano tried to drown	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Karl was disgusted by the dirtiness of	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Laika	Laika	Laila|Laika|Likable	Laila|Laika|لك	false	B
+en_tatoeba.misses.tsv	grouped	clean	Igor was aware of	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_tatoeba.misses.tsv	grouped	clean	screaming	Anna's	Anna's	Anna's|Annas	Anna's|Annas|أناس	false	B
+en_tatoeba.misses.tsv	grouped	clean		Yazid	Yazid	Yazid|Yard|Yards	Yazid|Yard|يزيد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni will be sharing this room with	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri broke Rima's spell over	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Thursday came around and still no call from	Janos	Janos	Janos|Janis|Jansen	Janos|Janis|جنس	false	B
+en_tatoeba.misses.tsv	grouped	clean		Allahu	Allahu	Allahu|Allah|Allahabad	Allahu|Allah|الله	false	B
+en_tatoeba.misses.tsv	grouped	clean	When he took his	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
+en_tatoeba.misses.tsv	grouped	clean	According to researchers from the	Carsey	Carsey	Carsey|Casey|Carey	Carsey|Casey|كرسي	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni showed that to	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	I don't know whether	Oreida	Oreida	Oreida|Oneida|Oneidas	Oreida|Oneida|أريد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri had sincere feelings for	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Tom gave	Snapchat	Snapchat	Snapchat|Snapshots|Snapshot	Snapchat|Snapshots|سنابشات	false	B
+en_tatoeba.misses.tsv	grouped	clean	Adriano made	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	He said the	shahada	shahada	shahada|sahara|saharan	shahada|sahara|شاهد	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yamanashi Prefecture's capital is	Kofu	Kofu	Kofu|Kouji|Koruna	Kofu|Kouji|كف	false	B
+en_tatoeba.misses.tsv	grouped	clean	Leonid was disappointed to hear that	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Leonid was disappointed to hear that Rima would marry	Walid	Walid	Walid|Waldo|Waldorf	Walid|Waldo|ولد	false	B
+en_tatoeba.misses.tsv	grouped	clean	I know you still want to look me in the eyes and tell me 'I love	you'	you'	you'|you	you'|you|يو	false	B
+en_tatoeba.misses.tsv	grouped	clean		Heya	Heya	Hey|Heya|Hear	Hey|Heya|هي	false	B
+en_tatoeba.misses.tsv	grouped	clean	Where ya	goin'	goin'	goin'	goin'|جون	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri invited	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yankev and	Sheyne	Sheyne	Sheyne|Shyness	Sheyne|Shyness|شين	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni found	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Oleg and	Rima	Rima	Rima|Romantic|Roman	Rima|Romantic|ريما	false	B
+en_tatoeba.misses.tsv	grouped	clean		Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
+en_tatoeba.misses.tsv	grouped	clean	Tat is separate from	Judeo	Judeo	Judeo|Jude|Judo	Judeo|Jude|جدا	false	B
+en_tatoeba.misses.tsv	grouped	clean	Yanni's dog started barking upon seeing	Skura	Skura	Skura|Sakura|Suraj	Skura|Sakura|سكر	false	B
+en_tatoeba.misses.tsv	grouped	clean	Ziri told Rima to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Boldi was watching a	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	The drawings Lyod has made	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Can you	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Can you	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Tom can	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Please don't	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	you can't act surprised when the clowns	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	We met after your	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	but I doubt he'll actually	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	It's time to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Tom and Mary have us to	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	I didn't	show	show	<no miss row>	show|should|showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean		Show	Show	<no miss row>	Show|Should|Showed	see policy C	C
+en_tatoeba.misses.tsv	grouped	clean	Will you	show	show	<no miss row>	show|should|showed	see policy C	C

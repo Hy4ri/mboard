@@ -1,22 +1,31 @@
 mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190306.md","context":[],"suggestions":["7abibi","حبيبي","حبيب"],"language":"en","text":"7abibi","word":"7abibi"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190308.md","context":[],"suggestions":["shu","shut","shit"],"language":"en","text":"shu","word":"shu"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190310.md","context":[],"suggestions":["kifak","kick","كيفك"],"language":"en","text":"kifak","word":"kifak"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190312.md","context":[],"suggestions":["3arabi","عربي"],"language":"en","text":"3arabi","word":"3arabi"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190314.md","context":[],"suggestions":["ma3","مع"],"language":"en","text":"ma3","word":"ma3"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190316.md","context":[],"suggestions":["sho","should","show"],"language":"en","text":"sho","word":"sho"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190318.md","context":[],"suggestions":["inshallah","installation","انشالله"],"language":"en","text":"inshallah","word":"inshallah"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190320.md","context":[],"suggestions":["yalla","gallant","يلا"],"language":"en","text":"yalla","word":"yalla"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190322.md","context":[],"suggestions":["hello","hell","yellow"],"language":"en","text":"hello","word":"hello"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190324.md","context":[],"suggestions":["the","there","they"],"language":"en","text":"the","word":"the"}
-{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190326.md","context":[],"suggestions":["good","god","goodbye"],"language":"en","text":"good","word":"good"}
-{"mode":"next","settings":{"autocorrect":true,"dialect":null,"autocap":true,"language":"en","learning":true},"auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.md","context":[],"suggestions":["I","You","And"],"text":"","event":"ready","word":"","jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.jsonl"}
-{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["7abibi","حبيبي","حبيب"],"text":"7abibi","ok":true,"word":"7abibi","seq":1,"events":["field set"]}
-{"mode":"next","auto":null,"keys":1,"context":["حبيبي"],"suggestions":["you","the","I"],"text":"حبيبي ","ok":true,"word":"","seq":2,"events":["picked حبيبي"]}
-{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["ma3","مع"],"text":"ma3","ok":true,"word":"ma3","seq":3,"events":["field set"]}
-{"mode":"next","auto":null,"keys":1,"context":["ma3"],"suggestions":["you","the","I"],"text":"ma3 ","ok":true,"word":"","seq":4,"events":[]}
-{"mode":"next","auto":null,"keys":0,"context":["ma3"],"suggestions":["you","the","I"],"text":"ma3 ","ok":true,"word":"","seq":5,"events":[]}
-{"corrections":0,"picked":1,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.md","keys":2,"text":"ma3 ","event":"end","commands":5,"undone":0,"jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-190328-agent.jsonl"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192055.md","context":[],"suggestions":["7abibi","حبيبي","حبيب"],"language":"en","text":"7abibi","word":"7abibi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192058.md","context":[],"suggestions":["shu","shut","شو"],"language":"en","text":"shu","word":"shu"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192100.md","context":[],"suggestions":["kifak","kick","كيفك"],"language":"en","text":"kifak","word":"kifak"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192103.md","context":[],"suggestions":["3arabi","عربي"],"language":"en","text":"3arabi","word":"3arabi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192106.md","context":[],"suggestions":["ma3","مع"],"language":"en","text":"ma3","word":"ma3"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192109.md","context":[],"suggestions":["sho","should","شو"],"language":"en","text":"sho","word":"sho"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192111.md","context":[],"suggestions":["inshallah","installation","انشالله"],"language":"en","text":"inshallah","word":"inshallah"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192113.md","context":[],"suggestions":["yalla","gallant","يلا"],"language":"en","text":"yalla","word":"yalla"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192116.md","context":[],"suggestions":["wallah","wallace","والله"],"language":"en","text":"wallah","word":"wallah"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192120.md","context":[],"suggestions":["habibi","habib","حبيبي"],"language":"en","text":"habibi","word":"habibi"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192125.md","context":[],"suggestions":["khalas","kalahari","خلص"],"language":"en","text":"khalas","word":"khalas"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192128.md","context":[],"suggestions":["mashallah","ماشالله"],"language":"en","text":"mashallah","word":"mashallah"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192131.md","context":[],"suggestions":["ya3ni","يعني"],"language":"en","text":"ya3ni","word":"ya3ni"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192135.md","context":[],"suggestions":["hello","hell","yellow"],"language":"en","text":"hello","word":"hello"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192140.md","context":[],"suggestions":["the","there","they"],"language":"en","text":"the","word":"the"}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192143.md","context":[],"suggestions":["good","god","goodbye"],"language":"en","text":"good","word":"good"}
+{"mode":"next","settings":{"autocorrect":true,"dialect":null,"autocap":true,"language":"en","learning":true},"auto":null,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192146-agent.md","context":[],"suggestions":["I","You","And"],"text":"","event":"ready","word":"","jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192146-agent.jsonl"}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["shu","shut","شو"],"text":"shu","ok":true,"word":"shu","seq":1,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["شو"],"suggestions":["you","the","I"],"text":"شو ","ok":true,"word":"","seq":2,"events":["picked شو"]}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["sho","should","شو"],"text":"sho","ok":true,"word":"sho","seq":3,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["sho"],"suggestions":["you","the","I"],"text":"sho ","ok":true,"word":"","seq":4,"events":[]}
+{"mode":"complete","auto":null,"keys":0,"context":[],"suggestions":["7abibi","حبيبي","حبيب"],"text":"7abibi","ok":true,"word":"7abibi","seq":5,"events":["field set"]}
+{"mode":"next","auto":null,"keys":1,"context":["حبيبي"],"suggestions":["you","the","I"],"text":"حبيبي ","ok":true,"word":"","seq":6,"events":["picked حبيبي"]}
+{"mode":"next","auto":null,"keys":0,"context":["حبيبي"],"suggestions":["you","the","I"],"text":"حبيبي ","ok":true,"word":"","seq":7,"events":[]}
+{"corrections":0,"picked":2,"log":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192146-agent.md","keys":3,"text":"حبيبي ","event":"end","commands":7,"undone":0,"jsonl":"/home/m57/Projects/mboard-302/bench/logs/suggest/20261030-192146-agent.jsonl"}
+
+Unchanged skeleton-expansion timing from the first implementation:
 7abibi skeletons=12 p50_ms=0.0142 p95_ms=0.0196 max_ms=0.1542
 shu skeletons=2 p50_ms=0.0035 p95_ms=0.0065 max_ms=0.0206
 kifak skeletons=6 p50_ms=0.0084 p95_ms=0.0110 max_ms=0.1864

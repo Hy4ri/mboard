@@ -134,15 +134,16 @@ object Arabizi {
 
     /**
      * Put [readings] into the strip choices. A Franco word with a digit gets them right after the typed
-     * word; otherwise a strong reading takes the last slot. Valid English words never reach this helper with readings.
+     * word; otherwise a strong reading takes the last slot. Allowlisted words always use only the last slot.
      */
     fun place(
         choices: List<String>,
         typed: String,
         readings: List<String>,
+        lastSlotOnly: Boolean = false,
     ): List<String> {
         if (readings.isEmpty()) return choices
-        if (!eligible(typed, anyLetters = false)) return choices.take(2) + readings.take(1)
+        if (lastSlotOnly || !eligible(typed, anyLetters = false)) return choices.take(2) + readings.take(1)
         val at = (choices.indexOf(typed) + 1).coerceAtLeast(0)
         return (choices.take(at) + readings.take(2) + choices.drop(at)).take(3)
     }
