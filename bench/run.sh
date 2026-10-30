@@ -29,6 +29,7 @@ for set in en_subs en_tatoeba en_chat en_fresh; do
     run "${args[@]}" "$@"
   fi
 done
+have en_space_typos.tsv && { run --lang en --typos data/en_space_typos.tsv --label en_space_typos "$@"; }
 have en_real_typos.tsv && { run --lang en --typos data/en_real_typos.tsv --label en_real_typos "$@"; }
 for set in ar_subs ar_tatoeba ar_fresh; do
   if have "$set.txt"; then

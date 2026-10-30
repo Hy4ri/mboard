@@ -280,6 +280,40 @@ class WordSuggestions(
         return hint
     }
 
+    /**
+     * Suggest-only: the typed word read as two words with the space missed ("fixit", "fixxit" → "fix it").
+     * Scored with the same next-word model as predictions; null when no reading has two real, frequent halves.
+     */
+    fun splitSuggestion(
+        word: String,
+        language: Language,
+        context: List<String>,
+        dialectOn: Boolean,
+    ): String? {
+        if (closed) return null
+        val model = model(language) ?: return null
+        val readings = model.dictionary.splitReadings(word)
+        if (readings.isEmpty()) return null
+        // A longer real word is probably still being typed (thankyo…): leave that to completions.
+        val longer = model.dictionary.completions(word, 4, false).filter { !it.word.equals(word, ignoreCase = true) }
+        if (longer.any { model.dictionary.frequency(it.word) >= SPLIT_PREFIX_BLOCK }) return null
+        val dialect = dialectOn && language.dialect != null
+        val first = Scorer(model, context, language, dialect, emptyMap(), emptyMap())
+        // A rare listed word (manor, Oran) is split only when the pair is a known sequence (a lot, thank you).
+        val listed = model.dictionary.frequency(word) > 0
+        val known = readings.filter { !listed || (model.next[matchKey(it.left)]?.count(candidateKey(it.right)) ?: 0L) > 0L }
+        val best =
+            known.maxByOrNull { reading ->
+                val l = written(reading.left, language)
+                val r = written(reading.right, language)
+                val second = Scorer(model, context + l, language, dialect, emptyMap(), emptyMap())
+                ln(first.probability(l)) + ln(second.probability(r)) - if (reading.stray) STRAY_COST else 0.0
+            } ?: return null
+        // A one-word typo reading (godo → good, namme → name) wins over a split: the strip already offers it.
+        if (model.dictionary.correctionOptions(word).isNotEmpty()) return null
+        return "${written(best.left, language)} ${written(best.right, language)}"
+    }
+
     private fun strongLiteral(
         typed: String,
         candidate: WordDictionary.Candidate,
@@ -673,6 +707,8 @@ class WordSuggestions(
 
         /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
         const val FUZZY_COST = 1.5
+        const val STRAY_COST = 3.0
+        const val SPLIT_PREFIX_BLOCK = 1_000L
 
         const val CLITIC_COST = 2.5
     }

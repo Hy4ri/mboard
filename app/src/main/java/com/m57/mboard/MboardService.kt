@@ -581,7 +581,16 @@ class MboardService : InputMethodService() {
             } else {
                 null
             }
-        val leading = autoCorrection ?: hint
+        // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
+        val split =
+            if (!userWords.knows(typed, language)) {
+                words
+                    .splitSuggestion(typed, language, context.contextWords, settings.dialectEnabled(language.dialect))
+                    ?.let { matchCase(it, typed) }
+            } else {
+                null
+            }
+        val leading = autoCorrection ?: hint ?: split
         // A saved phrase starting with the typed word follows the correction; tapping it replaces the word.
         val phrase =
             if (fieldPolicy.password || typed.length < 2) {
@@ -601,7 +610,7 @@ class MboardService : InputMethodService() {
                     if (privateSession) emptyMap() else userWords.completions(typed, language),
                 ).map { matchCase(it, typed) }
         val others =
-            (listOfNotNull(leading, phrase) + ranked)
+            (listOfNotNull(leading, split, phrase) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         // The word as typed always keeps a slot, right after a correction or hint, so it can be kept with one tap

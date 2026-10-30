@@ -121,7 +121,14 @@ class Strip(
             } else {
                 null
             }
-        val leading = autoCorrection ?: hint
+        // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
+        val split =
+            if (!userWords.knows(typed, language)) {
+                words.splitSuggestion(typed, language, c.contextWords, dialect)?.let { matchCase(it, typed) }
+            } else {
+                null
+            }
+        val leading = autoCorrection ?: hint ?: split
         val ranked =
             words
                 .rank(
@@ -133,7 +140,7 @@ class Strip(
                     if (!learning) emptyMap() else userWords.completions(typed, language),
                 ).map { matchCase(it, typed) }
         val others =
-            (listOfNotNull(leading) + ranked)
+            (listOfNotNull(leading, split) + ranked)
                 .filter { it != typed }
                 .distinctBy { it.lowercase(Locale.ROOT) }
         val keepAt = if (leading != null && leading != typed) 1 else 0

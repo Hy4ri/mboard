@@ -55,6 +55,23 @@ class Language(
     val layout = Layout.letters(rows, stretch)
     val alphabet = alphabet ?: rows.flatten().filter { it.length == 1 && it[0].isLetter() }.joinToString("")
 
+    /**
+     * Letters that sit above the space bar: the bottom letter row without its outermost left key (zxcvbnm → xcvbnm).
+     * A thumb aiming for the space bar can hit one of them instead. Latin layouts only.
+     */
+    val spaceNeighbours: Set<Char> =
+        if (script != Script.LATIN) {
+            emptySet()
+        } else {
+            rows
+                .lastOrNull { row -> row.any { it.length == 1 && it[0] in this.alphabet } }
+                ?.filter { it.length == 1 && it[0].isLetter() }
+                ?.drop(1)
+                ?.map { it[0] }
+                ?.toSet()
+                .orEmpty()
+        }
+
     /** Upper/lower case exists: drives auto-capitalization and case-matched suggestions. */
     val cased get() = script == Script.LATIN
 

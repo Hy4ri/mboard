@@ -21,6 +21,13 @@ class WordDictionary private constructor(
         val score: Double,
     )
 
+    /** Two words a run-together input may mean; [stray] when a key above the space bar sat between them. */
+    class SplitReading(
+        val left: String,
+        val right: String,
+        val stray: Boolean,
+    )
+
     private data class Entry(
         val normalized: String,
         val original: String,
@@ -627,6 +634,49 @@ class WordDictionary private constructor(
         return if (bestScore >= 300.0 && !midWord(normalized, best)) best.original else null
     }
 
+    /**
+     * Missing-space readings of [word]: two real words run together ("fixit"), or with one stray key between them
+     * that sits above the space bar ("fixxit"). Empty when the whole is a normal word or a longer word is still being typed.
+     */
+    fun splitReadings(word: String): List<SplitReading> {
+        if (language.script != Script.LATIN || word.length !in 4..24 || word.any { !it.isLetter() }) return emptyList()
+        val lower = word.lowercase(Locale.ROOT)
+        if (lower in language.keepAsTyped || lower in language.contractions) return emptyList()
+        val whole = exact[lower]?.frequency ?: 0L
+        val out = LinkedHashMap<String, SplitReading>()
+
+        fun half(text: String): Entry? {
+            val entry = exact[text]?.takeUnless { it.hidden || it.isDialectOnly } ?: return null
+            val floor =
+                when (text.length) {
+                    1 -> if (text == "a" || text == "i") SPLIT_MIN_SINGLE else return null
+                    2 -> SPLIT_MIN_SHORT
+                    else -> SPLIT_MIN_HALF
+                }
+            return entry.takeIf { it.frequency >= floor }
+        }
+
+        fun consider(
+            left: String,
+            right: String,
+            stray: Boolean,
+        ) {
+            // The right half must be a word of its own, not a single letter.
+            if (right.length < 2) return
+            val l = half(left) ?: return
+            val r = half(right) ?: return
+            val weaker = minOf(l.frequency, r.frequency)
+            // A listed word stays a word unless it is far rarer than both parts (alot, thankyou).
+            if (whole > 0 && whole * SPLIT_WHOLE_RATIO >= weaker) return
+            out.putIfAbsent("${l.original} ${r.original}", SplitReading(l.original, r.original, stray))
+        }
+        for (i in 1 until lower.length) {
+            consider(lower.substring(0, i), lower.substring(i), false)
+            if (lower[i] in language.spaceNeighbours) consider(lower.substring(0, i), lower.substring(i + 1), true)
+        }
+        return out.values.toList()
+    }
+
     /** Observed full words with a missing letter or one displaced letter: choices, not forced guesses. */
     fun manualAlternatives(word: String): List<Candidate> {
         if (language.script != Script.LATIN || word.length !in 4..12 || word.any { !it.isLetter() }) return emptyList()
@@ -1004,6 +1054,10 @@ class WordDictionary private constructor(
     companion object {
         private const val MAX_PREFIX_SCAN = 400
         private const val MAX_DISTANCE = 2
+        private const val SPLIT_MIN_HALF = 3000L
+        private const val SPLIT_MIN_SHORT = 100_000L
+        private const val SPLIT_MIN_SINGLE = 1_000_000L
+        private const val SPLIT_WHOLE_RATIO = 50L
         private val VOWELS = setOf('a', 'e', 'i', 'o', 'u')
         private val VOWELS_Y = setOf('a', 'e', 'i', 'o', 'u', 'y')
 
