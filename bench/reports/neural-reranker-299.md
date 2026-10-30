@@ -1,6 +1,8 @@
 # Card 299: tiny neural candidate reranker
 
-**Current candidate: v2 (one-letter completions + next words), still OFF pending review.**
+**Current delivery: V2 accepted by the lead, bundled and ON by default.**
+See `neural-reranker-299-shipped.md` for the final shipped-default gates.
+The OFF descriptions below are retained historical stages, not current behavior.
 The v1 results below are retained as rejected experimental evidence. See the final
 v2 section for the current source and recommendation.
 

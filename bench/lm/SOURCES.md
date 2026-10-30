@@ -107,7 +107,7 @@ Limitations:
 - Retained-count aggregation uses existing training intermediates, not a full corpus retrain. No evaluation sentences or follower counts are ingested. Key-frequency guards use the unchanged bundled lexicon; its Jordanian vocabulary still includes full-Shami spelling coverage. These are tuning replays, not blind unseen-language evidence.
 
 
-## Tiny neural reranker experiment (card 299, OFF)
+## Tiny neural reranker (card 299)
 
 `train_reranker.py` and `TrainReranker.java` train tied-embedding, two-word-context
 feed-forward scorers from the training-only `unigram_`, `next_`, and `context_`
@@ -115,10 +115,14 @@ count intermediates above. English/Arabic use the documented excluded subtitle
 windows and evaluation-line exclusions. Jordanian uses `out_jo_split` only, never
 full-Shami `out_jo`. No benchmark text is a training input. The model derivations
 retain the source attribution and data-license terms above; they have no new
-corpus license. No binary model is bundled in the app in this experiment.
+corpus license. The three quantized binary models are bundled in the app; together they occupy
+1,846,000 bytes. They score only existing next-word and one-letter completion candidates.
 
 See `../reports/neural-reranker-299.md` for fixed-seed training, the input/output
 SHA-256 manifest, full quality results, manual-target losses/gains, size and latency.
-The feature remains OFF for review. The first candidate lost manual typo targets;
-the final candidate limits neural completion scoring to one-letter prefixes and
-preserves every measured typo row. Small old-set prediction declines remain.
+The accepted feature is ON by default in the app and desktop bench. The first
+candidate lost manual typo targets; the final candidate limits neural completion
+scoring to one-letter prefixes and preserves every measured typo row. Small old-set
+prediction declines (at most 0.07 percentage points) were accepted by the lead.
+For a diagnostic OFF comparison, use `JAVA_OPTS=-Dmboard.neural=false` with the
+bench runner, or `JAVA_TOOL_OPTIONS=-Dmboard.neural=false` with `suggest.sh`.

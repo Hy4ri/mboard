@@ -1,0 +1,5 @@
+6fcbeec826fd2398fd5f413f88cbea6051830d9154ee96f7dbc863ee87c81957  bench/build/install/mboard-bench/lib/mboard-bench.jar
+b699d56295fb8f791b63cb87e9bc2f0299f7bc61ddbddbc298b063c08d9577ab  app/build/outputs/apk/debug/app-debug.apk
+8180b7f2f269992cad82b0d251fd2621319143261e3be41ce499676e34602dc9  app/src/main/assets/rerank_ar.bin
+e09972009238802e9fe0e26c6419e2e25a2a6b2dd3280488150b152d91c4d87a  app/src/main/assets/rerank_en.bin
+80a590233aa0bd68b043b407eac8ec1b678e2813527f772b5247ee81a0c7440c  app/src/main/assets/rerank_jo.bin

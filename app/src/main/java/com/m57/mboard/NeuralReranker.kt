@@ -55,8 +55,8 @@ internal class NeuralReranker private constructor(
     }
 
     companion object {
-        // OFF until the complete held-out, autocorrect, size and latency contract passes.
-        val enabled: Boolean get() = java.lang.Boolean.getBoolean("mboard.neural")
+        // Shared by the app and desktop bench. The property is a diagnostic kill switch.
+        val enabled: Boolean get() = System.getProperty("mboard.neural", "true").toBoolean()
         val weight: Double get() = System.getProperty("mboard.neural.weight", "0.1").toDouble().coerceIn(0.0, 1.0)
 
         private fun key(word: String): String =
