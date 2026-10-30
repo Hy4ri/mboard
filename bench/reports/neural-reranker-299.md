@@ -286,3 +286,10 @@ and asset inclusion decision; device responsiveness/typing verification. No inst
 push, merge or publication was performed by this member. No second full training
 reproduction run was executed; fixed-seed deterministic code and recorded input/output
 hashes support reproduction, but cross-JDK bitwise identity is not claimed.
+
+Lead-requested tabular V1 evidence: `299/v1-typo-target-tradeoffs.tsv` contains all
+41 lost and 107 gained typo targets, with set, typo, target, old strip and new strip.
+The `change` column distinguishes losses from gains. The one simple mitigation was
+already tried in V2: preserve the n-gram/spelling ordering for every prefix of two
+or more characters. This removes all 41 losses, but also gives up all 107 typo gains.
+The reranker still improves all three held-out prediction/completion/savings metrics.
