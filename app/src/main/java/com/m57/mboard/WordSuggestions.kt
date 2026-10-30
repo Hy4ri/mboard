@@ -3,6 +3,8 @@ package com.m57.mboard
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
+import android.util.Log
 import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -142,26 +144,57 @@ class WordSuggestions(
             if (states[language.code] == State.LOADING) return
             states[language.code] = State.LOADING
             executor.execute {
+                val engineLoadStart = SystemClock.elapsedRealtime()
                 try {
-                    val dialect = language.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
+                    val dialect =
+                        language.dialect
+                            ?.let {
+                                val assetName = it.wordsAsset
+                                Log.i("mboard.startup", "asset load start: $assetName")
+                                val start = SystemClock.elapsedRealtime()
+                                val map = readDialectVocabulary(assetName)
+                                val duration = SystemClock.elapsedRealtime() - start
+                                Log.i("mboard.startup", "asset load end: $assetName duration=${duration}ms entries=${map.size}")
+                                map
+                            }.orEmpty()
+
                     val knownForms =
                         language.knownFormsAsset?.let { name ->
-                            assets.open(name).bufferedReader().use { KnownWordForms.read(it) }
+                            Log.i("mboard.startup", "asset load start: $name")
+                            val start = SystemClock.elapsedRealtime()
+                            val kf = assets.open(name).bufferedReader().use { KnownWordForms.read(it) }
+                            val duration = SystemClock.elapsedRealtime() - start
+                            Log.i("mboard.startup", "asset load end: $name duration=${duration}ms")
+                            kf
                         } ?: KnownWordForms.EMPTY
+
+                    val dictStart = SystemClock.elapsedRealtime()
+                    Log.i("mboard.startup", "asset load start: ${language.wordsAsset}")
                     val dictionary =
                         assets
                             .open(language.wordsAsset)
                             .bufferedReader()
                             .use { WordDictionary.read(it, language, dialect, knownForms) }
+                    val dictDuration = SystemClock.elapsedRealtime() - dictStart
+                    Log.i(
+                        "mboard.startup",
+                        "asset load end: ${language.wordsAsset} duration=${dictDuration}ms entries=${dictionary.size}",
+                    )
                     if (dictionary.size == 0) throw IOException("No usable bundled word entries")
 
-                    val next = readTable(language.nextAsset)
-                    val contextTable = readTable(language.contextAsset)
-                    val dialectNext = language.dialect?.let { readTable(it.nextAsset) }.orEmpty()
+                    val next = readLoggedTable(language.nextAsset)
+                    val contextTable = readLoggedTable(language.contextAsset)
+                    val dialectNext = language.dialect?.let { readLoggedTable(it.nextAsset) }.orEmpty()
 
                     val misspellRules =
                         if (language.script == Script.LATIN) {
-                            assets.open("misspell_rules_en.tsv").bufferedReader().use { EnglishMisspellRules.read(it) }
+                            val name = "misspell_rules_en.tsv"
+                            Log.i("mboard.startup", "asset load start: $name")
+                            val start = SystemClock.elapsedRealtime()
+                            val rules = assets.open(name).bufferedReader().use { EnglishMisspellRules.read(it) }
+                            val duration = SystemClock.elapsedRealtime() - start
+                            Log.i("mboard.startup", "asset load end: $name duration=${duration}ms")
+                            rules
                         } else {
                             EnglishMisspellRules.EMPTY
                         }
@@ -183,6 +216,8 @@ class WordSuggestions(
                             states[language.code] = State.READY
                             waiting.toList().also { waiting.clear() }
                         }
+                    val totalDuration = SystemClock.elapsedRealtime() - engineLoadStart
+                    Log.i("mboard.startup", "engine ready: language=${language.code} duration=${totalDuration}ms")
                     mainHandler.post { if (!closed) readyCallbacks.forEach { it() } }
                 } catch (_: IOException) {
                     val failedCallbacks =
@@ -223,6 +258,15 @@ class WordSuggestions(
         } catch (_: IOException) {
             emptyMap()
         }
+
+    private fun readLoggedTable(name: String): Map<String, Row> {
+        Log.i("mboard.startup", "asset load start: $name")
+        val start = SystemClock.elapsedRealtime()
+        val table = readTable(name)
+        val duration = SystemClock.elapsedRealtime() - start
+        Log.i("mboard.startup", "asset load end: $name duration=${duration}ms entries=${table.size}")
+        return table
+    }
 
     /**
      * `context TAB total TAB word:count ...`; a row without counts (`context TAB word ...`) counts its
