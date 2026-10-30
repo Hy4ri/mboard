@@ -92,7 +92,7 @@ class WordSuggestions(
 
     /**
      * Arabic-script readings of a Franco word such as 7abibi or shu, best first (at most [limit]). A digit
-     * (2 3 5 6 7 8 9) mixed with letters is enough; otherwise [typed] must be allowlisted or no English word/prefix and match a
+     * (2 3 5 6 7 8 9) mixed with letters is enough; otherwise [typed] must be explicitly allowlisted and match a
      * frequent Arabic word. Candidates are only offered, never applied automatically.
      */
     fun arabizi(
@@ -103,15 +103,8 @@ class WordSuggestions(
         if (closed || language.script != Script.LATIN) return emptyList()
         val lexicon = arabiziLexicon ?: return emptyList()
         val withDigit = Arabizi.eligible(typed, anyLetters = false)
-        if (!withDigit) {
-            if (!Arabizi.eligible(typed, anyLetters = true)) return emptyList()
-            val english = model(language)?.dictionary ?: return emptyList()
-            if (!isArabiziListed(typed) &&
-                (english.frequency(typed) > 0L || english.completions(typed, 1, dialect = false).isNotEmpty())
-            ) {
-                return emptyList()
-            }
-        }
+        // No broad transliteration fallback: ordinary English typos must keep all their alternatives.
+        if (!withDigit && (!isArabiziListed(typed) || !Arabizi.eligible(typed, anyLetters = true))) return emptyList()
         val found = LinkedHashMap<String, Double>()
         for (skeleton in Arabizi.skeletons(typed)) {
             val entry = lexicon.exactEntry(skeleton) ?: continue
