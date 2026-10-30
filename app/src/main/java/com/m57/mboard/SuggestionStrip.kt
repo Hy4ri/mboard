@@ -1,7 +1,9 @@
 package com.m57.mboard
 
 import android.content.Context
+import android.os.SystemClock
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -22,6 +24,7 @@ class SuggestionStrip(
 
     private val choices = arrayOfNulls<Choice>(3)
     private val pressedChoices = arrayOfNulls<Choice>(3)
+    private var firstSuggestionLogged = false
     private val status =
         ui.label("Type a word for completions", 13f, true).apply {
             gravity = Gravity.CENTER_VERTICAL
@@ -81,6 +84,13 @@ class SuggestionStrip(
         // Only a real change of words animates; rerenders with the same list stay still while typing.
         val changed = visible != shown
         shown = visible
+        if (!firstSuggestionLogged && visible.isNotEmpty()) {
+            firstSuggestionLogged = true
+            Log.i(
+                "mboard.startup",
+                "first suggestion rendered: count=${visible.size} elapsedRealtime=${SystemClock.elapsedRealtime()} uptimeMillis=${SystemClock.uptimeMillis()}",
+            )
+        }
         status.text = message
         status.tooltipText = message
         status.visibility = if (visible.isEmpty()) VISIBLE else GONE

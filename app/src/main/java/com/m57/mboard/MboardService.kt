@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
+import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -71,6 +72,10 @@ class MboardService : InputMethodService() {
     private val settingsListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key -> settingsChanged(key) }
 
     override fun onCreate() {
+        Log.i(
+            "mboard.startup",
+            "service onCreate start: elapsedRealtime=${SystemClock.elapsedRealtime()} uptimeMillis=${SystemClock.uptimeMillis()}",
+        )
         super.onCreate()
         settings = BoardSettings(this)
         language = settings.language
