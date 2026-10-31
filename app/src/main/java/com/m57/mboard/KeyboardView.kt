@@ -39,6 +39,7 @@ class KeyboardView(
     private val cells = mutableListOf<Cell>()
     private var geometryLayout: Layout? = null
     private var geometryWidth = -1
+    private var geometryHeight = -1
     var layout = Languages.ALL.first().layout
         set(value) {
             if (field == value) return
@@ -84,14 +85,31 @@ class KeyboardView(
         }
     val backgroundColor get() = ui.background
 
-    /** Stable body size across pages; minimum row size takes precedence over the landscape target. */
-    val keysHeight: Int
+    /** Requested body pixels for the current window; independent of the previous orientation's layout. */
+    val keysHeight: Int get() = desiredKeysHeight
+
+    // Parents can constrain the requested height. Draw and hit-test within the pixels actually laid out.
+    private val drawnKeysHeight: Int
+        get() = if (height > 0) (height - paddingBottom).coerceAtLeast(0) else keysHeight
+
+    private val desiredKeysHeight: Int
         get() {
             val rowCount = if (showNumberRow) 5 else 4
             val configured = rowHeight * rowCount + gap
-            if (resources.configuration.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE) return configured.toInt()
-            val windowHeight = resources.configuration.screenHeightDp * density
-            val available = windowHeight * Tokens.LANDSCAPE_HEIGHT_FRACTION - (Tokens.TOOLBAR_HEIGHT + Tokens.STRIP_HEIGHT) * density
+            val metrics = context.getSystemService(android.view.WindowManager::class.java).currentWindowMetrics
+            val bounds = metrics.bounds
+            if (bounds.width() <= bounds.height()) return configured.toInt()
+            // Configuration.screenHeightDp can lag rotation and does not describe usable window pixels.
+            // Exclude system bars/cutouts, but never the IME itself (that would make sizing recursive).
+            val insets =
+                metrics.windowInsets.getInsetsIgnoringVisibility(
+                    android.view.WindowInsets.Type
+                        .systemBars() or
+                        android.view.WindowInsets.Type
+                            .displayCutout(),
+                )
+            val usableHeight = bounds.height() - insets.top - insets.bottom
+            val available = usableHeight * Tokens.LANDSCAPE_HEIGHT_FRACTION - (Tokens.TOOLBAR_HEIGHT + Tokens.STRIP_HEIGHT) * density
             val minimum = Tokens.KEY_ROW_MIN * density * rowCount + gap
             return minOf(configured, maxOf(minimum, available)).toInt()
         }
@@ -110,7 +128,7 @@ class KeyboardView(
         }
 
     // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
-    private val activeRowHeight get() = (keysHeight - gap) / rows.size
+    private val activeRowHeight get() = (drawnKeysHeight - gap) / rows.size
     private val altStrip = RectF()
     private val previewBubble = RectF()
     private val previewLabelBounds = RectF()
@@ -223,7 +241,7 @@ class KeyboardView(
         widthMeasureSpec: Int,
         heightMeasureSpec: Int,
     ) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), resolveSize(keysHeight + paddingBottom, heightMeasureSpec))
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), resolveSize(desiredKeysHeight + paddingBottom, heightMeasureSpec))
     }
 
     override fun onSizeChanged(
@@ -269,7 +287,7 @@ class KeyboardView(
         }
 
     private fun geometry() {
-        if (geometryWidth == width && geometryLayout == layout) return
+        if (geometryWidth == width && geometryHeight == drawnKeysHeight && geometryLayout == layout) return
         cells.clear()
         releasedAt.clear()
         if (width <= 0) return
@@ -300,6 +318,7 @@ class KeyboardView(
             }
         }
         geometryWidth = width
+        geometryHeight = drawnKeysHeight
         geometryLayout = layout
     }
 
@@ -533,7 +552,7 @@ class KeyboardView(
         y: Float,
     ): Cell? {
         geometry()
-        if (x < 0 || x >= width || y < 0 || y >= keysHeight) return null
+        if (x < 0 || x >= width || y < 0 || y >= drawnKeysHeight) return null
         val row = (y / activeRowHeight).toInt().coerceAtMost(rows.lastIndex)
         // Gaps are part of the closest key's target, but only within the same row.
         val candidates = cells.filter { it.row == row }
