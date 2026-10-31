@@ -114,7 +114,12 @@ class Strip(
     }
 
     // MboardService.renderSuggestions, ordinary text field, no saved phrases, emoji suggestions off.
-    fun show(c: Caret): Shown {
+    // [numeric] mirrors fieldPolicy.numeric: number, phone and date fields show no words, only a status.
+    fun show(
+        c: Caret,
+        numeric: Boolean = false,
+    ): Shown {
+        if (numeric) return Shown(emptyList(), false)
         if (c.idle) {
             val predicted =
                 words

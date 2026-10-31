@@ -26,11 +26,11 @@ class SuggestionStrip(
     private val pressedChoices = arrayOfNulls<Choice>(3)
     private var firstSuggestionLogged = false
     private val status =
-        ui.label("Type a word for completions", 13f, true).apply {
+        ui.label("Type a word for completions", Tokens.TEXT_CAPTION, true).apply {
             gravity = Gravity.CENTER_VERTICAL
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
-            setPadding(ui.dp(12), 0, ui.dp(12), 0)
+            setPadding(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_3), 0)
             accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
         }
     private val buttons = ArrayList<Button>(3)
@@ -38,9 +38,9 @@ class SuggestionStrip(
 
     init {
         orientation = HORIZONTAL
-        // Chips sit low in the bar so they read as part of the keyboard, not a separate strip.
-        gravity = Gravity.BOTTOM
-        setPadding(ui.dp(3), 0, ui.dp(3), ui.dp(2))
+        // Chips fill the whole strip height and share the key grid's column edges (half a key gap each side).
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(0, 0, 0, 0)
         addView(status, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         repeat(3) { index ->
             val button =
@@ -59,17 +59,27 @@ class SuggestionStrip(
                         }
                         maxLines = 1
                         ellipsize = TextUtils.TruncateAt.END
-                        // Slim key-style chips: same fill and edge as the letter keys, tight padding.
+                        // Key-style chips: same fill and edge as the letter keys, one fixed text size.
                         minHeight = 0
                         minimumHeight = 0
-                        setPadding(ui.dp(6), 0, ui.dp(6), 0)
+                        setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_2), 0)
                         includeFontPadding = false
-                        setAutoSizeTextTypeUniformWithConfiguration(11, 15, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
+                        textSize = Tokens.TEXT_BODY
                         background = ui.keyChip(ui.surface)
                         visibility = GONE
                     }
             buttons.add(button)
-            addView(button, LayoutParams(0, ui.dp(34), 1f).apply { setMargins(ui.dp(3), 0, ui.dp(3), 0) })
+            addView(
+                button,
+                LayoutParams(0, ui.dp(Tokens.STRIP_HEIGHT), 1f).apply {
+                    setMargins(
+                        ui.dp(Tokens.KEY_GAP / 2),
+                        0,
+                        ui.dp(Tokens.KEY_GAP / 2),
+                        0,
+                    )
+                },
+            )
         }
     }
 
@@ -79,6 +89,8 @@ class SuggestionStrip(
         editor: Long,
         message: String,
         highlightFirst: Boolean = false,
+        /** Saved e-mail addresses: keep the domain visible by cutting the middle of a long chip. */
+        addresses: Boolean = false,
     ) {
         val visible = words.take(3)
         // Only a real change of words animates; rerenders with the same list stay still while typing.
@@ -99,18 +111,20 @@ class SuggestionStrip(
             choices[index] = word?.let { Choice(it, prefix, editor) }
             val correction = highlightFirst && index == 0 && word != null
             button.text = word.orEmpty()
-            button.setTextColor(if (correction) ui.controlAccent else ui.text)
-            button.typeface = if (correction) android.graphics.Typeface.DEFAULT_BOLD else android.graphics.Typeface.DEFAULT
-            button.background = ui.keyChip(if (correction) ui.mix(ui.surface, ui.accent, .16f) else ui.surface)
+            button.setTextColor(if (correction) ui.accentInk else ui.text)
+            button.typeface = if (correction) MEDIUM else android.graphics.Typeface.DEFAULT
+            button.ellipsize = if (addresses) TextUtils.TruncateAt.MIDDLE else TextUtils.TruncateAt.END
+            button.background = ui.keyChip(if (correction) ui.accentContainer else ui.surface)
+            button.tooltipText = word
             if (changed && word != null) {
                 button.animate().cancel()
-                button.alpha = .35f
-                button.translationY = ui.dp(3).toFloat()
+                button.alpha = ui.disabledAlpha
+                button.translationY = ui.dp(Tokens.SPACE_1).toFloat()
                 button
                     .animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .setDuration(110L)
+                    .setDuration(Tokens.MOTION_FAST)
                     .start()
             }
             button.contentDescription =
@@ -125,5 +139,9 @@ class SuggestionStrip(
             button.isEnabled = word != null
             if (word == null) pressedChoices[index] = null
         }
+    }
+
+    private companion object {
+        val MEDIUM: android.graphics.Typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
     }
 }

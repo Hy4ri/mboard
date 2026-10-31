@@ -3,6 +3,8 @@ package com.m57.mboard
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
 import android.util.Log
@@ -231,16 +233,16 @@ class MboardService : InputMethodService() {
                                 isHorizontalScrollBarEnabled = false
                                 addView(toolbar)
                             },
-                            LinearLayout.LayoutParams(0, ui.dp(48), 1f),
+                            LinearLayout.LayoutParams(0, ui.dp(Tokens.TOOLBAR_HEIGHT), 1f),
                         )
                         addView(
                             ui.icon(R.drawable.ic_settings, "Settings") { openSettings() },
-                            LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                            LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TOOLBAR_HEIGHT)),
                         )
                     },
-                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(48)),
+                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.TOOLBAR_HEIGHT)),
                 )
-                addView(auxiliary, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(AUX_DP)))
+                addView(auxiliary, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.STRIP_HEIGHT)))
                 addView(body, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, kv.keysHeight))
                 setOnApplyWindowInsetsListener { target, insets ->
                     val bars = insets.getInsets(WindowInsets.Type.navigationBars())
@@ -255,60 +257,65 @@ class MboardService : InputMethodService() {
     private fun rebuildToolbar() {
         val bar = toolbar ?: return
         bar.removeAllViews()
+        val password = fieldPolicy.password
 
-        fun icon(
+        // Fixed slots, never inserted or shifted. Active = accent container behind an accent-ink glyph.
+        fun slot(
             res: Int,
             label: String,
-            enabled: Boolean = true,
+            active: Boolean = false,
+            offInPassword: Boolean = false,
             action: () -> Unit,
         ) {
+            val off = offInPassword && password
             bar.addView(
-                ui.icon(res, label, action).apply {
-                    isEnabled = enabled
-                    alpha = if (enabled) 1f else 0.35f
-                },
-                LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                ui
+                    .icon(res, label) { if (off) message("Off in password fields") else action() }
+                    .apply {
+                        isSelected = active
+                        imageTintList = ColorStateList.valueOf(if (active) ui.accentInk else ui.text)
+                        background = ui.ripple(if (active) ui.accentContainer else Color.TRANSPARENT)
+                        if (off) {
+                            isEnabled = false
+                            // Greyed, not hidden; accessibility and tooltip explain why.
+                            alpha = ui.disabledAlpha
+                            tooltipText = "$label: off in password fields"
+                            contentDescription = "$label, off in password fields"
+                        }
+                        if (active) stateDescription = "Open"
+                    },
+                LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TOOLBAR_HEIGHT)),
             )
         }
-        val pasteEnabled = !fieldPolicy.password
-        icon(R.drawable.ic_paste, "Paste", !fieldPolicy.password) { pasteClipboard() }
-        icon(R.drawable.ic_content_paste, "Clipboard history", !fieldPolicy.password) { togglePanel(Mode.CLIPBOARD) }
-        icon(R.drawable.ic_mood, "Search emoji", !fieldPolicy.password) { togglePanel(Mode.EMOJI_SEARCH) }
-        icon(R.drawable.ic_calculate, "Calculator", !fieldPolicy.password) { togglePanel(Mode.CALCULATOR) }
-        if (mode != Mode.KEYS) icon(R.drawable.ic_keyboard, "Return to keyboard") { setMode(Mode.KEYS) }
+        slot(R.drawable.ic_paste, "Paste", offInPassword = true) { pasteClipboard() }
+        slot(R.drawable.ic_content_paste, "Clipboard history", mode == Mode.CLIPBOARD, true) { togglePanel(Mode.CLIPBOARD) }
+        slot(R.drawable.ic_mood, "Emoji", mode == Mode.EMOJI || mode == Mode.EMOJI_SEARCH, true) { toggleEmoji() }
+        slot(R.drawable.ic_calculate, "Calculator", mode == Mode.CALCULATOR, true) { togglePanel(Mode.CALCULATOR) }
+        val shieldOn = privateSession || password
         val privacyLabel =
             when {
-                fieldPolicy.password -> "Shield on for password field. No history recording; static suggestions available"
+                password -> "Shield on for password field. No history recording; static suggestions available"
                 privateSession -> "Shield on. History recording paused; suggestions available. Tap to turn off"
                 else -> "Shield off. Tap to pause history recording without disabling suggestions"
             }
-        bar.addView(
-            ui
-                .icon(R.drawable.ic_privacy, privacyLabel) {
-                    if (!fieldPolicy.password) {
-                        privateSession = !privateSession
-                        emojiPanel?.recordingEnabled = !privateSession && !fieldPolicy.password
-                        if (settings.suggestions) loadWords()
-                        rebuildToolbar()
-                        updateAuxiliary()
-                    }
-                }.apply {
-                    isEnabled = !fieldPolicy.password
-                    isSelected = privateSession || fieldPolicy.password
-                    imageTintList =
-                        android.content.res.ColorStateList
-                            .valueOf(if (isSelected) ui.onAccent else ui.text)
-                    background = ui.ripple(if (isSelected) ui.accent else android.graphics.Color.TRANSPARENT)
-                    alpha = if (isEnabled) 1f else .4f
-                },
-            LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
-        )
-        icon(R.drawable.ic_keyboard_hide, "Hide keyboard") { requestHideSelf(0) }
+        slot(R.drawable.ic_privacy, privacyLabel, shieldOn) {
+            if (!password) {
+                privateSession = !privateSession
+                emojiPanel?.recordingEnabled = !privateSession && !password
+                if (settings.suggestions) loadWords()
+                rebuildToolbar()
+                updateAuxiliary()
+            }
+        }
+        slot(R.drawable.ic_keyboard_hide, "Hide keyboard") { requestHideSelf(0) }
     }
 
     private fun openSettings() = startActivity(Intent(this, SetupActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
     private fun togglePanel(next: Mode) = setMode(if (mode == next) Mode.KEYS else next)
+
+    /** The emoji icon owns both emoji modes: the open one is closed by the same tap. */
+    private fun toggleEmoji() = setMode(if (mode == Mode.EMOJI || mode == Mode.EMOJI_SEARCH) Mode.KEYS else Mode.EMOJI)
 
     private fun setMode(next: Mode) {
         suggestionHandler.removeCallbacks(refreshSuggestions)
@@ -325,18 +332,13 @@ class MboardService : InputMethodService() {
         } else if (previous == Mode.EMOJI_SEARCH || previous == Mode.CALCULATOR) {
             keyboard?.layout = defaultLayout
         }
-        keyboard?.enterLabel =
-            when (next) {
-                Mode.CALCULATOR -> "="
-                Mode.EMOJI_SEARCH -> "Pick"
-                else -> enterLabel(currentInputEditorInfo)
-            }
+        applyEnter(next)
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
-        // Clipboard and emoji drop the label bar and take its height, so the window size never changes.
+        // Browse panels own their header and use exactly the landscape-capped keys area.
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
         auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
         panelBody?.let { body ->
-            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(AUX_DP) else 0
+            val height = keyboard?.keysHeight ?: 0
             if (body.layoutParams != null && body.layoutParams.height != height) {
                 body.layoutParams = body.layoutParams.apply { this.height = height }
             }
@@ -380,7 +382,7 @@ class MboardService : InputMethodService() {
         keyboard?.layout = defaultLayout
         keyboard?.capsLocked = false
         keyboard?.shifted = false
-        keyboard?.enterLabel = enterLabel(info)
+        applyEnter(mode, info)
         setMode(Mode.KEYS)
         updateCapitalization()
         if (settings.suggestions) loadWords()
@@ -435,20 +437,41 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
-    private fun enterLabel(info: EditorInfo?): String {
-        if (info == null || info.imeOptions and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0) return Keys.ENTER
+    /** What the Enter key shows: a drawable (0 = draw [label] as text) and the action word for accessibility. */
+    private class EnterKey(
+        val icon: Int,
+        val label: String,
+    )
+
+    private fun applyEnter(
+        mode: Mode,
+        info: EditorInfo? = currentInputEditorInfo,
+    ) {
+        val key =
+            when (mode) {
+                Mode.CALCULATOR -> EnterKey(0, "=")
+                Mode.EMOJI_SEARCH -> EnterKey(R.drawable.ic_check, "Pick")
+                else -> enterKey(info)
+            }
+        keyboard?.enterIcon = key.icon
+        keyboard?.enterLabel = key.label
+    }
+
+    private fun enterKey(info: EditorInfo?): EnterKey {
+        val plain = EnterKey(R.drawable.ic_keyboard_return, "Enter")
+        if (info == null || info.imeOptions and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0) return plain
         info.actionLabel
             ?.toString()
             ?.takeIf { it.isNotBlank() }
-            ?.let { return it.take(8) }
+            ?.let { return EnterKey(R.drawable.ic_keyboard_return, it) }
         return when (info.imeOptions and EditorInfo.IME_MASK_ACTION) {
-            EditorInfo.IME_ACTION_GO -> "Go"
-            EditorInfo.IME_ACTION_SEARCH -> "Search"
-            EditorInfo.IME_ACTION_SEND -> "Send"
-            EditorInfo.IME_ACTION_NEXT -> "Next"
-            EditorInfo.IME_ACTION_DONE -> "Done"
-            EditorInfo.IME_ACTION_PREVIOUS -> "Prev"
-            else -> Keys.ENTER
+            EditorInfo.IME_ACTION_GO -> EnterKey(R.drawable.ic_arrow_forward, "Go")
+            EditorInfo.IME_ACTION_SEARCH -> EnterKey(R.drawable.ic_search, "Search")
+            EditorInfo.IME_ACTION_SEND -> EnterKey(R.drawable.ic_send, "Send")
+            EditorInfo.IME_ACTION_NEXT -> EnterKey(R.drawable.ic_last_page, "Next")
+            EditorInfo.IME_ACTION_DONE -> EnterKey(R.drawable.ic_check, "Done")
+            EditorInfo.IME_ACTION_PREVIOUS -> EnterKey(R.drawable.ic_first_page, "Previous")
+            else -> plain
         }
     }
 
@@ -538,15 +561,20 @@ class MboardService : InputMethodService() {
             bar.removeAllViews()
             bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
         }
+        // Numbers, phone and date fields take digits, not words: an honest empty strip.
+        if (fieldPolicy.numeric) {
+            strip.render(emptyList(), "", editorGeneration, shieldNote("Number field"))
+            return
+        }
         val blocked = if (!settings.suggestions) "Word suggestions off · enable them in Settings" else null
         if (blocked != null) {
             // Email/URL fields skip dictionary words but still offer the user's saved email addresses.
             val addresses = savedAddresses()
             if (addresses != null && addresses.second.isNotEmpty()) {
-                strip.render(addresses.second, addresses.first, editorGeneration, blocked)
+                strip.render(addresses.second, addresses.first, editorGeneration, blocked, addresses = true)
                 return
             }
-            strip.render(emptyList(), "", editorGeneration, blocked)
+            strip.render(emptyList(), "", editorGeneration, shieldNote(blocked))
             return
         }
         val state = words.state(language)
@@ -558,16 +586,16 @@ class MboardService : InputMethodService() {
                     WordSuggestions.State.CLOSED -> "Word suggestions unavailable"
                     else -> "Preparing word completions…"
                 }
-            strip.render(emptyList(), "", editorGeneration, message)
+            strip.render(emptyList(), "", editorGeneration, shieldNote(message))
             return
         }
         if (fieldPolicy.password) {
-            strip.render(words.commonWords(language), "", editorGeneration, "Static suggestions · shield on")
+            strip.render(words.commonWords(language), "", editorGeneration, shieldNote("Static suggestions"))
             return
         }
         val addresses = savedAddresses()
         if (addresses != null && addresses.second.isNotEmpty()) {
-            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses")
+            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses", addresses = true)
             return
         }
         val context = prefixContext()
@@ -580,7 +608,7 @@ class MboardService : InputMethodService() {
                 predicted.map { matchCase(it, "") },
                 "",
                 editorGeneration,
-                context.status,
+                shieldNote(context.status),
             )
             return
         }
@@ -642,8 +670,16 @@ class MboardService : InputMethodService() {
         // A matching emoji takes the last slot so the correction and best completion stay put.
         val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
         val values = if (emoji == null) shown else shown.take(2) + emoji
-        strip.render(values, typed, editorGeneration, context.status, highlightFirst = autoCorrection != null && !editingInside)
+        strip.render(values, typed, editorGeneration, shieldNote(context.status), highlightFirst = autoCorrection != null && !editingInside)
     }
+
+    /** The strip status says why history is off whenever the shield or a password field is active. */
+    private fun shieldNote(message: String) =
+        when {
+            fieldPolicy.password -> "$message · password field"
+            privateSession -> "$message · shield on"
+            else -> message
+        }
 
     private fun autoCorrection(
         typed: String,
@@ -761,39 +797,45 @@ class MboardService : InputMethodService() {
     private fun updateAuxiliary() {
         val bar = auxiliary ?: return
         if (mode == Mode.KEYS) {
+            bar.layoutParams = bar.layoutParams.apply { height = ui.dp(Tokens.STRIP_HEIGHT) }
             renderSuggestions(bar)
             return
         }
         bar.removeAllViews()
+        bar.layoutParams =
+            bar.layoutParams.apply {
+                height = ui.dp(if (mode == Mode.CALCULATOR) Tokens.PANEL_HEADER else Tokens.STRIP_HEIGHT)
+            }
         when (mode) {
             Mode.CALCULATOR -> {
                 val answer = Calculator.calculate(query)
-                bar.addView(
-                    ui.label(query.ifBlank { "Type a calculation" }, 14f, true).apply {
+                val header = ui.panelHeader(query.ifBlank { "Type a calculation" })
+                header.title.apply {
+                    setTextColor(if (query.isBlank()) ui.muted else ui.text)
+                    ellipsize = android.text.TextUtils.TruncateAt.START
+                    tooltipText = query
+                }
+                val result =
+                    ui.button(answer?.let { "= $it" } ?: "No result") { answer?.let(::paste) }.apply {
+                        ui.setEnabledLook(this, answer != null)
+                        background = ui.keyChip(ui.surface)
+                        setTextColor(if (answer != null) ui.accentInk else ui.muted)
                         maxLines = 1
-                        ellipsize = android.text.TextUtils.TruncateAt.START
-                        tooltipText = query
-                        setPadding(ui.dp(12), 0, ui.dp(8), 0)
-                    },
-                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
-                )
-                bar.addView(
-                    ui.button(answer?.let { "= $it" } ?: "No result", primary = answer != null) { answer?.let(::paste) }.apply {
-                        isEnabled = answer != null
-                        alpha = if (answer == null) .5f else 1f
-                        maxLines = 1
+                        ellipsize = android.text.TextUtils.TruncateAt.END
                         contentDescription = answer?.let { "Insert result $it" } ?: "No valid calculation result"
-                        tooltipText = answer
-                        setAutoSizeTextTypeUniformWithConfiguration(10, 14, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
-                    },
-                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
-                )
+                        tooltipText = answer ?: "Type a valid calculation first"
+                    }
+                header.setActions(listOf(result))
+                bar.addView(header, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.PANEL_HEADER)))
             }
 
             Mode.EMOJI_SEARCH -> {
+                // Field and results share the row by weight (about 45 / 55), never below a readable field width.
                 bar.addView(
-                    emojiSearchField(),
-                    LinearLayout.LayoutParams(ui.dp(150), ui.dp(32)).apply { setMargins(ui.dp(8), 0, ui.dp(4), 0) },
+                    emojiSearchField().apply { minimumWidth = ui.dp(Tokens.TARGET_MIN * 3) },
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 9f).apply {
+                        setMargins(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_1), 0)
+                    },
                 )
                 val row = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
                 val matches = emojiSearchResults()
@@ -805,17 +847,19 @@ class MboardService : InputMethodService() {
                             query.isNotBlank() -> "No matches"
                             else -> "Type to search"
                         }
-                    row.addView(ui.label(status, 14f, true).apply { setPadding(ui.dp(8), 0, ui.dp(8), 0) })
+                    row.addView(
+                        ui.label(status, Tokens.TEXT_BODY, true).apply { setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_2), 0) },
+                    )
                 }
                 matches.forEachIndexed { index, emoji ->
                     row.addView(
                         ui.button(emoji.text) { pasteEmoji(emoji.text) }.apply {
-                            textSize = 24f
-                            setPadding(ui.dp(6), 0, ui.dp(6), 0)
+                            textSize = Tokens.TEXT_EMOJI
+                            setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_2), 0)
                             includeFontPadding = false
                             // The first result is what the Pick key inserts, so it is visibly selected.
                             background =
-                                ui.ripple(if (index == 0 && query.isNotBlank()) ui.modifier else android.graphics.Color.TRANSPARENT)
+                                ui.ripple(if (index == 0 && query.isNotBlank()) ui.accentContainer else Color.TRANSPARENT)
                             contentDescription = emoji.name
                             setOnLongClickListener {
                                 if (!privateSession) emojiHistory.toggleFavorite(emoji.text)
@@ -839,33 +883,17 @@ class MboardService : InputMethodService() {
                         isHorizontalScrollBarEnabled = false
                         addView(row)
                     },
-                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f),
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 11f),
                 )
                 bar.addView(
-                    ui.icon(R.drawable.ic_mood, "Browse all emoji") { setMode(Mode.EMOJI) },
-                    LinearLayout.LayoutParams(ui.dp(44), LinearLayout.LayoutParams.MATCH_PARENT),
+                    ui.icon(R.drawable.ic_apps, "Browse all emoji") { setMode(Mode.EMOJI) },
+                    LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), LinearLayout.LayoutParams.MATCH_PARENT),
                 )
             }
 
-            Mode.KEYS -> {
-                Unit
-            }
-
-            // handled by the persistent strip above
-
+            // Keys: the persistent strip above. Clipboard and emoji browsing hide this row; their panels own the header.
             else -> {
-                bar.addView(
-                    ui
-                        .label(
-                            when (mode) {
-                                Mode.CLIPBOARD -> "Clipboard · saved on this device"
-                                Mode.EMOJI -> "Emoji · hold an emoji to favorite it"
-                                else -> ""
-                            },
-                            14f,
-                            true,
-                        ).apply { setPadding(ui.dp(12), 0, ui.dp(8), 0) },
-                )
+                Unit
             }
         }
     }
@@ -904,18 +932,24 @@ class MboardService : InputMethodService() {
         val field =
             LinearLayout(this).apply {
                 gravity = Gravity.CENTER_VERTICAL
-                background = ui.shape(ui.surface, 19)
-                setPadding(ui.dp(10), 0, ui.dp(2), 0)
+                // The touch area is the full strip height; only the pill is inset.
+                background =
+                    android.graphics.drawable.InsetDrawable(
+                        ui.shape(ui.surface, Tokens.RADIUS_PILL),
+                        0,
+                        ui.dp(Tokens.KEY_GAP / 2),
+                        0,
+                        ui.dp(Tokens.KEY_GAP / 2),
+                    )
+                setPadding(ui.dp(Tokens.SPACE_3), 0, 0, 0)
             }
         field.addView(
             android.widget.ImageView(this).apply {
                 setImageResource(R.drawable.ic_search)
-                imageTintList =
-                    android.content.res.ColorStateList
-                        .valueOf(ui.muted)
+                imageTintList = ColorStateList.valueOf(ui.muted)
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             },
-            LinearLayout.LayoutParams(ui.dp(18), ui.dp(18)),
+            LinearLayout.LayoutParams(ui.dp(Tokens.ICON_SMALL), ui.dp(Tokens.ICON_SMALL)),
         )
         val text =
             if (query.isEmpty()) {
@@ -926,12 +960,13 @@ class MboardService : InputMethodService() {
                 }
             }
         field.addView(
-            ui.label("", 15f, query.isEmpty()).apply {
+            ui.label("", Tokens.TEXT_BODY, query.isEmpty()).apply {
                 setText(text)
                 maxLines = 1
-                ellipsize = android.text.TextUtils.TruncateAt.START
+                // The typed end stays visible; the hint reads from its start.
+                ellipsize = if (query.isEmpty()) android.text.TextUtils.TruncateAt.END else android.text.TextUtils.TruncateAt.START
                 contentDescription = if (query.isEmpty()) "Emoji search, empty" else "Emoji search: $query"
-                setPadding(ui.dp(6), 0, ui.dp(4), 0)
+                setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_1), 0)
             },
             LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
         )
@@ -945,9 +980,15 @@ class MboardService : InputMethodService() {
                         scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
                         minimumWidth = 0
                         minimumHeight = 0
-                        setPadding(ui.dp(9), ui.dp(9), ui.dp(9), ui.dp(9))
+                        val inset = ui.dp((Tokens.TARGET_MIN - Tokens.ICON_SMALL) / 2)
+                        setPadding(
+                            inset,
+                            (ui.dp(Tokens.STRIP_HEIGHT) - ui.dp(Tokens.ICON_SMALL)) / 2,
+                            inset,
+                            (ui.dp(Tokens.STRIP_HEIGHT) - ui.dp(Tokens.ICON_SMALL)) / 2,
+                        )
                     },
-                LinearLayout.LayoutParams(ui.dp(34), ui.dp(34)),
+                LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), LinearLayout.LayoutParams.MATCH_PARENT),
             )
         }
         return field
@@ -1376,8 +1417,6 @@ class MboardService : InputMethodService() {
     private fun message(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
     private companion object {
-        const val AUX_DP = 40
-
         /** Text read before the caret for completions, and the sentence words kept from it. */
         const val CONTEXT_CHARS = 120
         const val CONTEXT_WORDS = 16
