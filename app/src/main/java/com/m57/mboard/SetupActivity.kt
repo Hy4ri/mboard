@@ -18,8 +18,8 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.CheckedTextView
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -159,11 +159,11 @@ class SetupActivity : Activity() {
         // A short slide-and-fade tells forward from back without slowing navigation down.
         scroller?.apply {
             alpha = 0f
-            translationX = ui.dp(if (forward) 24 else -24).toFloat()
+            translationX = ui.dp(if (forward) Tokens.SPACE_5 else -Tokens.SPACE_5).toFloat()
             animate()
                 .alpha(1f)
                 .translationX(0f)
-                .setDuration(160L)
+                .setDuration(Tokens.MOTION_BASE)
                 .setInterpolator(android.view.animation.DecelerateInterpolator())
                 .start()
         }
@@ -206,37 +206,48 @@ class SetupActivity : Activity() {
                 }
             }
         val header =
-            LinearLayout(this).apply {
+            CappedColumn(this, ui.dp(Tokens.CONTENT_MAX_WIDTH)).apply {
+                orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                minimumHeight = ui.dp(64)
-                setPadding(ui.dp(12), ui.dp(8), ui.dp(20), ui.dp(8))
+                minimumHeight = ui.dp(Tokens.SETTINGS_HEADER)
+                setPadding(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_4), 0)
             }
         if (page != Page.HOME) {
             header.addView(
                 ui.icon(R.drawable.ic_arrow_back, "Back") { goBack() },
-                LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TARGET_MIN)),
             )
         }
         header.addView(
-            ui.label(page.title, if (page == Page.HOME) 28f else 22f).apply {
+            ui.label(page.title, if (page == Page.HOME) Tokens.TEXT_TITLE else Tokens.TEXT_HEADER).apply {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
                 isAccessibilityHeading = true
-                setPadding(if (page == Page.HOME) ui.dp(8) else ui.dp(4), 0, 0, 0)
+                setPadding(if (page == Page.HOME) ui.dp(Tokens.SPACE_2) else ui.dp(Tokens.SPACE_1), 0, 0, 0)
             },
             LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
         )
-        root.addView(header)
+        root.addView(
+            header,
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                gravity = Gravity.CENTER_HORIZONTAL
+            },
+        )
         val column =
-            LinearLayout(this).apply {
+            CappedColumn(this, ui.dp(Tokens.CONTENT_MAX_WIDTH)).apply {
                 orientation = LinearLayout.VERTICAL
-                setPadding(ui.dp(20), 0, ui.dp(20), ui.dp(24))
+                setPadding(ui.dp(Tokens.SPACE_4), 0, ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_5))
                 isFocusableInTouchMode = true
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
         val scroll =
             ScrollView(this).apply {
                 isFillViewport = true
-                addView(column)
+                addView(
+                    column,
+                    FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                        gravity = Gravity.CENTER_HORIZONTAL
+                    },
+                )
             }
         scroller = scroll
         root.addView(scroll, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
@@ -270,10 +281,10 @@ class SetupActivity : Activity() {
     private fun home(column: LinearLayout) {
         components.add(column, components.note("${Languages.labels}. Entirely offline."))
         val statusView =
-            ui.label("", 15f).apply {
+            ui.label("", Tokens.TEXT_BODY).apply {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-                setPadding(ui.dp(16), ui.dp(16), ui.dp(16), ui.dp(16))
-                background = ui.shape(ui.mix(ui.surface, ui.accent, .12f), 16)
+                setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4))
+                background = ui.shape(ui.accentContainer, Tokens.RADIUS_CARD)
             }
         status = statusView
         components.add(column, statusView)
@@ -282,7 +293,7 @@ class SetupActivity : Activity() {
         column.addView(components.section("MAKE IT YOURS"))
         components.add(
             column,
-            components.row("Appearance", "${themeName()} · ${accentName()} · ${settings.rowHeightDp} dp", ui.accent) {
+            components.row("Appearance", "${themeName()} · ${accentName().substringBefore(" ·")}", ui.accent) {
                 navigate(Page.APPEARANCE)
             },
         )
@@ -313,6 +324,10 @@ class SetupActivity : Activity() {
 
     private fun appearance(column: LinearLayout) {
         components.add(column, components.note("Tune the look and feel. Changes apply to the keyboard immediately."))
+        components.add(
+            column,
+            components.row("Preview in playground", "Type with the keyboard as it looks now") { navigate(Page.PLAYGROUND) },
+        )
         column.addView(components.section("COLOR"))
         choice(
             column,
@@ -326,11 +341,12 @@ class SetupActivity : Activity() {
         }
         choice(
             column,
-            "Accent",
+            "Accent preset",
             accentName(),
             listOf("Violet", "Teal", "Amber", "Crimson · #990000"),
             listOf("violet", "teal", "amber", "crimson").indexOf(settings.accent),
             ui.accent,
+            listOf("violet", "teal", "amber", "crimson").map { Tokens.accents.getValue(it).let { a -> if (ui.dark) a.dark else a.light } },
         ) {
             settings.accent = listOf("violet", "teal", "amber", "crimson")[it]
             render()
@@ -374,7 +390,6 @@ class SetupActivity : Activity() {
             settings.oneHandMode = listOf("full", "left", "right")[it]
             render()
         }
-        components.add(column, components.note("Thumb mode moves real keys. Narrow windows use full width to keep them usable."))
         choice(
             column,
             "Dial pad swipe",
@@ -400,7 +415,12 @@ class SetupActivity : Activity() {
             if (edge != "off" && settings.dialPadEdge == edge) settings.dialPadEdge = opposite(edge)
             render()
         }
-        components.add(column, components.note("Swipe in from an edge to show its panel; swipe back out to hide it."))
+        components.add(
+            column,
+            components.note(
+                "Thumb mode moves real keys; narrow windows use full width to keep them usable. Swipe in from an edge to show its panel; swipe back out to hide it.",
+            ),
+        )
         column.addView(components.section("KEY DETAILS"))
         components.add(
             column,
@@ -439,7 +459,7 @@ class SetupActivity : Activity() {
             column,
             components.toggle(
                 "Auto-correction",
-                "Fix misspellings on space or punctuation · backspace right after to undo",
+                "Fix misspellings on space · backspace undoes",
                 settings.autoCorrect,
             ) {
                 settings.autoCorrect =
@@ -450,7 +470,7 @@ class SetupActivity : Activity() {
             column,
             components.toggle(
                 "Learn my words",
-                "Learn frequent words, next words and rejected corrections locally · word counts fade over time · recording pauses in protected fields and under the shield",
+                "Learn frequent words and corrections on this device",
                 settings.learnWords,
             ) {
                 settings.learnWords = it
@@ -474,7 +494,7 @@ class SetupActivity : Activity() {
             column,
             components.toggle(
                 "Arabizi suggestions",
-                "On the English layout, offer Arabic words for Franco typing like 7abibi or shu · suggestion only, never automatic",
+                "Arabic words for Franco typing like 7abibi · never automatic",
                 settings.arabiziSuggestions,
             ) {
                 settings.arabiziSuggestions = it
@@ -494,14 +514,17 @@ class SetupActivity : Activity() {
                     it
             },
         )
-        column.addView(components.section("QUICK GESTURES"))
         components.add(
             column,
             components.note(
-                "Swipe space to switch language.\nHold space, then slide to move the cursor.\nSlide left from backspace to delete words; slide back to keep them.\nDouble-tap Shift for caps lock.\nHold letters for accents and Arabic variants.",
+                "Learned words fade over time. Recording pauses in protected fields and under the shield. Arabizi works on the English layout and only suggests.",
             ),
         )
-        components.add(column, components.row("Try these gestures", "Open the keyboard playground") { navigate(Page.PLAYGROUND) })
+        column.addView(components.section("QUICK GESTURES"))
+        components.add(
+            column,
+            components.row("Try these gestures", "Swipe, hold and slide in the playground") { navigate(Page.PLAYGROUND) },
+        )
     }
 
     private fun privacy(column: LinearLayout) {
@@ -582,9 +605,32 @@ class SetupActivity : Activity() {
             }
         phraseEditor = editor
         components.add(column, editor)
-        val count = ui.label("", 12f, true)
+        val count = ui.label("", Tokens.TEXT_CAPTION, true)
+        val helper =
+            ui.label("", Tokens.TEXT_CAPTION, true).apply {
+                setPadding(ui.dp(Tokens.SPACE_1), 0, ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
+            }
         val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         lateinit var save: android.widget.Button
+
+        // Disabled Save keeps a readable surface look and says why in the helper line below the field.
+        fun updateSave() {
+            val clean = editor.text.toString().trim()
+            val saved = store.all()
+            val reason =
+                when {
+                    clean.isEmpty() -> "Type a phrase"
+                    saved.size >= 40 -> "40 of 40 saved"
+                    clean in saved -> "Already saved"
+                    else -> ""
+                }
+            val ok = reason.isEmpty()
+            helper.text = reason
+            helper.visibility = if (ok) View.INVISIBLE else View.VISIBLE
+            save.setTextColor(if (ok) ui.onAccent else ui.muted)
+            save.background = ui.ripple(if (ok) ui.accent else ui.surface)
+            ui.setEnabledLook(save, ok)
+        }
 
         fun refresh() {
             val values = store.all()
@@ -596,10 +642,10 @@ class SetupActivity : Activity() {
                     LinearLayout(this).apply {
                         gravity = Gravity.CENTER_VERTICAL
                         background = ui.shape(ui.surface)
-                        setPadding(ui.dp(16), ui.dp(8), ui.dp(4), ui.dp(8))
+                        setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_2))
                     }
                 row.addView(
-                    ui.label(phrase, 15f).apply {
+                    ui.label(phrase, Tokens.TEXT_BODY).apply {
                         maxLines = 4
                         ellipsize = android.text.TextUtils.TruncateAt.END
                         textDirection = View.TEXT_DIRECTION_FIRST_STRONG
@@ -607,18 +653,17 @@ class SetupActivity : Activity() {
                     LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
                 )
                 row.addView(
-                    ui.icon(R.drawable.ic_close, "Delete saved phrase") {
+                    ui.icon(R.drawable.ic_delete, "Delete saved phrase") {
                         confirm("Delete this phrase?", "This removes it from your keyboard's phrase list.") {
                             store.remove(phrase)
                             refresh()
                         }
                     },
-                    LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)),
+                    LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TARGET_MIN)),
                 )
                 components.add(list, row)
             }
-            save.isEnabled = editor.text.isNotBlank() && values.size < 40
-            save.alpha = if (save.isEnabled) 1f else .4f
+            updateSave()
         }
         save =
             ui.button("Save phrase", true) {
@@ -628,9 +673,10 @@ class SetupActivity : Activity() {
                     refresh()
                     toast("Phrase saved")
                 } else {
-                    editor.error = "Already saved, empty, or the 40-phrase limit was reached"
+                    updateSave()
                 }
             }
+        components.add(column, helper)
         components.add(column, save)
         // Android hides device accounts from other apps; the system picker shares only the one the user taps.
         components.add(
@@ -655,8 +701,7 @@ class SetupActivity : Activity() {
                     before: Int,
                     count: Int,
                 ) {
-                    save.isEnabled = !s.isNullOrBlank() && store.all().size < 40
-                    save.alpha = if (save.isEnabled) 1f else .4f
+                    updateSave()
                 }
 
                 override fun afterTextChanged(s: Editable?) = Unit
@@ -681,7 +726,7 @@ class SetupActivity : Activity() {
         }
         val editor =
             textEditor("Tap here and start typing", "Typing playground", fieldType, 4000).apply {
-                minHeight = ui.dp(144)
+                minHeight = ui.dp(Tokens.TARGET_MIN * 3)
                 maxLines = 6
                 setText(if (passwordPlayground) "" else draft)
                 setSelection(playgroundStart.coerceIn(0, length()), playgroundEnd.coerceIn(0, length()))
@@ -736,13 +781,13 @@ class SetupActivity : Activity() {
         )
         components.add(
             column,
-            components.row("Manage keyboards", "Open Android's keyboard settings") {
+            components.row("Manage keyboards", "Open Android's keyboard settings", external = true) {
                 startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
             },
         )
         components.add(
             column,
-            components.row("Switch keyboard", "Open Android's keyboard picker") {
+            components.row("Switch keyboard", "Open Android's keyboard picker", external = true) {
                 getSystemService(InputMethodManager::class.java).showInputMethodPicker()
             },
         )
@@ -777,6 +822,7 @@ class SetupActivity : Activity() {
         values: List<String>,
         selected: Int,
         swatch: Int? = null,
+        swatches: List<Int>? = null,
         select: (Int) -> Unit,
     ) {
         components.add(
@@ -784,25 +830,12 @@ class SetupActivity : Activity() {
             components.row(title, value, swatch) {
                 val generation = renderGeneration
                 val adapter =
-                    object : ArrayAdapter<String>(dialogContext(), android.R.layout.simple_list_item_single_choice, values) {
+                    object : ArrayAdapter<String>(dialogContext(), 0, values) {
                         override fun getView(
                             position: Int,
                             convertView: View?,
                             parent: android.view.ViewGroup,
-                        ): View =
-                            super.getView(position, convertView, parent).apply {
-                                minimumHeight = ui.dp(56)
-                                background = ui.ripple(ui.surface)
-                                setPadding(ui.dp(20), ui.dp(12), ui.dp(20), ui.dp(12))
-                                (this as? CheckedTextView)?.apply {
-                                    textSize = 16f
-                                    isSingleLine = false
-                                    maxLines = Int.MAX_VALUE
-                                    setTextColor(ui.text)
-                                    checkMarkTintList =
-                                        ColorStateList.valueOf(ui.controlAccent)
-                                }
-                            }
+                        ): View = ChoiceRow(dialogContext(), ui, values[position], swatches?.getOrNull(position))
                     }
                 AlertDialog
                     .Builder(dialogContext())
@@ -822,43 +855,65 @@ class SetupActivity : Activity() {
             BoardSettings.ACCENT -> ui.accent
             BoardSettings.BACKGROUND -> ui.background
             BoardSettings.KEYS -> ui.surface
-            BoardSettings.SPECIAL_KEYS -> ui.modifier
+            BoardSettings.SPECIAL_KEYS -> ui.functionSurface
             else -> ui.text
         }
 
     private fun hex(value: Int) = String.format("#%06X", value and 0xFFFFFF)
 
-    /** Swatches for quick picks plus a hex field for exact colors; the live chip previews either. */
+    /** The color a role is read against: keys and accent against the background, the background against the text, text against keys. */
+    private fun contrastReference(role: String): Pair<Int, String> =
+        when (role) {
+            BoardSettings.BACKGROUND -> ui.text to "text"
+            BoardSettings.TEXT -> ui.surface to "letter keys"
+            else -> ui.background to "background"
+        }
+
+    /** Swatches for quick picks plus a hex field for exact colors; the live chip and contrast line preview either. */
     private fun colorDialog(
         role: String,
         title: String,
     ) {
         val generation = renderGeneration
         var picked = settings.customColor(role) ?: themeColor(role)
+        var valid = true
+        val (reference, referenceName) = contrastReference(role)
         val body =
             LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
-                setPadding(ui.dp(20), ui.dp(8), ui.dp(20), 0)
+                setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_4), 0)
             }
         val preview = View(this)
+        val info = ui.label("", Tokens.TEXT_BODY, true).apply { setPadding(0, ui.dp(Tokens.SPACE_2), 0, 0) }
         val field =
             EditText(this).apply {
                 setText(hex(picked))
                 hint = "#RRGGBB"
                 isSingleLine = true
-                textSize = 16f
+                textSize = Tokens.TEXT_ROW
                 setTextColor(ui.text)
                 setHintTextColor(ui.muted)
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 filters = arrayOf(InputFilter.LengthFilter(7))
                 importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
             }
+        var applyButton: android.widget.Button? = null
 
-        fun show(value: Int) {
-            picked = value
-            preview.background = ui.shape(value or 0xFF000000.toInt(), 12).apply { setStroke(ui.dp(1), ui.muted) }
+        fun update() {
+            val color = picked or 0xFF000000.toInt()
+            preview.background = ui.shape(color, Tokens.RADIUS_CONTROL).apply { setStroke(ui.dp(1), ui.muted) }
+            if (valid) {
+                val ratio = ui.contrast(color, reference)
+                val low = ratio < Tokens.WARN_RATIO
+                info.text = "Contrast with $referenceName ${String.format("%.1f", ratio)}:1" + if (low) " · low, may be hard to see" else ""
+                info.setTextColor(if (low) ui.danger else ui.muted)
+            } else {
+                info.text = "Enter six hex digits, like #1A2B3C"
+                info.setTextColor(ui.danger)
+            }
+            applyButton?.let { ui.setEnabledLook(it, valid) }
         }
-        show(picked)
+        update()
         field.addTextChangedListener(
             object : TextWatcher {
                 override fun beforeTextChanged(
@@ -882,53 +937,73 @@ class SetupActivity : Activity() {
                             ?.trim()
                             ?.removePrefix("#")
                             .orEmpty()
-                    if (raw.length == 6) raw.toIntOrNull(16)?.let { show(it or 0xFF000000.toInt()) }
+                    valid = HEX_DIGITS.matches(raw)
+                    if (valid) picked = raw.toInt(16)
+                    update()
                 }
             },
         )
         val top =
             LinearLayout(this).apply {
                 gravity = Gravity.CENTER_VERTICAL
-                addView(preview, LinearLayout.LayoutParams(ui.dp(48), ui.dp(48)))
-                addView(field, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = ui.dp(12) })
+                addView(preview, LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TARGET_MIN)))
+                addView(
+                    field,
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = ui.dp(Tokens.SPACE_3) },
+                )
             }
         body.addView(top)
-        SWATCHES.chunked(6).forEach { rowValues ->
-            val row = LinearLayout(this).apply { setPadding(0, ui.dp(8), 0, 0) }
-            rowValues.forEach { value ->
-                val color = android.graphics.Color.parseColor(value)
+        body.addView(info)
+        swatches().chunked(SWATCH_COLUMNS).forEach { rowValues ->
+            val row = LinearLayout(this).apply { setPadding(0, ui.dp(Tokens.SPACE_2), 0, 0) }
+            val margin = ui.dp(Tokens.SPACE_1 / 2)
+            rowValues.forEach { color ->
                 row.addView(
                     View(this).apply {
-                        background = ui.shape(color, 20).apply { setStroke(ui.dp(1), ui.modifier) }
-                        contentDescription = value
-                        setOnClickListener {
-                            field.setText(value)
-                            show(color)
-                        }
+                        background = ui.shape(color, Tokens.RADIUS_PILL).apply { setStroke(ui.dp(1), ui.muted) }
+                        contentDescription = hex(color)
+                        setOnClickListener { field.setText(hex(color)) }
                     },
-                    LinearLayout.LayoutParams(0, ui.dp(40), 1f).apply { setMargins(ui.dp(3), 0, ui.dp(3), 0) },
+                    LinearLayout.LayoutParams(0, ui.dp(Tokens.TARGET_MIN), 1f).apply { setMargins(margin, 0, margin, 0) },
+                )
+            }
+            repeat(SWATCH_COLUMNS - rowValues.size) {
+                row.addView(
+                    View(this),
+                    LinearLayout.LayoutParams(0, ui.dp(Tokens.TARGET_MIN), 1f).apply { setMargins(margin, 0, margin, 0) },
                 )
             }
             body.addView(row)
         }
-        AlertDialog
-            .Builder(dialogContext())
-            .setTitle(title)
-            .setView(body)
-            .setPositiveButton("Apply") { _, _ ->
-                if (generation == renderGeneration) {
-                    settings.setCustomColor(role, picked or 0xFF000000.toInt())
-                    render()
-                }
-            }.setNeutralButton("Default") { _, _ ->
-                if (generation == renderGeneration) {
-                    settings.setCustomColor(role, null)
-                    render()
-                }
-            }.setNegativeButton("Cancel", null)
-            .create()
-            .let(::showDialog)
+        val dialog =
+            AlertDialog
+                .Builder(dialogContext())
+                .setTitle(title)
+                .setView(ScrollView(this).apply { addView(body) })
+                .setPositiveButton("Apply") { _, _ ->
+                    if (generation == renderGeneration && valid) {
+                        settings.setCustomColor(role, picked or 0xFF000000.toInt())
+                        render()
+                    }
+                }.setNeutralButton("Default") { _, _ ->
+                    if (generation == renderGeneration) {
+                        settings.setCustomColor(role, null)
+                        render()
+                    }
+                }.setNegativeButton("Cancel", null)
+                .create()
+        showDialog(dialog)
+        applyButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        update()
     }
+
+    /** Quick picks come from the token palettes and accent presets, so they cannot drift from the theme. */
+    private fun swatches(): List<Int> =
+        (
+            listOf(Tokens.onDarkFill) +
+                listOf(Tokens.dark, Tokens.light).flatMap { listOf(it.bg, it.surface, it.function, it.text) } +
+                Tokens.accents.values.flatMap { listOf(it.dark, it.light) }
+        ).distinct()
 
     private fun textEditor(
         hintValue: String,
@@ -939,12 +1014,12 @@ class SetupActivity : Activity() {
         hint = hintValue
         contentDescription = description
         inputType = type
-        minHeight = ui.dp(96)
+        minHeight = ui.dp(Tokens.TARGET_MIN * 2)
         maxLines = 4
-        textSize = 16f
+        textSize = Tokens.TEXT_ROW
         setTextColor(ui.text)
         setHintTextColor(ui.muted)
-        setPadding(ui.dp(16), ui.dp(16), ui.dp(16), ui.dp(16))
+        setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_4))
         background = ui.shape(ui.surface)
         backgroundTintList = null
         filters = arrayOf(InputFilter.LengthFilter(limit))
@@ -965,7 +1040,7 @@ class SetupActivity : Activity() {
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Delete") { _, _ -> if (generation == renderGeneration) confirmed() }
             .create()
-            .let(::showDialog)
+            .let { showDialog(it, destructive = true) }
     }
 
     private fun dialogContext() =
@@ -974,14 +1049,18 @@ class SetupActivity : Activity() {
             if (ui.dark) android.R.style.Theme_DeviceDefault_Dialog_Alert else android.R.style.Theme_DeviceDefault_Light_Dialog_Alert,
         )
 
-    private fun showDialog(dialog: AlertDialog) {
+    private fun showDialog(
+        dialog: AlertDialog,
+        destructive: Boolean = false,
+    ) {
         activeDialog?.dismiss()
         activeDialog = dialog
         dialog.setOnDismissListener { if (activeDialog === dialog) activeDialog = null }
         dialog.setOnShowListener {
-            dialog.window?.setBackgroundDrawable(ui.shape(ui.surface, 20))
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ui.controlAccent)
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ui.controlAccent)
+            dialog.window?.setBackgroundDrawable(ui.shape(ui.raised, Tokens.RADIUS_SHEET))
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(if (destructive) ui.danger else ui.controlAccent)
+            // A destructive confirm must not offer two buttons in one ink: Cancel goes neutral, the action keeps danger.
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(if (destructive) ui.text else ui.controlAccent)
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setTextColor(ui.controlAccent)
         }
         dialog.show()
@@ -1011,7 +1090,7 @@ class SetupActivity : Activity() {
 
     private fun onOff(value: Boolean) = if (value) "on" else "off"
 
-    /** The system chooser is single-choice and can't be restyled; reopening it after each pick lets the user add several. */
+    /** The system chooser is single-choice and can't be restyled; each tap adds one address. */
     private fun pickAccount() {
         try {
             @Suppress("DEPRECATION")
@@ -1037,12 +1116,10 @@ class SetupActivity : Activity() {
         val store = PhraseStore(this)
         when {
             name.isNullOrEmpty() || '@' !in name -> toast("That account has no email address")
-            store.add(name) -> toast("Added $name · pick another, or press back when done")
+            store.add(name) -> toast("Added $name")
             else -> toast("Already saved, or the 40-phrase limit was reached")
         }
         render()
-        // Back (RESULT_CANCELED) ends the loop; a full phrase list ends it too.
-        if (store.all().size < 40) pickAccount()
     }
 
     private fun dialName() = edgeName(settings.dialPadEdge)
@@ -1062,39 +1139,14 @@ class SetupActivity : Activity() {
         const val PICK_ACCOUNT = 41
         val COLOR_ROLES =
             listOf(
-                BoardSettings.ACCENT to "Accent",
+                BoardSettings.ACCENT to "Accent override",
                 BoardSettings.BACKGROUND to "Keyboard background",
                 BoardSettings.KEYS to "Letter keys",
                 BoardSettings.SPECIAL_KEYS to "Function keys",
                 BoardSettings.TEXT to "Text & icons",
             )
-        val SWATCHES =
-            listOf(
-                "#000000",
-                "#14141A",
-                "#24242E",
-                "#353540",
-                "#606070",
-                "#FFFFFF",
-                "#F1F0F7",
-                "#E0DEEA",
-                "#F4F2FA",
-                "#21212C",
-                "#990000",
-                "#E53935",
-                "#FB8C00",
-                "#FDD835",
-                "#43A047",
-                "#00897B",
-                "#1E88E5",
-                "#3949AB",
-                "#8E24AA",
-                "#D81B60",
-                "#6241A6",
-                "#C9B8FF",
-                "#80D8CE",
-                "#F6CF80",
-            )
+        const val SWATCH_COLUMNS = 6
+        val HEX_DIGITS = Regex("[0-9A-Fa-f]{6}")
         const val NORMAL_INPUT = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
         val PLAYGROUND_TYPES =
             listOf(
@@ -1104,4 +1156,68 @@ class SetupActivity : Activity() {
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD,
             )
     }
+}
+
+/** A column that never grows wider than [maxWidth] px; its parent centers it. */
+private class CappedColumn(
+    context: android.content.Context,
+    private val maxWidth: Int,
+) : LinearLayout(context) {
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+    ) {
+        val size = MeasureSpec.getSize(widthMeasureSpec)
+        val capped = if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.UNSPECIFIED) size else minOf(size, maxWidth)
+        super.onMeasure(MeasureSpec.makeMeasureSpec(capped, MeasureSpec.getMode(widthMeasureSpec)), heightMeasureSpec)
+    }
+}
+
+/** One choice-dialog row: optional swatch, label on the left, radio on the right, [Tokens.TARGET_MIN] + 8 dp high. */
+private class ChoiceRow(
+    context: android.content.Context,
+    ui: BoardUi,
+    label: String,
+    swatch: Int?,
+) : LinearLayout(context),
+    android.widget.Checkable {
+    private val radio =
+        android.widget.RadioButton(context).apply {
+            isClickable = false
+            isFocusable = false
+            importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+            buttonTintList =
+                ColorStateList(
+                    arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+                    intArrayOf(ui.controlAccent, ui.muted),
+                )
+        }
+
+    init {
+        gravity = Gravity.CENTER_VERTICAL
+        minimumHeight = ui.dp(Tokens.TARGET_MIN + Tokens.SPACE_2)
+        setPadding(ui.dp(Tokens.SPACE_5), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2))
+        background = ui.ripple(ui.raised)
+        swatch?.let {
+            addView(
+                View(context).apply { background = ui.shape(it, Tokens.RADIUS_PILL).apply { setStroke(ui.dp(1), ui.muted) } },
+                LayoutParams(ui.dp(Tokens.ICON), ui.dp(Tokens.ICON)).apply { marginEnd = ui.dp(Tokens.SPACE_3) },
+            )
+        }
+        addView(
+            ui.label(label, Tokens.TEXT_ROW).apply { importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO },
+            LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f),
+        )
+        addView(radio, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        contentDescription = label
+        layoutParams = android.widget.AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    }
+
+    override fun setChecked(checked: Boolean) {
+        radio.isChecked = checked
+    }
+
+    override fun isChecked() = radio.isChecked
+
+    override fun toggle() = radio.toggle()
 }

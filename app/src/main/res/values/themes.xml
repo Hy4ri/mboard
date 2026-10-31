@@ -1,0 +1,7 @@
+<resources>
+    <!-- The page header inside SetupActivity is the only title. -->
+    <style name="Theme.Mboard.Settings" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

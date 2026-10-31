@@ -10,6 +10,7 @@
         android:theme="@android:style/Theme.DeviceDefault.DayNight">
         <activity
             android:name=".SetupActivity"
+            android:theme="@style/Theme.Mboard.Settings"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
