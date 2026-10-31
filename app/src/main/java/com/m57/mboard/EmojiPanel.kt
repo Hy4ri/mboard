@@ -25,45 +25,57 @@ class EmojiPanel(
     private val categories = LinearLayout(context)
     private val grid = GridView(context)
     private val empty =
-        ui.label("", 15f, true).apply {
+        ui.label("", Tokens.TEXT_ROW, true).apply {
             gravity = Gravity.CENTER
-            setPadding(ui.dp(20), ui.dp(16), ui.dp(20), ui.dp(16))
+            setPadding(ui.dp(Tokens.SPACE_5), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_5), ui.dp(Tokens.SPACE_4))
         }
     private var active = "All"
     private var confirmingClear = false
+    private val unarmRunnable =
+        Runnable {
+            if (confirmingClear) {
+                confirmingClear = false
+                updateClear()
+            }
+        }
     var recordingEnabled = true
     var loadFailed = false
     private val adapter = EmojiAdapter(ui, history, { recordingEnabled }, onPick, ::updateItems)
+    private val searchButton =
+        ui.icon(R.drawable.ic_search, "Search emoji") { onSearch() }
     private val clear =
         ui.icon(R.drawable.ic_delete_sweep, "Clear recent emoji, keeps favorites") {
             if (confirmingClear) {
+                removeCallbacks(unarmRunnable)
                 history.clearRecent()
                 confirmingClear = false
                 refresh()
             } else {
                 confirmingClear = true
                 updateClear()
+                removeCallbacks(unarmRunnable)
+                postDelayed(unarmRunnable, 3000L)
             }
         }
+    private val header = ui.panelHeader("Emoji")
 
     init {
         orientation = VERTICAL
         layoutDirection = View.LAYOUT_DIRECTION_LTR
         setBackgroundColor(ui.background)
-        // One compact icon row: search, categories (scrolling), and clear-recent; no header above it.
-        val bar = LinearLayout(context).apply { gravity = Gravity.CENTER_VERTICAL }
-        bar.addView(tab(R.drawable.ic_search, "Search emoji", false, onSearch), LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)))
-        bar.addView(
+
+        header.setActions(listOf(searchButton, clear))
+        addView(header, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(Tokens.PANEL_HEADER)))
+
+        val tabScroll =
             HorizontalScrollView(context).apply {
                 isHorizontalScrollBarEnabled = false
                 addView(categories)
-            },
-            LayoutParams(0, ui.dp(TAB_DP), 1f),
-        )
-        bar.addView(clear.apply { compact() }, LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)))
-        addView(bar, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(TAB_DP)))
+            }
+        addView(tabScroll, LayoutParams(LayoutParams.MATCH_PARENT, ui.dp(Tokens.TARGET_MIN)))
+
         grid.numColumns = GridView.AUTO_FIT
-        grid.columnWidth = ui.dp(48)
+        grid.columnWidth = ui.dp(Tokens.TARGET_MIN)
         grid.stretchMode = GridView.STRETCH_COLUMN_WIDTH
         grid.adapter = adapter
         addView(empty, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
@@ -78,19 +90,25 @@ class EmojiPanel(
             byText = all.associateBy { it.text }
         }
         confirmingClear = false
+        removeCallbacks(unarmRunnable)
         updateClear()
         buildCategories()
         updateItems()
     }
 
     private fun updateClear() {
-        clear.isEnabled = history.recent().isNotEmpty()
-        clear.alpha = if (clear.isEnabled) 1f else .4f
-        // Second tap confirms: the icon turns accent-filled while armed.
+        val hasRecent = history.recent().isNotEmpty()
+        ui.setEnabledLook(clear, hasRecent)
         clear.background = ui.ripple(if (confirmingClear) ui.accent else android.graphics.Color.TRANSPARENT)
         clear.imageTintList = ColorStateList.valueOf(if (confirmingClear) ui.onAccent else ui.text)
         clear.tooltipText = if (confirmingClear) "Tap again to clear recent" else "Clear recent"
         clear.contentDescription = if (confirmingClear) "Confirm clearing recent emoji" else "Clear recent emoji, keeps favorites"
+        header.title.text =
+            when {
+                confirmingClear -> "Tap again to clear recent"
+                active == "All" -> "Emoji"
+                else -> "Emoji · $active"
+            }
     }
 
     private fun buildCategories() {
@@ -100,22 +118,15 @@ class EmojiPanel(
                 tab(categoryIcon(name), name, active == name) {
                     active = name
                     confirmingClear = false
+                    removeCallbacks(unarmRunnable)
                     updateClear()
                     buildCategories()
                     updateItems()
                     grid.setSelection(0)
                 },
-                LayoutParams(ui.dp(TAB_DP), ui.dp(TAB_DP)),
+                LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TARGET_MIN)),
             )
         }
-    }
-
-    private fun android.widget.ImageButton.compact() {
-        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-        minimumWidth = 0
-        minimumHeight = 0
-        val inset = ui.dp((TAB_DP - ICON_DP) / 2)
-        setPadding(inset, inset, inset, inset)
     }
 
     private fun tab(
@@ -124,7 +135,6 @@ class EmojiPanel(
         selected: Boolean,
         action: () -> Unit,
     ) = ui.icon(res, name, action).apply {
-        compact()
         isSelected = selected
         imageTintList = ColorStateList.valueOf(if (selected) ui.onAccent else ui.text)
         background = ui.ripple(if (selected) ui.accent else android.graphics.Color.TRANSPARENT)
@@ -147,11 +157,6 @@ class EmojiPanel(
             else -> R.drawable.ic_sentiment_satisfied
         }
 
-    private companion object {
-        const val TAB_DP = 36
-        const val ICON_DP = 20
-    }
-
     private fun updateItems() {
         val values =
             when (active) {
@@ -170,6 +175,11 @@ class EmojiPanel(
             }
         empty.visibility = if (values.isEmpty()) View.VISIBLE else View.GONE
         adapter.setItems(values)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        removeCallbacks(unarmRunnable)
     }
 }
 
@@ -201,11 +211,11 @@ private class EmojiAdapter(
         parent: ViewGroup,
     ): View {
         val cell =
-            (convertView as? TextView) ?: ui.label("", 26f).apply {
+            (convertView as? TextView) ?: ui.label("", Tokens.KEY_POPUP).apply {
                 gravity = Gravity.CENTER
-                minHeight = ui.dp(48)
-                minWidth = ui.dp(48)
-                setPadding(0, ui.dp(4), 0, ui.dp(4))
+                minHeight = ui.dp(Tokens.TARGET_MIN)
+                minWidth = ui.dp(Tokens.TARGET_MIN)
+                setPadding(0, ui.dp(Tokens.SPACE_1), 0, ui.dp(Tokens.SPACE_1))
                 isFocusable = true
                 background = ui.ripple()
             }
