@@ -43,11 +43,11 @@ class OneHandSurface(
         }
 
     private val modeLabel =
-        ui.label("", 12f, secondary = true).apply {
+        ui.label("", Tokens.TEXT_CAPTION, secondary = true).apply {
             gravity = Gravity.CENTER
             textAlignment = TextView.TEXT_ALIGNMENT_CENTER
             contentDescription = "One-handed keyboard position"
-            setPadding(ui.dp(2), ui.dp(4), ui.dp(2), ui.dp(4))
+            setPadding(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
         }
 
     /** A panel that slides in from [edge] and pushes the keyboard aside by its visible width. */
@@ -80,7 +80,7 @@ class OneHandSurface(
             view.visibility = View.VISIBLE
             animator =
                 ValueAnimator.ofFloat(amount, if (show) 1f else 0f).apply {
-                    duration = 220L
+                    duration = Tokens.MOTION_BASE
                     interpolator = DecelerateInterpolator()
                     addUpdateListener {
                         amount = it.animatedValue as Float
@@ -131,15 +131,22 @@ class OneHandSurface(
 
     private fun cellParams() =
         LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
-            setMargins(ui.dp(2), ui.dp(2), ui.dp(2), ui.dp(2))
+            setMargins(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
         }
 
     private fun panelColumn(description: String) =
         LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(ui.background)
-            setPadding(ui.dp(2), ui.dp(4), ui.dp(2), ui.dp(2))
+            setPadding(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
             contentDescription = description
+        }
+
+    private fun keyBackground(fill: Int) =
+        ui.ripple(fill).apply {
+            if (ui.needsOutline(fill)) {
+                (getDrawable(0) as? android.graphics.drawable.GradientDrawable)?.setStroke(ui.dp(Tokens.SPACE_1 / 4), ui.keyEdge)
+            }
         }
 
     private fun buildDial(): LinearLayout {
@@ -149,9 +156,17 @@ class OneHandSurface(
             keys.forEach { key ->
                 val view =
                     if (key == Keys.BACKSPACE) {
-                        ui.icon(R.drawable.ic_backspace, "Delete") { onDialKey(key) }.apply { background = ui.ripple(ui.modifier) }
+                        ui
+                            .icon(
+                                R.drawable.ic_backspace,
+                                "Delete",
+                            ) { onDialKey(key) }
+                            .apply { background = keyBackground(ui.functionSurface) }
                     } else {
-                        ui.button(key) { onDialKey(key) }.apply { textSize = 20f }
+                        ui.button(key) { onDialKey(key) }.apply {
+                            setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, Tokens.KEY_LABEL)
+                            background = keyBackground(ui.surface)
+                        }
                     }
                 row.addView(view, cellParams())
             }
@@ -160,15 +175,24 @@ class OneHandSurface(
         return pad
     }
 
-    private fun buildEmojiGrid() = panelColumn("Recent emoji").apply { setPadding(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1)) }
+    private fun buildEmojiGrid() =
+        panelColumn("Recent emoji").apply {
+            setPadding(
+                ui.dp(Tokens.SPACE_1 / 4),
+                ui.dp(Tokens.SPACE_1 / 4),
+                ui.dp(Tokens.SPACE_1 / 4),
+                ui.dp(Tokens.SPACE_1 / 4),
+            )
+        }
 
     /** Rebuilt on every reveal so it always reflects the latest history: 2 columns by 4 rows plus an open-all button. */
     private fun fillEmojiGrid() {
         emojiGrid.removeAllViews()
-        val recent = recentEmoji().take(EMOJI_COLUMNS * EMOJI_ROWS)
+        val rowCount = ((keyboard.keysHeight - ui.dp(OPEN_ROW_DP)) / ui.dp(Tokens.TARGET_MIN)).coerceIn(1, EMOJI_ROWS)
+        val recent = recentEmoji().take(EMOJI_COLUMNS * rowCount)
         if (recent.isEmpty()) {
             emojiGrid.addView(
-                ui.label("No recent emoji yet", 13f, secondary = true).apply {
+                ui.label("No recent emoji yet", Tokens.TEXT_BODY, secondary = true).apply {
                     gravity = Gravity.CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 },
@@ -177,7 +201,7 @@ class OneHandSurface(
             addOpenEmojiButton()
             return
         }
-        repeat(EMOJI_ROWS) { rowIndex ->
+        repeat(rowCount) { rowIndex ->
             val row = LinearLayout(context)
             repeat(EMOJI_COLUMNS) { column ->
                 val emoji = recent.getOrNull(rowIndex * EMOJI_COLUMNS + column)
@@ -186,7 +210,7 @@ class OneHandSurface(
                         View(context)
                     } else {
                         ui.button(emoji) { onEmoji(emoji) }.apply {
-                            textSize = 22f
+                            textSize = Tokens.TEXT_EMOJI
                             contentDescription = "Insert $emoji"
                             // Tight cells: the emoji glyph fills the tile instead of the default button padding.
                             setPadding(0, 0, 0, 0)
@@ -198,7 +222,12 @@ class OneHandSurface(
                 row.addView(
                     cell,
                     LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
-                        setMargins(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1))
+                        setMargins(
+                            ui.dp(Tokens.SPACE_1 / 4),
+                            ui.dp(Tokens.SPACE_1 / 4),
+                            ui.dp(Tokens.SPACE_1 / 4),
+                            ui.dp(Tokens.SPACE_1 / 4),
+                        )
                     },
                 )
             }
@@ -217,11 +246,11 @@ class OneHandSurface(
                     scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
                     minimumWidth = 0
                     minimumHeight = 0
-                    setPadding(ui.dp(7), ui.dp(7), ui.dp(7), ui.dp(7))
-                    background = ui.ripple(ui.modifier)
+                    setPadding(ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2))
+                    background = keyBackground(ui.functionSurface)
                 },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ui.dp(OPEN_ROW_DP)).apply {
-                setMargins(ui.dp(1), ui.dp(1), ui.dp(1), ui.dp(1))
+                setMargins(ui.dp(Tokens.SPACE_1 / 4), ui.dp(Tokens.SPACE_1 / 4), ui.dp(Tokens.SPACE_1 / 4), ui.dp(Tokens.SPACE_1 / 4))
             },
         )
     }
@@ -273,7 +302,7 @@ class OneHandSurface(
                 val horizontal = abs(dx) > 1.5f * abs(dy)
                 // Either a full drag, or a short quick flick, triggers.
                 val far = abs(dx) > ui.dp(SWIPE_DP)
-                val flick = abs(dx) > ui.dp(FLICK_DP) && speed > ui.dp(1) * FLICK_DP_PER_MS
+                val flick = abs(dx) > ui.dp(FLICK_DP) && speed > ui.dp(Tokens.SPACE_1 / 4) * FLICK_DP_PER_MS
                 if (horizontal && (far || flick)) {
                     active = null
                     // Inward from the panel's edge shows it; back out toward that edge hides it.
@@ -410,10 +439,7 @@ class OneHandSurface(
         modeLabel.contentDescription = "Keyboard positioned $effectiveMode"
         rail.addView(modeLabel, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         rail.addView(
-            ui.button("Full") { onModeChange(FULL) }.apply {
-                maxLines = 1
-                setAutoSizeTextTypeUniformWithConfiguration(10, 12, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
-            },
+            ui.icon(R.drawable.ic_keyboard, "Full width keyboard") { onModeChange(FULL) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ui.dp(RAIL_MIN_DP)),
         )
         val switchIcon = if (effectiveMode == LEFT) R.drawable.ic_arrow_forward else R.drawable.ic_arrow_back
@@ -437,13 +463,13 @@ class OneHandSurface(
         const val LEFT = "left"
         const val RIGHT = "right"
         const val COMPACT_WIDTH_DP = 300
-        const val RAIL_MIN_DP = 48
+        const val RAIL_MIN_DP = Tokens.TARGET_MIN
         const val KEYBOARD_FRACTION = 0.82f
         const val DIAL_FRACTION = 0.34f
         const val EMOJI_FRACTION = 0.26f
         const val EMOJI_COLUMNS = 2
         const val EMOJI_ROWS = 4
-        const val OPEN_ROW_DP = 32
+        const val OPEN_ROW_DP = Tokens.TARGET_MIN
         const val EDGE_DP = 40
         const val SWIPE_DP = 32
         const val FLICK_DP = 14

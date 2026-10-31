@@ -25,7 +25,7 @@ class KeyboardView(
     private val settings = BoardSettings(context)
     private val density = resources.displayMetrics.density
     private val rowHeight = settings.rowHeightDp * density
-    private val gap = 4 * density
+    private val gap = Tokens.KEY_GAP * density
     private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     private val showNumberRow = settings.numberRow
     private val showPreview = settings.keyPreview
@@ -59,7 +59,16 @@ class KeyboardView(
             field = value
             invalidate()
         }
-    var enterLabel: String = Keys.ENTER
+
+    /** Drawable resource id; zero draws enterLabel (calculator/custom editor actions). */
+    var enterIcon: Int = R.drawable.ic_keyboard_return
+        set(value) {
+            field = value
+            enterDrawable = if (value == 0) null else icon(value)
+            invalidate()
+        }
+    private var enterDrawable: Drawable? = icon(enterIcon)
+    var enterLabel: String = "Enter"
         set(value) {
             field = value
             invalidate()
@@ -74,7 +83,18 @@ class KeyboardView(
             invalidate()
         }
     val backgroundColor get() = ui.background
-    val keysHeight get() = (rowHeight * (if (showNumberRow) 5 else 4) + gap).toInt()
+
+    /** Stable body size across pages; minimum row size takes precedence over the landscape target. */
+    val keysHeight: Int
+        get() {
+            val rowCount = if (showNumberRow) 5 else 4
+            val configured = rowHeight * rowCount + gap
+            if (resources.configuration.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE) return configured.toInt()
+            val windowHeight = resources.configuration.screenHeightDp * density
+            val available = windowHeight * Tokens.LANDSCAPE_HEIGHT_FRACTION - (Tokens.TOOLBAR_HEIGHT + Tokens.STRIP_HEIGHT) * density
+            val minimum = Tokens.KEY_ROW_MIN * density * rowCount + gap
+            return minOf(configured, maxOf(minimum, available)).toInt()
+        }
     private var cachedRowsKey: Pair<Layout, Language>? = null
     private var cachedRows: List<List<String>> = emptyList()
 
@@ -103,7 +123,6 @@ class KeyboardView(
             "shifted" to icon(R.drawable.ic_shift_fill1),
             "locked" to icon(R.drawable.ic_shift_lock_fill1),
             "delete" to icon(R.drawable.ic_backspace),
-            "enter" to icon(R.drawable.ic_keyboard_return),
             "pad" to icon(R.drawable.ic_dialpad),
         )
     private var pointer = MotionEvent.INVALID_POINTER_ID
@@ -143,8 +162,10 @@ class KeyboardView(
         popup = cell
     }
 
+    private fun animationsEnabled() = android.animation.ValueAnimator.areAnimatorsEnabled()
+
     private fun fadeOut(cell: Cell?) {
-        if (cell != null) releasedAt[cell] = now()
+        if (animationsEnabled() && cell != null) releasedAt[cell] = now()
     }
 
     private fun pressAmount(
@@ -152,8 +173,12 @@ class KeyboardView(
         active: Boolean,
     ): Float {
         if (active) return 1f
+        if (!animationsEnabled()) {
+            releasedAt.clear()
+            return 0f
+        }
         val at = releasedAt[cell] ?: return 0f
-        val t = (now() - at) / RELEASE_FADE_MS.toFloat()
+        val t = (now() - at) / Tokens.MOTION_FAST.toFloat()
         if (t >= 1f) {
             releasedAt.remove(cell)
             return 0f
@@ -252,7 +277,15 @@ class KeyboardView(
         val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
         visibleRows.forEachIndexed { rowIndex, row ->
             val units = row.sumOf { weight(it).toDouble() }.toFloat()
-            val unit = width / (if (layout.stretch || layout.grid) units else maxUnits)
+            val contentWidth =
+                if (resources.configuration.orientation ==
+                    android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                ) {
+                    minOf(width.toFloat(), Tokens.CONTENT_MAX_WIDTH * density)
+                } else {
+                    width.toFloat()
+                }
+            val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
             var x = (width - units * unit) / 2
             row.forEach { key ->
                 val size = weight(key) * unit
@@ -273,8 +306,8 @@ class KeyboardView(
     override fun onDraw(canvas: Canvas) {
         geometry()
         canvas.drawColor(ui.background)
-        val radius = 8 * density
-        val edge = density
+        val radius = Tokens.RADIUS_KEY * density
+        val edge = Tokens.KEY_OUTLINE_WIDTH * density
         cells.forEach { cell ->
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
             val calc = layout == Layout.CALC
@@ -283,7 +316,8 @@ class KeyboardView(
             val base =
                 when {
                     equals -> ui.accent
-                    special -> ui.modifier
+                    cell.key == Keys.SHIFT && (shifted || capsLocked) -> ui.accentContainer
+                    special -> ui.functionSurface
                     else -> ui.surface
                 }
             val amount = pressAmount(cell, active)
@@ -295,6 +329,13 @@ class KeyboardView(
             canvas.save()
             canvas.translate(0f, sink)
             canvas.drawRoundRect(cell.rect, radius, radius, paint)
+            if (ui.needsOutline(base)) {
+                paint.color = ui.keyEdge
+                paint.style = Paint.Style.STROKE
+                paint.strokeWidth = Tokens.KEY_OUTLINE_WIDTH * density
+                canvas.drawRoundRect(cell.rect, radius, radius, paint)
+                paint.style = Paint.Style.FILL
+            }
             val foreground = if (equals) ui.onAccent else ui.text
             val drawable =
                 when (cell.key) {
@@ -323,7 +364,7 @@ class KeyboardView(
                     }
 
                     Keys.ENTER -> {
-                        if (enterLabel == Keys.ENTER) icons["enter"] else null
+                        enterDrawable
                     }
 
                     else -> {
@@ -344,8 +385,15 @@ class KeyboardView(
         access.focusedBounds()?.let { bounds ->
             paint.color = ui.controlAccent
             paint.style = Paint.Style.STROKE
-            paint.strokeWidth = 2 * density
+            paint.strokeWidth = Tokens.FOCUS_WIDTH * density
             canvas.drawRoundRect(bounds, radius, radius, paint)
+            paint.style = Paint.Style.FILL
+        }
+        if (isFocused) {
+            paint.color = ui.accentInk
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = Tokens.FOCUS_WIDTH * density
+            canvas.drawRoundRect(RectF(density, density, width - density, height - density), radius, radius, paint)
             paint.style = Paint.Style.FILL
         }
         popup?.takeIf { showPreview && alts.isEmpty() }?.let { drawPreview(canvas, it, radius) }
@@ -353,19 +401,24 @@ class KeyboardView(
             altStrip.set(altRects.first().left, altRects.first().top, altRects.last().right, altRects.last().bottom)
             paint.color = ui.keyEdge
             canvas.drawRoundRect(altStrip.left, altStrip.top + 2 * edge, altStrip.right, altStrip.bottom + 2 * edge, radius, radius, paint)
-            paint.color = ui.modifier
+            paint.color = ui.raised
             canvas.drawRoundRect(
                 altStrip,
                 radius,
                 radius,
                 paint,
             )
+            paint.color = ui.keyEdge
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = Tokens.KEY_OUTLINE_WIDTH * density
+            canvas.drawRoundRect(altStrip, radius, radius, paint)
+            paint.style = Paint.Style.FILL
             alts.forEachIndexed { i, value ->
                 if (i == altSelected) {
                     paint.color = ui.accent
                     canvas.drawRoundRect(altRects[i], radius, radius, paint)
                 }
-                drawLabel(canvas, value, altRects[i], if (i == altSelected) ui.onAccent else ui.text, 23f)
+                drawLabel(canvas, value, altRects[i], if (i == altSelected) ui.onAccent else ui.text, Tokens.KEY_POPUP)
             }
         }
     }
@@ -401,11 +454,13 @@ class KeyboardView(
         size: Float? = null,
     ) {
         textPaint.color = foreground
-        textPaint.textSize = (size ?: if (value.length > 2) 14f else 22f) * density
-        val available = (rect.width() - 4 * density).coerceAtLeast(1f)
+        textPaint.textSize = (size ?: if (value.length > 2) Tokens.KEY_LABEL_LONG else Tokens.KEY_LABEL) * density
+        val available = (rect.width() - Tokens.SPACE_2 * density).coerceAtLeast(1f)
         val measured = textPaint.measureText(value)
         if (measured > available) textPaint.textSize *= available / measured
-        canvas.drawText(value, rect.centerX(), rect.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint)
+        // Isolate neutral operator labels from the Arabic layout without changing key codes.
+        val display = if (value == Keys.MORE_SYMBOLS || value == language.symbolsLabel) "\u2066$value\u2069" else value
+        canvas.drawText(display, rect.centerX(), rect.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint)
     }
 
     private fun drawIcon(
@@ -414,7 +469,7 @@ class KeyboardView(
         rect: RectF,
         foreground: Int,
     ) {
-        val size = minOf(24 * density, rect.width() - gap, rect.height() - gap).toInt()
+        val size = minOf(Tokens.ICON * density, rect.width() - gap, rect.height() - gap).toInt()
         drawable.setTint(foreground)
         drawable.setBounds(
             (rect.centerX() - size / 2).toInt(),
@@ -445,7 +500,7 @@ class KeyboardView(
         previewBubble.offset((-previewBubble.left).coerceAtLeast(0f), 0f)
         previewBubble.offset(-(previewBubble.right - width).coerceAtLeast(0f), 0f)
         // A short ease-out grow from the key gives the bubble motion without delaying the letter.
-        val t = ((now() - previewStart) / PREVIEW_POP_MS.toFloat()).coerceIn(0f, 1f)
+        val t = if (animationsEnabled()) ((now() - previewStart) / Tokens.MOTION_INSTANT.toFloat()).coerceIn(0f, 1f) else 1f
         val eased = 1f - (1f - t) * (1f - t)
         val scale = .82f + .18f * eased
         canvas.save()
@@ -460,10 +515,15 @@ class KeyboardView(
             radius,
             paint,
         )
-        paint.color = ui.modifier
+        paint.color = ui.raised
         canvas.drawRoundRect(previewBubble, radius, radius, paint)
+        paint.color = ui.keyEdge
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = Tokens.KEY_OUTLINE_WIDTH * density
+        canvas.drawRoundRect(previewBubble, radius, radius, paint)
+        paint.style = Paint.Style.FILL
         previewLabelBounds.set(previewBubble.left, previewBubble.top, previewBubble.right, previewBubble.top + rowHeight * .65f)
-        drawLabel(canvas, label(cell.key), previewLabelBounds, ui.text, 26f)
+        drawLabel(canvas, label(cell.key), previewLabelBounds, ui.text, Tokens.KEY_POPUP)
         canvas.restore()
         if (t < 1f) postInvalidateOnAnimation()
     }
@@ -484,7 +544,7 @@ class KeyboardView(
     private fun showAlternates(base: Cell) {
         val extra = language.alternatesFor(base.key) ?: return
         alts = (listOf(base.key) + extra).map { if (shifted || capsLocked) it.uppercase(Locale.ROOT) else it }
-        val cellWidth = minOf(maxOf(base.rect.width(), 32 * density), width.toFloat() / alts.size)
+        val cellWidth = minOf(maxOf(base.rect.width(), Tokens.STRIP_HEIGHT * density), width.toFloat() / alts.size)
         val left = (base.rect.centerX() - cellWidth / 2).coerceIn(0f, (width - cellWidth * alts.size).coerceAtLeast(0f))
         val top = (base.rect.top - rowHeight).coerceAtLeast(0f)
         altRects = alts.indices.map { RectF(left + it * cellWidth, top, left + (it + 1) * cellWidth, top + rowHeight) }
@@ -572,7 +632,7 @@ class KeyboardView(
             }
 
             Keys.ENTER -> {
-                if (enterLabel == Keys.ENTER) "Enter" else enterLabel
+                enterLabel
             }
 
             Keys.SPACE -> {
@@ -745,7 +805,7 @@ class KeyboardView(
         current = origin
         setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         val key = origin?.key
-        if (key == Keys.SPACE || (key != null && language.alternatesFor(key) != null)) postDelayed(hold, 250L)
+        if (key == Keys.SPACE || (key != null && language.alternatesFor(key) != null)) postDelayed(hold, Tokens.MOTION_HOLD)
         if (key == Keys.BACKSPACE) {
             deleteStart = android.os.SystemClock.uptimeMillis()
             deleteRepeated = false
@@ -797,7 +857,7 @@ class KeyboardView(
                 if (picked.key != Keys.BACKSPACE || !deleteWasSent) onKey(picked.key)
                 if (showPreview && preview != null) {
                     popup = preview
-                    postDelayed(hidePopup, 100L)
+                    postDelayed(hidePopup, if (animationsEnabled()) Tokens.MOTION_FAST else 0L)
                 }
             }
         }
@@ -806,8 +866,6 @@ class KeyboardView(
     private companion object {
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_SWIPE_STEP_DP = 28
-        const val RELEASE_FADE_MS = 140L
-        const val PREVIEW_POP_MS = 70L
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
         val CALC_OPERATORS = setOf("÷", "×", "−", "+", "(", ")", "%")
     }
