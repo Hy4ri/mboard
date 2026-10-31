@@ -68,7 +68,8 @@ def load_exclusion_lines(repo_dir: str) -> set:
     test_files = [
         'en_subs.txt', 'ar_subs.txt', 'en_tatoeba.txt',
         'ar_tatoeba.txt', 'en_chat.txt', 'jo_chat.txt',
-        'en_fresh.txt', 'ar_fresh.txt', 'jo_human_fresh.txt'
+        'en_fresh.txt', 'ar_fresh.txt', 'jo_human_fresh.txt',
+        'jo_tatoeba_fresh.txt', 'levantine_sister_heldout.txt'
     ]
     for fn in test_files:
         p = os.path.join(bench_data_dir, fn)
@@ -412,6 +413,8 @@ def main():
     # Process extra-text files if any
     for spec in args.extra_text:
         extra_file, _, w = spec.partition(':')
+        if os.path.basename(extra_file) in {'jo_tatoeba_fresh.txt', 'levantine_sister_heldout.txt'}:
+            sys.exit(f'Error: {extra_file} is evaluation-only, never LM training')
         if extra_file.endswith('_touch_typos.tsv'):
             sys.exit(f"Error: {extra_file} is a benchmark touch typo dataset and must never be used for LM training")
         if os.path.exists(extra_file):

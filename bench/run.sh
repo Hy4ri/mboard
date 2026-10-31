@@ -44,6 +44,9 @@ if have jo_chat.txt; then
   run --lang ar --sentences data/jo_chat.txt --label jo_chat_msa "$@"
   run --lang ar --dialect --learning --sentences data/jo_chat.txt --label jo_chat_learning "$@"
 fi
+for set in jo_tatoeba_fresh levantine_sister_heldout; do
+  have "$set.txt" && run --lang ar --dialect --sentences "data/$set.txt" --label "$set" "$@"
+done
 if have jo_human_fresh.txt; then
   args=(--lang ar --dialect --sentences data/jo_human_fresh.txt --label jo_human_fresh)
   have jo_human_fresh_typos.tsv && args+=(--typos data/jo_human_fresh_typos.tsv)

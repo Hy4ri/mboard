@@ -1,0 +1,1570 @@
+{
+  "sets": {
+    "ar_fresh": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0.08,
+          "candidate": 0.08,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 7,
+          "candidate": 7,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 10.53,
+          "candidate": 10.53,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 8851,
+          "candidate": 8851,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 60.95,
+          "candidate": 60.95,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 21.47,
+          "candidate": 21.47,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 31.28,
+          "candidate": 31.28,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 24.77,
+          "candidate": 24.77,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 18.1,
+          "candidate": 18.1,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 12.31,
+          "candidate": 12.31,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.08,
+          "candidate": 0.08,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.16,
+          "candidate": 0.16,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 2.91,
+          "candidate": 2.91,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 61.37,
+          "candidate": 61.37,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 17.99,
+          "candidate": 17.99,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 1201,
+          "candidate": 1201,
+          "delta": 0
+        },
+        "rows": {
+          "base": 1461,
+          "candidate": 1461,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 84.94,
+          "candidate": 84.94,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "ar_real_typos": {
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 1.38,
+          "candidate": 1.38,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 45.78,
+          "candidate": 45.78,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 10.61,
+          "candidate": 10.61,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 509,
+          "candidate": 509,
+          "delta": 0
+        },
+        "rows": {
+          "base": 771,
+          "candidate": 771,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 89.49,
+          "candidate": 89.49,
+          "delta": 0.0
+        }
+      },
+      ".typos.tsv_identical": true
+    },
+    "ar_subs": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0.87,
+          "candidate": 0.87,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 58,
+          "candidate": 58,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 11.99,
+          "candidate": 11.99,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 42474,
+          "candidate": 42474,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 65.87,
+          "candidate": 65.87,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 23.37,
+          "candidate": 23.37,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 34.72,
+          "candidate": 34.72,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 27.13,
+          "candidate": 27.13,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 20.67,
+          "candidate": 20.67,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 9.35,
+          "candidate": 9.35,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.14,
+          "candidate": 0.14,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1,
+          "candidate": 1,
+          "delta": 0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 3.38,
+          "candidate": 3.38,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 68.35,
+          "candidate": 68.35,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 20.35,
+          "candidate": 20.35,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 2452,
+          "candidate": 2452,
+          "delta": 0
+        },
+        "rows": {
+          "base": 2919,
+          "candidate": 2919,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 82.67,
+          "candidate": 82.67,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "ar_tatoeba": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0.14,
+          "candidate": 0.14,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 26,
+          "candidate": 26,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 10.3,
+          "candidate": 10.3,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 26853,
+          "candidate": 26853,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 59.99,
+          "candidate": 59.99,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 20.77,
+          "candidate": 20.77,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 30.23,
+          "candidate": 30.23,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 23.92,
+          "candidate": 23.92,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 17.37,
+          "candidate": 17.37,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 11.06,
+          "candidate": 11.06,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.1,
+          "candidate": 0.1,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.24,
+          "candidate": 0.24,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 2.12,
+          "candidate": 2.12,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 63.54,
+          "candidate": 63.54,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 19.31,
+          "candidate": 19.31,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 2408,
+          "candidate": 2408,
+          "delta": 0
+        },
+        "rows": {
+          "base": 2913,
+          "candidate": 2913,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 83.73,
+          "candidate": 83.73,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "en_chat": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "false_autocorrect_count": {
+          "base": 28,
+          "candidate": 28,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 13,
+          "candidate": 13,
+          "delta": 0
+        },
+        "words": {
+          "base": 3073,
+          "candidate": 3073,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 87.18,
+          "candidate": 87.18,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 21.48,
+          "candidate": 21.48,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 41.8,
+          "candidate": 41.8,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 39.56,
+          "candidate": 39.56,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 22.51,
+          "candidate": 22.51,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 5.22,
+          "candidate": 5.22,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.91,
+          "candidate": 0.91,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 2.41,
+          "candidate": 2.41,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 4.09,
+          "candidate": 4.09,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 90.35,
+          "candidate": 90.35,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 74.27,
+          "candidate": 74.27,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 342,
+          "candidate": 342,
+          "delta": 0
+        },
+        "rows": {
+          "base": 400,
+          "candidate": 400,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 36.5,
+          "candidate": 36.5,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "en_chat_learning": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "false_autocorrect_count": {
+          "base": 10,
+          "candidate": 10,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 13.11,
+          "candidate": 13.11,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 3073,
+          "candidate": 3073,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 87.34,
+          "candidate": 87.34,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 21.65,
+          "candidate": 21.65,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 42.19,
+          "candidate": 42.19,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 40.35,
+          "candidate": 40.35,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 22.55,
+          "candidate": 22.55,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 5.22,
+          "candidate": 5.22,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.33,
+          "candidate": 0.33,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1.82,
+          "candidate": 1.82,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true
+    },
+    "en_fresh": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "false_autocorrect_count": {
+          "base": 15,
+          "candidate": 15,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 16.86,
+          "candidate": 16.86,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 14024,
+          "candidate": 14024,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 84.93,
+          "candidate": 84.93,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 23.29,
+          "candidate": 23.29,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 44.36,
+          "candidate": 44.36,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 40.9,
+          "candidate": 40.9,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 27.97,
+          "candidate": 27.97,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 20.93,
+          "candidate": 20.93,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.11,
+          "candidate": 0.11,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.11,
+          "candidate": 0.11,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 3.41,
+          "candidate": 3.41,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 88.43,
+          "candidate": 88.43,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 68.94,
+          "candidate": 68.94,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 1262,
+          "candidate": 1262,
+          "delta": 0
+        },
+        "rows": {
+          "base": 1487,
+          "candidate": 1487,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 41.49,
+          "candidate": 41.49,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "en_real_typos": {
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 14.1,
+          "candidate": 14.1,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 47.83,
+          "candidate": 47.83,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 27.9,
+          "candidate": 27.9,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 4000,
+          "candidate": 4000,
+          "delta": 0
+        },
+        "rows": {
+          "base": 4000,
+          "candidate": 4000,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 72.1,
+          "candidate": 72.1,
+          "delta": 0.0
+        }
+      },
+      ".typos.tsv_identical": true
+    },
+    "en_space_typos": {
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 11.41,
+          "candidate": 11.41,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 54.58,
+          "candidate": 54.58,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "scored_rows": {
+          "base": 982,
+          "candidate": 982,
+          "delta": 0
+        },
+        "rows": {
+          "base": 1000,
+          "candidate": 1000,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 100,
+          "candidate": 100,
+          "delta": 0
+        }
+      },
+      ".typos.tsv_identical": true
+    },
+    "en_subs": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "false_autocorrect_count": {
+          "base": 89,
+          "candidate": 89,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 17.25,
+          "candidate": 17.25,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 56273,
+          "candidate": 56273,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 86.91,
+          "candidate": 86.91,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 26.64,
+          "candidate": 26.64,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 48.4,
+          "candidate": 48.4,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 42.07,
+          "candidate": 42.07,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 29.69,
+          "candidate": 29.69,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 15.95,
+          "candidate": 15.95,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.16,
+          "candidate": 0.16,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.2,
+          "candidate": 0.2,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 3.12,
+          "candidate": 3.12,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 91.9,
+          "candidate": 91.9,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 74.31,
+          "candidate": 74.31,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 2371,
+          "candidate": 2371,
+          "delta": 0
+        },
+        "rows": {
+          "base": 2790,
+          "candidate": 2790,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 36.85,
+          "candidate": 36.85,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "en_tatoeba": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0,
+          "candidate": 0,
+          "delta": 0
+        },
+        "false_autocorrect_count": {
+          "base": 51,
+          "candidate": 51,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 16.61,
+          "candidate": 16.61,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 44170,
+          "candidate": 44170,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 85.49,
+          "candidate": 85.49,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 24.06,
+          "candidate": 24.06,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 45.15,
+          "candidate": 45.15,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 41.24,
+          "candidate": 41.24,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 28.65,
+          "candidate": 28.65,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 21.28,
+          "candidate": 21.28,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.12,
+          "candidate": 0.12,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.12,
+          "candidate": 0.12,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 3.83,
+          "candidate": 3.83,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 88.46,
+          "candidate": 88.46,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 71.74,
+          "candidate": 71.74,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 2505,
+          "candidate": 2505,
+          "delta": 0
+        },
+        "rows": {
+          "base": 2960,
+          "candidate": 2960,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 39.29,
+          "candidate": 39.29,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true,
+      ".typos.tsv_identical": true
+    },
+    "jo_chat_dialect": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 1.31,
+          "candidate": 1.31,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 12,
+          "candidate": 12,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 5.64,
+          "candidate": 5.94,
+          "delta": 0.3
+        },
+        "words": {
+          "base": 10283,
+          "candidate": 10283,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 52.21,
+          "candidate": 53.39,
+          "delta": 1.18
+        },
+        "one_letter_top1_pct": {
+          "base": 10.33,
+          "candidate": 11.56,
+          "delta": 1.23
+        },
+        "one_letter_top3_pct": {
+          "base": 14.82,
+          "candidate": 16.74,
+          "delta": 1.92
+        },
+        "keystroke_savings_pct": {
+          "base": 17.63,
+          "candidate": 18.79,
+          "delta": 1.16
+        },
+        "next_word_top3_pct": {
+          "base": 9.38,
+          "candidate": 10.64,
+          "delta": 1.26
+        },
+        "first_word_top3_pct": {
+          "base": 0.15,
+          "candidate": 0.15,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.12,
+          "candidate": 0.12,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1.43,
+          "candidate": 1.43,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 2.54,
+          "candidate": 2.54,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 57.1,
+          "candidate": 57.2,
+          "delta": 0.1
+        },
+        "autofixed_pct": {
+          "base": 13.64,
+          "candidate": 13.64,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 1063,
+          "candidate": 1063,
+          "delta": 0
+        },
+        "rows": {
+          "base": 1199,
+          "candidate": 1199,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 87.91,
+          "candidate": 87.91,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": false,
+      ".typos.tsv_identical": false
+    },
+    "jo_chat_learning": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 1.06,
+          "candidate": 1.06,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 12,
+          "candidate": 12,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 6.22,
+          "candidate": 6.6,
+          "delta": 0.38
+        },
+        "words": {
+          "base": 10283,
+          "candidate": 10283,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 58.83,
+          "candidate": 59.88,
+          "delta": 1.05
+        },
+        "one_letter_top1_pct": {
+          "base": 12.09,
+          "candidate": 13.32,
+          "delta": 1.23
+        },
+        "one_letter_top3_pct": {
+          "base": 19.26,
+          "candidate": 20.84,
+          "delta": 1.58
+        },
+        "keystroke_savings_pct": {
+          "base": 21.66,
+          "candidate": 22.73,
+          "delta": 1.07
+        },
+        "next_word_top3_pct": {
+          "base": 10.29,
+          "candidate": 11.36,
+          "delta": 1.07
+        },
+        "first_word_top3_pct": {
+          "base": 0.15,
+          "candidate": 0.15,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.12,
+          "candidate": 0.12,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1.18,
+          "candidate": 1.18,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": false
+    },
+    "jo_chat_msa": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 1.31,
+          "candidate": 1.31,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 12,
+          "candidate": 12,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 2.3,
+          "candidate": 2.3,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 10283,
+          "candidate": 10283,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 37.24,
+          "candidate": 37.24,
+          "delta": 0.0
+        },
+        "one_letter_top1_pct": {
+          "base": 5.1,
+          "candidate": 5.1,
+          "delta": 0.0
+        },
+        "one_letter_top3_pct": {
+          "base": 8.19,
+          "candidate": 8.19,
+          "delta": 0.0
+        },
+        "keystroke_savings_pct": {
+          "base": 11.25,
+          "candidate": 11.25,
+          "delta": 0.0
+        },
+        "next_word_top3_pct": {
+          "base": 3.61,
+          "candidate": 3.61,
+          "delta": 0.0
+        },
+        "first_word_top3_pct": {
+          "base": 0.53,
+          "candidate": 0.53,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.12,
+          "candidate": 0.12,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1.43,
+          "candidate": 1.43,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": true
+    },
+    "jo_human_fresh": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0.51,
+          "candidate": 0.51,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 35,
+          "candidate": 35,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 7.48,
+          "candidate": 7.74,
+          "delta": 0.26
+        },
+        "words": {
+          "base": 17960,
+          "candidate": 17960,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 51.51,
+          "candidate": 52.01,
+          "delta": 0.5
+        },
+        "one_letter_top1_pct": {
+          "base": 12.63,
+          "candidate": 13.24,
+          "delta": 0.61
+        },
+        "one_letter_top3_pct": {
+          "base": 18.3,
+          "candidate": 18.76,
+          "delta": 0.46
+        },
+        "keystroke_savings_pct": {
+          "base": 18.46,
+          "candidate": 18.77,
+          "delta": 0.31
+        },
+        "next_word_top3_pct": {
+          "base": 11.57,
+          "candidate": 12.23,
+          "delta": 0.66
+        },
+        "first_word_top3_pct": {
+          "base": 17.37,
+          "candidate": 17.37,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.19,
+          "candidate": 0.19,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.7,
+          "candidate": 0.7,
+          "delta": 0.0
+        }
+      },
+      "typos": {
+        "wrong_fix_pct": {
+          "base": 2.78,
+          "candidate": 2.78,
+          "delta": 0.0
+        },
+        "in_strip_pct": {
+          "base": 56.27,
+          "candidate": 56.27,
+          "delta": 0.0
+        },
+        "autofixed_pct": {
+          "base": 15.22,
+          "candidate": 15.22,
+          "delta": 0.0
+        },
+        "scored_rows": {
+          "base": 1189,
+          "candidate": 1189,
+          "delta": 0
+        },
+        "rows": {
+          "base": 1352,
+          "candidate": 1352,
+          "delta": 0
+        },
+        "words_modified_ratio_pct": {
+          "base": 86.61,
+          "candidate": 86.61,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": false,
+      ".typos.tsv_identical": false
+    },
+    "jo_tatoeba_fresh": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 0.09,
+          "candidate": 0.09,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 1,
+          "candidate": 1,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 2.3,
+          "candidate": 2.3,
+          "delta": 0.0
+        },
+        "words": {
+          "base": 1064,
+          "candidate": 1064,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 44.17,
+          "candidate": 44.36,
+          "delta": 0.19
+        },
+        "one_letter_top1_pct": {
+          "base": 10.7,
+          "candidate": 11.27,
+          "delta": 0.57
+        },
+        "one_letter_top3_pct": {
+          "base": 14.87,
+          "candidate": 15.72,
+          "delta": 0.85
+        },
+        "keystroke_savings_pct": {
+          "base": 14.18,
+          "candidate": 14.5,
+          "delta": 0.32
+        },
+        "next_word_top3_pct": {
+          "base": 5,
+          "candidate": 6.08,
+          "delta": 1.08
+        },
+        "first_word_top3_pct": {
+          "base": 1.58,
+          "candidate": 1.58,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.09,
+          "candidate": 0.09,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 0.19,
+          "candidate": 0.19,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": false
+    },
+    "levantine_sister_heldout": {
+      "sentences": {
+        "spelling_normalized_pct": {
+          "base": 1.14,
+          "candidate": 1.14,
+          "delta": 0.0
+        },
+        "false_autocorrect_count": {
+          "base": 64,
+          "candidate": 64,
+          "delta": 0
+        },
+        "next_word_top1_pct": {
+          "base": 3.45,
+          "candidate": 5.94,
+          "delta": 2.49
+        },
+        "words": {
+          "base": 19594,
+          "candidate": 19594,
+          "delta": 0
+        },
+        "found_before_end_pct": {
+          "base": 43.21,
+          "candidate": 47.15,
+          "delta": 3.94
+        },
+        "one_letter_top1_pct": {
+          "base": 9.6,
+          "candidate": 14.01,
+          "delta": 4.41
+        },
+        "one_letter_top3_pct": {
+          "base": 14.61,
+          "candidate": 20,
+          "delta": 5.39
+        },
+        "keystroke_savings_pct": {
+          "base": 13.97,
+          "candidate": 17.03,
+          "delta": 3.06
+        },
+        "next_word_top3_pct": {
+          "base": 6.34,
+          "candidate": 11.02,
+          "delta": 4.68
+        },
+        "first_word_top3_pct": {
+          "base": 5.27,
+          "candidate": 5.27,
+          "delta": 0.0
+        },
+        "false_autocorrect_pct": {
+          "base": 0.33,
+          "candidate": 0.33,
+          "delta": 0.0
+        },
+        "words_modified_ratio_pct": {
+          "base": 1.47,
+          "candidate": 1.47,
+          "delta": 0.0
+        }
+      },
+      ".misses.tsv_identical": false
+    }
+  },
+  "typo_target_changes": [
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 25,
+      "change": "lost",
+      "before": {
+        "context": "ولا",
+        "typed": "يهم",
+        "intended": "يهمك",
+        "kind": "omission",
+        "outcome": "offered",
+        "shown": "يهم|يهمك|يهمني"
+      },
+      "after": {
+        "context": "ولا",
+        "typed": "يهم",
+        "intended": "يهمك",
+        "kind": "omission",
+        "outcome": "missed",
+        "shown": "يهم|يهمني|يعمل"
+      }
+    },
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 640,
+      "change": "gained",
+      "before": {
+        "context": "بدي اشتري دفتر جديد واقلام عشان ابلش",
+        "typed": "لدرس",
+        "intended": "ادرس",
+        "kind": "adjacent",
+        "outcome": "missed",
+        "shown": "لدرس|بدرس|لدرجه"
+      },
+      "after": {
+        "context": "بدي اشتري دفتر جديد واقلام عشان ابلش",
+        "typed": "لدرس",
+        "intended": "ادرس",
+        "kind": "adjacent",
+        "outcome": "offered",
+        "shown": "لدرس|ادرس|بدرس"
+      }
+    },
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 649,
+      "change": "lost",
+      "before": {
+        "context": "بدي",
+        "typed": "انظل",
+        "intended": "انزل",
+        "kind": "adjacent",
+        "outcome": "wrong_fix",
+        "shown": "انظر|انظل|انزل"
+      },
+      "after": {
+        "context": "بدي",
+        "typed": "انظل",
+        "intended": "انزل",
+        "kind": "adjacent",
+        "outcome": "wrong_fix",
+        "shown": "انظر|انظل|انظري"
+      }
+    },
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 722,
+      "change": "gained",
+      "before": {
+        "context": "بدي اشتري كندرة جلد اصلية من",
+        "typed": "ويم",
+        "intended": "وين",
+        "kind": "adjacent",
+        "outcome": "missed",
+        "shown": "ويم|يومها|يوم"
+      },
+      "after": {
+        "context": "بدي اشتري كندرة جلد اصلية من",
+        "typed": "ويم",
+        "intended": "وين",
+        "kind": "adjacent",
+        "outcome": "offered",
+        "shown": "ويم|وين|يوم"
+      }
+    },
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 943,
+      "change": "gained",
+      "before": {
+        "context": "المي مقطوعة والجو",
+        "typed": "شوق",
+        "intended": "شوب",
+        "kind": "adjacent",
+        "outcome": "missed",
+        "shown": "شوي|شوق|شوية"
+      },
+      "after": {
+        "context": "المي مقطوعة والجو",
+        "typed": "شوق",
+        "intended": "شوب",
+        "kind": "adjacent",
+        "outcome": "offered",
+        "shown": "شوي|شوق|شوب"
+      }
+    },
+    {
+      "set": "jo_chat_dialect.typos",
+      "line": 960,
+      "change": "lost",
+      "before": {
+        "context": "الجو بديع اليوم وبفتح",
+        "typed": "للنفس",
+        "intended": "النفس",
+        "kind": "adjacent",
+        "outcome": "offered",
+        "shown": "للنفس|النفس|لنفسك"
+      },
+      "after": {
+        "context": "الجو بديع اليوم وبفتح",
+        "typed": "للنفس",
+        "intended": "النفس",
+        "kind": "adjacent",
+        "outcome": "missed",
+        "shown": "للنفس|لنفسك|لنفسي"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 417,
+      "change": "gained",
+      "before": {
+        "context": "كنت احس فعلا اديش",
+        "typed": "ان",
+        "intended": "انا",
+        "kind": "omission",
+        "outcome": "missed",
+        "shown": "ان|أن|أنا"
+      },
+      "after": {
+        "context": "كنت احس فعلا اديش",
+        "typed": "ان",
+        "intended": "انا",
+        "kind": "omission",
+        "outcome": "offered",
+        "shown": "ان|انا|أن"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 504,
+      "change": "gained",
+      "before": {
+        "context": "ع فكره",
+        "typed": "اننا",
+        "intended": "انا",
+        "kind": "doubled",
+        "outcome": "wrong_fix",
+        "shown": "أننا|اننا|أنا"
+      },
+      "after": {
+        "context": "ع فكره",
+        "typed": "اننا",
+        "intended": "انا",
+        "kind": "doubled",
+        "outcome": "wrong_fix",
+        "shown": "أننا|اننا|انا"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 939,
+      "change": "lost",
+      "before": {
+        "context": "لما قرب ابوي علي حكيتلو",
+        "typed": "باب",
+        "intended": "بابا",
+        "kind": "omission",
+        "outcome": "offered",
+        "shown": "باب|بابا|بالطبع"
+      },
+      "after": {
+        "context": "لما قرب ابوي علي حكيتلو",
+        "typed": "باب",
+        "intended": "بابا",
+        "kind": "omission",
+        "outcome": "missed",
+        "shown": "باب|بالطبع|بالتأكيد"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 950,
+      "change": "gained",
+      "before": {
+        "context": "فتح ع سنابشات و تطلع عالصوره بعدين اخد نفس و بحركه سريعه قدام كل العيله و كل",
+        "typed": "اهعلي",
+        "intended": "اهلي",
+        "kind": "insertion",
+        "outcome": "missed",
+        "shown": "أهلي|اهعلي|اهلين"
+      },
+      "after": {
+        "context": "فتح ع سنابشات و تطلع عالصوره بعدين اخد نفس و بحركه سريعه قدام كل العيله و كل",
+        "typed": "اهعلي",
+        "intended": "اهلي",
+        "kind": "insertion",
+        "outcome": "offered",
+        "shown": "أهلي|اهعلي|اهلي"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 1004,
+      "change": "lost",
+      "before": {
+        "context": "",
+        "typed": "الهم",
+        "intended": "المهم",
+        "kind": "omission",
+        "outcome": "offered",
+        "shown": "الهم|المهم|العمل"
+      },
+      "after": {
+        "context": "",
+        "typed": "الهم",
+        "intended": "المهم",
+        "kind": "omission",
+        "outcome": "missed",
+        "shown": "الهم|العمل|المكان"
+      }
+    },
+    {
+      "set": "jo_human_fresh.typos",
+      "line": 1311,
+      "change": "lost",
+      "before": {
+        "context": "اي حلو",
+        "typed": "عن",
+        "intended": "عنا",
+        "kind": "omission",
+        "outcome": "offered",
+        "shown": "عن|عني|عنا"
+      },
+      "after": {
+        "context": "اي حلو",
+        "typed": "عن",
+        "intended": "عنا",
+        "kind": "omission",
+        "outcome": "missed",
+        "shown": "عن|عني|عندما"
+      }
+    }
+  ]
+}
