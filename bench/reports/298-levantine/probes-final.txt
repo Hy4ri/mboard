@@ -1,0 +1,4 @@
+mboard dev shell: openjdk version "21.0.12" 2026-07-21, adb 1.0.41
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-298b/bench/logs/suggest/20261031-134815.md","context":["شو"],"suggestions":["في","صار","بدك"],"language":"ar","text":"شو ","word":""}
+{"mode":"next","auto":null,"log":"/home/m57/Projects/mboard-298b/bench/logs/suggest/20261031-134816.md","context":["بدي"],"suggestions":["اروح","احكي","اعمل"],"language":"ar","text":"بدي ","word":""}
+{"mode":"complete","auto":null,"log":"/home/m57/Projects/mboard-298b/bench/logs/suggest/20261031-134817.md","context":[],"suggestions":["fix it","fixxit","fixing"],"language":"en","text":"fixxit","word":"fixxit"}
