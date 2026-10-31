@@ -1,5 +1,11 @@
 # Card 298: Levantine continuation expansion
 
+**Size correction:** clean APK growth is **208,744 bytes**, not the earlier incremental
++1.78 MB figure. The full candidate already meets the 600 KB limit. See
+[the pruning/clean-size curve](pruning-followup.md) for three rejected direct
+pruning levels and two bounded-update screens. The original continuation asset
+is retained because pruning loses useful coverage.
+
 Base engine/assets: `be17dc98692fbf8f1fafc277b9734c0b925cf799`.
 Selected replay: `crew298-half`; control: `crew298-base`.
 Both use the same engine, harness, existing split-trained continuation baseline,
@@ -111,8 +117,8 @@ README distinguishes continuation sources from unchanged neural-model training s
 | jordanian_next.tsv | `bd634d87d2ba72bfa5de1e674115d938d56270831b926de27557396536422a1d` | `9e663c29fbb966995b9dfd58f25dc1c85bdec06eaf6dc40b3b97e5bbd6cb33bc` |
 | NOTICE.txt | `cfb3e8fe0d4793ece7ca0eedbfaa4a30994c701b2fecab7d1226adfbf632c436` | `c6efddbf1368940b1c730f183140601c870d21ccf2d2a0c64a781f6f1eea8399` |
 
-Final APK: **21,043,747 bytes**; baseline **19,261,469 bytes**; delta **+1,782,278 bytes**.
-APK SHA-256: `e8c3b39ce19379a27c5adecf72c415f0412ba8d991e00782a9a2de8009dcb806`.
+Final clean APK: **19,470,381 bytes**; credit-matched clean baseline **19,261,637 bytes**; delta **+208,744 bytes**.
+APK SHA-256: `0ffc32d41392572bca4617e608d13537dca8e1fbfcf1e23b21dd1b37671c78e2`.
 
 Final probes (all `auto=null`):
 - `شو ` -> `في | صار | بدك` (baseline `في | بدك | صار`).
@@ -144,7 +150,7 @@ flock /tmp/crew-mboard/bench.lock nix develop -c bash -c 'cd bench; bash run.sh 
 flock /tmp/crew-mboard/bench.lock nix develop -c bash -c 'cd bench; bash run.sh crew298-half --assets "$PWD/reports/298-levantine/half-assets"'
 python3 -I bench/scripts/summary.py bench/results/crew298-half bench/results/crew298-base
 python3 -I bench/reports/298-levantine/compare.py bench/results/crew298-base bench/results/crew298-half
-flock /tmp/crew-mboard/bench.lock nix develop -c bash -c 'set -euo pipefail; ktlint -F "app/src/main/java/**/*.kt" "bench/src/**/*.kt"; ktlint "app/src/main/java/**/*.kt" "bench/src/**/*.kt"; ./gradlew assembleDebug'
+flock /tmp/crew-mboard/bench.lock nix develop -c bash -c 'set -euo pipefail; ktlint -F "app/src/main/java/**/*.kt" "bench/src/**/*.kt"; ktlint "app/src/main/java/**/*.kt" "bench/src/**/*.kt"; ./gradlew :app:clean assembleDebug'
 nix develop -c timeout 300 bash -c 'bench/suggest.sh --json --assets "$PWD/bench/reports/298-levantine/half-assets" --lang ar --dialect "شو "; bench/suggest.sh --json --assets "$PWD/bench/reports/298-levantine/half-assets" --lang ar --dialect "بدي "; bench/suggest.sh --json --assets "$PWD/bench/reports/298-levantine/half-assets" --lang en "fixxit"'
 ```
 
