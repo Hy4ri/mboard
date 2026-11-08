@@ -226,19 +226,9 @@ class MboardService : InputMethodService() {
                 layoutDirection = View.LAYOUT_DIRECTION_LTR
                 setBackgroundColor(ui.background)
                 addView(
-                    LinearLayout(this@MboardService).apply {
-                        gravity = Gravity.CENTER_VERTICAL
-                        addView(
-                            HorizontalScrollView(this@MboardService).apply {
-                                isHorizontalScrollBarEnabled = false
-                                addView(toolbar)
-                            },
-                            LinearLayout.LayoutParams(0, ui.dp(Tokens.TOOLBAR_HEIGHT), 1f),
-                        )
-                        addView(
-                            ui.icon(R.drawable.ic_settings, "Settings") { openSettings() },
-                            LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TOOLBAR_HEIGHT)),
-                        )
+                    HorizontalScrollView(this@MboardService).apply {
+                        isHorizontalScrollBarEnabled = false
+                        addView(toolbar)
                     },
                     LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.TOOLBAR_HEIGHT)),
                 )
@@ -321,6 +311,7 @@ class MboardService : InputMethodService() {
                 updateAuxiliary()
             }
         }
+        slot(R.drawable.ic_settings, "Settings") { openSettings() }
         slot(R.drawable.ic_keyboard_hide, "Hide keyboard") { requestHideSelf(0) }
     }
 
