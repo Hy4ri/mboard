@@ -107,9 +107,10 @@ class SuggestionStrip(
         status.tooltipText = message
         status.visibility = if (visible.isEmpty()) VISIBLE else GONE
         buttons.forEachIndexed { index, button ->
-            val word = visible.getOrNull(index)
+            val rank = SLOT_ORDER[index]
+            val word = visible.getOrNull(rank)
             choices[index] = word?.let { Choice(it, prefix, editor) }
-            val correction = highlightFirst && index == 0 && word != null
+            val correction = highlightFirst && rank == 0 && word != null
             button.text = word.orEmpty()
             button.setTextColor(if (correction) ui.accentInk else ui.text)
             button.typeface = if (correction) MEDIUM else android.graphics.Typeface.DEFAULT
@@ -143,5 +144,8 @@ class SuggestionStrip(
 
     private companion object {
         val MEDIUM: android.graphics.Typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
+
+        /** Main suggestion in the middle slot, flanked by the second and third choices. */
+        val SLOT_ORDER = intArrayOf(1, 0, 2)
     }
 }
