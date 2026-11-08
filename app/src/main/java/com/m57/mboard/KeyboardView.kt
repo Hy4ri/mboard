@@ -219,21 +219,28 @@ class KeyboardView(
         object : Runnable {
             override fun run() {
                 if (pointer == MotionEvent.INVALID_POINTER_ID || current?.key != Keys.BACKSPACE || origin?.key != Keys.BACKSPACE) return
-                // Hold time picks the pace: letters, then word levels 1-3 that each delete faster.
+                // Smooth ramp: characters speed up continuously, then whole words take over and also speed up.
                 val held = android.os.SystemClock.uptimeMillis() - deleteStart
+                val words = held >= DELETE_WORD_AFTER_MS
                 val interval =
-                    when {
-                        held < 900L -> 50L
-                        held < 1_800L -> 200L
-                        held < 2_800L -> 120L
-                        else -> 70L
+                    if (words) {
+                        ramp(held - DELETE_WORD_AFTER_MS, 2_000L, 140L, 60L)
+                    } else {
+                        ramp(held - 400L, DELETE_WORD_AFTER_MS - 400L, 70L, 25L)
                     }
                 deleteRepeated = true
-                onKey(if (held < 900L) Keys.BACKSPACE else Keys.DELETE_WORD)
+                onKey(if (words) Keys.DELETE_WORD else Keys.BACKSPACE)
                 postDelayed(this, interval)
             }
         }
     private var deleteStart = 0L
+
+    private fun ramp(
+        elapsed: Long,
+        span: Long,
+        from: Long,
+        to: Long,
+    ): Long = from + (to - from) * elapsed.coerceIn(0L, span) / span
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -831,7 +838,7 @@ class KeyboardView(
             deleteStart = android.os.SystemClock.uptimeMillis()
             deleteRepeated = false
             onKey(Keys.BACKSPACE)
-            postDelayed(repeatDelete, 400L)
+            postDelayed(repeatDelete, 350L)
         }
         invalidate()
     }
@@ -881,6 +888,7 @@ class KeyboardView(
 
     private companion object {
         const val DELETE_SWIPE_START_DP = 20
+        const val DELETE_WORD_AFTER_MS = 1_500L
         const val DELETE_SWIPE_STEP_DP = 28
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
         const val SCRUB_STEP_DP = 12
