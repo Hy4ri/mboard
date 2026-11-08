@@ -135,21 +135,28 @@ class OneHandSurface(
 
     private fun cellParams() =
         LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
-            setMargins(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
+            val gap = ui.dp(Tokens.KEY_GAP / 2)
+            setMargins(gap, gap, gap, gap)
         }
 
     private fun panelColumn(description: String) =
         LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(ui.background)
-            setPadding(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
+            val gap = ui.dp(Tokens.KEY_GAP / 2)
+            setPadding(gap, gap, gap, gap)
             contentDescription = description
         }
 
     private fun keyBackground(fill: Int) =
-        ui.ripple(fill).apply {
+        ui.keyChip(fill).apply {
             if (ui.needsOutline(fill)) {
-                (getDrawable(0) as? android.graphics.drawable.GradientDrawable)?.setStroke(ui.dp(Tokens.SPACE_1 / 4), ui.keyEdge)
+                val body = getDrawable(0) as? android.graphics.drawable.LayerDrawable
+                (
+                    body?.getDrawable(
+                        1,
+                    ) as? android.graphics.drawable.GradientDrawable
+                )?.setStroke(ui.dp(Tokens.KEY_OUTLINE_WIDTH), ui.keyEdge)
             }
         }
 
@@ -165,10 +172,20 @@ class OneHandSurface(
                                 R.drawable.ic_backspace,
                                 context.getString(R.string.action_delete),
                             ) { onDialKey(key) }
-                            .apply { background = keyBackground(ui.functionSurface) }
+                            .apply {
+                                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                                minimumWidth = 0
+                                minimumHeight = 0
+                                setPadding(ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_2))
+                                background = keyBackground(ui.functionSurface)
+                            }
                     } else {
                         ui.button(key) { onDialKey(key) }.apply {
                             setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, Tokens.KEY_LABEL)
+                            setPadding(0, 0, 0, 0)
+                            minHeight = 0
+                            minimumHeight = 0
+                            includeFontPadding = false
                             background = keyBackground(ui.surface)
                         }
                     }
