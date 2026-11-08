@@ -87,10 +87,10 @@ class Layout(
         val CALC =
             Layout(
                 listOf(
-                    listOf("7", "8", "9", "÷", Keys.BACKSPACE),
-                    listOf("4", "5", "6", "×", "("),
-                    listOf("1", "2", "3", "−", ")"),
-                    listOf(".", "0", "%", "+", Keys.ENTER),
+                    listOf("+", "1", "2", "3", "÷"),
+                    listOf("−", "4", "5", "6", "×"),
+                    listOf("(", "7", "8", "9", Keys.BACKSPACE),
+                    listOf(")", "%", "0", ".", Keys.ENTER),
                 ),
                 grid = true,
             )

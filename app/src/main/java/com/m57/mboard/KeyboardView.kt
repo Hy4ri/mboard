@@ -327,12 +327,9 @@ class KeyboardView(
         val edge = Tokens.KEY_OUTLINE_WIDTH * density
         cells.forEach { cell ->
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
-            val calc = layout == Layout.CALC
-            val equals = calc && cell.key == Keys.ENTER
-            val special = cell.key in SPECIAL || (calc && cell.key in CALC_OPERATORS)
+            val special = cell.key in SPECIAL
             val base =
                 when {
-                    equals -> ui.accent
                     cell.key == Keys.SHIFT && (shifted || capsLocked) -> ui.accentContainer
                     special -> ui.functionSurface
                     else -> ui.surface
@@ -353,7 +350,7 @@ class KeyboardView(
                 canvas.drawRoundRect(cell.rect, radius, radius, paint)
                 paint.style = Paint.Style.FILL
             }
-            val foreground = if (equals) ui.onAccent else ui.text
+            val foreground = ui.text
             val drawable =
                 when (cell.key) {
                     Keys.GLOBE -> {
@@ -883,8 +880,7 @@ class KeyboardView(
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_WORD_AFTER_MS = 1_500L
         const val DELETE_SWIPE_STEP_DP = 28
-        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
         const val SCRUB_STEP_DP = 12
-        val CALC_OPERATORS = setOf("÷", "×", "−", "+", "(", ")", "%")
+        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
     }
 }
