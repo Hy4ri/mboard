@@ -61,8 +61,8 @@ class Layout(
                 listOf(
                     digits,
                     "@#\$_%-+()/".map(Char::toString),
-                    "*\"':;!?,".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.LETTERS, Keys.PAD, Keys.MORE_SYMBOLS, Keys.SPACE, ".", Keys.ENTER),
+                    listOf(Keys.MORE_SYMBOLS) + "*\"':;!?".map(Char::toString) + Keys.BACKSPACE,
+                    listOf(Keys.LETTERS, Keys.PAD, ",", Keys.SPACE, ".", Keys.ENTER),
                 ),
             )
         val SYMBOLS_MORE =
@@ -70,8 +70,8 @@ class Layout(
                 listOf(
                     "[]{}<>^\\|~".map(Char::toString),
                     "€£¥₹¢©®™°•".map(Char::toString),
-                    "=&…¿¡·`'".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.LETTERS, Keys.SYMBOLS, Keys.GLOBE, Keys.SPACE, ".", Keys.ENTER),
+                    listOf(Keys.SYMBOLS) + "=&…¿¡·`".map(Char::toString) + Keys.BACKSPACE,
+                    listOf(Keys.LETTERS, Keys.GLOBE, ",", Keys.SPACE, ".", Keys.ENTER),
                 ),
             )
         val NUMPAD =

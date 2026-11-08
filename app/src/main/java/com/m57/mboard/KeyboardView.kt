@@ -263,14 +263,7 @@ class KeyboardView(
     private fun weight(key: String) =
         when (key) {
             Keys.SPACE -> {
-                when {
-                    layout.grid -> 1f
-
-                    // Symbols gains the pad toggle; a narrower space keeps the row width unchanged.
-                    layout == Layout.SYMBOLS -> 3f
-
-                    else -> 4f
-                }
+                if (layout.grid) 1f else 4f
             }
 
             Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> {
@@ -282,7 +275,7 @@ class KeyboardView(
             }
 
             // Pads are grids: every key is one column wide so the rows line up.
-            Keys.SYMBOLS, Keys.LETTERS -> {
+            Keys.SYMBOLS, Keys.LETTERS, Keys.MORE_SYMBOLS -> {
                 if (layout.grid) 1f else 1.5f
             }
 
