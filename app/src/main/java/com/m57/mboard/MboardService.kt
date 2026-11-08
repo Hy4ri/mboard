@@ -368,6 +368,29 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
+    /** Back from a panel (emoji, clipboard, calculator) returns to the keys instead of hiding the keyboard. */
+    override fun onKeyDown(
+        keyCode: Int,
+        event: android.view.KeyEvent,
+    ): Boolean {
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
+            event.startTracking()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(
+        keyCode: Int,
+        event: android.view.KeyEvent,
+    ): Boolean {
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
+            setMode(Mode.KEYS)
+            return true
+        }
+        return super.onKeyUp(keyCode, event)
+    }
+
     override fun onStartInput(
         info: EditorInfo?,
         restarting: Boolean,
