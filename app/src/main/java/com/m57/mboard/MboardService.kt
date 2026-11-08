@@ -350,10 +350,11 @@ class MboardService : InputMethodService() {
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
         // Browse panels own their header and fill the keys plus strip area, keeping the keyboard height constant.
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
-        auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
+        auxiliary?.visibility = if (clipboardOpen || (next == Mode.KEYS && !stripNeeded())) View.GONE else View.VISIBLE
         panelBody?.let { body ->
             // Panels replace the hidden strip too, so opening one never shrinks the keyboard and small boards keep room.
-            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(Tokens.STRIP_HEIGHT) else 0
+            // Number pads have no strip row to replace, so their panels keep the pad's own height.
+            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen && stripNeeded()) ui.dp(Tokens.STRIP_HEIGHT) else 0
             if (body.layoutParams != null && body.layoutParams.height != height) {
                 body.layoutParams = body.layoutParams.apply { this.height = height }
             }
@@ -832,9 +833,17 @@ class MboardService : InputMethodService() {
         return true
     }
 
+    /**
+     * PIN, number, phone and date pads take digits, not words: they drop the strip row entirely.
+     * Anything that must still reach those fields from the strip (a copied code to quick-paste)
+     * returns true here so the row comes back for it. The toolbar Paste button is unaffected.
+     */
+    private fun stripNeeded(): Boolean = !fieldPolicy.numeric
+
     private fun updateAuxiliary() {
         val bar = auxiliary ?: return
         if (mode == Mode.KEYS) {
+            bar.visibility = if (stripNeeded()) View.VISIBLE else View.GONE
             bar.layoutParams = bar.layoutParams.apply { height = ui.dp(Tokens.STRIP_HEIGHT) }
             renderSuggestions(bar)
             return
