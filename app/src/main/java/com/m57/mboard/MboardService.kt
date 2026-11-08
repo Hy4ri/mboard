@@ -189,7 +189,7 @@ class MboardService : InputMethodService() {
     override fun onCreateInputView(): View {
         ui = BoardUi(this)
         visualKey = settings.visualKey()
-        val kv = KeyboardView(this, ::onKey, ::toggleLanguage, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
+        val kv = KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
         keyboard = kv
         kv.language = language
         kv.layout = defaultLayout
@@ -245,10 +245,24 @@ class MboardService : InputMethodService() {
                 addView(auxiliary, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.STRIP_HEIGHT)))
                 addView(body, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, kv.keysHeight))
                 setOnApplyWindowInsetsListener { target, insets ->
-                    val bars = insets.getInsets(WindowInsets.Type.navigationBars())
-                    target.setPadding(bars.left, 0, bars.right, bars.bottom)
+                    val bars = insets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars())
+                    if (target.paddingBottom != bars.bottom || target.paddingLeft != bars.left || target.paddingRight != bars.right) {
+                        target.setPadding(bars.left, 0, bars.right, bars.bottom)
+                    }
                     insets
                 }
+                // The first insets pass can run before this listener sees real bars, leaving the bottom row
+                // cropped until a touch forces another pass. Ask again on attach and after the first layout.
+                addOnAttachStateChangeListener(
+                    object : View.OnAttachStateChangeListener {
+                        override fun onViewAttachedToWindow(v: View) {
+                            v.requestApplyInsets()
+                            v.post { v.requestApplyInsets() }
+                        }
+
+                        override fun onViewDetachedFromWindow(v: View) = Unit
+                    },
+                )
             }
         setMode(Mode.KEYS)
         return root
