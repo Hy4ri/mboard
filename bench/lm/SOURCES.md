@@ -76,7 +76,7 @@ The cleaned Shami text contributes weight 3; synthetic lines contribute weight 1
 
 ## Arabic stem-context aggregation (experiment, NOT shipped)
 
-Two runtime variants were measured and rejected (see bench/reports/quality/research-gaps/execution.md); the tables are not bundled. The tooling is kept for reproduction.
+Two runtime variants were measured and rejected; the tables are not bundled. The tooling is kept for reproduction.
 
 Deterministic backoff aggregation groups one-word context rows from existing training intermediates (`out_ar/next_ar.tsv` and `out_jo_split/next_jo.tsv`) under a shared stripped stem key. Only contexts with at least two distinct source contexts and at least one stripped source context are retained, preventing redundant single-form duplicates.
 
@@ -118,8 +118,7 @@ retain the source attribution and data-license terms above; they have no new
 corpus license. The three quantized binary models are bundled in the app; together they occupy
 1,846,000 bytes. They score only existing next-word and one-letter completion candidates.
 
-See `../reports/neural-reranker-299.md` for fixed-seed training, the input/output
-SHA-256 manifest, full quality results, manual-target losses/gains, size and latency.
+See `reranker_manifest.json` for fixed-seed training and the input/output SHA-256 manifest.
 The accepted feature is ON by default in the app and desktop bench. The first
 candidate lost manual typo targets; the final candidate limits neural completion
 scoring to one-letter prefixes and preserves every measured typo row. Small old-set
@@ -165,6 +164,3 @@ Reproduce only the accepted continuation refresh (from the repo root):
   jo_train_2.txt:2 jo_train_3.txt:2 jo_train_4a.txt:2 jo_train_4b.txt:2 jo_train_4c.txt:2)
 python3 -I bench/lm/make_assets.py --only-jordanian-next --dialect-source bench/lm/out_298_half
 ```
-
-See `bench/reports/298-levantine/README.md` for full comparisons, rejected weights,
-manual-target changes, APK growth and open Android acceptance.

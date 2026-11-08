@@ -4,3 +4,7 @@ local.properties
 .idea/
 *.iml
 .kotlin/
+.hermes/
+/logs/
+__pycache__/
+*.py[cod]

@@ -1,6 +1,8 @@
 data/raw/
+data/*_fresh_touch_typos.tsv
 build/
 results/
 logs/
+reports/
 .gradle/
 .kotlin/

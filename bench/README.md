@@ -84,9 +84,7 @@ Training totals are approximate counts after singleton-context pruning, and comp
 
 `*_touch_typos.tsv` contains synthetic Gaussian evidence in two extra columns: per-letter likelihood
 maps and raw points. The current runtime and runner do **not** consume this evidence. Touch integration
-was tried and deferred by m57 after two failed quality gates; its complete source, jars and commands
-remain in `bench/reports/quality/research-gaps/engines/touch-v1`, `engines/touch-v2` and `touch-v*-commands.log`.
-Use those frozen engines for experimental replay, not today's label-only runner.
+was tried and deferred by m57 after two failed quality gates.
 
 Reproduce a dataset without changing the original four-column datasets:
 
