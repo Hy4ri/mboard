@@ -68,7 +68,7 @@ class KeyboardView(
             invalidate()
         }
     private var enterDrawable: Drawable? = icon(enterIcon)
-    var enterLabel: String = "Enter"
+    var enterLabel: String = context.getString(R.string.key_enter)
         set(value) {
             field = value
             invalidate()
@@ -448,7 +448,7 @@ class KeyboardView(
             }
 
             Keys.SPACE -> {
-                if (scrubbing) "Move cursor" else language.label
+                if (scrubbing) context.getString(R.string.key_move_cursor) else language.label
             }
 
             Keys.ENTER -> {
@@ -627,21 +627,23 @@ class KeyboardView(
     private fun accessibleLabel(key: String) =
         when (key) {
             Keys.SHIFT -> {
-                if (capsLocked) {
-                    "Caps lock on"
-                } else if (shifted) {
-                    "Shift on"
-                } else {
-                    "Shift"
-                }
+                context.getString(
+                    if (capsLocked) {
+                        R.string.key_caps_lock_on
+                    } else if (shifted) {
+                        R.string.key_shift_on
+                    } else {
+                        R.string.key_shift
+                    },
+                )
             }
 
             Keys.GLOBE -> {
-                "Change language"
+                context.getString(R.string.key_change_language)
             }
 
             Keys.BACKSPACE -> {
-                "Backspace"
+                context.getString(R.string.key_backspace)
             }
 
             Keys.ENTER -> {
@@ -649,23 +651,23 @@ class KeyboardView(
             }
 
             Keys.SPACE -> {
-                "Space"
+                context.getString(R.string.key_space)
             }
 
             Keys.SYMBOLS -> {
-                "Numbers and symbols"
+                context.getString(R.string.key_numbers_symbols)
             }
 
             Keys.MORE_SYMBOLS -> {
-                "More symbols"
+                context.getString(R.string.key_more_symbols)
             }
 
             Keys.PAD -> {
-                "Number pad"
+                context.getString(R.string.key_number_pad)
             }
 
             Keys.LETTERS -> {
-                "Letters"
+                context.getString(R.string.key_letters)
             }
 
             else -> {

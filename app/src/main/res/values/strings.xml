@@ -1,5 +1,370 @@
 <resources>
-    <string name="app_name">mboard</string>
-    <string name="subtype_en">English</string>
-    <string name="subtype_ar">العربية</string>
+    <string name="app_name" translatable="false">mboard</string>
+    <string name="subtype_en" translatable="false">English</string>
+    <string name="subtype_ar" translatable="false">العربية</string>
+
+    <!-- Language & dialect names -->
+    <string name="language_en">English</string>
+    <string name="language_ar">Arabic</string>
+    <string name="languages_and">%1$s and %2$s</string>
+    <string name="dialect_jordanian_title">Jordanian Arabic</string>
+    <string name="dialect_jordanian_summary">Add local chat words like كيفك، بدي، هسا</string>
+
+    <!-- Common buttons & states -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_apply">Apply</string>
+    <string name="action_default">Default</string>
+    <string name="action_undo">Undo</string>
+    <string name="state_on">on</string>
+    <string name="state_off">off</string>
+    <string name="state_open">Open</string>
+    <string name="settings_row_a11y">%1$s. %2$s</string>
+
+    <!-- Settings pages -->
+    <string name="page_appearance">Appearance</string>
+    <string name="page_typing">Typing</string>
+    <string name="page_privacy">Clipboard &amp; privacy</string>
+    <string name="page_phrases">Saved phrases</string>
+    <string name="page_playground">Try your keyboard</string>
+    <string name="page_about">About mboard</string>
+
+    <!-- Settings: Home -->
+    <string name="home_note">%1$s. Entirely offline.</string>
+    <string name="status_active">Active keyboard · ready to type</string>
+    <string name="status_enabled">Enabled · choose mboard to start</string>
+    <string name="status_setup">Set up your keyboard</string>
+    <string name="action_enable_mboard">Enable mboard</string>
+    <string name="action_choose_mboard">Choose mboard</string>
+    <string name="section_customize">MAKE IT YOURS</string>
+    <string name="home_appearance_summary">%1$s · %2$s</string>
+    <string name="home_typing_summary">Suggestions %1$s · capitalization %2$s</string>
+    <string name="section_on_device">ON YOUR DEVICE</string>
+    <string name="home_privacy_summary">History %1$s · local controls</string>
+    <string name="home_phrases_summary">Replies, addresses and signatures</string>
+    <string name="section_explore">EXPLORE</string>
+    <string name="home_playground_summary">A separate playground, not another setting</string>
+    <string name="home_about_summary">Gestures, offline tools and credits</string>
+
+    <!-- Settings: Appearance -->
+    <string name="appearance_note">Tune the look and feel. Changes apply to the keyboard immediately.</string>
+    <string name="appearance_preview_title">Preview in playground</string>
+    <string name="appearance_preview_summary">Type with the keyboard as it looks now</string>
+    <string name="section_color">COLOR</string>
+    <string name="appearance_theme_title">Theme</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="appearance_accent_title">Accent preset</string>
+    <string name="accent_violet">Violet</string>
+    <string name="accent_teal">Teal</string>
+    <string name="accent_amber">Amber</string>
+    <string name="accent_crimson">Crimson</string>
+    <string name="accent_crimson_hex">Crimson · #990000</string>
+    <string name="section_custom_colors">CUSTOM COLORS</string>
+    <string name="color_role_accent">Accent override</string>
+    <string name="color_role_background">Keyboard background</string>
+    <string name="color_role_keys">Letter keys</string>
+    <string name="color_role_special_keys">Function keys</string>
+    <string name="color_role_text">Text &amp; icons</string>
+    <string name="color_theme_default">Theme default</string>
+    <string name="color_reset_title">Reset custom colors</string>
+    <string name="color_reset_summary">Go back to the theme and accent above</string>
+    <string name="custom_colors_note">Custom colors override the theme and accent. Text on accent keys adjusts for contrast.</string>
+    <string name="color_ref_text">text</string>
+    <string name="color_ref_keys">letter keys</string>
+    <string name="color_ref_background">background</string>
+    <string name="color_contrast_ok">Contrast with %1$s %2$s:1</string>
+    <string name="color_contrast_low">Contrast with %1$s %2$s:1 · low, may be hard to see</string>
+    <string name="color_invalid_hex">Enter six hex digits, like #1A2B3C</string>
+    <string name="section_keyboard_layout">KEYBOARD LAYOUT</string>
+    <string name="layout_key_height_title">Key height</string>
+    <string name="layout_key_height_value">%1$d dp</string>
+    <string name="layout_key_height_compact">Compact · 44 dp</string>
+    <string name="layout_key_height_balanced">Balanced · 54 dp</string>
+    <string name="layout_key_height_roomy">Roomy · 64 dp</string>
+    <string name="layout_thumb_title">Thumb mode</string>
+    <string name="thumb_full">Full width</string>
+    <string name="thumb_left">Left thumb</string>
+    <string name="thumb_right">Right thumb</string>
+    <string name="layout_dial_swipe_title">Dial pad swipe</string>
+    <string name="layout_emoji_swipe_title">Recent emoji swipe</string>
+    <string name="edge_off">Off</string>
+    <string name="edge_left">Left edge</string>
+    <string name="edge_right">Right edge</string>
+    <string name="edge_swipe_left">Swipe from left edge</string>
+    <string name="edge_swipe_right">Swipe from right edge</string>
+    <string name="layout_thumb_note">Thumb mode moves real keys; narrow windows use full width to keep them usable. Swipe in from an edge to show its panel; swipe back out to hide it.</string>
+    <string name="section_key_details">KEY DETAILS</string>
+    <string name="detail_number_row_title">Number row</string>
+    <string name="detail_number_row_summary">Keep digits above the letters</string>
+    <string name="detail_key_previews_title">Key previews</string>
+    <string name="detail_key_previews_summary">Show a brief letter preview when pressed</string>
+
+    <!-- Settings: Typing -->
+    <string name="typing_note">Helpful when you want it. Bundled dictionaries plus, if you allow it, words you type, kept on this device.</string>
+    <string name="section_input_assistance">INPUT ASSISTANCE</string>
+    <string name="typing_suggestions_title">Word suggestions</string>
+    <string name="typing_suggestions_summary">%1$s · tap to complete</string>
+    <string name="typing_autocorrect_title">Auto-correction</string>
+    <string name="typing_autocorrect_summary">Fix misspellings on space · backspace undoes</string>
+    <string name="typing_learn_title">Learn my words</string>
+    <string name="typing_learn_summary">Learn frequent words and corrections on this device</string>
+    <string name="typing_emoji_title">Emoji suggestions</string>
+    <string name="typing_emoji_summary">Offer a matching emoji for words like fire or love</string>
+    <string name="typing_arabizi_title">Arabizi suggestions</string>
+    <string name="typing_arabizi_summary">Arabic words for Franco typing like 7abibi · never automatic</string>
+    <string name="typing_capitalize_title">Automatic capitalization</string>
+    <string name="typing_capitalize_summary">Follow the active app\'s capitalization hints</string>
+    <string name="typing_double_space_title">Double-space period</string>
+    <string name="typing_double_space_summary">Two quick spaces after a word insert a period</string>
+    <string name="typing_privacy_note">Learned words fade over time. Recording pauses in protected fields and under the shield. Arabizi works on the English layout and only suggests.</string>
+    <string name="section_quick_gestures">QUICK GESTURES</string>
+    <string name="typing_gestures_title">Try these gestures</string>
+    <string name="typing_gestures_summary">Swipe, hold and slide in the playground</string>
+
+    <!-- Settings: Privacy & Clipboard -->
+    <string name="privacy_note">Nothing leaves this device. History is optional and can be cleared here.</string>
+    <string name="section_clipboard_history">CLIPBOARD HISTORY</string>
+    <string name="privacy_save_clips_title">Save copied text</string>
+    <string name="privacy_save_clips_summary">Only while mboard is visible. Sensitive clips are skipped.</string>
+    <string name="privacy_retention_title">Unpinned retention</string>
+    <string name="retention_5m">5 minutes</string>
+    <string name="retention_1h">1 hour</string>
+    <string name="retention_2h">2 hours</string>
+    <string name="retention_1d">1 day</string>
+    <string name="retention_forever">Until cleared</string>
+    <string name="privacy_retention_note">Pinned clips stay until you delete them. Expired clips are removed on the next history access.</string>
+    <string name="section_private_input">PRIVATE INPUT</string>
+    <string name="privacy_shield_note">The keyboard\'s shield toggles a private session: clipboard recording and word learning pause. Password fields are protected automatically. App no-learning flags stop capture and history; static word completions can still work.</string>
+    <string name="section_clear_data">CLEAR LOCAL DATA</string>
+    <string name="privacy_delete_words_title">Delete learned words</string>
+    <plurals name="privacy_delete_words_summary">
+        <item quantity="one">%d word learned from your typing, plus next-word pairs and remembered correction rejections</item>
+        <item quantity="other">%d words learned from your typing, plus next-word pairs and remembered correction rejections</item>
+    </plurals>
+    <string name="privacy_delete_words_confirm_title">Delete learned words?</string>
+    <string name="privacy_delete_words_confirm_body">Erase local words, pairs and remembered correction rejections. Keep the bundled dictionaries.</string>
+    <string name="toast_learned_words_deleted">Learned words deleted</string>
+    <string name="privacy_delete_clips_title">Delete clipboard history</string>
+    <string name="privacy_delete_clips_summary">Includes pinned clips · asks for confirmation</string>
+    <string name="privacy_delete_clips_confirm_title">Delete clipboard history?</string>
+    <string name="privacy_delete_clips_confirm_body">Pinned clips are included. Your system clipboard is unchanged.</string>
+    <string name="toast_clips_deleted">Clipboard history deleted</string>
+
+    <!-- Settings: Saved phrases -->
+    <string name="phrases_note">Only phrases you explicitly save are stored. Drafts stay in this activity\'s memory.</string>
+    <string name="section_new_phrase">NEW PHRASE</string>
+    <string name="phrases_editor_hint">A reply, address or signature</string>
+    <string name="phrases_editor_a11y">New saved phrase</string>
+    <string name="phrases_reason_empty">Type a phrase</string>
+    <string name="phrases_count">%1$d of %2$d saved</string>
+    <string name="phrases_reason_duplicate">Already saved</string>
+    <string name="phrases_empty_note">No saved phrases yet. Add your first one above.</string>
+    <string name="phrases_delete_a11y">Delete saved phrase</string>
+    <string name="phrases_delete_confirm_title">Delete this phrase?</string>
+    <string name="phrases_delete_confirm_body">This removes it from your keyboard\'s phrase list.</string>
+    <string name="phrases_save_action">Save phrase</string>
+    <string name="toast_phrase_saved">Phrase saved</string>
+    <string name="phrases_add_account_emails">Add emails from device accounts</string>
+    <string name="section_your_phrases">YOUR PHRASES</string>
+    <string name="toast_account_picker_unavailable">Account picker is not available on this device</string>
+    <string name="toast_account_no_email">That account has no email address</string>
+    <string name="toast_account_added">Added %1$s</string>
+    <string name="toast_account_duplicate_or_full">Already saved, or the 40-phrase limit was reached</string>
+
+    <!-- Settings: Playground -->
+    <string name="playground_note">Try typing, gestures and suggestions here without opening another app.</string>
+    <string name="playground_field_title">Field type</string>
+    <string name="playground_field_normal">Normal text</string>
+    <string name="playground_field_number">Number</string>
+    <string name="playground_field_email">Email</string>
+    <string name="playground_field_password">Password</string>
+    <string name="playground_editor_hint">Tap here and start typing</string>
+    <string name="playground_editor_a11y">Typing playground</string>
+    <string name="playground_password_note">Password samples clear on leaving this page, changing field type, or rebuilding appearance. Don\'t enter a real password here.</string>
+    <string name="section_what_to_try">WHAT TO TRY</string>
+    <string name="playground_tips">Slide on space: move cursor
+Slide left from backspace: delete words
+Double-tap Shift: caps lock
+Hold a letter: alternates</string>
+
+    <!-- Settings: About -->
+    <string name="about_note">%1$s. Built for local, quiet typing.</string>
+    <string name="section_offline">OFFLINE BY DESIGN</string>
+    <string name="about_offline_note">No network permission. No sound or vibration. No cloud calls. Learned words stay on this device and can be deleted any time. App data is excluded from Android cloud backup and device transfer.</string>
+    <string name="section_keyboard_tools">KEYBOARD TOOLS</string>
+    <string name="about_tools_note">Emoji: categories, favorites and Arabic/English search.
+Saved phrases: suggested when you start typing them.
+Number pad: tap the dial pad key on the symbols page.
+Calculator: a math pad; = inserts the result.
+Percent: 50%% means 0.5.</string>
+    <string name="section_credits">CREDITS</string>
+    <string name="about_licenses_title">Licenses &amp; word lists</string>
+    <string name="about_licenses_summary">Bundled data, attribution and full notices</string>
+    <string name="about_credits_dialog_title">Credits</string>
+    <string name="about_manage_keyboards_title">Manage keyboards</string>
+    <string name="about_manage_keyboards_summary">Open Android\'s keyboard settings</string>
+    <string name="about_switch_keyboard_title">Switch keyboard</string>
+    <string name="about_switch_keyboard_summary">Open Android\'s keyboard picker</string>
+
+    <!-- Keyboard keys & accessibility -->
+    <string name="key_move_cursor">Move cursor</string>
+    <string name="key_enter">Enter</string>
+    <string name="key_pick">Pick</string>
+    <string name="key_go">Go</string>
+    <string name="key_search">Search</string>
+    <string name="key_send">Send</string>
+    <string name="key_next">Next</string>
+    <string name="key_done">Done</string>
+    <string name="key_previous">Previous</string>
+    <string name="key_shift">Shift</string>
+    <string name="key_shift_on">Shift on</string>
+    <string name="key_caps_lock_on">Caps lock on</string>
+    <string name="key_change_language">Change language</string>
+    <string name="key_backspace">Backspace</string>
+    <string name="key_space">Space</string>
+    <string name="key_numbers_symbols">Numbers and symbols</string>
+    <string name="key_more_symbols">More symbols</string>
+    <string name="key_number_pad">Number pad</string>
+    <string name="key_letters">Letters</string>
+
+    <!-- Toolbar & privacy shield -->
+    <string name="toolbar_off_in_password">Off in password fields</string>
+    <string name="toolbar_slot_off_tooltip">%1$s: off in password fields</string>
+    <string name="toolbar_slot_off_a11y">%1$s, off in password fields</string>
+    <string name="toolbar_paste">Paste</string>
+    <string name="toolbar_clipboard_history">Clipboard history</string>
+    <string name="toolbar_emoji">Emoji</string>
+    <string name="toolbar_calculator">Calculator</string>
+    <string name="shield_password">Shield on for password field. No history recording; static suggestions available</string>
+    <string name="shield_on">Shield on. History recording paused; suggestions available. Tap to turn off</string>
+    <string name="shield_off">Shield off. Tap to pause history recording without disabling suggestions</string>
+    <string name="toolbar_settings">Settings</string>
+    <string name="toolbar_hide_keyboard">Hide keyboard</string>
+
+    <!-- Suggestion strip & statuses -->
+    <string name="strip_default_hint">Type a word for completions</string>
+    <string name="strip_no_editor">No active text editor</string>
+    <string name="strip_selection_active">Selection active · completions paused</string>
+    <string name="strip_no_surrounding_text">App does not expose text for completions</string>
+    <string name="strip_word_too_long">Word is too long for completions</string>
+    <string name="strip_idle_hint">Type a word · completions appear while typing</string>
+    <string name="strip_no_match">No matching completion</string>
+    <string name="strip_number_field">Number field</string>
+    <string name="strip_suggestions_off">Word suggestions off · enable them in Settings</string>
+    <string name="strip_loading_dictionary">Loading %1$s dictionary…</string>
+    <string name="strip_dictionary_failed">Dictionary unavailable · reopen keyboard to retry</string>
+    <string name="strip_suggestions_unavailable">Word suggestions unavailable</string>
+    <string name="strip_preparing">Preparing word completions…</string>
+    <string name="strip_static_suggestions">Static suggestions</string>
+    <string name="strip_saved_addresses">Saved addresses</string>
+    <string name="strip_note_password">%1$s · password field</string>
+    <string name="strip_note_shield">%1$s · shield on</string>
+    <string name="strip_a11y_autocorrect">Auto-correct to: %1$s</string>
+    <string name="strip_a11y_common">Insert common word: %1$s</string>
+    <string name="strip_a11y_complete">Complete word: %1$s</string>
+
+    <!-- Calculator & Emoji search auxiliary bar -->
+    <string name="calc_placeholder">Type a calculation</string>
+    <string name="calc_no_result">No result</string>
+    <string name="calc_insert_result_a11y">Insert result %1$s</string>
+    <string name="calc_no_result_a11y">No valid calculation result</string>
+    <string name="calc_type_valid_tooltip">Type a valid calculation first</string>
+    <string name="emoji_unavailable">Emoji unavailable</string>
+    <string name="emoji_loading">Loading emoji…</string>
+    <string name="emoji_no_matches">No matches</string>
+    <string name="emoji_type_to_search">Type to search</string>
+    <string name="emoji_favorites_paused">Favorites paused in private mode</string>
+    <string name="emoji_favorite_added">Added to favorites</string>
+    <string name="emoji_favorite_removed">Removed from favorites</string>
+    <string name="emoji_browse_all">Browse all emoji</string>
+    <string name="emoji_search_hint">Search emoji</string>
+    <string name="emoji_search_empty_a11y">Emoji search, empty</string>
+    <string name="emoji_search_query_a11y">Emoji search: %1$s</string>
+    <string name="emoji_clear_search">Clear search</string>
+
+    <!-- IME messages -->
+    <string name="msg_app_rejected_address">This app did not accept the address</string>
+    <string name="msg_app_rejected_emoji">This app did not accept the emoji</string>
+    <string name="msg_app_rejected_completion">This app did not accept the completion</string>
+    <string name="msg_nothing_to_paste">Nothing to paste</string>
+    <string name="msg_app_rejected_text">This app did not accept the text</string>
+    <string name="msg_app_ignored_action">This app did not handle the action</string>
+
+    <!-- Clipboard panel -->
+    <string name="clip_panel_title">Clipboard</string>
+    <string name="clip_paste_current">Paste current system clipboard</string>
+    <string name="clip_no_plain_text">No plain text copied</string>
+    <string name="clip_unavailable">Clipboard is not available</string>
+    <string name="clip_clear_unpinned">Clear unpinned</string>
+    <string name="clip_confirm_clear">Confirm clear</string>
+    <string name="clip_confirm_clear_a11y">Confirm clearing unpinned clips</string>
+    <string name="clip_clear_unpinned_a11y">Clear unpinned clips, keeps pinned clips</string>
+    <string name="clip_nothing_to_clear">Nothing to clear</string>
+    <plurals name="clip_count">
+        <item quantity="one">%d clip</item>
+        <item quantity="other">%d clips</item>
+    </plurals>
+    <plurals name="clip_pinned_count">
+        <item quantity="one">%d pinned</item>
+        <item quantity="other">%d pinned</item>
+    </plurals>
+    <string name="clip_header_counts">%1$s · %2$s</string>
+    <string name="clip_deleted">Clip deleted</string>
+    <string name="clip_restore_failed">Clip changed, expired, or the pin limit was reached</string>
+    <string name="clip_empty_state">Nothing saved yet
+
+Only clips copied while mboard is visible appear here. Sensitive clips and clips over 20,000 characters are not saved.</string>
+    <string name="clip_paste_a11y">Paste clip: %1$s</string>
+    <string name="clip_paste_pinned_a11y">Paste pinned clip: %1$s</string>
+    <string name="clip_pin">Pin clip</string>
+    <string name="clip_unpin">Unpin clip</string>
+    <string name="clip_pin_limit">Maximum 30 pinned clips, or clip expired</string>
+    <string name="clip_delete">Delete clip</string>
+
+    <!-- Emoji panel -->
+    <string name="emoji_clear_recent_a11y">Clear recent emoji, keeps favorites</string>
+    <string name="emoji_clear_recent_tooltip">Clear recent</string>
+    <string name="emoji_confirm_clear_recent">Tap again to clear recent</string>
+    <string name="emoji_confirm_clear_recent_a11y">Confirm clearing recent emoji</string>
+    <string name="emoji_header_category">Emoji · %1$s</string>
+    <string name="emoji_cat_recent">Recent</string>
+    <string name="emoji_cat_favorites">Favorites</string>
+    <string name="emoji_cat_all">All</string>
+    <string name="emoji_cat_smileys">Smileys &amp; Emotion</string>
+    <string name="emoji_cat_people">People &amp; Body</string>
+    <string name="emoji_cat_animals">Animals &amp; Nature</string>
+    <string name="emoji_cat_food">Food &amp; Drink</string>
+    <string name="emoji_cat_travel">Travel &amp; Places</string>
+    <string name="emoji_cat_activities">Activities</string>
+    <string name="emoji_cat_objects">Objects</string>
+    <string name="emoji_cat_symbols">Symbols</string>
+    <string name="emoji_cat_flags">Flags</string>
+    <string name="emoji_data_unavailable">Emoji data is unavailable</string>
+    <string name="emoji_empty_recent">No recent emoji available. Pick one in All to start.</string>
+    <string name="emoji_empty_favorites">Hold any emoji to save it here.</string>
+    <string name="emoji_empty_category">No emoji in this category on this device.</string>
+    <string name="emoji_cell_favorite_a11y">%1$s, favorite</string>
+
+    <!-- One-handed rail & edge panels -->
+    <string name="one_hand_position_a11y">One-handed keyboard position</string>
+    <string name="panel_shown_a11y">%1$s shown</string>
+    <string name="panel_hidden_a11y">%1$s hidden</string>
+    <string name="panel_dial_pad">Dial pad</string>
+    <string name="panel_recent_emoji">Recent emoji</string>
+    <string name="panel_recent_emoji_empty">No recent emoji yet</string>
+    <string name="panel_insert_emoji_a11y">Insert %1$s</string>
+    <string name="panel_open_all_emoji">Open all emoji</string>
+    <string name="rail_keyboard_left">Keyboard
+left</string>
+    <string name="rail_keyboard_right">Keyboard
+right</string>
+    <string name="rail_positioned_left_a11y">Keyboard positioned left</string>
+    <string name="rail_positioned_right_a11y">Keyboard positioned right</string>
+    <string name="rail_full_width">Full width keyboard</string>
+    <string name="rail_move_right">Move keyboard right</string>
+    <string name="rail_move_left">Move keyboard left</string>
 </resources>

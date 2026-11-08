@@ -18,22 +18,26 @@ class ClipboardPanel(
     private val ui = BoardUi(context)
     private val list = LinearLayout(context).apply { orientation = VERTICAL }
     private val scroller = ScrollView(context).apply { addView(list) }
-    private val header = ui.panelHeader("Clipboard")
+    private val header = ui.panelHeader(context.getString(R.string.clip_panel_title))
     private val undoRow = LinearLayout(context).apply { gravity = Gravity.CENTER_VERTICAL }
     private var deleted: Clip? = null
     private var confirmingClear = false
     private val pasteCurrent =
-        ui.icon(R.drawable.ic_paste, "Paste current system clipboard") {
+        ui.icon(R.drawable.ic_paste, context.getString(R.string.clip_paste_current)) {
             try {
                 val clip = context.getSystemService(android.content.ClipboardManager::class.java).primaryClip
                 val text = if (clip != null && clip.itemCount > 0) clip.getItemAt(0).text?.toString() else null
-                if (text != null) onPaste(text) else Toast.makeText(context, "No plain text copied", Toast.LENGTH_SHORT).show()
+                if (text != null) {
+                    onPaste(text)
+                } else {
+                    Toast.makeText(context, R.string.clip_no_plain_text, Toast.LENGTH_SHORT).show()
+                }
             } catch (_: SecurityException) {
-                Toast.makeText(context, "Clipboard is not available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.clip_unavailable, Toast.LENGTH_SHORT).show()
             }
         }
     private val clear =
-        ui.button("Clear unpinned") {
+        ui.button(context.getString(R.string.clip_clear_unpinned)) {
             val clips = store.all()
             val hasUnpinned = clips.any { !it.pinned }
             if (hasUnpinned) {
@@ -65,38 +69,45 @@ class ClipboardPanel(
         val clips = store.all()
         val totalCount = clips.size
         val pinnedCount = clips.count { it.pinned }
-        val clipsLabel = if (totalCount == 1) "1 clip" else "$totalCount clips"
-        val pinnedLabel = if (pinnedCount == 1) "1 pinned" else "$pinnedCount pinned"
-        header.title.text = "$clipsLabel · $pinnedLabel"
+        val res = context.resources
+        val clipsLabel = res.getQuantityString(R.plurals.clip_count, totalCount, totalCount)
+        val pinnedLabel = res.getQuantityString(R.plurals.clip_pinned_count, pinnedCount, pinnedCount)
+        header.title.text = context.getString(R.string.clip_header_counts, clipsLabel, pinnedLabel)
 
         val hasUnpinned = clips.any { !it.pinned }
-        clear.text = if (confirmingClear) "Confirm clear" else "Clear unpinned"
+        clear.text = context.getString(if (confirmingClear) R.string.clip_confirm_clear else R.string.clip_clear_unpinned)
         ui.setEnabledLook(clear, hasUnpinned)
         clear.tooltipText =
-            if (hasUnpinned) {
-                if (confirmingClear) "Confirm clearing unpinned clips" else "Clear unpinned"
-            } else {
-                "Nothing to clear"
-            }
+            context.getString(
+                if (hasUnpinned) {
+                    if (confirmingClear) R.string.clip_confirm_clear_a11y else R.string.clip_clear_unpinned
+                } else {
+                    R.string.clip_nothing_to_clear
+                },
+            )
         clear.contentDescription =
-            if (confirmingClear) {
-                "Confirm clearing unpinned clips"
-            } else {
-                if (hasUnpinned) "Clear unpinned clips, keeps pinned clips" else "Nothing to clear"
-            }
+            context.getString(
+                if (confirmingClear) {
+                    R.string.clip_confirm_clear_a11y
+                } else if (hasUnpinned) {
+                    R.string.clip_clear_unpinned_a11y
+                } else {
+                    R.string.clip_nothing_to_clear
+                },
+            )
 
         undoRow.removeAllViews()
         deleted?.let { clip ->
             undoRow.addView(
-                ui.label("Clip deleted", Tokens.TEXT_BODY, true).apply {
-                    setPadding(ui.dp(Tokens.SPACE_3), 0, 0, 0)
+                ui.label(context.getString(R.string.clip_deleted), Tokens.TEXT_BODY, true).apply {
+                    setPaddingRelative(ui.dp(Tokens.SPACE_3), 0, 0, 0)
                 },
                 LayoutParams(0, ui.dp(Tokens.TARGET_MIN), 1f),
             )
             undoRow.addView(
-                ui.button("Undo") {
+                ui.button(context.getString(R.string.action_undo)) {
                     if (!store.restore(clip)) {
-                        Toast.makeText(context, "Clip changed, expired, or the pin limit was reached", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.clip_restore_failed, Toast.LENGTH_SHORT).show()
                     }
                     deleted = null
                     refresh(false)
@@ -109,7 +120,7 @@ class ClipboardPanel(
             list.addView(
                 ui
                     .label(
-                        "Nothing saved yet\n\nOnly clips copied while mboard is visible appear here. Sensitive clips and clips over 20,000 characters are not saved.",
+                        context.getString(R.string.clip_empty_state),
                         Tokens.TEXT_ROW,
                         true,
                     ).apply {
@@ -148,7 +159,11 @@ class ClipboardPanel(
                 isClickable = true
                 isFocusable = true
                 background = ui.ripple()
-                contentDescription = "Paste ${if (clip.pinned) "pinned " else ""}clip: ${clip.text.take(80)}"
+                contentDescription =
+                    context.getString(
+                        if (clip.pinned) R.string.clip_paste_pinned_a11y else R.string.clip_paste_a11y,
+                        clip.text.take(80),
+                    )
                 setOnClickListener { onPaste(clip.text) }
                 addView(
                     ui.label(preview, Tokens.TEXT_BODY).apply {
@@ -179,17 +194,17 @@ class ClipboardPanel(
         val pinButton =
             ui.icon(
                 if (clip.pinned) R.drawable.ic_push_pin_fill1 else R.drawable.ic_push_pin,
-                if (clip.pinned) "Unpin clip" else "Pin clip",
+                context.getString(if (clip.pinned) R.string.clip_unpin else R.string.clip_pin),
             ) {
                 if (!store.togglePin(clip.text)) {
-                    Toast.makeText(context, "Maximum 30 pinned clips, or clip expired", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.clip_pin_limit, Toast.LENGTH_SHORT).show()
                 }
                 confirmingClear = false
                 refresh(false)
             }
 
         val deleteButton =
-            ui.icon(R.drawable.ic_close, "Delete clip") {
+            ui.icon(R.drawable.ic_close, context.getString(R.string.clip_delete)) {
                 store.remove(clip.text)
                 deleted = clip
                 confirmingClear = false

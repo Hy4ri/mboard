@@ -46,7 +46,7 @@ class OneHandSurface(
         ui.label("", Tokens.TEXT_CAPTION, secondary = true).apply {
             gravity = Gravity.CENTER
             textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            contentDescription = "One-handed keyboard position"
+            contentDescription = context.getString(R.string.one_hand_position_a11y)
             setPadding(ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_1))
         }
 
@@ -90,7 +90,9 @@ class OneHandSurface(
                     }
                     start()
                 }
-            view.announceForAccessibility(if (show) "$name shown" else "$name hidden")
+            view.announceForAccessibility(
+                context.getString(if (show) R.string.panel_shown_a11y else R.string.panel_hidden_a11y, name),
+            )
         }
     }
 
@@ -108,10 +110,12 @@ class OneHandSurface(
         addView(keyboard, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(rail, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
         val list = ArrayList<SidePanel>(2)
-        if (dialEdge == LEFT || dialEdge == RIGHT) list += SidePanel(dialEdge, DIAL_FRACTION, buildDial(), "Dial pad")
+        if (dialEdge == LEFT || dialEdge == RIGHT) {
+            list += SidePanel(dialEdge, DIAL_FRACTION, buildDial(), context.getString(R.string.panel_dial_pad))
+        }
         // One panel per edge: the dial pad keeps its edge if both settings ever collide.
         if ((emojiEdge == LEFT || emojiEdge == RIGHT) && list.none { it.edge == emojiEdge }) {
-            list += SidePanel(emojiEdge, EMOJI_FRACTION, emojiGrid, "Recent emoji", ::fillEmojiGrid)
+            list += SidePanel(emojiEdge, EMOJI_FRACTION, emojiGrid, context.getString(R.string.panel_recent_emoji), ::fillEmojiGrid)
         }
         panels = list
         panels.forEach {
@@ -150,7 +154,7 @@ class OneHandSurface(
         }
 
     private fun buildDial(): LinearLayout {
-        val pad = panelColumn("Dial pad")
+        val pad = panelColumn(context.getString(R.string.panel_dial_pad))
         listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf(".", "0", Keys.BACKSPACE)).forEach { keys ->
             val row = LinearLayout(context)
             keys.forEach { key ->
@@ -159,7 +163,7 @@ class OneHandSurface(
                         ui
                             .icon(
                                 R.drawable.ic_backspace,
-                                "Delete",
+                                context.getString(R.string.action_delete),
                             ) { onDialKey(key) }
                             .apply { background = keyBackground(ui.functionSurface) }
                     } else {
@@ -176,7 +180,7 @@ class OneHandSurface(
     }
 
     private fun buildEmojiGrid() =
-        panelColumn("Recent emoji").apply {
+        panelColumn(context.getString(R.string.panel_recent_emoji)).apply {
             setPadding(
                 ui.dp(Tokens.SPACE_1 / 4),
                 ui.dp(Tokens.SPACE_1 / 4),
@@ -192,7 +196,7 @@ class OneHandSurface(
         val recent = recentEmoji().take(EMOJI_COLUMNS * rowCount)
         if (recent.isEmpty()) {
             emojiGrid.addView(
-                ui.label("No recent emoji yet", Tokens.TEXT_BODY, secondary = true).apply {
+                ui.label(context.getString(R.string.panel_recent_emoji_empty), Tokens.TEXT_BODY, secondary = true).apply {
                     gravity = Gravity.CENTER
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 },
@@ -211,7 +215,7 @@ class OneHandSurface(
                     } else {
                         ui.button(emoji) { onEmoji(emoji) }.apply {
                             textSize = Tokens.TEXT_EMOJI
-                            contentDescription = "Insert $emoji"
+                            contentDescription = context.getString(R.string.panel_insert_emoji_a11y, emoji)
                             // Tight cells: the emoji glyph fills the tile instead of the default button padding.
                             setPadding(0, 0, 0, 0)
                             minHeight = 0
@@ -239,7 +243,7 @@ class OneHandSurface(
     private fun addOpenEmojiButton() {
         emojiGrid.addView(
             ui
-                .icon(R.drawable.ic_mood, "Open all emoji") {
+                .icon(R.drawable.ic_mood, context.getString(R.string.panel_open_all_emoji)) {
                     panels.firstOrNull { it.view === emojiGrid }?.reveal(false)
                     onOpenEmoji()
                 }.apply {
@@ -436,15 +440,19 @@ class OneHandSurface(
             return
         }
         rail.visibility = View.VISIBLE
-        modeLabel.text = if (effectiveMode == LEFT) "Keyboard\nleft" else "Keyboard\nright"
-        modeLabel.contentDescription = "Keyboard positioned $effectiveMode"
+        rail.layoutDirection = View.LAYOUT_DIRECTION_LTR
+        modeLabel.text =
+            context.getString(if (effectiveMode == LEFT) R.string.rail_keyboard_left else R.string.rail_keyboard_right)
+        modeLabel.contentDescription =
+            context.getString(if (effectiveMode == LEFT) R.string.rail_positioned_left_a11y else R.string.rail_positioned_right_a11y)
         rail.addView(modeLabel, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         rail.addView(
-            ui.icon(R.drawable.ic_keyboard, "Full width keyboard") { onModeChange(FULL) },
+            ui.icon(R.drawable.ic_keyboard, context.getString(R.string.rail_full_width)) { onModeChange(FULL) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ui.dp(RAIL_MIN_DP)),
         )
         val switchIcon = if (effectiveMode == LEFT) R.drawable.ic_arrow_forward else R.drawable.ic_arrow_back
-        val switchDescription = if (effectiveMode == LEFT) "Move keyboard right" else "Move keyboard left"
+        val switchDescription =
+            context.getString(if (effectiveMode == LEFT) R.string.rail_move_right else R.string.rail_move_left)
         rail.addView(
             ui.icon(switchIcon, switchDescription) {
                 onModeChange(if (effectiveMode == LEFT) RIGHT else LEFT)

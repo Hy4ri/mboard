@@ -42,9 +42,9 @@ class EmojiPanel(
     var loadFailed = false
     private val adapter = EmojiAdapter(ui, history, { recordingEnabled }, onPick, ::updateItems)
     private val searchButton =
-        ui.icon(R.drawable.ic_search, "Search emoji") { onSearch() }
+        ui.icon(R.drawable.ic_search, context.getString(R.string.emoji_search_hint)) { onSearch() }
     private val clear =
-        ui.icon(R.drawable.ic_delete_sweep, "Clear recent emoji, keeps favorites") {
+        ui.icon(R.drawable.ic_delete_sweep, context.getString(R.string.emoji_clear_recent_a11y)) {
             if (confirmingClear) {
                 removeCallbacks(unarmRunnable)
                 history.clearRecent()
@@ -57,11 +57,10 @@ class EmojiPanel(
                 postDelayed(unarmRunnable, 3000L)
             }
         }
-    private val header = ui.panelHeader("Emoji")
+    private val header = ui.panelHeader(context.getString(R.string.toolbar_emoji))
 
     init {
         orientation = VERTICAL
-        layoutDirection = View.LAYOUT_DIRECTION_LTR
         setBackgroundColor(ui.background)
 
         header.setActions(listOf(searchButton, clear))
@@ -101,13 +100,15 @@ class EmojiPanel(
         ui.setEnabledLook(clear, hasRecent)
         clear.background = ui.ripple(if (confirmingClear) ui.accent else android.graphics.Color.TRANSPARENT)
         clear.imageTintList = ColorStateList.valueOf(if (confirmingClear) ui.onAccent else ui.text)
-        clear.tooltipText = if (confirmingClear) "Tap again to clear recent" else "Clear recent"
-        clear.contentDescription = if (confirmingClear) "Confirm clearing recent emoji" else "Clear recent emoji, keeps favorites"
+        clear.tooltipText =
+            context.getString(if (confirmingClear) R.string.emoji_confirm_clear_recent else R.string.emoji_clear_recent_tooltip)
+        clear.contentDescription =
+            context.getString(if (confirmingClear) R.string.emoji_confirm_clear_recent_a11y else R.string.emoji_clear_recent_a11y)
         header.title.text =
             when {
-                confirmingClear -> "Tap again to clear recent"
-                active == "All" -> "Emoji"
-                else -> "Emoji · $active"
+                confirmingClear -> context.getString(R.string.emoji_confirm_clear_recent)
+                active == "All" -> context.getString(R.string.toolbar_emoji)
+                else -> context.getString(R.string.emoji_header_category, categoryLabel(active))
             }
     }
 
@@ -115,7 +116,7 @@ class EmojiPanel(
         categories.removeAllViews()
         (listOf("Recent", "Favorites", "All") + all.map { it.category }.filter(String::isNotBlank).distinct()).forEach { name ->
             categories.addView(
-                tab(categoryIcon(name), name, active == name) {
+                tab(categoryIcon(name), categoryLabel(name), active == name) {
                     active = name
                     confirmingClear = false
                     removeCallbacks(unarmRunnable)
@@ -139,6 +140,23 @@ class EmojiPanel(
         imageTintList = ColorStateList.valueOf(if (selected) ui.onAccent else ui.text)
         background = ui.ripple(if (selected) ui.accent else android.graphics.Color.TRANSPARENT)
     }
+
+    private fun categoryLabel(name: String) =
+        when (name) {
+            "Recent" -> context.getString(R.string.emoji_cat_recent)
+            "Favorites" -> context.getString(R.string.emoji_cat_favorites)
+            "All" -> context.getString(R.string.emoji_cat_all)
+            "Smileys & Emotion" -> context.getString(R.string.emoji_cat_smileys)
+            "People & Body" -> context.getString(R.string.emoji_cat_people)
+            "Animals & Nature" -> context.getString(R.string.emoji_cat_animals)
+            "Food & Drink" -> context.getString(R.string.emoji_cat_food)
+            "Travel & Places" -> context.getString(R.string.emoji_cat_travel)
+            "Activities" -> context.getString(R.string.emoji_cat_activities)
+            "Objects" -> context.getString(R.string.emoji_cat_objects)
+            "Symbols" -> context.getString(R.string.emoji_cat_symbols)
+            "Flags" -> context.getString(R.string.emoji_cat_flags)
+            else -> name
+        }
 
     private fun categoryIcon(name: String) =
         when (name) {
@@ -166,13 +184,15 @@ class EmojiPanel(
                 else -> all.filter { it.category == active }
             }
         empty.text =
-            when {
-                loadFailed -> "Emoji data is unavailable"
-                !Emojis.ready -> "Loading emoji…"
-                active == "Recent" -> "No recent emoji available. Pick one in All to start."
-                active == "Favorites" -> "Hold any emoji to save it here."
-                else -> "No emoji in this category on this device."
-            }
+            context.getString(
+                when {
+                    loadFailed -> R.string.emoji_data_unavailable
+                    !Emojis.ready -> R.string.emoji_loading
+                    active == "Recent" -> R.string.emoji_empty_recent
+                    active == "Favorites" -> R.string.emoji_empty_favorites
+                    else -> R.string.emoji_empty_category
+                },
+            )
         empty.visibility = if (values.isEmpty()) View.VISIBLE else View.GONE
         adapter.setItems(values)
     }
@@ -222,7 +242,12 @@ private class EmojiAdapter(
         val emoji = items[position]
         val favorite = emoji.text in favorites
         cell.text = emoji.text
-        cell.contentDescription = "${emoji.name}${if (favorite) ", favorite" else ""}"
+        cell.contentDescription =
+            if (favorite) {
+                ui.context.getString(R.string.emoji_cell_favorite_a11y, emoji.name)
+            } else {
+                emoji.name
+            }
         cell.tooltipText = emoji.name
         cell.backgroundTintList = ColorStateList.valueOf(if (favorite) ui.modifier else ui.background)
         // The service records recent emoji only after the editor accepts the commit.
@@ -230,11 +255,11 @@ private class EmojiAdapter(
         cell.setOnLongClickListener {
             val message =
                 if (!mayRecord()) {
-                    "Favorites paused in private mode"
+                    R.string.emoji_favorites_paused
                 } else {
                     history.toggleFavorite(emoji.text)
                     onFavoriteChanged()
-                    if (history.isFavorite(emoji.text)) "Added to favorites" else "Removed from favorites"
+                    if (history.isFavorite(emoji.text)) R.string.emoji_favorite_added else R.string.emoji_favorite_removed
                 }
             Toast.makeText(ui.context, message, Toast.LENGTH_SHORT).show()
             true

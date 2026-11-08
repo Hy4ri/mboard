@@ -151,7 +151,7 @@ class MboardService : InputMethodService() {
         pickedSpaceTail = null
         predictionTrail.reset()
         editorGeneration++
-        suggestionStrip?.render(emptyList(), "", editorGeneration, "No active text editor")
+        suggestionStrip?.render(emptyList(), "", editorGeneration, getString(R.string.strip_no_editor))
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
         query = ""
@@ -223,7 +223,6 @@ class MboardService : InputMethodService() {
         val root =
             LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
-                layoutDirection = View.LAYOUT_DIRECTION_LTR
                 setBackgroundColor(ui.background)
                 addView(
                     HorizontalScrollView(this@MboardService).apply {
@@ -274,7 +273,7 @@ class MboardService : InputMethodService() {
             val off = offInPassword && password
             bar.addView(
                 ui
-                    .icon(res, label) { if (off) message("Off in password fields") else action() }
+                    .icon(res, label) { if (off) message(R.string.toolbar_off_in_password) else action() }
                     .apply {
                         isSelected = active
                         imageTintList = ColorStateList.valueOf(if (active) ui.accentInk else ui.text)
@@ -283,25 +282,33 @@ class MboardService : InputMethodService() {
                             isEnabled = false
                             // Greyed, not hidden; accessibility and tooltip explain why.
                             alpha = ui.disabledAlpha
-                            tooltipText = "$label: off in password fields"
-                            contentDescription = "$label, off in password fields"
+                            tooltipText = getString(R.string.toolbar_slot_off_tooltip, label)
+                            contentDescription = getString(R.string.toolbar_slot_off_a11y, label)
                         }
-                        if (active) stateDescription = "Open"
+                        if (active) stateDescription = getString(R.string.state_open)
                     },
                 LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TOOLBAR_HEIGHT)),
             )
         }
-        slot(R.drawable.ic_paste, "Paste", offInPassword = true) { pasteClipboard() }
-        slot(R.drawable.ic_content_paste, "Clipboard history", mode == Mode.CLIPBOARD, true) { togglePanel(Mode.CLIPBOARD) }
-        slot(R.drawable.ic_mood, "Emoji", mode == Mode.EMOJI || mode == Mode.EMOJI_SEARCH, true) { toggleEmoji() }
-        slot(R.drawable.ic_calculate, "Calculator", mode == Mode.CALCULATOR, true) { togglePanel(Mode.CALCULATOR) }
+        slot(R.drawable.ic_paste, getString(R.string.toolbar_paste), offInPassword = true) { pasteClipboard() }
+        slot(R.drawable.ic_content_paste, getString(R.string.toolbar_clipboard_history), mode == Mode.CLIPBOARD, true) {
+            togglePanel(Mode.CLIPBOARD)
+        }
+        slot(R.drawable.ic_mood, getString(R.string.toolbar_emoji), mode == Mode.EMOJI || mode == Mode.EMOJI_SEARCH, true) {
+            toggleEmoji()
+        }
+        slot(R.drawable.ic_calculate, getString(R.string.toolbar_calculator), mode == Mode.CALCULATOR, true) {
+            togglePanel(Mode.CALCULATOR)
+        }
         val shieldOn = privateSession || password
         val privacyLabel =
-            when {
-                password -> "Shield on for password field. No history recording; static suggestions available"
-                privateSession -> "Shield on. History recording paused; suggestions available. Tap to turn off"
-                else -> "Shield off. Tap to pause history recording without disabling suggestions"
-            }
+            getString(
+                when {
+                    password -> R.string.shield_password
+                    privateSession -> R.string.shield_on
+                    else -> R.string.shield_off
+                },
+            )
         slot(R.drawable.ic_privacy, privacyLabel, shieldOn) {
             if (!password) {
                 privateSession = !privateSession
@@ -311,8 +318,8 @@ class MboardService : InputMethodService() {
                 updateAuxiliary()
             }
         }
-        slot(R.drawable.ic_settings, "Settings") { openSettings() }
-        slot(R.drawable.ic_keyboard_hide, "Hide keyboard") { requestHideSelf(0) }
+        slot(R.drawable.ic_settings, getString(R.string.toolbar_settings)) { openSettings() }
+        slot(R.drawable.ic_keyboard_hide, getString(R.string.toolbar_hide_keyboard)) { requestHideSelf(0) }
     }
 
     private fun openSettings() = startActivity(Intent(this, SetupActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -480,7 +487,7 @@ class MboardService : InputMethodService() {
         val key =
             when (mode) {
                 Mode.CALCULATOR -> EnterKey(0, "=")
-                Mode.EMOJI_SEARCH -> EnterKey(R.drawable.ic_check, "Pick")
+                Mode.EMOJI_SEARCH -> EnterKey(R.drawable.ic_check, getString(R.string.key_pick))
                 else -> enterKey(info)
             }
         keyboard?.enterIcon = key.icon
@@ -488,19 +495,19 @@ class MboardService : InputMethodService() {
     }
 
     private fun enterKey(info: EditorInfo?): EnterKey {
-        val plain = EnterKey(R.drawable.ic_keyboard_return, "Enter")
+        val plain = EnterKey(R.drawable.ic_keyboard_return, getString(R.string.key_enter))
         if (info == null || info.imeOptions and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0) return plain
         info.actionLabel
             ?.toString()
             ?.takeIf { it.isNotBlank() }
             ?.let { return EnterKey(R.drawable.ic_keyboard_return, it) }
         return when (info.imeOptions and EditorInfo.IME_MASK_ACTION) {
-            EditorInfo.IME_ACTION_GO -> EnterKey(R.drawable.ic_arrow_forward, "Go")
-            EditorInfo.IME_ACTION_SEARCH -> EnterKey(R.drawable.ic_search, "Search")
-            EditorInfo.IME_ACTION_SEND -> EnterKey(R.drawable.ic_send, "Send")
-            EditorInfo.IME_ACTION_NEXT -> EnterKey(R.drawable.ic_last_page, "Next")
-            EditorInfo.IME_ACTION_DONE -> EnterKey(R.drawable.ic_check, "Done")
-            EditorInfo.IME_ACTION_PREVIOUS -> EnterKey(R.drawable.ic_first_page, "Previous")
+            EditorInfo.IME_ACTION_GO -> EnterKey(R.drawable.ic_arrow_forward, getString(R.string.key_go))
+            EditorInfo.IME_ACTION_SEARCH -> EnterKey(R.drawable.ic_search, getString(R.string.key_search))
+            EditorInfo.IME_ACTION_SEND -> EnterKey(R.drawable.ic_send, getString(R.string.key_send))
+            EditorInfo.IME_ACTION_NEXT -> EnterKey(R.drawable.ic_last_page, getString(R.string.key_next))
+            EditorInfo.IME_ACTION_DONE -> EnterKey(R.drawable.ic_check, getString(R.string.key_done))
+            EditorInfo.IME_ACTION_PREVIOUS -> EnterKey(R.drawable.ic_first_page, getString(R.string.key_previous))
             else -> plain
         }
     }
@@ -551,16 +558,18 @@ class MboardService : InputMethodService() {
     }
 
     private fun prefixContext(): PrefixContext {
-        val ic = currentInputConnection ?: return PrefixContext("", "No active text editor")
-        if (!ic.getSelectedText(0).isNullOrEmpty()) return PrefixContext("", "Selection active · completions paused")
-        val after = ic.getTextAfterCursor(65, 0)?.toString() ?: return PrefixContext("", "App does not expose text for completions")
+        val ic = currentInputConnection ?: return PrefixContext("", getString(R.string.strip_no_editor))
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return PrefixContext("", getString(R.string.strip_selection_active))
+        val after =
+            ic.getTextAfterCursor(65, 0)?.toString()
+                ?: return PrefixContext("", getString(R.string.strip_no_surrounding_text))
         val before =
             ic.getTextBeforeCursor(CONTEXT_CHARS, 0)?.toString()
-                ?: return PrefixContext("", "App does not expose text for completions")
+                ?: return PrefixContext("", getString(R.string.strip_no_surrounding_text))
 
         val result = before.takeLastWhile(::wordChar)
         val suffix = after.takeWhile(::wordChar)
-        if (result.length + suffix.length > 64) return PrefixContext("", "Word is too long for completions")
+        if (result.length + suffix.length > 64) return PrefixContext("", getString(R.string.strip_word_too_long))
         val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
         val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
         val sentenceStart = beforeWord.isEmpty() || beforeWord.last() in ".!?؟\n"
@@ -576,7 +585,7 @@ class MboardService : InputMethodService() {
                 .takeLast(CONTEXT_WORDS)
         return PrefixContext(
             result,
-            if (result.isEmpty() && suffix.isEmpty()) "Type a word · completions appear while typing" else "No matching completion",
+            getString(if (result.isEmpty() && suffix.isEmpty()) R.string.strip_idle_hint else R.string.strip_no_match),
             idle,
             recent,
             sentenceStart,
@@ -593,10 +602,10 @@ class MboardService : InputMethodService() {
         }
         // Numbers, phone and date fields take digits, not words: an honest empty strip.
         if (fieldPolicy.numeric) {
-            strip.render(emptyList(), "", editorGeneration, shieldNote("Number field"))
+            strip.render(emptyList(), "", editorGeneration, shieldNote(getString(R.string.strip_number_field)))
             return
         }
-        val blocked = if (!settings.suggestions) "Word suggestions off · enable them in Settings" else null
+        val blocked = if (!settings.suggestions) getString(R.string.strip_suggestions_off) else null
         if (blocked != null) {
             // Email/URL fields skip dictionary words but still offer the user's saved email addresses.
             val addresses = savedAddresses()
@@ -611,21 +620,21 @@ class MboardService : InputMethodService() {
         if (state != WordSuggestions.State.READY) {
             val message =
                 when (state) {
-                    WordSuggestions.State.LOADING -> "Loading ${language.name} dictionary…"
-                    WordSuggestions.State.FAILED -> "Dictionary unavailable · reopen keyboard to retry"
-                    WordSuggestions.State.CLOSED -> "Word suggestions unavailable"
-                    else -> "Preparing word completions…"
+                    WordSuggestions.State.LOADING -> getString(R.string.strip_loading_dictionary, language.localizedName(this))
+                    WordSuggestions.State.FAILED -> getString(R.string.strip_dictionary_failed)
+                    WordSuggestions.State.CLOSED -> getString(R.string.strip_suggestions_unavailable)
+                    else -> getString(R.string.strip_preparing)
                 }
             strip.render(emptyList(), "", editorGeneration, shieldNote(message))
             return
         }
         if (fieldPolicy.password) {
-            strip.render(words.commonWords(language), "", editorGeneration, shieldNote("Static suggestions"))
+            strip.render(words.commonWords(language), "", editorGeneration, shieldNote(getString(R.string.strip_static_suggestions)))
             return
         }
         val addresses = savedAddresses()
         if (addresses != null && addresses.second.isNotEmpty()) {
-            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses", addresses = true)
+            strip.render(addresses.second, addresses.first, editorGeneration, getString(R.string.strip_saved_addresses), addresses = true)
             return
         }
         val context = prefixContext()
@@ -706,8 +715,8 @@ class MboardService : InputMethodService() {
     /** The strip status says why history is off whenever the shield or a password field is active. */
     private fun shieldNote(message: String) =
         when {
-            fieldPolicy.password -> "$message · password field"
-            privateSession -> "$message · shield on"
+            fieldPolicy.password -> getString(R.string.strip_note_password, message)
+            privateSession -> getString(R.string.strip_note_shield, message)
             else -> message
         }
 
@@ -847,21 +856,23 @@ class MboardService : InputMethodService() {
         when (mode) {
             Mode.CALCULATOR -> {
                 val answer = Calculator.calculate(query)
-                val header = ui.panelHeader(query.ifBlank { "Type a calculation" })
+                val header = ui.panelHeader(query.ifBlank { getString(R.string.calc_placeholder) })
                 header.title.apply {
                     setTextColor(if (query.isBlank()) ui.muted else ui.text)
                     ellipsize = android.text.TextUtils.TruncateAt.START
                     tooltipText = query
                 }
                 val result =
-                    ui.button(answer?.let { "= $it" } ?: "No result") { answer?.let(::paste) }.apply {
+                    ui.button(answer?.let { "= $it" } ?: getString(R.string.calc_no_result)) { answer?.let(::paste) }.apply {
                         ui.setEnabledLook(this, answer != null)
                         background = ui.keyChip(ui.surface)
                         setTextColor(if (answer != null) ui.accentInk else ui.muted)
                         maxLines = 1
                         ellipsize = android.text.TextUtils.TruncateAt.END
-                        contentDescription = answer?.let { "Insert result $it" } ?: "No valid calculation result"
-                        tooltipText = answer ?: "Type a valid calculation first"
+                        contentDescription =
+                            answer?.let { getString(R.string.calc_insert_result_a11y, it) }
+                                ?: getString(R.string.calc_no_result_a11y)
+                        tooltipText = answer ?: getString(R.string.calc_type_valid_tooltip)
                     }
                 header.setActions(listOf(result))
                 bar.addView(header, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ui.dp(Tokens.PANEL_HEADER)))
@@ -872,19 +883,22 @@ class MboardService : InputMethodService() {
                 bar.addView(
                     emojiSearchField().apply { minimumWidth = ui.dp(Tokens.TARGET_MIN * 3) },
                     LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 9f).apply {
-                        setMargins(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_1), 0)
+                        marginStart = ui.dp(Tokens.SPACE_2)
+                        marginEnd = ui.dp(Tokens.SPACE_1)
                     },
                 )
                 val row = LinearLayout(this).apply { gravity = Gravity.CENTER_VERTICAL }
                 val matches = emojiSearchResults()
                 if (matches.isEmpty()) {
                     val status =
-                        when {
-                            emojiLoadFailed -> "Emoji unavailable"
-                            !Emojis.ready -> "Loading emoji…"
-                            query.isNotBlank() -> "No matches"
-                            else -> "Type to search"
-                        }
+                        getString(
+                            when {
+                                emojiLoadFailed -> R.string.emoji_unavailable
+                                !Emojis.ready -> R.string.emoji_loading
+                                query.isNotBlank() -> R.string.emoji_no_matches
+                                else -> R.string.emoji_type_to_search
+                            },
+                        )
                     row.addView(
                         ui.label(status, Tokens.TEXT_BODY, true).apply { setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_2), 0) },
                     )
@@ -903,11 +917,11 @@ class MboardService : InputMethodService() {
                                 if (!privateSession) emojiHistory.toggleFavorite(emoji.text)
                                 message(
                                     if (privateSession) {
-                                        "Favorites paused in private mode"
+                                        R.string.emoji_favorites_paused
                                     } else if (emojiHistory.isFavorite(emoji.text)) {
-                                        "Added to favorites"
+                                        R.string.emoji_favorite_added
                                     } else {
-                                        "Removed from favorites"
+                                        R.string.emoji_favorite_removed
                                     },
                                 )
                                 true
@@ -924,7 +938,7 @@ class MboardService : InputMethodService() {
                     LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 11f),
                 )
                 bar.addView(
-                    ui.icon(R.drawable.ic_apps, "Browse all emoji") { setMode(Mode.EMOJI) },
+                    ui.icon(R.drawable.ic_apps, getString(R.string.emoji_browse_all)) { setMode(Mode.EMOJI) },
                     LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), LinearLayout.LayoutParams.MATCH_PARENT),
                 )
             }
@@ -979,7 +993,7 @@ class MboardService : InputMethodService() {
                         0,
                         ui.dp(Tokens.KEY_GAP / 2),
                     )
-                setPadding(ui.dp(Tokens.SPACE_3), 0, 0, 0)
+                setPaddingRelative(ui.dp(Tokens.SPACE_3), 0, 0, 0)
             }
         field.addView(
             android.widget.ImageView(this).apply {
@@ -991,7 +1005,7 @@ class MboardService : InputMethodService() {
         )
         val text =
             if (query.isEmpty()) {
-                android.text.SpannableString("Search emoji")
+                android.text.SpannableString(getString(R.string.emoji_search_hint))
             } else {
                 android.text.SpannableString("$query|").apply {
                     setSpan(android.text.style.ForegroundColorSpan(ui.accent), query.length, query.length + 1, 0)
@@ -1003,15 +1017,20 @@ class MboardService : InputMethodService() {
                 maxLines = 1
                 // The typed end stays visible; the hint reads from its start.
                 ellipsize = if (query.isEmpty()) android.text.TextUtils.TruncateAt.END else android.text.TextUtils.TruncateAt.START
-                contentDescription = if (query.isEmpty()) "Emoji search, empty" else "Emoji search: $query"
-                setPadding(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_1), 0)
+                contentDescription =
+                    if (query.isEmpty()) {
+                        getString(R.string.emoji_search_empty_a11y)
+                    } else {
+                        getString(R.string.emoji_search_query_a11y, query)
+                    }
+                setPaddingRelative(ui.dp(Tokens.SPACE_2), 0, ui.dp(Tokens.SPACE_1), 0)
             },
             LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
         )
         if (query.isNotEmpty()) {
             field.addView(
                 ui
-                    .icon(R.drawable.ic_close, "Clear search") {
+                    .icon(R.drawable.ic_close, getString(R.string.emoji_clear_search)) {
                         query = ""
                         updateAuxiliary()
                     }.apply {
@@ -1058,7 +1077,7 @@ class MboardService : InputMethodService() {
             if (addresses != null && word in addresses.second) {
                 if (addresses.first != expected) return updateAuxiliary()
                 val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
-                if (!done) message("This app did not accept the address")
+                if (!done) message(R.string.msg_app_rejected_address)
                 updateAuxiliary()
                 return
             }
@@ -1074,7 +1093,7 @@ class MboardService : InputMethodService() {
             if (replaceWord(ic, context, word + if (context.textAfterWord) "" else " ")) {
                 if (!privateSession && !fieldPolicy.password) emojiHistory.record(word)
             } else {
-                message("This app did not accept the emoji")
+                message(R.string.msg_app_rejected_emoji)
             }
             lastSpace = 0L
             updateAuxiliary()
@@ -1084,7 +1103,7 @@ class MboardService : InputMethodService() {
         val value = word.trimEnd() + if (context.suffix.isNotEmpty() && context.textAfterWord) "" else " "
         val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceWord(ic, context, value)
         if (!done) {
-            message("This app did not accept the completion")
+            message(R.string.msg_app_rejected_completion)
         } else {
             pickedSpaceTail = value.takeIf { it.endsWith(' ') }?.takeLast(33)
             if (language.script == Script.LATIN && Arabizi.isReading(word)) {
@@ -1125,7 +1144,7 @@ class MboardService : InputMethodService() {
                 if (query.length + raw.length <= 200) query += raw
                 updateAuxiliary()
             } else {
-                message("Nothing to paste")
+                message(R.string.msg_nothing_to_paste)
             }
             return
         }
@@ -1138,14 +1157,14 @@ class MboardService : InputMethodService() {
             lastSpace = 0L
             if (mode == Mode.KEYS) updateAuxiliary()
         } else {
-            message("Nothing to paste")
+            message(R.string.msg_nothing_to_paste)
         }
     }
 
     private fun paste(text: String) {
         pickedSpaceTail = null
         predictionTrail.reset()
-        if (currentInputConnection?.commitText(text, 1) == false) message("This app did not accept the text")
+        if (currentInputConnection?.commitText(text, 1) == false) message(R.string.msg_app_rejected_text)
         lastSpace = 0L
         if (mode == Mode.KEYS) updateAuxiliary()
     }
@@ -1284,9 +1303,9 @@ class MboardService : InputMethodService() {
                 val action = info?.imeOptions?.and(EditorInfo.IME_MASK_ACTION) ?: EditorInfo.IME_ACTION_NONE
                 val noAction = (info?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0
                 if (!noAction && info?.actionLabel != null) {
-                    if (!ic.performEditorAction(info.actionId)) message("This app did not handle the action")
+                    if (!ic.performEditorAction(info.actionId)) message(R.string.msg_app_ignored_action)
                 } else if (!noAction && action > EditorInfo.IME_ACTION_NONE) {
-                    if (!ic.performEditorAction(action)) message("This app did not handle the action")
+                    if (!ic.performEditorAction(action)) message(R.string.msg_app_ignored_action)
                 } else {
                     ic.commitText("\n", 1)
                 }
@@ -1447,7 +1466,7 @@ class MboardService : InputMethodService() {
         lastSpace = 0L
     }
 
-    private fun message(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    private fun message(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 
     private companion object {
         /** Text read before the caret for completions, and the sentence words kept from it. */

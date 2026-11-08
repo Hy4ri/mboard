@@ -31,15 +31,15 @@ import android.window.OnBackInvokedDispatcher
 /** A compact settings home and focused pages, using native controls and no new dependencies. */
 class SetupActivity : Activity() {
     private enum class Page(
-        val title: String,
+        val titleRes: Int,
     ) {
-        HOME("mboard"),
-        APPEARANCE("Appearance"),
-        TYPING("Typing"),
-        PRIVACY("Clipboard & privacy"),
-        PHRASES("Saved phrases"),
-        PLAYGROUND("Try your keyboard"),
-        ABOUT("About mboard"),
+        HOME(R.string.app_name),
+        APPEARANCE(R.string.page_appearance),
+        TYPING(R.string.page_typing),
+        PRIVACY(R.string.page_privacy),
+        PHRASES(R.string.page_phrases),
+        PLAYGROUND(R.string.page_playground),
+        ABOUT(R.string.page_about),
     }
 
     private lateinit var settings: BoardSettings
@@ -158,9 +158,11 @@ class SetupActivity : Activity() {
         page = next
         render(captureState = false)
         // A short slide-and-fade tells forward from back without slowing navigation down.
+        val rtl = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+        val delta = ui.dp(if (forward != rtl) Tokens.SPACE_5 else -Tokens.SPACE_5).toFloat()
         scroller?.apply {
             alpha = 0f
-            translationX = ui.dp(if (forward) Tokens.SPACE_5 else -Tokens.SPACE_5).toFloat()
+            translationX = delta
             animate()
                 .alpha(1f)
                 .translationX(0f)
@@ -211,19 +213,19 @@ class SetupActivity : Activity() {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
                 minimumHeight = ui.dp(Tokens.SETTINGS_HEADER)
-                setPadding(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_4), 0)
+                setPaddingRelative(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_4), 0)
             }
         if (page != Page.HOME) {
             header.addView(
-                ui.icon(R.drawable.ic_arrow_back, "Back") { goBack() },
+                ui.icon(R.drawable.ic_arrow_back, getString(R.string.action_back)) { goBack() },
                 LinearLayout.LayoutParams(ui.dp(Tokens.TARGET_MIN), ui.dp(Tokens.TARGET_MIN)),
             )
         }
         header.addView(
-            ui.label(page.title, if (page == Page.HOME) Tokens.TEXT_TITLE else Tokens.TEXT_HEADER).apply {
+            ui.label(getString(page.titleRes), if (page == Page.HOME) Tokens.TEXT_TITLE else Tokens.TEXT_HEADER).apply {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
                 isAccessibilityHeading = true
-                setPadding(if (page == Page.HOME) ui.dp(Tokens.SPACE_2) else ui.dp(Tokens.SPACE_1), 0, 0, 0)
+                setPaddingRelative(if (page == Page.HOME) ui.dp(Tokens.SPACE_2) else ui.dp(Tokens.SPACE_1), 0, 0, 0)
             },
             LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
         )
@@ -280,7 +282,8 @@ class SetupActivity : Activity() {
     }
 
     private fun home(column: LinearLayout) {
-        components.add(column, components.note("${Languages.labels}. Entirely offline."))
+        val nativeLabels = joinLanguageLabels(this, Languages.ALL.map { it.label })
+        components.add(column, components.note(getString(R.string.home_note, nativeLabels)))
         val statusView =
             ui.label("", Tokens.TEXT_BODY).apply {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
@@ -291,50 +294,65 @@ class SetupActivity : Activity() {
         components.add(column, statusView)
         setupActions = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         column.addView(setupActions)
-        column.addView(components.section("MAKE IT YOURS"))
+        column.addView(components.section(getString(R.string.section_customize)))
         components.add(
             column,
-            components.row("Appearance", "${themeName()} · ${accentName().substringBefore(" ·")}", ui.accent) {
+            components.row(
+                getString(R.string.page_appearance),
+                getString(R.string.home_appearance_summary, themeName(), accentShortName()),
+                ui.accent,
+            ) {
                 navigate(Page.APPEARANCE)
             },
         )
         components.add(
             column,
             components.row(
-                "Typing",
-                "Suggestions ${onOff(settings.suggestions)} · capitalization ${onOff(settings.autoCapitalize)}",
+                getString(R.string.page_typing),
+                getString(R.string.home_typing_summary, onOff(settings.suggestions), onOff(settings.autoCapitalize)),
             ) {
                 navigate(Page.TYPING)
             },
         )
-        column.addView(components.section("ON YOUR DEVICE"))
+        column.addView(components.section(getString(R.string.section_on_device)))
         components.add(
             column,
-            components.row("Clipboard & privacy", "History ${onOff(settings.clipboardHistory)} · local controls") {
+            components.row(
+                getString(R.string.page_privacy),
+                getString(R.string.home_privacy_summary, onOff(settings.clipboardHistory)),
+            ) {
                 navigate(Page.PRIVACY)
             },
         )
-        components.add(column, components.row("Saved phrases", "Replies, addresses and signatures") { navigate(Page.PHRASES) })
-        column.addView(components.section("EXPLORE"))
         components.add(
             column,
-            components.row("Try your keyboard", "A separate playground, not another setting") { navigate(Page.PLAYGROUND) },
+            components.row(getString(R.string.page_phrases), getString(R.string.home_phrases_summary)) { navigate(Page.PHRASES) },
         )
-        components.add(column, components.row("About mboard", "Gestures, offline tools and credits") { navigate(Page.ABOUT) })
+        column.addView(components.section(getString(R.string.section_explore)))
+        components.add(
+            column,
+            components.row(getString(R.string.page_playground), getString(R.string.home_playground_summary)) { navigate(Page.PLAYGROUND) },
+        )
+        components.add(
+            column,
+            components.row(getString(R.string.page_about), getString(R.string.home_about_summary)) { navigate(Page.ABOUT) },
+        )
     }
 
     private fun appearance(column: LinearLayout) {
-        components.add(column, components.note("Tune the look and feel. Changes apply to the keyboard immediately."))
+        components.add(column, components.note(getString(R.string.appearance_note)))
         components.add(
             column,
-            components.row("Preview in playground", "Type with the keyboard as it looks now") { navigate(Page.PLAYGROUND) },
+            components.row(getString(R.string.appearance_preview_title), getString(R.string.appearance_preview_summary)) {
+                navigate(Page.PLAYGROUND)
+            },
         )
-        column.addView(components.section("COLOR"))
+        column.addView(components.section(getString(R.string.section_color)))
         choice(
             column,
-            "Theme",
+            getString(R.string.appearance_theme_title),
             themeName(),
-            listOf("Follow system", "Dark", "Light"),
+            listOf(getString(R.string.theme_system), getString(R.string.theme_dark), getString(R.string.theme_light)),
             listOf("system", "dark", "light").indexOf(settings.appearance),
         ) {
             settings.appearance = listOf("system", "dark", "light")[it]
@@ -342,9 +360,14 @@ class SetupActivity : Activity() {
         }
         choice(
             column,
-            "Accent preset",
+            getString(R.string.appearance_accent_title),
             accentName(),
-            listOf("Violet", "Teal", "Amber", "Crimson · #990000"),
+            listOf(
+                getString(R.string.accent_violet),
+                getString(R.string.accent_teal),
+                getString(R.string.accent_amber),
+                getString(R.string.accent_crimson_hex),
+            ),
             listOf("violet", "teal", "amber", "crimson").indexOf(settings.accent),
             ui.accent,
             listOf("violet", "teal", "amber", "crimson").map { Tokens.accents.getValue(it).let { a -> if (ui.dark) a.dark else a.light } },
@@ -352,30 +375,41 @@ class SetupActivity : Activity() {
             settings.accent = listOf("violet", "teal", "amber", "crimson")[it]
             render()
         }
-        column.addView(components.section("CUSTOM COLORS"))
-        COLOR_ROLES.forEach { (role, title) ->
+        column.addView(components.section(getString(R.string.section_custom_colors)))
+        COLOR_ROLES.forEach { (role, titleRes) ->
+            val title = getString(titleRes)
             val custom = settings.customColor(role)
             components.add(
                 column,
-                components.row(title, custom?.let(::hex) ?: "Theme default", custom ?: themeColor(role)) { colorDialog(role, title) },
+                components.row(title, custom?.let(::hex) ?: getString(R.string.color_theme_default), custom ?: themeColor(role)) {
+                    colorDialog(role, title)
+                },
             )
         }
         if (BoardSettings.COLOR_ROLES.any { settings.customColor(it) != null }) {
             components.add(
                 column,
-                components.row("Reset custom colors", "Go back to the theme and accent above", destructive = true) {
+                components.row(
+                    getString(R.string.color_reset_title),
+                    getString(R.string.color_reset_summary),
+                    destructive = true,
+                ) {
                     BoardSettings.COLOR_ROLES.forEach { settings.setCustomColor(it, null) }
                     render()
                 },
             )
         }
-        components.add(column, components.note("Custom colors override the theme and accent. Text on accent keys adjusts for contrast."))
-        column.addView(components.section("KEYBOARD LAYOUT"))
+        components.add(column, components.note(getString(R.string.custom_colors_note)))
+        column.addView(components.section(getString(R.string.section_keyboard_layout)))
         choice(
             column,
-            "Key height",
-            "${settings.rowHeightDp} dp",
-            listOf("Compact · 44 dp", "Balanced · 54 dp", "Roomy · 64 dp"),
+            getString(R.string.layout_key_height_title),
+            getString(R.string.layout_key_height_value, settings.rowHeightDp),
+            listOf(
+                getString(R.string.layout_key_height_compact),
+                getString(R.string.layout_key_height_balanced),
+                getString(R.string.layout_key_height_roomy),
+            ),
             listOf(44, 54, 64).indexOf(settings.rowHeightDp),
         ) {
             settings.rowHeightDp = listOf(44, 54, 64)[it]
@@ -383,19 +417,21 @@ class SetupActivity : Activity() {
         }
         choice(
             column,
-            "Thumb mode",
+            getString(R.string.layout_thumb_title),
             thumbName(),
-            listOf("Full width", "Left thumb", "Right thumb"),
+            listOf(getString(R.string.thumb_full), getString(R.string.thumb_left), getString(R.string.thumb_right)),
             listOf("full", "left", "right").indexOf(settings.oneHandMode),
         ) {
             settings.oneHandMode = listOf("full", "left", "right")[it]
             render()
         }
+        val swipeOptions =
+            listOf(getString(R.string.edge_off), getString(R.string.edge_swipe_left), getString(R.string.edge_swipe_right))
         choice(
             column,
-            "Dial pad swipe",
+            getString(R.string.layout_dial_swipe_title),
             dialName(),
-            listOf("Off", "Swipe from left edge", "Swipe from right edge"),
+            swipeOptions,
             listOf("off", "left", "right").indexOf(settings.dialPadEdge),
         ) {
             val edge = listOf("off", "left", "right")[it]
@@ -406,9 +442,9 @@ class SetupActivity : Activity() {
         }
         choice(
             column,
-            "Recent emoji swipe",
+            getString(R.string.layout_emoji_swipe_title),
             edgeName(settings.emojiEdge),
-            listOf("Off", "Swipe from left edge", "Swipe from right edge"),
+            swipeOptions,
             listOf("off", "left", "right").indexOf(settings.emojiEdge),
         ) {
             val edge = listOf("off", "left", "right")[it]
@@ -418,23 +454,27 @@ class SetupActivity : Activity() {
         }
         components.add(
             column,
-            components.note(
-                "Thumb mode moves real keys; narrow windows use full width to keep them usable. Swipe in from an edge to show its panel; swipe back out to hide it.",
-            ),
+            components.note(getString(R.string.layout_thumb_note)),
         )
-        column.addView(components.section("KEY DETAILS"))
+        column.addView(components.section(getString(R.string.section_key_details)))
         components.add(
             column,
-            components.toggle("Number row", "Keep digits above the letters", settings.numberRow) {
-                settings.numberRow =
-                    it
+            components.toggle(
+                getString(R.string.detail_number_row_title),
+                getString(R.string.detail_number_row_summary),
+                settings.numberRow,
+            ) {
+                settings.numberRow = it
             },
         )
         components.add(
             column,
-            components.toggle("Key previews", "Show a brief letter preview when pressed", settings.keyPreview) {
-                settings.keyPreview =
-                    it
+            components.toggle(
+                getString(R.string.detail_key_previews_title),
+                getString(R.string.detail_key_previews_summary),
+                settings.keyPreview,
+            ) {
+                settings.keyPreview = it
             },
         )
     }
@@ -442,36 +482,35 @@ class SetupActivity : Activity() {
     private fun typing(column: LinearLayout) {
         components.add(
             column,
-            components.note("Helpful when you want it. Bundled dictionaries plus, if you allow it, words you type, kept on this device."),
+            components.note(getString(R.string.typing_note)),
         )
-        column.addView(components.section("INPUT ASSISTANCE"))
+        column.addView(components.section(getString(R.string.section_input_assistance)))
+        val langNames = joinLanguageLabels(this, Languages.ALL.map { it.localizedName(this) })
         components.add(
             column,
             components.toggle(
-                "Word suggestions",
-                "${Languages.ALL.joinToString(" and ") { it.name }} · tap to complete",
+                getString(R.string.typing_suggestions_title),
+                getString(R.string.typing_suggestions_summary, langNames),
                 settings.suggestions,
             ) {
-                settings.suggestions =
-                    it
+                settings.suggestions = it
             },
         )
         components.add(
             column,
             components.toggle(
-                "Auto-correction",
-                "Fix misspellings on space · backspace undoes",
+                getString(R.string.typing_autocorrect_title),
+                getString(R.string.typing_autocorrect_summary),
                 settings.autoCorrect,
             ) {
-                settings.autoCorrect =
-                    it
+                settings.autoCorrect = it
             },
         )
         components.add(
             column,
             components.toggle(
-                "Learn my words",
-                "Learn frequent words and corrections on this device",
+                getString(R.string.typing_learn_title),
+                getString(R.string.typing_learn_summary),
                 settings.learnWords,
             ) {
                 settings.learnWords = it
@@ -480,22 +519,26 @@ class SetupActivity : Activity() {
         Languages.ALL.mapNotNull { it.dialect }.forEach { dialect ->
             components.add(
                 column,
-                components.toggle(dialect.title, dialect.summary, settings.dialectEnabled(dialect)) {
+                components.toggle(dialect.localizedTitle(this), dialect.localizedSummary(this), settings.dialectEnabled(dialect)) {
                     settings.setDialectEnabled(dialect, it)
                 },
             )
         }
         components.add(
             column,
-            components.toggle("Emoji suggestions", "Offer a matching emoji for words like fire or love", settings.emojiSuggestions) {
+            components.toggle(
+                getString(R.string.typing_emoji_title),
+                getString(R.string.typing_emoji_summary),
+                settings.emojiSuggestions,
+            ) {
                 settings.emojiSuggestions = it
             },
         )
         components.add(
             column,
             components.toggle(
-                "Arabizi suggestions",
-                "Arabic words for Franco typing like 7abibi · never automatic",
+                getString(R.string.typing_arabizi_title),
+                getString(R.string.typing_arabizi_summary),
                 settings.arabiziSuggestions,
             ) {
                 settings.arabiziSuggestions = it
@@ -503,47 +546,56 @@ class SetupActivity : Activity() {
         )
         components.add(
             column,
-            components.toggle("Automatic capitalization", "Follow the active app's capitalization hints", settings.autoCapitalize) {
-                settings.autoCapitalize =
-                    it
+            components.toggle(
+                getString(R.string.typing_capitalize_title),
+                getString(R.string.typing_capitalize_summary),
+                settings.autoCapitalize,
+            ) {
+                settings.autoCapitalize = it
             },
         )
         components.add(
             column,
-            components.toggle("Double-space period", "Two quick spaces after a word insert a period", settings.doubleSpacePeriod) {
-                settings.doubleSpacePeriod =
-                    it
+            components.toggle(
+                getString(R.string.typing_double_space_title),
+                getString(R.string.typing_double_space_summary),
+                settings.doubleSpacePeriod,
+            ) {
+                settings.doubleSpacePeriod = it
             },
         )
         components.add(
             column,
-            components.note(
-                "Learned words fade over time. Recording pauses in protected fields and under the shield. Arabizi works on the English layout and only suggests.",
-            ),
+            components.note(getString(R.string.typing_privacy_note)),
         )
-        column.addView(components.section("QUICK GESTURES"))
+        column.addView(components.section(getString(R.string.section_quick_gestures)))
         components.add(
             column,
-            components.row("Try these gestures", "Swipe, hold and slide in the playground") { navigate(Page.PLAYGROUND) },
+            components.row(getString(R.string.typing_gestures_title), getString(R.string.typing_gestures_summary)) {
+                navigate(Page.PLAYGROUND)
+            },
         )
     }
 
     private fun privacy(column: LinearLayout) {
         val clips = ClipStore(this)
-        components.add(column, components.note("Nothing leaves this device. History is optional and can be cleared here."))
-        column.addView(components.section("CLIPBOARD HISTORY"))
+        components.add(column, components.note(getString(R.string.privacy_note)))
+        column.addView(components.section(getString(R.string.section_clipboard_history)))
         components.add(
             column,
-            components.toggle("Save copied text", "Only while mboard is visible. Sensitive clips are skipped.", settings.clipboardHistory) {
-                settings.clipboardHistory =
-                    it
+            components.toggle(
+                getString(R.string.privacy_save_clips_title),
+                getString(R.string.privacy_save_clips_summary),
+                settings.clipboardHistory,
+            ) {
+                settings.clipboardHistory = it
             },
         )
         choice(
             column,
-            "Unpinned retention",
-            ClipStore.RETENTION_OPTIONS.firstOrNull { it.second == clips.retentionMs }?.first ?: "1 hour",
-            ClipStore.RETENTION_OPTIONS.map { it.first },
+            getString(R.string.privacy_retention_title),
+            getString(ClipStore.RETENTION_OPTIONS.firstOrNull { it.second == clips.retentionMs }?.first ?: R.string.retention_1h),
+            ClipStore.RETENTION_OPTIONS.map { getString(it.first) },
             ClipStore.RETENTION_OPTIONS.indexOfFirst { it.second == clips.retentionMs },
         ) {
             clips.retentionMs = ClipStore.RETENTION_OPTIONS[it].second
@@ -551,40 +603,46 @@ class SetupActivity : Activity() {
         }
         components.add(
             column,
-            components.note("Pinned clips stay until you delete them. Expired clips are removed on the next history access."),
+            components.note(getString(R.string.privacy_retention_note)),
         )
-        column.addView(components.section("PRIVATE INPUT"))
+        column.addView(components.section(getString(R.string.section_private_input)))
         components.add(
             column,
-            components.note(
-                "The keyboard's shield toggles a private session: clipboard recording and word learning pause. Password fields are protected automatically. App no-learning flags stop capture and history; static word completions can still work.",
-            ),
+            components.note(getString(R.string.privacy_shield_note)),
         )
-        column.addView(components.section("CLEAR LOCAL DATA"))
+        column.addView(components.section(getString(R.string.section_clear_data)))
+        val learnedCount = UserWords(this).size()
         components.add(
             column,
             components.row(
-                "Delete learned words",
-                "${UserWords(this).size()} words learned from your typing, plus next-word pairs and remembered correction rejections",
+                getString(R.string.privacy_delete_words_title),
+                resources.getQuantityString(R.plurals.privacy_delete_words_summary, learnedCount, learnedCount),
                 destructive = true,
             ) {
                 confirm(
-                    "Delete learned words?",
-                    "Erase local words, pairs and remembered correction rejections. Keep the bundled dictionaries.",
+                    getString(R.string.privacy_delete_words_confirm_title),
+                    getString(R.string.privacy_delete_words_confirm_body),
                 ) {
                     UserWords(this).clear()
                     settings.markLearnedReset()
-                    toast("Learned words deleted")
+                    toast(R.string.toast_learned_words_deleted)
                     render()
                 }
             },
         )
         components.add(
             column,
-            components.row("Delete clipboard history", "Includes pinned clips · asks for confirmation", destructive = true) {
-                confirm("Delete clipboard history?", "Pinned clips are included. Your system clipboard is unchanged.") {
+            components.row(
+                getString(R.string.privacy_delete_clips_title),
+                getString(R.string.privacy_delete_clips_summary),
+                destructive = true,
+            ) {
+                confirm(
+                    getString(R.string.privacy_delete_clips_confirm_title),
+                    getString(R.string.privacy_delete_clips_confirm_body),
+                ) {
                     clips.clearAll()
-                    toast("Clipboard history deleted")
+                    toast(R.string.toast_clips_deleted)
                 }
             },
         )
@@ -592,12 +650,12 @@ class SetupActivity : Activity() {
 
     private fun phrases(column: LinearLayout) {
         val store = PhraseStore(this)
-        components.add(column, components.note("Only phrases you explicitly save are stored. Drafts stay in this activity's memory."))
-        column.addView(components.section("NEW PHRASE"))
+        components.add(column, components.note(getString(R.string.phrases_note)))
+        column.addView(components.section(getString(R.string.section_new_phrase)))
         val editor =
             textEditor(
-                "A reply, address or signature",
-                "New saved phrase",
+                getString(R.string.phrases_editor_hint),
+                getString(R.string.phrases_editor_a11y),
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
                 2000,
             ).apply {
@@ -620,9 +678,9 @@ class SetupActivity : Activity() {
             val saved = store.all()
             val reason =
                 when {
-                    clean.isEmpty() -> "Type a phrase"
-                    saved.size >= 40 -> "40 of 40 saved"
-                    clean in saved -> "Already saved"
+                    clean.isEmpty() -> getString(R.string.phrases_reason_empty)
+                    saved.size >= 40 -> getString(R.string.phrases_count, 40, 40)
+                    clean in saved -> getString(R.string.phrases_reason_duplicate)
                     else -> ""
                 }
             val ok = reason.isEmpty()
@@ -635,15 +693,15 @@ class SetupActivity : Activity() {
 
         fun refresh() {
             val values = store.all()
-            count.text = "${values.size} of 40 saved"
+            count.text = getString(R.string.phrases_count, values.size, 40)
             list.removeAllViews()
-            if (values.isEmpty()) components.add(list, components.note("No saved phrases yet. Add your first one above."))
+            if (values.isEmpty()) components.add(list, components.note(getString(R.string.phrases_empty_note)))
             values.forEach { phrase ->
                 val row =
                     LinearLayout(this).apply {
                         gravity = Gravity.CENTER_VERTICAL
                         background = ui.shape(ui.surface)
-                        setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_2))
+                        setPaddingRelative(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_2))
                     }
                 row.addView(
                     ui.label(phrase, Tokens.TEXT_BODY).apply {
@@ -654,8 +712,11 @@ class SetupActivity : Activity() {
                     LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f),
                 )
                 row.addView(
-                    ui.icon(R.drawable.ic_delete, "Delete saved phrase") {
-                        confirm("Delete this phrase?", "This removes it from your keyboard's phrase list.") {
+                    ui.icon(R.drawable.ic_delete, getString(R.string.phrases_delete_a11y)) {
+                        confirm(
+                            getString(R.string.phrases_delete_confirm_title),
+                            getString(R.string.phrases_delete_confirm_body),
+                        ) {
                             store.remove(phrase)
                             refresh()
                         }
@@ -667,12 +728,12 @@ class SetupActivity : Activity() {
             updateSave()
         }
         save =
-            ui.button("Save phrase", true) {
+            ui.button(getString(R.string.phrases_save_action), true) {
                 if (store.add(editor.text.toString())) {
                     editor.setText("")
                     phraseDraft = ""
                     refresh()
-                    toast("Phrase saved")
+                    toast(R.string.toast_phrase_saved)
                 } else {
                     updateSave()
                 }
@@ -682,9 +743,9 @@ class SetupActivity : Activity() {
         // Android hides device accounts from other apps; the system picker shares only the one the user taps.
         components.add(
             column,
-            ui.button("Add emails from device accounts", action = ::pickAccount),
+            ui.button(getString(R.string.phrases_add_account_emails), action = ::pickAccount),
         )
-        column.addView(components.section("YOUR PHRASES"))
+        column.addView(components.section(getString(R.string.section_your_phrases)))
         components.add(column, count)
         column.addView(list)
         editor.addTextChangedListener(
@@ -712,10 +773,22 @@ class SetupActivity : Activity() {
     }
 
     private fun playground(column: LinearLayout) {
-        components.add(column, components.note("Try typing, gestures and suggestions here without opening another app."))
-        val names = listOf("Normal text", "Number", "Email", "Password")
+        components.add(column, components.note(getString(R.string.playground_note)))
+        val names =
+            listOf(
+                getString(R.string.playground_field_normal),
+                getString(R.string.playground_field_number),
+                getString(R.string.playground_field_email),
+                getString(R.string.playground_field_password),
+            )
         val types = PLAYGROUND_TYPES
-        choice(column, "Field type", names[types.indexOf(fieldType).coerceAtLeast(0)], names, types.indexOf(fieldType)) {
+        choice(
+            column,
+            getString(R.string.playground_field_title),
+            names[types.indexOf(fieldType).coerceAtLeast(0)],
+            names,
+            types.indexOf(fieldType),
+        ) {
             val next = types[it]
             if (SuggestionPolicy.clearPasswordTransition(fieldType, next)) {
                 sandbox?.text?.clear()
@@ -726,7 +799,12 @@ class SetupActivity : Activity() {
             render()
         }
         val editor =
-            textEditor("Tap here and start typing", "Typing playground", fieldType, 4000).apply {
+            textEditor(
+                getString(R.string.playground_editor_hint),
+                getString(R.string.playground_editor_a11y),
+                fieldType,
+                4000,
+            ).apply {
                 minHeight = ui.dp(Tokens.TARGET_MIN * 3)
                 maxLines = 6
                 setText(if (passwordPlayground) "" else draft)
@@ -736,59 +814,60 @@ class SetupActivity : Activity() {
         components.add(column, editor)
         components.add(
             column,
-            components.note(
-                "Password samples clear on leaving this page, changing field type, or rebuilding appearance. Don't enter a real password here.",
-            ),
+            components.note(getString(R.string.playground_password_note)),
         )
-        column.addView(components.section("WHAT TO TRY"))
+        column.addView(components.section(getString(R.string.section_what_to_try)))
         components.add(
             column,
-            components.note(
-                "Slide on space: move cursor\nSlide left from backspace: delete words\nDouble-tap Shift: caps lock\nHold a letter: alternates",
-            ),
+            components.note(getString(R.string.playground_tips)),
         )
     }
 
     private fun about(column: LinearLayout) {
-        components.add(column, components.note("${Languages.labels}. Built for local, quiet typing."))
-        column.addView(components.section("OFFLINE BY DESIGN"))
+        val nativeLabels = joinLanguageLabels(this, Languages.ALL.map { it.label })
+        components.add(column, components.note(getString(R.string.about_note, nativeLabels)))
+        column.addView(components.section(getString(R.string.section_offline)))
         components.add(
             column,
-            components.note(
-                "No network permission. No sound or vibration. No cloud calls. Learned words stay on this device and can be deleted any time. App data is excluded from Android cloud backup and device transfer.",
-            ),
+            components.note(getString(R.string.about_offline_note)),
         )
-        column.addView(components.section("KEYBOARD TOOLS"))
+        column.addView(components.section(getString(R.string.section_keyboard_tools)))
         components.add(
             column,
-            components.note(
-                "Emoji: categories, favorites and Arabic/English search.\nSaved phrases: suggested when you start typing them.\nNumber pad: tap the dial pad key on the symbols page.\nCalculator: a math pad; = inserts the result.\nPercent: 50% means 0.5.",
-            ),
+            components.note(getString(R.string.about_tools_note)),
         )
-        column.addView(components.section("CREDITS"))
+        column.addView(components.section(getString(R.string.section_credits)))
         components.add(
             column,
-            components.row("Licenses & word lists", "Bundled data, attribution and full notices") {
+            components.row(getString(R.string.about_licenses_title), getString(R.string.about_licenses_summary)) {
                 val notice = assets.open("NOTICE.txt").bufferedReader().use { it.readText() }
                 AlertDialog
                     .Builder(
                         dialogContext(),
-                    ).setTitle("Credits")
+                    ).setTitle(R.string.about_credits_dialog_title)
                     .setMessage(notice)
-                    .setPositiveButton("Close", null)
+                    .setPositiveButton(R.string.action_close, null)
                     .create()
                     .let(::showDialog)
             },
         )
         components.add(
             column,
-            components.row("Manage keyboards", "Open Android's keyboard settings", external = true) {
+            components.row(
+                getString(R.string.about_manage_keyboards_title),
+                getString(R.string.about_manage_keyboards_summary),
+                external = true,
+            ) {
                 startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
             },
         )
         components.add(
             column,
-            components.row("Switch keyboard", "Open Android's keyboard picker", external = true) {
+            components.row(
+                getString(R.string.about_switch_keyboard_title),
+                getString(R.string.about_switch_keyboard_summary),
+                external = true,
+            ) {
                 getSystemService(InputMethodManager::class.java).showInputMethodPicker()
             },
         )
@@ -799,20 +878,29 @@ class SetupActivity : Activity() {
         val enabled = manager.enabledInputMethodList.any { it.packageName == packageName }
         val active = Settings.Secure.getString(contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)?.startsWith("$packageName/") == true
         status?.text =
-            when {
-                active -> "Active keyboard · ready to type"
-                enabled -> "Enabled · choose mboard to start"
-                else -> "Set up your keyboard"
-            }
+            getString(
+                when {
+                    active -> R.string.status_active
+                    enabled -> R.string.status_enabled
+                    else -> R.string.status_setup
+                },
+            )
         setupActions?.let { actions ->
             actions.removeAllViews()
             if (!enabled) {
                 components.add(
                     actions,
-                    ui.button("Enable mboard", true) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) },
+                    ui.button(getString(R.string.action_enable_mboard), true) {
+                        startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+                    },
                 )
             }
-            if (enabled && !active) components.add(actions, ui.button("Choose mboard", true) { manager.showInputMethodPicker() })
+            if (enabled && !active) {
+                components.add(
+                    actions,
+                    ui.button(getString(R.string.action_choose_mboard), true) { manager.showInputMethodPicker() },
+                )
+            }
         }
     }
 
@@ -844,7 +932,7 @@ class SetupActivity : Activity() {
                     .setSingleChoiceItems(adapter, selected) { dialog, index ->
                         dialog.dismiss()
                         if (generation == renderGeneration) select(index)
-                    }.setNegativeButton("Cancel", null)
+                    }.setNegativeButton(R.string.action_cancel, null)
                     .create()
                     .let(::showDialog)
             },
@@ -860,14 +948,14 @@ class SetupActivity : Activity() {
             else -> ui.text
         }
 
-    private fun hex(value: Int) = String.format("#%06X", value and 0xFFFFFF)
+    private fun hex(value: Int) = String.format(java.util.Locale.US, "#%06X", value and 0xFFFFFF)
 
     /** The color a role is read against: keys and accent against the background, the background against the text, text against keys. */
     private fun contrastReference(role: String): Pair<Int, String> =
         when (role) {
-            BoardSettings.BACKGROUND -> ui.text to "text"
-            BoardSettings.TEXT -> ui.surface to "letter keys"
-            else -> ui.background to "background"
+            BoardSettings.BACKGROUND -> ui.text to getString(R.string.color_ref_text)
+            BoardSettings.TEXT -> ui.surface to getString(R.string.color_ref_keys)
+            else -> ui.background to getString(R.string.color_ref_background)
         }
 
     /** Swatches for quick picks plus a hex field for exact colors; the live chip and contrast line preview either. */
@@ -892,6 +980,7 @@ class SetupActivity : Activity() {
                 hint = "#RRGGBB"
                 isSingleLine = true
                 textSize = Tokens.TEXT_ROW
+                textDirection = View.TEXT_DIRECTION_LTR
                 setTextColor(ui.text)
                 setHintTextColor(ui.muted)
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
@@ -905,11 +994,17 @@ class SetupActivity : Activity() {
             preview.background = ui.shape(color, Tokens.RADIUS_CONTROL).apply { setStroke(ui.dp(1), ui.muted) }
             if (valid) {
                 val ratio = ui.contrast(color, reference)
+                val ratioText = String.format(java.util.Locale.US, "%.1f", ratio)
                 val low = ratio < Tokens.WARN_RATIO
-                info.text = "Contrast with $referenceName ${String.format("%.1f", ratio)}:1" + if (low) " · low, may be hard to see" else ""
+                info.text =
+                    getString(
+                        if (low) R.string.color_contrast_low else R.string.color_contrast_ok,
+                        referenceName,
+                        ratioText,
+                    )
                 info.setTextColor(if (low) ui.danger else ui.muted)
             } else {
-                info.text = "Enter six hex digits, like #1A2B3C"
+                info.text = getString(R.string.color_invalid_hex)
                 info.setTextColor(ui.danger)
             }
             applyButton?.let { ui.setEnabledLook(it, valid) }
@@ -981,17 +1076,17 @@ class SetupActivity : Activity() {
                 .Builder(dialogContext())
                 .setTitle(title)
                 .setView(ScrollView(this).apply { addView(body) })
-                .setPositiveButton("Apply") { _, _ ->
+                .setPositiveButton(R.string.action_apply) { _, _ ->
                     if (generation == renderGeneration && valid) {
                         settings.setCustomColor(role, picked or 0xFF000000.toInt())
                         render()
                     }
-                }.setNeutralButton("Default") { _, _ ->
+                }.setNeutralButton(R.string.action_default) { _, _ ->
                     if (generation == renderGeneration) {
                         settings.setCustomColor(role, null)
                         render()
                     }
-                }.setNegativeButton("Cancel", null)
+                }.setNegativeButton(R.string.action_cancel, null)
                 .create()
         showDialog(dialog)
         applyButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -1038,8 +1133,8 @@ class SetupActivity : Activity() {
             .Builder(dialogContext())
             .setTitle(title)
             .setMessage(message)
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Delete") { _, _ -> if (generation == renderGeneration) confirmed() }
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.action_delete) { _, _ -> if (generation == renderGeneration) confirmed() }
             .create()
             .let { showDialog(it, destructive = true) }
     }
@@ -1088,28 +1183,44 @@ class SetupActivity : Activity() {
     }
 
     private fun themeName() =
-        when (settings.appearance) {
-            "dark" -> "Dark"
-            "light" -> "Light"
-            else -> "Follow system"
-        }
+        getString(
+            when (settings.appearance) {
+                "dark" -> R.string.theme_dark
+                "light" -> R.string.theme_light
+                else -> R.string.theme_system
+            },
+        )
 
     private fun accentName() =
-        when (settings.accent) {
-            "teal" -> "Teal"
-            "amber" -> "Amber"
-            "crimson" -> "Crimson · #990000"
-            else -> "Violet"
-        }
+        getString(
+            when (settings.accent) {
+                "teal" -> R.string.accent_teal
+                "amber" -> R.string.accent_amber
+                "crimson" -> R.string.accent_crimson_hex
+                else -> R.string.accent_violet
+            },
+        )
+
+    private fun accentShortName() =
+        getString(
+            when (settings.accent) {
+                "teal" -> R.string.accent_teal
+                "amber" -> R.string.accent_amber
+                "crimson" -> R.string.accent_crimson
+                else -> R.string.accent_violet
+            },
+        )
 
     private fun thumbName() =
-        when (settings.oneHandMode) {
-            "left" -> "Left thumb"
-            "right" -> "Right thumb"
-            else -> "Full width"
-        }
+        getString(
+            when (settings.oneHandMode) {
+                "left" -> R.string.thumb_left
+                "right" -> R.string.thumb_right
+                else -> R.string.thumb_full
+            },
+        )
 
-    private fun onOff(value: Boolean) = if (value) "on" else "off"
+    private fun onOff(value: Boolean) = getString(if (value) R.string.state_on else R.string.state_off)
 
     /** The system chooser is single-choice and can't be restyled; each tap adds one address. */
     private fun pickAccount() {
@@ -1120,7 +1231,7 @@ class SetupActivity : Activity() {
                 PICK_ACCOUNT,
             )
         } catch (_: android.content.ActivityNotFoundException) {
-            toast("Account picker is not available on this device")
+            toast(R.string.toast_account_picker_unavailable)
         }
     }
 
@@ -1136,9 +1247,9 @@ class SetupActivity : Activity() {
         val name = data?.getStringExtra(android.accounts.AccountManager.KEY_ACCOUNT_NAME)?.trim()
         val store = PhraseStore(this)
         when {
-            name.isNullOrEmpty() || '@' !in name -> toast("That account has no email address")
-            store.add(name) -> toast("Added $name")
-            else -> toast("Already saved, or the 40-phrase limit was reached")
+            name.isNullOrEmpty() || '@' !in name -> toast(R.string.toast_account_no_email)
+            store.add(name) -> Toast.makeText(this, getString(R.string.toast_account_added, name), Toast.LENGTH_SHORT).show()
+            else -> toast(R.string.toast_account_duplicate_or_full)
         }
         render()
     }
@@ -1148,23 +1259,25 @@ class SetupActivity : Activity() {
     private fun opposite(edge: String) = if (edge == "left") "right" else "left"
 
     private fun edgeName(edge: String) =
-        when (edge) {
-            "left" -> "Left edge"
-            "right" -> "Right edge"
-            else -> "Off"
-        }
+        getString(
+            when (edge) {
+                "left" -> R.string.edge_left
+                "right" -> R.string.edge_right
+                else -> R.string.edge_off
+            },
+        )
 
-    private fun toast(value: String) = Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
+    private fun toast(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 
     private companion object {
         const val PICK_ACCOUNT = 41
         val COLOR_ROLES =
             listOf(
-                BoardSettings.ACCENT to "Accent override",
-                BoardSettings.BACKGROUND to "Keyboard background",
-                BoardSettings.KEYS to "Letter keys",
-                BoardSettings.SPECIAL_KEYS to "Function keys",
-                BoardSettings.TEXT to "Text & icons",
+                BoardSettings.ACCENT to R.string.color_role_accent,
+                BoardSettings.BACKGROUND to R.string.color_role_background,
+                BoardSettings.KEYS to R.string.color_role_keys,
+                BoardSettings.SPECIAL_KEYS to R.string.color_role_special_keys,
+                BoardSettings.TEXT to R.string.color_role_text,
             )
         const val SWATCH_COLUMNS = 6
         val HEX_DIGITS = Regex("[0-9A-Fa-f]{6}")
@@ -1217,7 +1330,7 @@ private class ChoiceRow(
     init {
         gravity = Gravity.CENTER_VERTICAL
         minimumHeight = ui.dp(Tokens.TARGET_MIN + Tokens.SPACE_2)
-        setPadding(ui.dp(Tokens.SPACE_5), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2))
+        setPaddingRelative(ui.dp(Tokens.SPACE_5), ui.dp(Tokens.SPACE_2), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_2))
         background = ui.ripple(ui.raised)
         swatch?.let {
             addView(

@@ -1,0 +1,378 @@
+<resources>
+    <!-- Language & dialect names -->
+    <string name="language_en">الإنجليزية</string>
+    <string name="language_ar">العربية</string>
+    <string name="languages_and">%1$s و%2$s</string>
+    <string name="dialect_jordanian_title">العامّية الأردنية</string>
+    <string name="dialect_jordanian_summary">إضافة مفردات محادثة محلية مثل: كيفك، بدي، هسا</string>
+
+    <!-- Common buttons & states -->
+    <string name="action_back">رجوع</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_close">إغلاق</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_apply">تطبيق</string>
+    <string name="action_default">افتراضي</string>
+    <string name="action_undo">تراجع</string>
+    <string name="state_on">مفعَّل</string>
+    <string name="state_off">متوقّف</string>
+    <string name="state_open">مفتوح</string>
+    <string name="settings_row_a11y">%1$s. %2$s</string>
+
+    <!-- Settings pages -->
+    <string name="page_appearance">المظهر</string>
+    <string name="page_typing">الكتابة</string>
+    <string name="page_privacy">الحافظة والخصوصية</string>
+    <string name="page_phrases">العبارات المحفوظة</string>
+    <string name="page_playground">جرّب لوحة المفاتيح</string>
+    <string name="page_about">عن mboard</string>
+
+    <!-- Settings: Home -->
+    <string name="home_note">%1$s. تعمل بالكامل دون اتصال.</string>
+    <string name="status_active">لوحة المفاتيح النشطة · جاهزة للكتابة</string>
+    <string name="status_enabled">مفعَّلة · اختر mboard للبدء</string>
+    <string name="status_setup">إعداد لوحة المفاتيح</string>
+    <string name="action_enable_mboard">تفعيل mboard</string>
+    <string name="action_choose_mboard">اختيار mboard</string>
+    <string name="section_customize">خصِّصها</string>
+    <string name="home_appearance_summary">%1$s · %2$s</string>
+    <string name="home_typing_summary">الاقتراحات %1$s · الأحرف الكبيرة %2$s</string>
+    <string name="section_on_device">على جهازك</string>
+    <string name="home_privacy_summary">السجل %1$s · تحكّم محلي</string>
+    <string name="home_phrases_summary">ردود وعناوين وتوقيعات</string>
+    <string name="section_explore">استكشف</string>
+    <string name="home_playground_summary">مساحة تجربة مستقلة بعيداً عن الإعدادات</string>
+    <string name="home_about_summary">الإيماءات والأدوات المحلية وحقوق النشر</string>
+
+    <!-- Settings: Appearance -->
+    <string name="appearance_note">اضبط المظهر كما تحب. تُطبَّق التغييرات على لوحة المفاتيح فوراً.</string>
+    <string name="appearance_preview_title">معاينة في ساحة التجربة</string>
+    <string name="appearance_preview_summary">جرّب الكتابة بالمظهر الحالي للوحة المفاتيح</string>
+    <string name="section_color">الألوان</string>
+    <string name="appearance_theme_title">السمة</string>
+    <string name="theme_system">حسب النظام</string>
+    <string name="theme_dark">داكن</string>
+    <string name="theme_light">فاتح</string>
+    <string name="appearance_accent_title">اللون المميّز</string>
+    <string name="accent_violet">بنفسجي</string>
+    <string name="accent_teal">تركوازي</string>
+    <string name="accent_amber">كهرماني</string>
+    <string name="accent_crimson">قرمزي</string>
+    <string name="accent_crimson_hex">قرمزي · ‎#990000</string>
+    <string name="section_custom_colors">ألوان مخصّصة</string>
+    <string name="color_role_accent">اللون المميّز المخصّص</string>
+    <string name="color_role_background">خلفية لوحة المفاتيح</string>
+    <string name="color_role_keys">مفاتيح الأحرف</string>
+    <string name="color_role_special_keys">مفاتيح الوظائف</string>
+    <string name="color_role_text">النص والأيقونات</string>
+    <string name="color_theme_default">افتراضي السمة</string>
+    <string name="color_reset_title">إعادة ضبط الألوان المخصّصة</string>
+    <string name="color_reset_summary">العودة إلى السمة واللون المميّز أعلاه</string>
+    <string name="custom_colors_note">تتجاوز الألوان المخصّصة السمة واللون المميّز. يتكيّف لون النص على المفاتيح المميّزة تلقائياً للحفاظ على التباين.</string>
+    <string name="color_ref_text">النص</string>
+    <string name="color_ref_keys">مفاتيح الأحرف</string>
+    <string name="color_ref_background">الخلفية</string>
+    <string name="color_contrast_ok">التباين مع %1$s ‏%2$s:1</string>
+    <string name="color_contrast_low">التباين مع %1$s ‏%2$s:1 · منخفض، قد يصعب رؤيته</string>
+    <string name="color_invalid_hex">أدخل ستة أرقام ست عشرية، مثل ‎#1A2B3C</string>
+    <string name="section_keyboard_layout">تخطيط لوحة المفاتيح</string>
+    <string name="layout_key_height_title">ارتفاع المفتاح</string>
+    <string name="layout_key_height_value">‎%1$d dp</string>
+    <string name="layout_key_height_compact">مضغوط · ‎44 dp</string>
+    <string name="layout_key_height_balanced">متوازن · ‎54 dp</string>
+    <string name="layout_key_height_roomy">رحب · ‎64 dp</string>
+    <string name="layout_thumb_title">وضع اليد الواحدة</string>
+    <string name="thumb_full">العرض الكامل</string>
+    <string name="thumb_left">إبهام أيسر</string>
+    <string name="thumb_right">إبهام أيمن</string>
+    <string name="layout_dial_swipe_title">سحب لوحة الأرقام</string>
+    <string name="layout_emoji_swipe_title">سحب الرموز الأخيرة</string>
+    <string name="edge_off">متوقّف</string>
+    <string name="edge_left">الحافة اليسرى</string>
+    <string name="edge_right">الحافة اليمنى</string>
+    <string name="edge_swipe_left">سحب من الحافة اليسرى</string>
+    <string name="edge_swipe_right">سحب من الحافة اليمنى</string>
+    <string name="layout_thumb_note">يُقرّب وضع اليد الواحدة المفاتيح نحو إبهامك، وتعود النوافذ الضيقة إلى العرض الكامل لسهولة الاستخدام. اسحب من الحافة للداخل لإظهار لوحتها، وللخارج لإخفائها.</string>
+    <string name="section_key_details">تفاصيل المفاتيح</string>
+    <string name="detail_number_row_title">صف الأرقام</string>
+    <string name="detail_number_row_summary">إبقاء الأرقام أعلى الأحرف</string>
+    <string name="detail_key_previews_title">معاينة المفاتيح</string>
+    <string name="detail_key_previews_summary">إظهار الحرف بشكل مكبَّر عند الضغط</string>
+
+    <!-- Settings: Typing -->
+    <string name="typing_note">مساعدة عند الحاجة. قواميس مدمجة، مع تعلّم الكلمات التي تكتبها عند السماح بذلك، محفوظة على جهازك فقط.</string>
+    <string name="section_input_assistance">مساعدة الكتابة</string>
+    <string name="typing_suggestions_title">اقتراحات الكلمات</string>
+    <string name="typing_suggestions_summary">%1$s · اضغط للإكمال</string>
+    <string name="typing_autocorrect_title">التصحيح التلقائي</string>
+    <string name="typing_autocorrect_summary">تصحيح الأخطاء الإملائية عند المسافة · الحذف يتراجع</string>
+    <string name="typing_learn_title">تعلُّم كلماتي</string>
+    <string name="typing_learn_summary">تعلُّم الكلمات المتكررة والتصحيحات على هذا الجهاز</string>
+    <string name="typing_emoji_title">اقتراحات الرموز التعبيرية</string>
+    <string name="typing_emoji_summary">اقتراح رمز تعبيري مناسب لكلمات مثل نار أو حب</string>
+    <string name="typing_arabizi_title">اقتراحات العربيزي</string>
+    <string name="typing_arabizi_summary">كلمات عربية عند الكتابة بالفرانكو مثل 7abibi · اقتراح فقط دون استبدال تلقائي</string>
+    <string name="typing_capitalize_title">الأحرف الكبيرة التلقائية</string>
+    <string name="typing_capitalize_summary">اتباع تلميحات التطبيق النشط للأحرف الكبيرة</string>
+    <string name="typing_double_space_title">نقطة بمسافتين</string>
+    <string name="typing_double_space_summary">الضغط السريع مرتين على المسافة بعد كلمة يُدرج نقطة</string>
+    <string name="typing_privacy_note">تتلاشى الكلمات المتعلَّمة بمرور الوقت. يتوقف التسجيل في الحقول المحمية وعند تفعيل الدرع. تعمل اقتراحات العربيزي على التخطيط الإنجليزي كاقتراحات فقط.</string>
+    <string name="section_quick_gestures">إيماءات سريعة</string>
+    <string name="typing_gestures_title">جرّب هذه الإيماءات</string>
+    <string name="typing_gestures_summary">السحب والضغط المطوّل والتمرير في ساحة التجربة</string>
+
+    <!-- Settings: Privacy & Clipboard -->
+    <string name="privacy_note">لا يغادر شيء هذا الجهاز. سجل الحافظة اختياري ويمكن مسحه من هنا.</string>
+    <string name="section_clipboard_history">سجل الحافظة</string>
+    <string name="privacy_save_clips_title">حفظ النصوص المنسوخة</string>
+    <string name="privacy_save_clips_summary">أثناء ظهور mboard فقط. يتم تجاهل النصوص الحساسة.</string>
+    <string name="privacy_retention_title">الاحتفاظ بغير المثبَّت</string>
+    <string name="retention_5m">5 دقائق</string>
+    <string name="retention_1h">ساعة واحدة</string>
+    <string name="retention_2h">ساعتان</string>
+    <string name="retention_1d">يوم واحد</string>
+    <string name="retention_forever">حتى المسح</string>
+    <string name="privacy_retention_note">تبقى النصوص المثبَّتة حتى تحذفها. تُحذف النصوص المنتهية صلاحيتها عند فتح السجل التالي.</string>
+    <string name="section_private_input">الكتابة الخاصة</string>
+    <string name="privacy_shield_note">يُفعّل درع لوحة المفاتيح جلسة خاصة: يتوقف تسجيل الحافظة وتعلُّم الكلمات مؤقتاً. تُحمى حقول كلمات المرور تلقائياً. تمنع إشارات عدم التعلُّم من التطبيقات الحفظ والسجل مع استمرار الاقتراحات الثابتة.</string>
+    <string name="section_clear_data">مسح البيانات المحلية</string>
+    <string name="privacy_delete_words_title">حذف الكلمات المتعلَّمة</string>
+    <plurals name="privacy_delete_words_summary">
+        <item quantity="zero">لا توجد كلمات متعلَّمة من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+        <item quantity="one">كلمة واحدة متعلَّمة من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+        <item quantity="two">كلمتان متعلَّمتان من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+        <item quantity="few">%d كلمات متعلَّمة من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+        <item quantity="many">%d كلمة متعلَّمة من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+        <item quantity="other">%d كلمة متعلَّمة من كتابتك، مع ثنائيات الكلمات التالية والتصحيحات المرفوضة</item>
+    </plurals>
+    <string name="privacy_delete_words_confirm_title">حذف الكلمات المتعلَّمة؟</string>
+    <string name="privacy_delete_words_confirm_body">سيتم مسح الكلمات المحلية وثنائيات السياق والتصحيحات المرفوضة، مع الإبقاء على القواميس المدمجة.</string>
+    <string name="toast_learned_words_deleted">حُذفت الكلمات المتعلَّمة</string>
+    <string name="privacy_delete_clips_title">حذف سجل الحافظة</string>
+    <string name="privacy_delete_clips_summary">يشمل النصوص المثبَّتة · يطلب التأكيد</string>
+    <string name="privacy_delete_clips_confirm_title">حذف سجل الحافظة؟</string>
+    <string name="privacy_delete_clips_confirm_body">يشمل ذلك النصوص المثبَّتة. لن تتأثر حافظة النظام الحالية.</string>
+    <string name="toast_clips_deleted">حُذف سجل الحافظة</string>
+
+    <!-- Settings: Saved phrases -->
+    <string name="phrases_note">لا يُحفظ إلا ما تضيفه صراحةً. تبقى المسودات في ذاكرة هذه الشاشة فقط.</string>
+    <string name="section_new_phrase">عبارة جديدة</string>
+    <string name="phrases_editor_hint">رد أو عنوان أو توقيع</string>
+    <string name="phrases_editor_a11y">عبارة محفوظة جديدة</string>
+    <string name="phrases_reason_empty">اكتب عبارة</string>
+    <string name="phrases_count">%1$d من %2$d محفوظة</string>
+    <string name="phrases_reason_duplicate">محفوظة مسبقاً</string>
+    <string name="phrases_empty_note">لا توجد عبارات محفوظة بعد. أضف أول عبارة أعلاه.</string>
+    <string name="phrases_delete_a11y">حذف العبارة المحفوظة</string>
+    <string name="phrases_delete_confirm_title">حذف هذه العبارة؟</string>
+    <string name="phrases_delete_confirm_body">سيزيل هذا العبارة من قائمة عبارات لوحة المفاتيح.</string>
+    <string name="phrases_save_action">حفظ العبارة</string>
+    <string name="toast_phrase_saved">حُفظت العبارة</string>
+    <string name="phrases_add_account_emails">إضافة عناوين بريد من حسابات الجهاز</string>
+    <string name="section_your_phrases">عباراتك</string>
+    <string name="toast_account_picker_unavailable">محدد الحسابات غير متاح على هذا الجهاز</string>
+    <string name="toast_account_no_email">لا يحتوي هذا الحساب على عنوان بريد إلكتروني</string>
+    <string name="toast_account_added">أُضيف %1$s</string>
+    <string name="toast_account_duplicate_or_full">محفوظ مسبقاً، أو تم بلوغ الحد الأقصى (40 عبارة)</string>
+
+    <!-- Settings: Playground -->
+    <string name="playground_note">جرّب الكتابة والإيماءات والاقتراحات هنا دون فتح تطبيق آخر.</string>
+    <string name="playground_field_title">نوع الحقل</string>
+    <string name="playground_field_normal">نص عادي</string>
+    <string name="playground_field_number">رقم</string>
+    <string name="playground_field_email">بريد إلكتروني</string>
+    <string name="playground_field_password">كلمة مرور</string>
+    <string name="playground_editor_hint">اضغط هنا وابدأ الكتابة</string>
+    <string name="playground_editor_a11y">ساحة تجربة الكتابة</string>
+    <string name="playground_password_note">تُمسح نصوص حقل كلمة المرور عند مغادرة هذه الصفحة أو تغيير نوع الحقل أو تحديث المظهر. لا تُدخل كلمة مرور حقيقية هنا.</string>
+    <string name="section_what_to_try">ما يمكنك تجربته</string>
+    <string name="playground_tips">التمرير على المسافة: تحريك المؤشر
+السحب لليسار من مفتاح الحذف: حذف كلمات
+الضغط مرتين على العالي: تثبيت الأحرف الكبيرة
+الضغط المطوّل على حرف: البدائل</string>
+
+    <!-- Settings: About -->
+    <string name="about_note">%1$s. صُمِّمت لكتابة محلية وهادئة.</string>
+    <string name="section_offline">دون اتصال بالتصميم</string>
+    <string name="about_offline_note">بلا إذن شبكة. بلا صوت أو اهتزاز. بلا اتصالات سحابية. تبقى الكلمات المتعلَّمة على هذا الجهاز ويمكن حذفها في أي وقت. بيانات التطبيق مستثناة من النسخ الاحتياطي السحابي ونقل الأجهزة في أندرويد.</string>
+    <string name="section_keyboard_tools">أدوات لوحة المفاتيح</string>
+    <string name="about_tools_note">الرموز التعبيرية: فئات ومفضلة وبحث بالعربية والإنجليزية.
+العبارات المحفوظة: تُقترح عند بدء كتابتها.
+لوحة الأرقام: اضغط مفتاح الأرقام في صفحة الرموز.
+الحاسبة: لوحة حسابية؛ مفتاح = يُدرج النتيجة.
+النسبة المئوية: 50%% تعني 0.5.</string>
+    <string name="section_credits">حقوق النشر والمصادر</string>
+    <string name="about_licenses_title">التراخيص وقوائم الكلمات</string>
+    <string name="about_licenses_summary">البيانات المدمجة ونَسب المصادر والإشعارات الكاملة</string>
+    <string name="about_credits_dialog_title">حقوق النشر</string>
+    <string name="about_manage_keyboards_title">إدارة لوحات المفاتيح</string>
+    <string name="about_manage_keyboards_summary">فتح إعدادات لوحات المفاتيح في أندرويد</string>
+    <string name="about_switch_keyboard_title">تبديل لوحة المفاتيح</string>
+    <string name="about_switch_keyboard_summary">فتح منتقي لوحة المفاتيح في أندرويد</string>
+
+    <!-- Keyboard keys & accessibility -->
+    <string name="key_move_cursor">تحريك المؤشر</string>
+    <string name="key_enter">إدخال</string>
+    <string name="key_pick">اختيار</string>
+    <string name="key_go">انتقال</string>
+    <string name="key_search">بحث</string>
+    <string name="key_send">إرسال</string>
+    <string name="key_next">التالي</string>
+    <string name="key_done">تم</string>
+    <string name="key_previous">السابق</string>
+    <string name="key_shift">عالي</string>
+    <string name="key_shift_on">العالي مفعَّل</string>
+    <string name="key_caps_lock_on">تثبيت العالي مفعَّل</string>
+    <string name="key_change_language">تغيير اللغة</string>
+    <string name="key_backspace">حذف للخلف</string>
+    <string name="key_space">مسافة</string>
+    <string name="key_numbers_symbols">أرقام ورموز</string>
+    <string name="key_more_symbols">رموز إضافية</string>
+    <string name="key_number_pad">لوحة الأرقام</string>
+    <string name="key_letters">أحرف</string>
+
+    <!-- Toolbar & privacy shield -->
+    <string name="toolbar_off_in_password">معطَّل في حقول كلمات المرور</string>
+    <string name="toolbar_slot_off_tooltip">%1$s: معطَّل في حقول كلمات المرور</string>
+    <string name="toolbar_slot_off_a11y">%1$s، معطَّل في حقول كلمات المرور</string>
+    <string name="toolbar_paste">لصق</string>
+    <string name="toolbar_clipboard_history">سجل الحافظة</string>
+    <string name="toolbar_emoji">رموز تعبيرية</string>
+    <string name="toolbar_calculator">حاسبة</string>
+    <string name="shield_password">الدرع مفعَّل لحقل كلمة المرور. لا يُسجَّل السجل؛ تتوفر اقتراحات ثابتة</string>
+    <string name="shield_on">الدرع مفعَّل. تسجيل السجل متوقّف مؤقتاً؛ الاقتراحات متاحة. اضغط للإيقاف</string>
+    <string name="shield_off">الدرع متوقّف. اضغط لإيقاف تسجيل السجل مؤقتاً دون تعطيل الاقتراحات</string>
+    <string name="toolbar_settings">الإعدادات</string>
+    <string name="toolbar_hide_keyboard">إخفاء لوحة المفاتيح</string>
+
+    <!-- Suggestion strip & statuses -->
+    <string name="strip_default_hint">اكتب كلمة لإظهار الإكمالات</string>
+    <string name="strip_no_editor">لا يوجد حقل نص نشط</string>
+    <string name="strip_selection_active">تحديد نص نشط · الإكمالات متوقّفة مؤقتاً</string>
+    <string name="strip_no_surrounding_text">لا يتيح التطبيق قراءة النص للإكمالات</string>
+    <string name="strip_word_too_long">الكلمة أطول من حد الإكمالات</string>
+    <string name="strip_idle_hint">اكتب كلمة · تظهر الإكمالات أثناء الكتابة</string>
+    <string name="strip_no_match">لا يوجد إكمال مطابق</string>
+    <string name="strip_number_field">حقل رقمي</string>
+    <string name="strip_suggestions_off">اقتراحات الكلمات متوقّفة · فعِّلها من الإعدادات</string>
+    <string name="strip_loading_dictionary">جارٍ تحميل قاموس %1$s…</string>
+    <string name="strip_dictionary_failed">القاموس غير متاح · أعد فتح لوحة المفاتيح للمحاولة</string>
+    <string name="strip_suggestions_unavailable">اقتراحات الكلمات غير متاحة</string>
+    <string name="strip_preparing">جارٍ تحضير إكمالات الكلمات…</string>
+    <string name="strip_static_suggestions">اقتراحات ثابتة</string>
+    <string name="strip_saved_addresses">العناوين المحفوظة</string>
+    <string name="strip_note_password">%1$s · حقل كلمة مرور</string>
+    <string name="strip_note_shield">%1$s · الدرع مفعَّل</string>
+    <string name="strip_a11y_autocorrect">تصحيح تلقائي إلى: %1$s</string>
+    <string name="strip_a11y_common">إدراج كلمة شائعة: %1$s</string>
+    <string name="strip_a11y_complete">إكمال الكلمة: %1$s</string>
+
+    <!-- Calculator & Emoji search auxiliary bar -->
+    <string name="calc_placeholder">اكتب عملية حسابية</string>
+    <string name="calc_no_result">لا نتيجة</string>
+    <string name="calc_insert_result_a11y">إدراج النتيجة %1$s</string>
+    <string name="calc_no_result_a11y">لا توجد نتيجة حسابية صالحة</string>
+    <string name="calc_type_valid_tooltip">اكتب عملية حسابية صالحة أولاً</string>
+    <string name="emoji_unavailable">الرموز التعبيرية غير متاحة</string>
+    <string name="emoji_loading">جارٍ تحميل الرموز التعبيرية…</string>
+    <string name="emoji_no_matches">لا توجد نتائج</string>
+    <string name="emoji_type_to_search">اكتب للبحث</string>
+    <string name="emoji_favorites_paused">المفضلة متوقّفة مؤقتاً في الوضع الخاص</string>
+    <string name="emoji_favorite_added">أُضيف إلى المفضلة</string>
+    <string name="emoji_favorite_removed">أُزيل من المفضلة</string>
+    <string name="emoji_browse_all">تصفّح كل الرموز التعبيرية</string>
+    <string name="emoji_search_hint">البحث في الرموز التعبيرية</string>
+    <string name="emoji_search_empty_a11y">البحث في الرموز التعبيرية، فارغ</string>
+    <string name="emoji_search_query_a11y">البحث في الرموز التعبيرية: %1$s</string>
+    <string name="emoji_clear_search">مسح البحث</string>
+
+    <!-- IME messages -->
+    <string name="msg_app_rejected_address">لم يقبل هذا التطبيق العنوان</string>
+    <string name="msg_app_rejected_emoji">لم يقبل هذا التطبيق الرمز التعبيري</string>
+    <string name="msg_app_rejected_completion">لم يقبل هذا التطبيق الإكمال</string>
+    <string name="msg_nothing_to_paste">لا يوجد شيء للصقه</string>
+    <string name="msg_app_rejected_text">لم يقبل هذا التطبيق النص</string>
+    <string name="msg_app_ignored_action">لم يعالج هذا التطبيق الإجراء</string>
+
+    <!-- Clipboard panel -->
+    <string name="clip_panel_title">الحافظة</string>
+    <string name="clip_paste_current">لصق حافظة النظام الحالية</string>
+    <string name="clip_no_plain_text">لا يوجد نص عادي منسوخ</string>
+    <string name="clip_unavailable">الحافظة غير متاحة</string>
+    <string name="clip_clear_unpinned">مسح غير المثبَّت</string>
+    <string name="clip_confirm_clear">تأكيد المسح</string>
+    <string name="clip_confirm_clear_a11y">تأكيد مسح النصوص غير المثبَّتة</string>
+    <string name="clip_clear_unpinned_a11y">مسح النصوص غير المثبَّتة مع إبقاء المثبَّتة</string>
+    <string name="clip_nothing_to_clear">لا يوجد شيء لمسحه</string>
+    <plurals name="clip_count">
+        <item quantity="zero">%d عنصر</item>
+        <item quantity="one">عنصر واحد</item>
+        <item quantity="two">عنصران</item>
+        <item quantity="few">%d عناصر</item>
+        <item quantity="many">%d عنصراً</item>
+        <item quantity="other">%d عنصر</item>
+    </plurals>
+    <plurals name="clip_pinned_count">
+        <item quantity="zero">%d مثبَّت</item>
+        <item quantity="one">واحد مثبَّت</item>
+        <item quantity="two">اثنان مثبَّتان</item>
+        <item quantity="few">%d مثبَّتة</item>
+        <item quantity="many">%d مثبَّتاً</item>
+        <item quantity="other">%d مثبَّت</item>
+    </plurals>
+    <string name="clip_header_counts">%1$s · %2$s</string>
+    <string name="clip_deleted">حُذف العنصر</string>
+    <string name="clip_restore_failed">تغيّر العنصر أو انتهت صلاحيته أو تم بلوغ حد التثبيت</string>
+    <string name="clip_empty_state">لا يوجد شيء محفوظ بعد
+
+تظهر هنا فقط النصوص المنسوخة أثناء ظهور mboard. لا تُحفظ النصوص الحساسة أو التي تتجاوز 20,000 حرف.</string>
+    <string name="clip_paste_a11y">لصق العنصر: %1$s</string>
+    <string name="clip_paste_pinned_a11y">لصق العنصر المثبَّت: %1$s</string>
+    <string name="clip_pin">تثبيت العنصر</string>
+    <string name="clip_unpin">إلغاء تثبيت العنصر</string>
+    <string name="clip_pin_limit">الحد الأقصى 30 عنصراً مثبَّتاً، أو انتهت صلاحية العنصر</string>
+    <string name="clip_delete">حذف العنصر</string>
+
+    <!-- Emoji panel -->
+    <string name="emoji_clear_recent_a11y">مسح الرموز الأخيرة مع إبقاء المفضلة</string>
+    <string name="emoji_clear_recent_tooltip">مسح الأخيرة</string>
+    <string name="emoji_confirm_clear_recent">اضغط مرة أخرى لمسح الأخيرة</string>
+    <string name="emoji_confirm_clear_recent_a11y">تأكيد مسح الرموز التعبيرية الأخيرة</string>
+    <string name="emoji_header_category">رموز تعبيرية · %1$s</string>
+    <string name="emoji_cat_recent">الأخيرة</string>
+    <string name="emoji_cat_favorites">المفضلة</string>
+    <string name="emoji_cat_all">الكل</string>
+    <string name="emoji_cat_smileys">الوجوه والمشاعر</string>
+    <string name="emoji_cat_people">الأشخاص والجسم</string>
+    <string name="emoji_cat_animals">الحيوانات والطبيعة</string>
+    <string name="emoji_cat_food">الطعام والشراب</string>
+    <string name="emoji_cat_travel">السفر والأماكن</string>
+    <string name="emoji_cat_activities">الأنشطة</string>
+    <string name="emoji_cat_objects">الأشياء</string>
+    <string name="emoji_cat_symbols">الرموز</string>
+    <string name="emoji_cat_flags">الأعلام</string>
+    <string name="emoji_data_unavailable">بيانات الرموز التعبيرية غير متاحة</string>
+    <string name="emoji_empty_recent">لا توجد رموز أخيرة بعد. اختر رمزاً من الكل للبدء.</string>
+    <string name="emoji_empty_favorites">اضغط مطوّلاً على أي رمز لحفظه هنا.</string>
+    <string name="emoji_empty_category">لا توجد رموز في هذه الفئة على هذا الجهاز.</string>
+    <string name="emoji_cell_favorite_a11y">%1$s، في المفضلة</string>
+
+    <!-- One-handed rail & edge panels -->
+    <string name="one_hand_position_a11y">موضع لوحة المفاتيح لليد الواحدة</string>
+    <string name="panel_shown_a11y">ظهرت %1$s</string>
+    <string name="panel_hidden_a11y">أُخفيت %1$s</string>
+    <string name="panel_dial_pad">لوحة الأرقام</string>
+    <string name="panel_recent_emoji">الرموز الأخيرة</string>
+    <string name="panel_recent_emoji_empty">لا توجد رموز أخيرة بعد</string>
+    <string name="panel_insert_emoji_a11y">إدراج %1$s</string>
+    <string name="panel_open_all_emoji">فتح كل الرموز التعبيرية</string>
+    <string name="rail_keyboard_left">لوحة
+يسار</string>
+    <string name="rail_keyboard_right">لوحة
+يمين</string>
+    <string name="rail_positioned_left_a11y">لوحة المفاتيح على اليسار</string>
+    <string name="rail_positioned_right_a11y">لوحة المفاتيح على اليمين</string>
+    <string name="rail_full_width">لوحة مفاتيح بالعرض الكامل</string>
+    <string name="rail_move_right">نقل لوحة المفاتيح لليمين</string>
+    <string name="rail_move_left">نقل لوحة المفاتيح لليسار</string>
+</resources>

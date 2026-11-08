@@ -47,7 +47,7 @@ A compact home opens focused pages instead of displaying every control, playgrou
 - Try your keyboard: separate normal/numeric/email/password playground.
 - About: gestures, offline tools, credits and system keyboard management.
 
-Native single-choice dialogs replace inline spinners. The page header stays outside scrolling content, and Back returns to the actual parent page. Setup actions appear only when mboard needs enabling/selecting. Password samples clear on leaving the playground, changing password type or rebuilding appearance and never enter saved drafts. Unsaved phrase text remains only in the activity's memory; both editor fields opt out of normal autofill/view autosave.
+Native single-choice dialogs replace inline spinners. The page header stays outside scrolling content, and Back returns to the actual parent page. Setup actions appear only when mboard needs enabling/selecting. Settings and keyboard chrome are localized in English and Arabic (with Android per-app language support and RTL layout mirroring). Password samples clear on leaving the playground, changing password type or rebuilding appearance and never enter saved drafts. Unsaved phrase text remains only in the activity's memory; both editor fields opt out of normal autofill/view autosave.
 
 ## Privacy and limits
 

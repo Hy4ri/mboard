@@ -67,7 +67,7 @@ class SettingsUi(
                 }
             setCompoundDrawablesRelative(color, null, arrow, null)
             if (destructive) setTextColor(ui.danger)
-            contentDescription = "$title. $detail"
+            contentDescription = context.getString(R.string.settings_row_a11y, title, detail)
         }
 
     fun toggle(
@@ -96,7 +96,7 @@ class SettingsUi(
                     addState(intArrayOf(), track(ui.switchTrackOff))
                 }
             isChecked = checked
-            contentDescription = "$title. $detail"
+            contentDescription = context.getString(R.string.settings_row_a11y, title, detail)
             setOnCheckedChangeListener { _, value -> changed(value) }
         }
 

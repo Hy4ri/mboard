@@ -26,7 +26,7 @@ class SuggestionStrip(
     private val pressedChoices = arrayOfNulls<Choice>(3)
     private var firstSuggestionLogged = false
     private val status =
-        ui.label("Type a word for completions", Tokens.TEXT_CAPTION, true).apply {
+        ui.label(context.getString(R.string.strip_default_hint), Tokens.TEXT_CAPTION, true).apply {
             gravity = Gravity.CENTER_VERTICAL
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
@@ -130,11 +130,13 @@ class SuggestionStrip(
             }
             button.contentDescription =
                 word?.let {
-                    when {
-                        correction -> "Auto-correct to: $it"
-                        prefix.isEmpty() -> "Insert common word: $it"
-                        else -> "Complete word: $it"
-                    }
+                    val res =
+                        when {
+                            correction -> R.string.strip_a11y_autocorrect
+                            prefix.isEmpty() -> R.string.strip_a11y_common
+                            else -> R.string.strip_a11y_complete
+                        }
+                    context.getString(res, it)
                 }
             button.visibility = if (word == null) GONE else VISIBLE
             button.isEnabled = word != null

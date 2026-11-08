@@ -212,7 +212,7 @@ class BoardUi(
         init {
             gravity = Gravity.CENTER_VERTICAL
             minimumHeight = ui.dp(Tokens.PANEL_HEADER)
-            setPadding(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_1), 0)
+            setPaddingRelative(ui.dp(Tokens.SPACE_3), 0, ui.dp(Tokens.SPACE_1), 0)
             addView(title, LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
             addView(actions, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
         }

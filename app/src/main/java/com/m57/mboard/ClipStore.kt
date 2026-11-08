@@ -139,11 +139,11 @@ class ClipStore(
         const val FOREVER = -1L
         val RETENTION_OPTIONS =
             listOf(
-                "5 minutes" to 5 * 60_000L,
-                "1 hour" to 60 * 60_000L,
-                "2 hours" to 2 * 60 * 60_000L,
-                "1 day" to 24 * 60 * 60_000L,
-                "Until cleared" to FOREVER,
+                R.string.retention_5m to 5 * 60_000L,
+                R.string.retention_1h to 60 * 60_000L,
+                R.string.retention_2h to 2 * 60 * 60_000L,
+                R.string.retention_1d to 24 * 60 * 60_000L,
+                R.string.retention_forever to FOREVER,
             )
     }
 }
