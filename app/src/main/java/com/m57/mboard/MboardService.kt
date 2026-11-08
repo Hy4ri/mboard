@@ -348,11 +348,12 @@ class MboardService : InputMethodService() {
         }
         applyEnter(next)
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
-        // Browse panels own their header and use exactly the landscape-capped keys area.
+        // Browse panels own their header and fill the keys plus strip area, keeping the keyboard height constant.
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
         auxiliary?.visibility = if (clipboardOpen) View.GONE else View.VISIBLE
         panelBody?.let { body ->
-            val height = keyboard?.keysHeight ?: 0
+            // Panels replace the hidden strip too, so opening one never shrinks the keyboard and small boards keep room.
+            val height = (keyboard?.keysHeight ?: 0) + if (clipboardOpen) ui.dp(Tokens.STRIP_HEIGHT) else 0
             if (body.layoutParams != null && body.layoutParams.height != height) {
                 body.layoutParams = body.layoutParams.apply { this.height = height }
             }
