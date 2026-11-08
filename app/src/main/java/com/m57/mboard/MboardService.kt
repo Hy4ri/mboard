@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputContentInfo
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -61,6 +62,9 @@ class MboardService : InputMethodService() {
     private var pickedSpaceTail: String? = null
     private var privateSession = false
     private var lastClipStamp = 0L
+    private var lastInspectedClipStamp = 0L
+    private var consumedQuickPasteStamp = 0L
+    private var quickPasteSnapshot: ClipQuickPaste.Snapshot? = null
     private var fieldPolicy = SuggestionPolicy.classify(0)
     private var editorGeneration = 0L
     private var suggestionStrip: SuggestionStrip? = null
@@ -169,14 +173,21 @@ class MboardService : InputMethodService() {
 
     private fun recordClip() {
         // Notifications also arrive while a living IME is hidden: never collect in the background.
-        if (!isInputViewShown || fieldPolicy.password || privateSession || !settings.clipboardHistory) return
+        if (!isInputViewShown || fieldPolicy.password || privateSession) return
         try {
             val clip = clipboard.primaryClip ?: return
-            if (clip.itemCount == 0 || clip.description.extras?.getBoolean(ClipDescription.EXTRA_IS_SENSITIVE) == true) return
+            if (clip.itemCount == 0) return
+            val rawStamp = clip.description.timestamp
+            val snapshot = ClipQuickPaste.inspect(clip)
+            if (snapshot != null && (rawStamp == 0L || rawStamp != lastInspectedClipStamp)) {
+                lastInspectedClipStamp = rawStamp
+                quickPasteSnapshot = snapshot
+                if (mode == Mode.KEYS) updateAuxiliary()
+            }
+            if (!settings.clipboardHistory || clip.description.extras?.getBoolean(ClipDescription.EXTRA_IS_SENSITIVE) == true) return
             // Each copy is saved once: a clip the user deleted from history is not re-added on the next open.
-            val stamp = clip.description.timestamp
-            if (stamp == lastClipStamp) return
-            lastClipStamp = stamp
+            if (rawStamp != 0L && rawStamp == lastClipStamp) return
+            lastClipStamp = rawStamp
             // Do not resolve arbitrary content URIs to read their contents.
             val text = clip.getItemAt(0).text?.toString() ?: return
             clips.add(text)
@@ -184,6 +195,17 @@ class MboardService : InputMethodService() {
         } catch (_: SecurityException) {
             // Access may be revoked between the notification and the read.
         }
+    }
+
+    private fun quickPasteActions(): List<ClipQuickPaste.Action> {
+        if (fieldPolicy.password || privateSession || !settings.suggestions) return emptyList()
+        val snapshot = quickPasteSnapshot ?: return emptyList()
+        if (snapshot.timestamp == consumedQuickPasteStamp) return emptyList()
+        return ClipQuickPaste.actionsFor(snapshot, fieldPolicy.numeric, currentInputEditorInfo)
+    }
+
+    private fun consumeQuickPaste() {
+        quickPasteSnapshot?.let { consumedQuickPasteStamp = it.timestamp }
     }
 
     override fun onCreateInputView(): View {
@@ -201,7 +223,7 @@ class MboardService : InputMethodService() {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
             }
-        suggestionStrip = SuggestionStrip(this, ::acceptSuggestion)
+        suggestionStrip = SuggestionStrip(this, ::acceptSuggestion, ::acceptQuickPaste)
         val body = FrameLayout(this)
         panelBody = body
         val fill = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
@@ -315,6 +337,7 @@ class MboardService : InputMethodService() {
         slot(R.drawable.ic_privacy, privacyLabel, shieldOn) {
             if (!password) {
                 privateSession = !privateSession
+                if (privateSession) quickPasteSnapshot = null
                 emojiPanel?.recordingEnabled = !privateSession && !password
                 if (settings.suggestions) loadWords()
                 rebuildToolbar()
@@ -404,6 +427,7 @@ class MboardService : InputMethodService() {
         lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
+        if (fieldPolicy.password) quickPasteSnapshot = null
         defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language.layout
         lastSpace = 0L
         lastShift = 0L
@@ -600,9 +624,10 @@ class MboardService : InputMethodService() {
             bar.removeAllViews()
             bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
         }
-        // Numbers, phone and date fields take digits, not words: an honest empty strip.
+        // Numbers, phone and date fields take digits, not words: only offer a quick-paste code when one is ready.
         if (fieldPolicy.numeric) {
-            strip.render(emptyList(), "", editorGeneration, shieldNote("Number field"))
+            val quick = if (prefixContext().commonEligible) quickPasteActions() else emptyList()
+            strip.render(emptyList(), "", editorGeneration, shieldNote("Number field"), quickPaste = quick)
             return
         }
         val blocked = if (!settings.suggestions) "Word suggestions off · enable them in Settings" else null
@@ -625,7 +650,8 @@ class MboardService : InputMethodService() {
                     WordSuggestions.State.CLOSED -> "Word suggestions unavailable"
                     else -> "Preparing word completions…"
                 }
-            strip.render(emptyList(), "", editorGeneration, shieldNote(message))
+            val quick = if (prefixContext().commonEligible) quickPasteActions() else emptyList()
+            strip.render(emptyList(), "", editorGeneration, shieldNote(message), quickPaste = quick)
             return
         }
         if (fieldPolicy.password) {
@@ -634,11 +660,13 @@ class MboardService : InputMethodService() {
         }
         val addresses = savedAddresses()
         if (addresses != null && addresses.second.isNotEmpty()) {
-            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses", addresses = true)
+            val quick = if (addresses.first.isEmpty()) quickPasteActions() else emptyList()
+            strip.render(addresses.second, addresses.first, editorGeneration, "Saved addresses", addresses = true, quickPaste = quick)
             return
         }
         val context = prefixContext()
         if (context.commonEligible) {
+            val quick = quickPasteActions()
             val predicted =
                 words
                     .predict(context.contextWords, language, settings.dialectEnabled(language.dialect), learnedNext(context.contextWords))
@@ -648,6 +676,7 @@ class MboardService : InputMethodService() {
                 "",
                 editorGeneration,
                 shieldNote(context.status),
+                quickPaste = quick,
             )
             return
         }
@@ -834,11 +863,10 @@ class MboardService : InputMethodService() {
     }
 
     /**
-     * PIN, number, phone and date pads take digits, not words: they drop the strip row entirely.
-     * Anything that must still reach those fields from the strip (a copied code to quick-paste)
-     * returns true here so the row comes back for it. The toolbar Paste button is unaffected.
+     * PIN, number, phone and date pads take digits, not words: they drop the strip row unless a
+     * copied verification code is ready to quick-paste. The toolbar Paste button is unaffected.
      */
-    private fun stripNeeded(): Boolean = !fieldPolicy.numeric
+    private fun stripNeeded(): Boolean = !fieldPolicy.numeric || (prefixContext().commonEligible && quickPasteActions().isNotEmpty())
 
     private fun updateAuxiliary() {
         val bar = auxiliary ?: return
@@ -1118,17 +1146,62 @@ class MboardService : InputMethodService() {
         suggestionHandler.postDelayed(refreshSuggestions, 30L)
     }
 
+    private fun acceptQuickPaste(
+        action: ClipQuickPaste.Action,
+        generation: Long,
+    ) {
+        if (generation != editorGeneration || mode != Mode.KEYS || fieldPolicy.password || privateSession) return
+        pickedSpaceTail = null
+        predictionTrail.reset()
+        consumeQuickPaste()
+        val ic = currentInputConnection ?: return updateAuxiliary()
+        when (action) {
+            is ClipQuickPaste.Action.Code -> {
+                if (!ic.commitText(action.code, 1)) message("This app did not accept the code")
+            }
+
+            is ClipQuickPaste.Action.Text -> {
+                if (!ic.commitText(action.text, 1)) message("This app did not accept the text")
+            }
+
+            is ClipQuickPaste.Action.Image -> {
+                val mime = ClipQuickPaste.matchingImageMime(currentInputEditorInfo, action.description)
+                val committed =
+                    if (mime != null) {
+                        try {
+                            val label = action.description.label?.takeIf { it.isNotBlank() } ?: "Copied image"
+                            val info = InputContentInfo(action.uri, ClipDescription(label, arrayOf(mime)), null)
+                            ic.commitContent(info, InputConnection.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null)
+                        } catch (_: Exception) {
+                            false
+                        }
+                    } else {
+                        false
+                    }
+                if (!committed && !ic.performContextMenuAction(android.R.id.paste)) {
+                    message("This app did not accept the image")
+                }
+            }
+        }
+        lastSpace = 0L
+        updateAuxiliary()
+        suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.postDelayed(refreshSuggestions, 30L)
+    }
+
     private fun pasteClipboard() {
         pickedSpaceTail = null
         predictionTrail.reset()
         if (fieldPolicy.password) return
-        val raw =
+        consumeQuickPaste()
+        val clip =
             try {
-                val clip = clipboard.primaryClip
-                if (clip != null && clip.itemCount > 0) clip.getItemAt(0).coerceToText(this)?.toString() else null
+                clipboard.primaryClip
             } catch (_: SecurityException) {
                 null
             }
+        val item = if (clip != null && clip.itemCount > 0) clip.getItemAt(0) else null
+        val raw = item?.text?.toString()
         if (mode == Mode.CALCULATOR || mode == Mode.EMOJI_SEARCH) {
             if (!raw.isNullOrEmpty()) {
                 if (query.length + raw.length <= 200) query += raw
@@ -1137,6 +1210,27 @@ class MboardService : InputMethodService() {
                 message("Nothing to paste")
             }
             return
+        }
+        val uri = item?.uri
+        val desc = clip?.description
+        if (uri != null && desc != null) {
+            val mime = ClipQuickPaste.matchingImageMime(currentInputEditorInfo, desc)
+            val ic = currentInputConnection
+            if (mime != null && ic != null) {
+                val committed =
+                    try {
+                        val label = desc.label?.takeIf { it.isNotBlank() } ?: "Copied image"
+                        val info = InputContentInfo(uri, ClipDescription(label, arrayOf(mime)), null)
+                        ic.commitContent(info, InputConnection.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null)
+                    } catch (_: Exception) {
+                        false
+                    }
+                if (committed) {
+                    lastSpace = 0L
+                    if (mode == Mode.KEYS) updateAuxiliary()
+                    return
+                }
+            }
         }
         if (!raw.isNullOrEmpty()) {
             paste(raw)
@@ -1154,6 +1248,7 @@ class MboardService : InputMethodService() {
     private fun paste(text: String) {
         pickedSpaceTail = null
         predictionTrail.reset()
+        consumeQuickPaste()
         if (currentInputConnection?.commitText(text, 1) == false) message("This app did not accept the text")
         lastSpace = 0L
         if (mode == Mode.KEYS) updateAuxiliary()
