@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -1058,12 +1059,32 @@ class SetupActivity : Activity() {
         dialog.setOnDismissListener { if (activeDialog === dialog) activeDialog = null }
         dialog.setOnShowListener {
             dialog.window?.setBackgroundDrawable(ui.shape(ui.raised, Tokens.RADIUS_SHEET))
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(if (destructive) ui.danger else ui.controlAccent)
-            // A destructive confirm must not offer two buttons in one ink: Cancel goes neutral, the action keeps danger.
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(if (destructive) ui.text else ui.controlAccent)
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setTextColor(ui.controlAccent)
+            // Real buttons, not bare text: the confirming action is filled, the others are tonal, all at touch-target height.
+            val fill = if (destructive) ui.danger else ui.accent
+            val ink = if (Color.luminance(fill) > .5f) Color.BLACK else Color.WHITE
+            styleDialogButton(dialog.getButton(AlertDialog.BUTTON_POSITIVE), fill, if (destructive) ink else ui.onAccent)
+            styleDialogButton(dialog.getButton(AlertDialog.BUTTON_NEGATIVE), ui.surface, ui.text)
+            styleDialogButton(dialog.getButton(AlertDialog.BUTTON_NEUTRAL), ui.surface, ui.text)
         }
         dialog.show()
+    }
+
+    private fun styleDialogButton(
+        button: android.widget.Button?,
+        fill: Int,
+        ink: Int,
+    ) {
+        button ?: return
+        button.isAllCaps = false
+        button.setTextColor(ink)
+        button.minWidth = ui.dp(Tokens.TARGET_MIN + Tokens.SPACE_4)
+        button.minimumWidth = button.minWidth
+        button.minHeight = ui.dp(Tokens.TARGET_MIN)
+        button.minimumHeight = button.minHeight
+        button.setPadding(ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_1), ui.dp(Tokens.SPACE_4), ui.dp(Tokens.SPACE_1))
+        button.background = ui.ripple(fill)
+        button.backgroundTintList = null
+        (button.layoutParams as? android.view.ViewGroup.MarginLayoutParams)?.marginStart = ui.dp(Tokens.SPACE_2)
     }
 
     private fun themeName() =
