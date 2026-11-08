@@ -12,11 +12,10 @@ import android.view.ViewConfiguration
 import java.util.Locale
 import kotlin.math.abs
 
-/** Single-owner gestures: a key tap, a space swipe, or a held-space scrub, never two. */
+/** Single-owner gestures: a key tap or a space-bar cursor scrub, never two. */
 class KeyboardView(
     context: Context,
     private val onKey: (String) -> Unit,
-    private val onSpaceSwipe: () -> Unit,
     private val onCursorMove: (Int) -> Unit = {},
     private val onDeleteSwipe: (Int) -> Unit = {},
     private val onDeleteSwipeEnd: (Boolean) -> Unit = {},
@@ -150,7 +149,6 @@ class KeyboardView(
     private var downY = 0f
     private var lastX = 0f
     private var lastY = 0f
-    private var spaceSwiped = false
 
     // Sliding left from backspace marks whole words; release deletes them, sliding back un-marks.
     private var deleteSwiping = false
@@ -207,7 +205,7 @@ class KeyboardView(
     private val hold =
         Runnable {
             val base = origin ?: return@Runnable
-            if (current != base || pointer == MotionEvent.INVALID_POINTER_ID || spaceSwiped) return@Runnable
+            if (current != base || pointer == MotionEvent.INVALID_POINTER_ID) return@Runnable
             if (base.key == Keys.SPACE) {
                 scrubbing = true
                 scrubAnchor = lastX
@@ -600,7 +598,6 @@ class KeyboardView(
         alts = emptyList()
         altRects = emptyList()
         scrubbing = false
-        spaceSwiped = false
         invalidate()
     }
 
@@ -753,10 +750,10 @@ class KeyboardView(
                     }
 
                     scrubbing -> {
-                        val steps = ((x - scrubAnchor) / (18 * density)).toInt()
+                        val steps = ((x - scrubAnchor) / (SCRUB_STEP_DP * density)).toInt()
                         if (steps != 0) {
                             onCursorMove(steps)
-                            scrubAnchor += steps * 18 * density
+                            scrubAnchor += steps * SCRUB_STEP_DP * density
                         }
                     }
 
@@ -773,8 +770,13 @@ class KeyboardView(
                     }
 
                     origin?.key == Keys.SPACE -> {
-                        if (abs(x - downX) > touchSlop || abs(y - downY) > touchSlop) removeCallbacks(hold)
-                        spaceSwiped = abs(x - downX) > 40 * density && abs(y - downY) < rowHeight
+                        // Sliding along the space bar scrubs the cursor at once; no hold needed.
+                        if (abs(x - downX) > touchSlop * 2) {
+                            removeCallbacks(hold)
+                            scrubbing = true
+                            scrubAnchor = x
+                            popup = null
+                        }
                     }
 
                     else -> {
@@ -850,7 +852,6 @@ class KeyboardView(
         val picked = current
         val alternate = alts.getOrNull(altSelected)
         val wasScrubbing = scrubbing
-        val swipe = spaceSwiped
         val deleteWasSent = base?.key == Keys.BACKSPACE
         val releasedCell = keyAt(x, y)
         val preview = popup
@@ -862,10 +863,6 @@ class KeyboardView(
 
             wasScrubbing -> {
                 Unit
-            }
-
-            swipe && base?.key == Keys.SPACE -> {
-                onSpaceSwipe()
             }
 
             base?.key == Keys.SPACE && releasedCell?.key == Keys.SPACE -> {
@@ -886,6 +883,7 @@ class KeyboardView(
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_SWIPE_STEP_DP = 28
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
+        const val SCRUB_STEP_DP = 12
         val CALC_OPERATORS = setOf("÷", "×", "−", "+", "(", ")", "%")
     }
 }

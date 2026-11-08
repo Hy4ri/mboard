@@ -1413,17 +1413,12 @@ class MboardService : InputMethodService() {
     private fun moveCursor(steps: Int) {
         if (mode != Mode.KEYS) return
         val ic = currentInputConnection ?: return
+        val right = steps > 0
         repeat(kotlin.math.abs(steps).coerceAtMost(20)) {
-            sendKey(
-                ic,
-                if (steps <
-                    0
-                ) {
-                    KeyEvent.KEYCODE_DPAD_LEFT
-                } else {
-                    KeyEvent.KEYCODE_DPAD_RIGHT
-                },
-            )
+            // A dpad key at the text end moves focus to another view, which can close the keyboard. Stop at the ends.
+            val next = if (right) ic.getTextAfterCursor(1, 0) else ic.getTextBeforeCursor(1, 0)
+            if (next != null && next.isEmpty()) return
+            sendKey(ic, if (right) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT)
         }
         lastSpace = 0L
     }

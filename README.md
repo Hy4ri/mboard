@@ -13,7 +13,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
 - Hold backspace to repeat deletion; lifting, hiding, or changing keyboards stops the repeat.
-- Swipe space quickly to switch English/Arabic. Hold space first, then slide, to scrub the cursor instead.
+- Slide along the space bar to move the cursor. Use the globe key to switch language.
 - Numeric fields start with a keypad. ABC returns to letters; ?123 and =\< expose two symbol pages.
 - Enter follows the app's Go, Send, Search, Next, Done, or custom action.
 

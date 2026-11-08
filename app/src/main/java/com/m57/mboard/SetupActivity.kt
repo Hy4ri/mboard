@@ -743,7 +743,7 @@ class SetupActivity : Activity() {
         components.add(
             column,
             components.note(
-                "Swipe space: switch language\nHold space: move cursor\nSlide left from backspace: delete words\nDouble-tap Shift: caps lock\nHold a letter: alternates",
+                "Slide on space: move cursor\nSlide left from backspace: delete words\nDouble-tap Shift: caps lock\nHold a letter: alternates",
             ),
         )
     }

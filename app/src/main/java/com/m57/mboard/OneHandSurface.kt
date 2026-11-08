@@ -395,11 +395,12 @@ class OneHandSurface(
         // Keep Android's back gesture from eating the edge swipes (the system caps this at 200 dp per edge).
         val edgeWidth = ui.dp(EDGE_DP)
         val exclusionTop = (height - ui.dp(200)).coerceAtLeast(0)
+        // Space-bar scrubbing also runs into the edges, so both stay excluded even without panels.
         systemGestureExclusionRects =
-            panels.map {
-                val x = if (it.edge == LEFT) 0 else fullWidth - edgeWidth
-                Rect(x, exclusionTop, x + edgeWidth, height)
-            }
+            listOf(
+                Rect(0, exclusionTop, edgeWidth, height),
+                Rect(fullWidth - edgeWidth, exclusionTop, fullWidth, height),
+            )
         // Panels push the keyboard over by their visible width.
         val offset = leftShown
         val width = fullWidth - leftShown - rightShown
