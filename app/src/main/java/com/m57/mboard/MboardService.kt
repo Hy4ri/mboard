@@ -1302,7 +1302,7 @@ class MboardService : InputMethodService() {
                 val info = currentInputEditorInfo
                 val action = info?.imeOptions?.and(EditorInfo.IME_MASK_ACTION) ?: EditorInfo.IME_ACTION_NONE
                 val noAction = (info?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0
-                if (!noAction && info?.actionLabel != null) {
+                if (!noAction && !info?.actionLabel.isNullOrBlank()) {
                     if (!ic.performEditorAction(info.actionId)) message(R.string.msg_app_ignored_action)
                 } else if (!noAction && action > EditorInfo.IME_ACTION_NONE) {
                     if (!ic.performEditorAction(action)) message(R.string.msg_app_ignored_action)
