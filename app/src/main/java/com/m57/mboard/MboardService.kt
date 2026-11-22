@@ -158,6 +158,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun resetEditorState() {
+        input.finishComposing()
         input.reset()
         predictionTrail.reset()
         editorGeneration++
@@ -349,6 +350,7 @@ class MboardService : InputMethodService() {
         if (fieldPolicy.password && next != Mode.KEYS) return
         suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         val previous = mode
+        if (previous != next) input.finishComposing()
         mode = next
         keyboard?.cursorScrubEnabled = next == Mode.KEYS
         input.forgetSpace()
@@ -412,7 +414,7 @@ class MboardService : InputMethodService() {
         restarting: Boolean,
     ) {
         super.onStartInput(info, restarting)
-        input.reset()
+        input.reset(clearFallback = true)
         predictionTrail.reset()
         editorGeneration++
         if (!restarting) rejectedCorrections.clear()
@@ -459,7 +461,7 @@ class MboardService : InputMethodService() {
     ) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         // A caret jump (tap elsewhere) means backspace no longer refers to the correction.
-        input.caretMoved(oldSelStart, newSelStart, newSelEnd)
+        input.caretMoved(oldSelStart, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         if (mode == Mode.KEYS && keyboard?.isCursorScrubbing != true && !suggestionHandler.hasCallbacks(refreshAfterCursorScrub)) {
             updateCapitalization()
             updateAuxiliary()
@@ -527,6 +529,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun toggleLanguage() {
+        input.finishComposing()
         language = Languages.next(language)
         settings.language = language
         if (defaultLayout != Layout.NUMBER) defaultLayout = language.layout
@@ -643,6 +646,10 @@ class MboardService : InputMethodService() {
                 caretAfter: Boolean,
             ) = ic?.commitText(text, if (caretAfter) 1 else 0) ?: false
 
+            override fun setComposing(text: String) = ic?.setComposingText(text, 1) ?: false
+
+            override fun finishComposing() = ic?.finishComposingText() ?: false
+
             override fun deleteSurrounding(
                 before: Int,
                 after: Int,
@@ -662,6 +669,9 @@ class MboardService : InputMethodService() {
             override val language get() = this@MboardService.language
             override val autoCorrectActive get() = mode == Mode.KEYS && keyboard?.let { it.layout == language.layout } == true
             override val doubleSpacePeriod get() = settings.doubleSpacePeriod && !fieldPolicy.password
+            override val composingEnabled get() =
+                settings.composingText && fieldPolicy.allowComposing &&
+                    mode == Mode.KEYS && keyboard?.let { it.layout == language.layout } == true
 
             override fun policy() = stripPolicy()
 
@@ -967,6 +977,7 @@ class MboardService : InputMethodService() {
             paste(raw)
             return
         }
+        input.finishComposing()
         val ic = currentInputConnection
         if (ic?.performContextMenuAction(android.R.id.paste) == true) {
             input.forgetSpace()
@@ -977,6 +988,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun paste(text: String) {
+        input.finishComposing()
         input.forgetPickedSpace()
         predictionTrail.reset()
         if (currentInputConnection?.commitText(text, 1) == false) message(R.string.msg_app_rejected_text)
@@ -985,6 +997,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun pasteEmoji(text: String) {
+        input.finishComposing()
         if (currentInputConnection?.commitText(text, 1) == true && !privateSession && !fieldPolicy.password) emojiHistory.record(text)
         input.forgetSpace()
     }
@@ -1082,17 +1095,19 @@ class MboardService : InputMethodService() {
             Keys.BACKSPACE -> {
                 pressDeleted = null
                 if (!ic.getSelectedText(0).isNullOrEmpty()) {
+                    input.finishComposing()
                     ic.commitText("", 1)
                 } else {
                     val before = ic.getTextBeforeCursor(2, 0)?.toString()
                     if (!before.isNullOrEmpty()) {
                         pressDeleted = before.substring(before.offsetByCodePoints(before.length, -1))
                     }
-                    sendKey(ic, KeyEvent.KEYCODE_DEL)
+                    if (!input.backspaceComposing()) sendKey(ic, KeyEvent.KEYCODE_DEL)
                 }
             }
 
             Keys.DELETE_WORD -> {
+                input.finishComposing()
                 if (!ic.getSelectedText(0).isNullOrEmpty()) {
                     ic.commitText("", 1)
                 } else {
@@ -1107,6 +1122,7 @@ class MboardService : InputMethodService() {
             }
 
             Keys.ENTER -> {
+                input.finishComposing()
                 val info = currentInputEditorInfo
                 val action = info?.imeOptions?.and(EditorInfo.IME_MASK_ACTION) ?: EditorInfo.IME_ACTION_NONE
                 val noAction = (info?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0
@@ -1124,18 +1140,22 @@ class MboardService : InputMethodService() {
             }
 
             Keys.SYMBOLS -> {
+                input.finishComposing()
                 kv.layout = Layout.SYMBOLS
             }
 
             Keys.MORE_SYMBOLS -> {
+                input.finishComposing()
                 kv.layout = Layout.SYMBOLS_MORE
             }
 
             Keys.PAD -> {
+                input.finishComposing()
                 kv.layout = Layout.NUMPAD
             }
 
             Keys.LETTERS -> {
+                input.finishComposing()
                 kv.layout = language.layout
             }
 
@@ -1165,6 +1185,7 @@ class MboardService : InputMethodService() {
     private fun deleteSwipe(steps: Int) {
         val ic = currentInputConnection ?: return
         if (swipeCursor < 0 && swipeBefore == null) {
+            input.finishComposing()
             // The press already removed one character; give it back so the swipe owns the deletion.
             pressDeleted?.let { ic.commitText(it, 1) }
             pressDeleted = null
@@ -1231,6 +1252,7 @@ class MboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         val right = steps > 0
         val arrow = if (right) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT
+        input.finishComposing()
         input.forgetSpace()
         input.reset()
         predictionTrail.reset()

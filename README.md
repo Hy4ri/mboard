@@ -41,7 +41,7 @@ Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bo
 A compact home opens focused pages instead of displaying every control, playground and phrase editor in one long form:
 
 - Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, number row and previews.
-- Typing: suggestions, capitalization and double-space period.
+- Typing: suggestions, capitalization, double-space period and an opt-in "Underline the word being typed" (off by default). When on, the word being typed is an Android composing span until a separator, pick or caret jump; auto-correction and picks replace it in place. Password, numeric, no-suggestions and non-text fields never compose, and a field that drops or rejects composing falls back to plain commits until the next field. Not yet verified on a device.
 - Clipboard & privacy: history, retention and confirmed local-data deletion.
 - Saved phrases: dedicated draft editor, actual saved count, explicit Save/Delete.
 - Try your keyboard: separate normal/numeric/email/password playground.

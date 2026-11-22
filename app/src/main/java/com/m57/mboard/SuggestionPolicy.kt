@@ -6,6 +6,7 @@ import android.text.InputType
 data class SuggestionPolicy(
     val numeric: Boolean,
     val reason: Reason,
+    val allowComposing: Boolean = false,
 ) {
     val password get() = reason == Reason.PASSWORD
 
@@ -44,7 +45,11 @@ data class SuggestionPolicy(
 
                     else -> Reason.AVAILABLE
                 }
-            return SuggestionPolicy(numeric, reason)
+            val noSuggestions = (inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS) != 0
+            val allowComposing =
+                inputClass == InputType.TYPE_CLASS_TEXT && !password && !numeric &&
+                    reason == Reason.AVAILABLE && !noSuggestions
+            return SuggestionPolicy(numeric, reason, allowComposing)
         }
     }
 }

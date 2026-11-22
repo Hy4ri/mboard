@@ -116,6 +116,8 @@
     <string name="typing_capitalize_summary">اتباع تلميحات التطبيق النشط للأحرف الكبيرة</string>
     <string name="typing_double_space_title">نقطة بمسافتين</string>
     <string name="typing_double_space_summary">الضغط السريع مرتين على المسافة بعد كلمة يُدرج نقطة</string>
+    <string name="typing_composing_title">تسطير الكلمة أثناء كتابتها</string>
+    <string name="typing_composing_summary">تمييز الكلمة الحالية كنص قيد التركيب حتى المسافة أو اختيار اقتراح</string>
     <string name="typing_privacy_note">تتلاشى الكلمات المتعلَّمة بمرور الوقت. يتوقف التسجيل في الحقول المحمية وعند تفعيل الدرع. تعمل اقتراحات العربيزي على التخطيط الإنجليزي كاقتراحات فقط.</string>
     <string name="section_quick_gestures">إيماءات سريعة</string>
     <string name="typing_gestures_title">جرّب هذه الإيماءات</string>

@@ -21,6 +21,8 @@ internal class MemoryEditor(
     var text: String,
 ) : EditorPort {
     var caret = text.length
+    var composingStart = -1
+    var composingEnd = -1
 
     override val connected = true
 
@@ -33,9 +35,32 @@ internal class MemoryEditor(
     override fun commit(
         text: String,
         caretAfter: Boolean,
+    ): Boolean = replaceTarget(text, caretAfter, keepComposing = false)
+
+    override fun setComposing(text: String): Boolean = replaceTarget(text, caretAfter = true, keepComposing = true)
+
+    override fun finishComposing(): Boolean {
+        composingStart = -1
+        composingEnd = -1
+        return true
+    }
+
+    private fun replaceTarget(
+        replacement: String,
+        caretAfter: Boolean,
+        keepComposing: Boolean,
     ): Boolean {
-        this.text = this.text.substring(0, caret) + text + this.text.substring(caret)
-        if (caretAfter) caret += text.length
+        val from = if (composingStart >= 0) composingStart else caret
+        val to = if (composingStart >= 0) composingEnd else caret
+        text = text.substring(0, from) + replacement + text.substring(to)
+        caret = if (caretAfter) from + replacement.length else from
+        if (keepComposing && replacement.isNotEmpty()) {
+            composingStart = from
+            composingEnd = from + replacement.length
+        } else {
+            composingStart = -1
+            composingEnd = -1
+        }
         return true
     }
 
@@ -44,7 +69,24 @@ internal class MemoryEditor(
         after: Int,
     ): Boolean {
         val from = maxOf(0, caret - before)
-        text = text.substring(0, from) + text.substring(minOf(text.length, caret + after))
+        val to = minOf(text.length, caret + after)
+        val removed = to - from
+        text = text.substring(0, from) + text.substring(to)
+        if (composingStart >= 0) {
+            when {
+                composingEnd <= from -> {}
+
+                composingStart >= to -> {
+                    composingStart -= removed
+                    composingEnd -= removed
+                }
+
+                else -> {
+                    composingStart = -1
+                    composingEnd = -1
+                }
+            }
+        }
         caret = from
         return true
     }
@@ -62,6 +104,7 @@ internal class Editor(
     private val strip: Strip,
     private val autoCapitalize: Boolean,
     initial: String,
+    private val composing: Boolean = false,
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     private val field = MemoryEditor(initial)
@@ -75,6 +118,7 @@ internal class Editor(
                 override val language get() = strip.language
                 override val autoCorrectActive = true
                 override val doubleSpacePeriod = true
+                override val composingEnabled get() = composing
 
                 override fun policy() = strip.policy()
 
@@ -129,7 +173,8 @@ internal class Editor(
 
     /** Replace the whole field, as if the app had set its text; nothing is learned from it. */
     fun set(value: String) {
-        input.reset()
+        input.finishComposing()
+        input.reset(clearFallback = true)
         input.forgetSpace()
         strip.predictionTrail.reset()
         field.text = value
@@ -139,6 +184,7 @@ internal class Editor(
 
     /** Move the caret [back] chars before the end of the text. */
     fun caretBack(back: Int) {
+        input.finishComposing()
         field.caret = (text.length - back).coerceIn(0, text.length)
         input.reset()
         input.forgetSpace()
@@ -147,6 +193,7 @@ internal class Editor(
     }
 
     fun enter() {
+        input.finishComposing()
         input.reset()
         input.forgetSpace()
         strip.predictionTrail.reset()
@@ -163,8 +210,10 @@ internal class Editor(
             refresh()
             return "undid ${it.corrected} → ${it.original}"
         }
-        val before = field.textBefore(2)
-        if (before.isNotEmpty()) field.deleteSurrounding(before.length - before.offsetByCodePoints(before.length, -1), 0)
+        if (!input.backspaceComposing()) {
+            val before = field.textBefore(2)
+            if (before.isNotEmpty()) field.deleteSurrounding(before.length - before.offsetByCodePoints(before.length, -1), 0)
+        }
         refresh()
         return null
     }
@@ -353,7 +402,7 @@ internal fun runLive(
     val started = System.nanoTime()
     val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect, opts.arabizi)
     val loadMs = (System.nanoTime() - started) / 1_000_000
-    val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty())
+    val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty(), opts.composing)
     if (tty) out.print("\r\u001b[2K")
 
     val now = ZonedDateTime.now()

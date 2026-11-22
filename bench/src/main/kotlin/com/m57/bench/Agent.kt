@@ -80,7 +80,7 @@ internal fun runAgent(
     val strip = Strip(Context(opts.assets), language, dialect, opts.learning, opts.autoCorrect, opts.arabizi)
     val loadMs = (System.nanoTime() - started) / 1_000_000
     var clock = 0L
-    val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty()) { clock }
+    val editor = Editor(strip, opts.autoCapitalize && language.cased, opts.input.orEmpty(), opts.composing) { clock }
 
     val now = ZonedDateTime.now()
     val md = uniqueLog(opts.logDir, now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")), "-agent")

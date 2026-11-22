@@ -46,6 +46,9 @@ class BoardSettings(
     var doubleSpacePeriod: Boolean
         get() = prefs.getBoolean("double_space", true)
         set(value) = prefs.edit().putBoolean("double_space", value).apply()
+    var composingText: Boolean
+        get() = prefs.getBoolean("composing_text", false)
+        set(value) = prefs.edit().putBoolean("composing_text", value).apply()
     var learnWords: Boolean
         get() = prefs.getBoolean("learn_words", true)
         set(value) = prefs.edit().putBoolean("learn_words", value).apply()

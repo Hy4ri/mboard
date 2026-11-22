@@ -120,6 +120,8 @@
     <string name="typing_capitalize_summary">Follow the active app\'s capitalization hints</string>
     <string name="typing_double_space_title">Double-space period</string>
     <string name="typing_double_space_summary">Two quick spaces after a word insert a period</string>
+    <string name="typing_composing_title">Underline the word being typed</string>
+    <string name="typing_composing_summary">Mark the active word as composing text until space or a pick</string>
     <string name="typing_privacy_note">Learned words fade over time. Recording pauses in protected fields and under the shield. Arabizi works on the English layout and only suggests.</string>
     <string name="section_quick_gestures">QUICK GESTURES</string>
     <string name="typing_gestures_title">Try these gestures</string>

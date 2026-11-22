@@ -566,6 +566,16 @@ class SetupActivity : Activity() {
         )
         components.add(
             column,
+            components.toggle(
+                getString(R.string.typing_composing_title),
+                getString(R.string.typing_composing_summary),
+                settings.composingText,
+            ) {
+                settings.composingText = it
+            },
+        )
+        components.add(
+            column,
             components.note(getString(R.string.typing_privacy_note)),
         )
         column.addView(components.section(getString(R.string.section_quick_gestures)))
