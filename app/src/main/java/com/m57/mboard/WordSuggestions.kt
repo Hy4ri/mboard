@@ -409,10 +409,19 @@ class WordSuggestions(
         context: List<String> = emptyList(),
         dialectOn: Boolean = false,
         learned: Map<String, Int> = emptyMap(),
-    ): String? =
-        correctionReading(word, language, context, dialectOn, learned)?.takeUnless {
-            model(language)?.dictionary?.hasCompetingReading(word, it) == true
+    ): String? {
+        val reading = correctionReading(word, language, context, dialectOn, learned) ?: return null
+        val model = model(language) ?: return null
+        if (model.dictionary.hasCompetingReading(word, reading)) return null
+        if (language.script != Script.LATIN || context.isEmpty()) return reading
+        val key = matchKey(reading)
+        // Veto the winner rather than promote a runner-up that did not earn an automatic commit.
+        if (matchKey(context.last()) == key && matchKey(word) != key) {
+            val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
+            if (!scorer.repeatSupported(reading)) return null
         }
+        return reading
+    }
 
     /** Pick the original reading before applying whole-decision ambiguity safety. */
     private fun correctionReading(
