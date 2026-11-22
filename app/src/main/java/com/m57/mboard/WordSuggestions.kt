@@ -583,6 +583,18 @@ class WordSuggestions(
                 (learnedKeys[key]?.toLong() ?: 0L)
         }
 
+        /**
+         * An immediate repeat (the the, i i) is plausible only when the last word's own table row lists it
+         * with a real share (no no, ha ha) or the user has typed it after that word.
+         */
+        fun repeatSupported(word: String): Boolean {
+            val key = candidateKey(word)
+            if ((learnedKeys[key] ?: 0) > 0) return true
+            return listOfNotNull(nextRow, dialectNextRow).any { row ->
+                row.total > 0 && row.count(key).toDouble() / row.total >= REPEAT_MIN_SHARE
+            }
+        }
+
         /** Context words, best known first, for prediction and context-only completions. */
         val sources: List<List<String>> =
             listOfNotNull(
@@ -669,7 +681,9 @@ class WordSuggestions(
             val tail = normalized + matchKey(candidate)
             val run = tail.takeLast(4)
             val repeatsRun = tail.size > 4 && tail.dropLast(1).windowed(4).any { it == run }
-            !repeatsRun && (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) } &&
+            val repeatsLast = normalized.isNotEmpty() && normalized.last() == matchKey(candidate) && !scorer.repeatSupported(candidate)
+            !repeatsRun && !repeatsLast &&
+                (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) } &&
                 // Arabic single letters are word pieces in the tables, except the conjunction و and dialect ع (on).
                 (language.script != Script.ARABIC || candidate.length > 1 || candidate == "و" || (candidate == "ع" && dialectOn))
         }
@@ -980,6 +994,7 @@ class WordSuggestions(
         /** Pseudo-counts each table level gives to the level below it. */
         const val BETA = 3.0
         const val DIALECT_BETA = 3.0
+        const val REPEAT_MIN_SHARE = 0.02
         const val LEARNED_BETA = 3.0
 
         /** Unigram share per use of a learned word, capped at ten uses (about a top-500 word at two uses). */
