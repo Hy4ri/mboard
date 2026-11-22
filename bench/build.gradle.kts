@@ -28,6 +28,7 @@ sourceSets {
                 "com/m57/mboard/PredictionTrail.kt",
                 "com/m57/mboard/UserWords.kt",
                 "com/m57/mboard/StripPlanner.kt",
+                "com/m57/mboard/InputController.kt",
                 "android/**",
                 "com/m57/bench/**",
             )

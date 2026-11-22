@@ -21,6 +21,7 @@ internal const val AGENT_PROTOCOL = """Agent protocol (--agent): one JSON object
   {"key": "backspace"}          one key: backspace | enter | space; add "times": N to repeat
   {"pick": 1}                   tap suggestion slot 1, 2 or 3 (replaces the word at the caret, adds a space)
   {"set": "some text"}          replace the whole field (nothing is learned, caret at the end)
+  {"caret": 3}                  put the caret 3 chars before the end of the text
   {"wait": 800}                 let virtual time pass, in ms (each key press takes 100 ms; two spaces
                                 within 600 ms make ". ", as on the phone)
   {"state": true}               report the current state without changing it
@@ -36,7 +37,8 @@ Everything (commands, every key, every reply) is logged to <log-dir>/<stamp>-age
 
 private const val KEY_MS = 100L
 
-private val ACTIONS = listOf("type", "key", "pick", "set", "wait", "state", "quit")
+private val ACTIONS = listOf("type", "key", "pick", "set", "caret", "wait", "state", "quit")
+private val NON_KEYS = setOf("set", "caret", "wait")
 
 /** One key applied by a command, kept for the logs. */
 private class Step(
@@ -244,6 +246,11 @@ internal fun runAgent(
                     steps += Step("set", editor.text, slotsText(editor, " · "), "field set")
                 }
 
+                cmd.has("caret") -> {
+                    editor.caretBack(cmd.getInt("caret"))
+                    steps += Step("caret", editor.text, slotsText(editor, " · "), "caret ${cmd.getInt("caret")} chars from the end")
+                }
+
                 cmd.has("wait") -> {
                     val ms = cmd.getLong("wait")
                     require(ms >= 0) { "wait must be >= 0" }
@@ -263,7 +270,7 @@ internal fun runAgent(
             }
             reply.put("ok", true)
             stateJson(editor).let { s -> s.keys().forEach { reply.put(it, s.get(it)) } }
-            reply.put("keys", steps.count { it.key != "set" && it.key != "wait" })
+            reply.put("keys", steps.count { it.key !in NON_KEYS })
             reply.put("events", JSONArray(steps.mapNotNull { it.note }))
         } catch (e: JSONException) {
             reply.put("ok", false).put("error", "bad JSON: ${e.message}")
@@ -284,10 +291,10 @@ internal fun runAgent(
                     )
                 } else {
                     appendLine("| $seq | `$label` | | | | |")
-                    val base = keyCount - steps.count { it.key != "set" && it.key != "wait" }
+                    val base = keyCount - steps.count { it.key !in NON_KEYS }
                     var n = base
                     for (s in steps) {
-                        val number = if (s.key == "set" || s.key == "wait") "" else (++n).toString()
+                        val number = if (s.key in NON_KEYS) "" else (++n).toString()
                         val key = if (s.key == "`") "`` ` ``" else "`${cell(s.key)}`"
                         appendLine(
                             "| | $key | $number | `${cell(visible(s.text.takeLast(48)))}` | ${cell(s.strip)} | ${cell(s.note.orEmpty())} |",

@@ -1,6 +1,8 @@
 package com.m57.bench
 
 import android.content.Context
+import com.m57.mboard.EditorPort
+import com.m57.mboard.InputController
 import com.m57.mboard.Keys
 import com.m57.mboard.Language
 import java.io.File
@@ -14,10 +16,47 @@ import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.system.exitProcess
 
+/** A string-backed field with a caret and no selection. */
+internal class MemoryEditor(
+    var text: String,
+) : EditorPort {
+    var caret = text.length
+
+    override val connected = true
+
+    override fun hasSelection() = false
+
+    override fun textBefore(count: Int) = text.substring(maxOf(0, caret - count), caret)
+
+    override fun textAfter(count: Int) = text.substring(caret, minOf(text.length, caret + count))
+
+    override fun commit(
+        text: String,
+        caretAfter: Boolean,
+    ): Boolean {
+        this.text = this.text.substring(0, caret) + text + this.text.substring(caret)
+        if (caretAfter) caret += text.length
+        return true
+    }
+
+    override fun deleteSurrounding(
+        before: Int,
+        after: Int,
+    ): Boolean {
+        val from = maxOf(0, caret - before)
+        text = text.substring(0, from) + text.substring(minOf(text.length, caret + after))
+        caret = from
+        return true
+    }
+
+    override fun beginBatch() = Unit
+
+    override fun endBatch() = Unit
+}
+
 /**
- * A text field with the caret at its end, plus the key handling of MboardService that changes what the
- * strip shows: onKey's separator branch (autocorrect, learning, double space), autoCorrectBefore,
- * undoCorrection and acceptSuggestion. Keep it in step with MboardService.kt when that code changes.
+ * A text field plus the keyboard's real [InputController]: every key goes through the same editor logic
+ * as MboardService, so only the key dispatch and the strip redraw live here.
  */
 internal class Editor(
     private val strip: Strip,
@@ -25,8 +64,26 @@ internal class Editor(
     initial: String,
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
-    var text = initial
-        private set
+    private val field = MemoryEditor(initial)
+    private val input =
+        InputController(
+            field,
+            strip.planner,
+            strip.predictionTrail,
+            strip.rejectedCorrections,
+            object : InputController.Host {
+                override val language get() = strip.language
+                override val autoCorrectActive = true
+                override val doubleSpacePeriod = true
+
+                override fun policy() = strip.policy()
+
+                override fun learningAllowed() = strip.learning
+
+                override fun now() = clock()
+            },
+        )
+    val text get() = field.text
     lateinit var caret: Strip.Caret
         private set
     lateinit var shown: Strip.Shown
@@ -38,16 +95,6 @@ internal class Editor(
     var picks = 0
         private set
 
-    private class Correction(
-        val original: String,
-        val corrected: String,
-        val separator: String,
-    )
-
-    private var lastCorrection: Correction? = null
-    private var lastSpace = 0L
-    private var pickedSpaceTail: String? = null
-
     init {
         refresh()
     }
@@ -55,46 +102,26 @@ internal class Editor(
     /** Shift follows the text, as MboardService.updateCapitalization does after every edit. */
     private fun refresh() {
         strip.shifted = autoCapitalize && sentenceCaps(text)
-        caret = strip.context(text)
+        caret = Strip.Caret(input.context())
         shown = strip.show(caret)
     }
 
     /** A letter, digit, symbol, or separator key. Returns a note when something notable happened. */
     fun type(key: String): String? {
         strip.predictionTrail.reset()
-        val pickedTail = pickedSpaceTail
-        pickedSpaceTail = null
-        if (key != Keys.SPACE) lastSpace = 0L
-        lastCorrection = null
+        val pickedTail = input.beginKey(key, keepsPick = false)
+        input.forgetCorrection()
         var note: String? = null
-        if (key in SEPARATORS) {
-            val before = strip.context(text)
-            val typed = before.prefix
-            val corrected = strip.autoCorrection(typed, before.sentenceStart, before.contextWords)
-            if (corrected != null) {
-                text = text.dropLast(typed.length) + corrected
-                lastCorrection = Correction(typed, corrected, key)
+        if (key in InputController.SEPARATORS) {
+            input.beforeSeparator(key)?.let {
                 corrections++
-                note = "auto-corrected $typed → $corrected"
+                note = "auto-corrected ${it.original} → ${it.corrected}"
             }
-            strip.learn(lastCorrection?.corrected ?: typed, before.contextWords.lastOrNull())
         }
         if (key == Keys.SPACE) {
-            val now = clock()
-            val canPeriod =
-                lastSpace != 0L && now - lastSpace < 600 && text.endsWith(" ") &&
-                    text.dropLast(1).lastOrNull()?.isLetterOrDigit() == true
-            if (canPeriod) {
-                text = text.dropLast(1) + ". "
-                lastSpace = 0L
-                note = (note?.plus(" · ") ?: "") + "double space → period"
-            } else {
-                text += " "
-                lastSpace = now
-            }
+            if (input.space()) note = (note?.plus(" · ") ?: "") + "double space → period"
         } else {
-            if (pickedTail != null && key in SEPARATORS && text.endsWith(pickedTail)) text = text.dropLast(1)
-            text += if (strip.shifted) key.uppercase(Locale.ROOT) else key
+            input.character(if (strip.shifted) key.uppercase(Locale.ROOT) else key, key, pickedTail)
         }
         refresh()
         return note
@@ -102,41 +129,42 @@ internal class Editor(
 
     /** Replace the whole field, as if the app had set its text; nothing is learned from it. */
     fun set(value: String) {
-        pickedSpaceTail = null
+        input.reset()
+        input.forgetSpace()
         strip.predictionTrail.reset()
-        text = value
-        lastSpace = 0L
-        lastCorrection = null
+        field.text = value
+        field.caret = value.length
+        refresh()
+    }
+
+    /** Move the caret [back] chars before the end of the text. */
+    fun caretBack(back: Int) {
+        field.caret = (text.length - back).coerceIn(0, text.length)
+        input.reset()
+        input.forgetSpace()
+        strip.predictionTrail.reset()
         refresh()
     }
 
     fun enter() {
-        pickedSpaceTail = null
+        input.reset()
+        input.forgetSpace()
         strip.predictionTrail.reset()
-        lastSpace = 0L
-        lastCorrection = null
-        text += "\n"
+        field.commit("\n")
         refresh()
     }
 
     /** Backspace straight after an auto-correction puts the typed word back and stops correcting it. */
     fun backspace(): String? {
-        pickedSpaceTail = null
+        input.beginKey(Keys.BACKSPACE, keepsPick = false)
         strip.predictionTrail.reset()
-        lastSpace = 0L
-        val last = lastCorrection
-        lastCorrection = null
-        val tail = last?.let { it.corrected + it.separator }
-        if (last != null && tail != null && text.endsWith(tail)) {
-            text = text.dropLast(tail.length) + last.original
-            strip.rejectedCorrections += last.original
-            strip.learn(last.original, null)
-            strip.rejectCorrection(last.original, last.corrected)
+        input.undoCorrection()?.let {
             undos++
             refresh()
-            return "undid ${last.corrected} → ${last.original}"
+            return "undid ${it.corrected} → ${it.original}"
         }
-        if (text.isNotEmpty()) text = text.substring(0, text.offsetByCodePoints(text.length, -1))
+        val before = field.textBefore(2)
+        if (before.isNotEmpty()) field.deleteSurrounding(before.length - before.offsetByCodePoints(before.length, -1), 0)
         refresh()
         return null
     }
@@ -144,31 +172,10 @@ internal class Editor(
     /** Tap on suggestion [slot]: the word replaces the one at the caret and a space follows. */
     fun pick(slot: Int): String? {
         val word = shown.values.getOrNull(slot) ?: return "nothing in slot ${slot + 1}"
-        val context = caret
-        text = text.dropLast(context.prefix.length) + word.trimEnd() + " "
-        pickedSpaceTail = (word.trimEnd() + " ").takeLast(33)
-        if (strip.language.script == com.m57.mboard.Script.LATIN &&
-            com.m57.mboard.Arabizi
-                .isReading(word)
-        ) {
-            strip.predictionTrail.reset()
-        } else if (' ' !in word.trim()) {
-            strip.acceptCorrection(context.prefix, word.trim())
-            strip.predictionTrail.record(context.contextWords, word.trim())
-            strip.learn(word.trim(), context.contextWords.lastOrNull())
-        } else {
-            strip.predictionTrail.reset()
-        }
-        lastSpace = 0L
-        lastCorrection = null
+        input.accept(word, caret.raw)
         picks++
         refresh()
         return "picked $word"
-    }
-
-    private companion object {
-        // MboardService.separators
-        val SEPARATORS = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
     }
 }
 
