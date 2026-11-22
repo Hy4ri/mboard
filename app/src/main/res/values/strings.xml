@@ -160,7 +160,10 @@
     <string name="phrases_editor_hint">A reply, address or signature</string>
     <string name="phrases_editor_a11y">New saved phrase</string>
     <string name="phrases_reason_empty">Type a phrase</string>
-    <string name="phrases_count">%1$d of %2$d saved</string>
+    <plurals name="phrases_count">
+        <item quantity="one">%1$d of %2$d saved</item>
+        <item quantity="other">%1$d of %2$d saved</item>
+    </plurals>
     <string name="phrases_reason_duplicate">Already saved</string>
     <string name="phrases_empty_note">No saved phrases yet. Add your first one above.</string>
     <string name="phrases_delete_a11y">Delete saved phrase</string>

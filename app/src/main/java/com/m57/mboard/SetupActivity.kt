@@ -679,7 +679,7 @@ class SetupActivity : Activity() {
             val reason =
                 when {
                     clean.isEmpty() -> getString(R.string.phrases_reason_empty)
-                    saved.size >= 40 -> getString(R.string.phrases_count, 40, 40)
+                    saved.size >= 40 -> resources.getQuantityString(R.plurals.phrases_count, 40, 40, 40)
                     clean in saved -> getString(R.string.phrases_reason_duplicate)
                     else -> ""
                 }
@@ -693,7 +693,7 @@ class SetupActivity : Activity() {
 
         fun refresh() {
             val values = store.all()
-            count.text = getString(R.string.phrases_count, values.size, 40)
+            count.text = resources.getQuantityString(R.plurals.phrases_count, values.size, values.size, 40)
             list.removeAllViews()
             if (values.isEmpty()) components.add(list, components.note(getString(R.string.phrases_empty_note)))
             values.forEach { phrase ->

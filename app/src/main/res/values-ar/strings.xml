@@ -160,7 +160,14 @@
     <string name="phrases_editor_hint">رد أو عنوان أو توقيع</string>
     <string name="phrases_editor_a11y">عبارة محفوظة جديدة</string>
     <string name="phrases_reason_empty">اكتب عبارة</string>
-    <string name="phrases_count">%1$d من %2$d محفوظة</string>
+    <plurals name="phrases_count">
+        <item quantity="zero">لا عبارات محفوظة (%1$d من %2$d)</item>
+        <item quantity="one">عبارة واحدة محفوظة (%1$d من %2$d)</item>
+        <item quantity="two">عبارتان محفوظتان (%1$d من %2$d)</item>
+        <item quantity="few">%1$d عبارات محفوظة من %2$d</item>
+        <item quantity="many">%1$d عبارة محفوظة من %2$d</item>
+        <item quantity="other">%1$d عبارة محفوظة من %2$d</item>
+    </plurals>
     <string name="phrases_reason_duplicate">محفوظة مسبقاً</string>
     <string name="phrases_empty_note">لا توجد عبارات محفوظة بعد. أضف أول عبارة أعلاه.</string>
     <string name="phrases_delete_a11y">حذف العبارة المحفوظة</string>
