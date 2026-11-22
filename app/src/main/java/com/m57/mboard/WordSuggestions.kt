@@ -568,6 +568,16 @@ class WordSuggestions(
         private val userKeys = userCounts.mapKeys { candidateKey(it.key) }
         private val total = model.dictionary.totalFrequency.toDouble()
 
+        /** Direct n-gram/learned observation count for [word] after the current context. */
+        fun contextCount(word: String): Long {
+            val key = candidateKey(word)
+            return (nextRow?.count(key) ?: 0L) +
+                (contextRow?.count(key) ?: 0L) +
+                (dialectNextRow?.count(key) ?: 0L) +
+                (dialectContextRow?.count(key) ?: 0L) +
+                (learnedKeys[key]?.toLong() ?: 0L)
+        }
+
         /** Context words, best known first, for prediction and context-only completions. */
         val sources: List<List<String>> =
             listOfNotNull(
@@ -753,10 +763,24 @@ class WordSuggestions(
         // bundled contraction without treating it as an automatic correction of that valid word.
         if (language.script == Script.LATIN && typed.all { it.isLetter() }) {
             for (i in 1 until typed.length) {
-                val contraction = typed.substring(0, i) + "'" + typed.substring(i)
-                if (model.dictionary.frequency(contraction) > 0L) {
-                    consider(contraction, ln(scorer.probability(contraction)))
-                    contractionChoices.add(contraction)
+                val rawContraction = typed.substring(0, i) + "'" + typed.substring(i)
+                val entry = model.dictionary.exactEntry(rawContraction) ?: continue
+                consider(entry.word, ln(scorer.probability(entry.word)))
+                contractionChoices.add(entry.word)
+            }
+        }
+
+        // Real-word confusions (their/there/they're, then/than, your/you're) compete in the same
+        // context scorer as strip-only suggestions; they never trigger automatic replacement.
+        val lowerForConfusion = typed.lowercase(Locale.ROOT)
+        val confusionAlternatives =
+            if (language.script == Script.LATIN) language.confusions[lowerForConfusion].orEmpty() else emptyList()
+        if (confusionAlternatives.isNotEmpty()) {
+            val typedProb = scorer.probability(typed)
+            for (alt in confusionAlternatives) {
+                val altProb = scorer.probability(alt)
+                if (altProb > typedProb) {
+                    consider(alt, ln(altProb) - CONFUSION_COST)
                 }
             }
         }
@@ -824,16 +848,27 @@ class WordSuggestions(
                     it.word in language.supplementalWords
                 }.maxByOrNull { scorer.probability(it.word) }
                 ?.word
-        // Reserve known auxiliary homographs (shed/she'd), not arbitrary possessives
-        // (days/day's) or unknown typos (alls/youd) that need the ordinary alternatives.
-        val contractionChoice =
-            if (model.dictionary.frequency(typed) > 0L) {
-                language.contractionHints[lowerTyped]?.let { wanted ->
-                    contractionChoices.firstOrNull { candidateKey(it) == candidateKey(wanted) }
-                }
+        // Reserve context-favored real-word confusions (better then -> than, over their -> there)
+        // and known auxiliary homographs (shed/she'd), never arbitrary possessives (days/day's).
+        val confusionChoice =
+            if (confusionAlternatives.isNotEmpty()) {
+                val typedProb = scorer.probability(typed)
+                confusionAlternatives
+                    .filter { alt ->
+                        scorer.contextCount(alt) > 0L && scorer.probability(alt) >= typedProb * CONFUSION_PROMOTE_RATIO
+                    }.maxByOrNull { scorer.probability(it) }
             } else {
                 null
             }
+        val contractionChoice =
+            confusionChoice
+                ?: if (model.dictionary.frequency(typed) > 0L) {
+                    language.contractionHints[lowerTyped]?.let { wanted ->
+                        contractionChoices.firstOrNull { candidateKey(it) == candidateKey(wanted) }
+                    }
+                } else {
+                    null
+                }
         // A full curated spelling one transposition away is more specific than an unrelated
         // longer prefix reading (resapwn -> respawn). This never changes replacement policy.
         val supplementalTypo =
@@ -947,6 +982,8 @@ class WordSuggestions(
 
         /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
         const val FUZZY_COST = 1.5
+        const val CONFUSION_COST = 1.0
+        const val CONFUSION_PROMOTE_RATIO = 1.5
         const val STRAY_COST = 3.0
         const val SPLIT_LISTED_MAX = 6000L
         const val SPLIT_COMMON_HALF = 100_000L

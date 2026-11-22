@@ -43,6 +43,8 @@ class Language(
     val contractions: Map<String, String> = emptyMap(),
     /** Real-word homographs whose contractions should remain manually pickable, not forced. */
     val contractionHints: Map<String, String> = emptyMap(),
+    /** Real-word confusion sets scored in context as strip-only suggestions. */
+    val confusions: Map<String, List<String>> = emptyMap(),
     /** Unknown words that are deliberate and must never be corrected: lol, brb. */
     val keepAsTyped: Set<String> = emptySet(),
     /** Curated missing spellings: minimum lexical score only, never invented corpus counts. */
@@ -165,6 +167,7 @@ object Languages {
                 ).mapValues { (_, value) -> value.map(Char::toString) },
             contractions = EnglishWords.CONTRACTIONS,
             contractionHints = EnglishWords.CONTRACTION_HINTS,
+            confusions = EnglishWords.CONFUSIONS,
             keepAsTyped = EnglishWords.SLANG,
             supplementalWords = EnglishWords.SUPPLEMENTAL,
         )
