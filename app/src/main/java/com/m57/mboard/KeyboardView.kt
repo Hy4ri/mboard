@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -21,6 +22,7 @@ class KeyboardView(
     private val onDeleteSwipeEnd: (Boolean) -> Unit = {},
     private val canRepeatWords: () -> Boolean,
     private val onRepeatDelete: (preferWord: Boolean) -> DeleteRepeat,
+    private val onCursorScrubEnd: () -> Unit = {},
 ) : View(context) {
     enum class DeleteRepeat { CHARACTER, CHARACTER_ONLY, WORD, STOP }
 
@@ -162,8 +164,15 @@ class KeyboardView(
     private var characterRepeats = 0
     private var wordRepeatStartedAt: Long? = null
     val isRepeatingDelete: Boolean get() = deleteRepeated && current?.key == Keys.BACKSPACE && origin == current
-    private var scrubbing = false
-    private var scrubAnchor = 0f
+    var cursorScrubEnabled = true
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+        }
+    var isCursorScrubbing = false
+        private set
+    private val cursorDrag = CursorDrag()
     private var popup: Cell? = null
     private var alts = emptyList<String>()
     private var altRects = emptyList<RectF>()
@@ -215,10 +224,7 @@ class KeyboardView(
             val base = origin ?: return@Runnable
             if (current != base || pointer == MotionEvent.INVALID_POINTER_ID) return@Runnable
             if (base.key == Keys.SPACE) {
-                scrubbing = true
-                scrubAnchor = lastX
-                popup = null
-                invalidate()
+                if (cursorScrubEnabled) beginCursorScrub(lastX)
             } else {
                 showAlternates(base)
             }
@@ -345,10 +351,12 @@ class KeyboardView(
         val radius = Tokens.RADIUS_KEY * density
         val edge = Tokens.KEY_OUTLINE_WIDTH * density
         cells.forEach { cell ->
+            val cursorKey = isCursorScrubbing && cell.key == Keys.SPACE
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
             val special = cell.key in SPECIAL
             val base =
                 when {
+                    cursorKey -> ui.accentContainer
                     cell.key == Keys.SHIFT && (shifted || capsLocked) -> ui.accentContainer
                     special -> ui.functionSurface
                     else -> ui.surface
@@ -369,7 +377,7 @@ class KeyboardView(
                 canvas.drawRoundRect(cell.rect, radius, radius, paint)
                 paint.style = Paint.Style.FILL
             }
-            val foreground = ui.text
+            val foreground = if (cursorKey) ui.accentInk else ui.text
             val drawable =
                 when (cell.key) {
                     Keys.GLOBE -> {
@@ -467,7 +475,7 @@ class KeyboardView(
             }
 
             Keys.SPACE -> {
-                if (scrubbing) context.getString(R.string.key_move_cursor) else language.label
+                if (isCursorScrubbing) context.getString(R.string.key_move_cursor) else language.label
             }
 
             Keys.ENTER -> {
@@ -614,7 +622,10 @@ class KeyboardView(
         alts = emptyList()
         altRects = emptyList()
         deleteRepeated = false
-        scrubbing = false
+        if (isCursorScrubbing) {
+            isCursorScrubbing = false
+            onCursorScrubEnd()
+        }
         invalidate()
     }
 
@@ -741,7 +752,7 @@ class KeyboardView(
             MotionEvent.ACTION_POINTER_DOWN -> {
                 // Roll over to the new finger only after committing the prior ordinary tap.
                 // Its later UP is ignored, so fast two-thumb typing never emits it twice.
-                if (!scrubbing && alts.isEmpty()) {
+                if (!isCursorScrubbing && alts.isEmpty()) {
                     if (pointer != MotionEvent.INVALID_POINTER_ID) release(lastX, lastY)
                     beginTouch(event.getX(event.actionIndex), event.getY(event.actionIndex), event.getPointerId(event.actionIndex))
                 }
@@ -766,14 +777,6 @@ class KeyboardView(
                             } else {
                                 ((x - altRects.first().left) / altRects.first().width()).toInt().coerceIn(0, alts.lastIndex)
                             }
-                    }
-
-                    scrubbing -> {
-                        val steps = ((x - scrubAnchor) / (SCRUB_STEP_DP * density)).toInt()
-                        if (steps != 0) {
-                            onCursorMove(steps)
-                            scrubAnchor += steps * SCRUB_STEP_DP * density
-                        }
                     }
 
                     origin?.key == Keys.BACKSPACE && (deleteSwiping || startsDeleteSwipe(x)) -> {
@@ -802,13 +805,7 @@ class KeyboardView(
                     }
 
                     origin?.key == Keys.SPACE -> {
-                        // Sliding along the space bar scrubs the cursor at once; no hold needed.
-                        if (abs(x - downX) > touchSlop * 2) {
-                            removeCallbacks(hold)
-                            scrubbing = true
-                            scrubAnchor = x
-                            popup = null
-                        }
+                        trackSpaceMotion(event, index)
                     }
 
                     else -> {
@@ -818,19 +815,11 @@ class KeyboardView(
                 invalidate()
             }
 
-            MotionEvent.ACTION_POINTER_UP -> {
-                if (event.getPointerId(event.actionIndex) ==
-                    pointer
-                ) {
-                    release(event.getX(event.actionIndex), event.getY(event.actionIndex))
-                }
-            }
-
-            MotionEvent.ACTION_UP -> {
-                if (event.getPointerId(event.actionIndex) ==
-                    pointer
-                ) {
-                    release(event.getX(event.actionIndex), event.getY(event.actionIndex))
+            MotionEvent.ACTION_POINTER_UP, MotionEvent.ACTION_UP -> {
+                val index = event.actionIndex
+                if (event.getPointerId(index) == pointer) {
+                    if (origin?.key == Keys.SPACE) trackSpaceMotion(event, index)
+                    release(event.getX(index), event.getY(index))
                 }
             }
 
@@ -839,6 +828,49 @@ class KeyboardView(
             }
         }
         return true
+    }
+
+    private fun beginCursorScrub(anchorX: Float) {
+        removeCallbacks(hold)
+        isCursorScrubbing = true
+        cursorDrag.start(anchorX / density)
+        setPopup(null)
+        performHapticFeedback(HapticFeedbackConstants.GESTURE_START)
+        invalidate()
+    }
+
+    private fun trackSpaceMotion(
+        event: MotionEvent,
+        index: Int,
+    ) {
+        if (!cursorScrubEnabled) return
+        var steps = 0
+
+        fun sample(
+            x: Float,
+            y: Float,
+        ) {
+            if (!isCursorScrubbing) {
+                val dx = x - downX
+                val dy = abs(y - downY)
+                val threshold = touchSlop * 1.5f
+                if (dy > touchSlop && dy >= abs(dx)) removeCallbacks(hold)
+                if (abs(dx) <= threshold || abs(dx) <= dy) return
+                // Consume only the dead zone, not the rest of the sample that crossed it.
+                beginCursorScrub(downX + if (dx > 0f) threshold else -threshold)
+            }
+            val delta = cursorDrag.move(x / density)
+            if ((steps > 0 && delta < 0) || (steps < 0 && delta > 0)) {
+                // Don't net opposite steps: the editor may have clamped the first run at an edge.
+                onCursorMove(steps)
+                steps = 0
+            }
+            steps += delta
+        }
+
+        for (i in 0 until event.historySize) sample(event.getHistoricalX(index, i), event.getHistoricalY(index, i))
+        sample(event.getX(index), event.getY(index))
+        if (steps != 0) onCursorMove(steps)
     }
 
     private fun startsDeleteSwipe(x: Float) = !deleteRepeated && downX - x > DELETE_SWIPE_START_DP * density
@@ -858,7 +890,9 @@ class KeyboardView(
         current = origin
         setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         val key = origin?.key
-        if (key == Keys.SPACE || (key != null && language.alternatesFor(key) != null)) postDelayed(hold, Tokens.MOTION_HOLD)
+        if ((key == Keys.SPACE && cursorScrubEnabled) || (key != null && language.alternatesFor(key) != null)) {
+            postDelayed(hold, Tokens.MOTION_HOLD)
+        }
         if (key == Keys.BACKSPACE) {
             deleteStart = now()
             repeatWords = canRepeatWords()
@@ -885,7 +919,7 @@ class KeyboardView(
         val base = origin
         val picked = current
         val alternate = alts.getOrNull(altSelected)
-        val wasScrubbing = scrubbing
+        val wasScrubbing = isCursorScrubbing
         val releasedCell = keyAt(x, y)
         val preview = popup
         cancelTouch()
@@ -925,7 +959,6 @@ class KeyboardView(
         const val DELETE_WORD_RAMP_MS = 1_600L
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_SWIPE_STEP_DP = 28
-        const val SCRUB_STEP_DP = 12
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
     }
 }
