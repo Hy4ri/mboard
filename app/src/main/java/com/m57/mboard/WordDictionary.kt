@@ -483,6 +483,19 @@ class WordDictionary private constructor(
         return scores.values.sortedByDescending { it.score }.take(12)
     }
 
+    internal data class CorrectionReading(
+        val word: String,
+        val channelWeight: Double,
+    )
+
+    /** Keep lexical eligibility here; the contextual engine makes the automatic-edit decision. */
+    internal fun latinReadings(word: String): List<CorrectionReading> {
+        val options = correctionOptions(word)
+        // Legacy rescue is already restricted to a single lexically eligible reading. It cannot introduce a new runner-up.
+        if (options.isEmpty()) return correction(word)?.let { listOf(CorrectionReading(it, 1.0)) }.orEmpty()
+        return options.map { CorrectionReading(it.word, (it.score / maxOf(frequency(it.word), 1L)).coerceIn(1e-6, 1.0)) }
+    }
+
     /**
      * The dictionary spelling the typed word should become, or null when it should stay as typed.
      * English: contractions, 1-edit / 2-edit corrections.

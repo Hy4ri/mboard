@@ -74,6 +74,23 @@ class InputController(
         private set
     private var lastSpace = 0L
     private var pickedSpaceTail: String? = null
+    private var trackedToken = ""
+    private var trackedContextWords = emptyList<String>()
+    private val trackedTouches = mutableListOf<TouchSample?>()
+
+    fun forgetTouchEvidence() {
+        trackedToken = ""
+        trackedContextWords = emptyList()
+        trackedTouches.clear()
+    }
+
+    private fun matchesTrackedToken(context: StripPlanner.CaretContext): Boolean =
+        trackedToken.isNotEmpty() && context.suffix.isEmpty() && context.prefix == trackedToken &&
+            context.contextWords == trackedContextWords
+
+    fun touchSamples(context: StripPlanner.CaretContext): List<TouchSample?> =
+        if (matchesTrackedToken(context)) trackedTouches.toList() else emptyList()
+
     private var composingWord = ""
     var composingBroken = false
         private set
@@ -94,6 +111,7 @@ class InputController(
 
     /** The editor or field changed under us: nothing pending refers to the old text. */
     fun reset(clearFallback: Boolean = false) {
+        forgetTouchEvidence()
         pickedSpaceTail = null
         lastCorrection = null
         composingWord = ""
@@ -132,6 +150,11 @@ class InputController(
         candidatesStart: Int = -1,
         candidatesEnd: Int = -1,
     ) {
+        if (trackedToken.isNotEmpty() &&
+            (newStart != newEnd || newStart - oldStart !in 0..trackedToken.length || !matchesTrackedToken(context()))
+        ) {
+            forgetTouchEvidence()
+        }
         if (composingWord.isNotEmpty()) {
             val jumped = newStart != newEnd || kotlin.math.abs(newStart - oldStart) > composingWord.length + 2
             when {
@@ -163,6 +186,7 @@ class InputController(
         val tail = pickedSpaceTail
         if (!keepsPick) pickedSpaceTail = null
         if (key != Keys.SPACE) lastSpace = 0L
+        if (key != Keys.SHIFT && key !in SEPARATORS && key.singleOrNull()?.isLetter() != true) forgetTouchEvidence()
         return tail
     }
 
@@ -171,6 +195,7 @@ class InputController(
      * (or clears the span on the last character) so the editor never needs a synthetic DEL key event.
      */
     fun backspaceComposing(): Boolean {
+        forgetTouchEvidence()
         if (composingWord.isEmpty()) return false
         if (port.hasSelection() || port.textBefore(composingWord.length) != composingWord) {
             finishComposing()
@@ -229,11 +254,13 @@ class InputController(
     /** Before a separator is committed: correct the word at the caret (or finish composing) and learn what was typed. */
     fun beforeSeparator(separator: String): Correction? {
         val before = context()
+        val touches = touchSamples(before)
+        forgetTouchEvidence()
         // A separator inside a word splits it; correcting the first half would mangle it.
         if (before.suffix.isEmpty()) {
             if (host.autoCorrectActive) {
                 val typed = before.prefix
-                val corrected = planner.autoCorrection(typed, before.sentenceStart, before.contextWords, host.policy())
+                val corrected = planner.autoCorrection(typed, before.sentenceStart, before.contextWords, host.policy(), touches)
                 if (corrected != null && replaceBeforeCursor(typed, corrected)) {
                     lastCorrection = Correction(typed, corrected, separator)
                 }
@@ -280,11 +307,34 @@ class InputController(
         text: String,
         key: String,
         pickedTail: String?,
+        touch: TouchSample? = null,
     ) {
+        val letter = text.singleOrNull()?.takeIf(Char::isLetter)
+        val sample = touch?.takeIf { letter != null && it.key.equals(letter, ignoreCase = true) }
+        val prior = if (sample != null || trackedToken.isNotEmpty()) context() else null
+
+        fun record(success: Boolean) {
+            if (prior == null) return
+            if (!success || letter == null || prior.status !in TOUCHABLE_CARET || prior.suffix.isNotEmpty() ||
+                trackedToken.length >= StripPlanner.MAX_WORD_CHARS
+            ) {
+                forgetTouchEvidence()
+                return
+            }
+            if (!matchesTrackedToken(prior)) {
+                forgetTouchEvidence()
+                if (prior.prefix.isNotEmpty() || sample == null) return
+                trackedContextWords = prior.contextWords
+            }
+            trackedToken += letter
+            trackedTouches.add(sample)
+        }
+
         val absorbSpace =
             pickedTail != null && key in SEPARATORS && key != Keys.SPACE && !port.hasSelection() &&
                 port.textBefore(pickedTail.length)?.endsWith(pickedTail) == true
         if (absorbSpace) {
+            forgetTouchEvidence()
             finishComposing()
             port.beginBatch()
             try {
@@ -304,6 +354,7 @@ class InputController(
                     val next = composingWord + text
                     if (port.setComposing(next)) {
                         composingWord = next
+                        record(true)
                         return
                     }
                     composingWord = ""
@@ -312,6 +363,7 @@ class InputController(
                 } else if (context.prefix.isEmpty()) {
                     if (port.setComposing(text)) {
                         composingWord = text
+                        record(true)
                         return
                     }
                     composingBroken = true
@@ -324,7 +376,7 @@ class InputController(
         } else {
             finishComposing()
         }
-        port.commit(text)
+        record(port.commit(text))
     }
 
     /**
@@ -336,6 +388,7 @@ class InputController(
         expected: String,
         replacement: String,
     ): Boolean {
+        forgetTouchEvidence()
         if (expected.isEmpty() || port.hasSelection()) return false
         if (port.textBefore(expected.length) != expected) return false
         if (composingWord.isNotEmpty() && composingWord == expected) {
@@ -391,6 +444,7 @@ class InputController(
         word: String,
         context: StripPlanner.CaretContext,
     ): Boolean {
+        forgetTouchEvidence()
         val value = word.trimEnd() + if (context.suffix.isNotEmpty() && context.textAfterWord) "" else " "
         val done =
             if (context.word.isEmpty()) {
@@ -422,6 +476,7 @@ class InputController(
     ) = planner.learn(word, previous, host.language, host.learningAllowed())
 
     companion object {
+        private val TOUCHABLE_CARET = setOf(StripPlanner.CaretStatus.NO_MATCH, StripPlanner.CaretStatus.IDLE_HINT)
         val SEPARATORS = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
     }
 }

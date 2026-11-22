@@ -238,6 +238,7 @@ class MboardService : InputMethodService() {
                 suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
                 suggestionHandler.postDelayed(refreshAfterCursorScrub, CURSOR_REFRESH_MS)
             }
+        kv.onTouchKey = ::onKey
         keyboard = kv
         kv.language = language
         kv.layout = defaultLayout
@@ -374,6 +375,7 @@ class MboardService : InputMethodService() {
             )
         slot(R.drawable.ic_privacy, privacyLabel, shieldOn) {
             if (!password) {
+                input.forgetTouchEvidence()
                 privateSession = !privateSession
                 emojiPanel?.recordingEnabled = !privateSession && !password
                 if (settings.suggestions) loadWords()
@@ -701,6 +703,7 @@ class MboardService : InputMethodService() {
             suggestionsEnabled = settings.suggestions,
             autoCorrect = settings.autoCorrect,
             useLearnedHistory = !privateSession,
+            touchesFor = { context -> if (learningAllowed()) input.touchSamples(context) else emptyList() },
             arabizi = settings.arabiziSuggestions,
             numeric = fieldPolicy.numeric,
             password = fieldPolicy.password,
@@ -1267,7 +1270,12 @@ class MboardService : InputMethodService() {
         return if (before == null || word) DeleteRepeat.CHARACTER_ONLY else DeleteRepeat.CHARACTER
     }
 
-    private fun onKey(key: String) {
+    private fun onKey(key: String) = onKey(key, null)
+
+    private fun onKey(
+        key: String,
+        touch: TouchSample?,
+    ) {
         if (suggestionHandler.hasCallbacks(refreshAfterDeleteRepeat)) {
             suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
             updateCapitalization()
@@ -1363,7 +1371,12 @@ class MboardService : InputMethodService() {
             }
 
             else -> {
-                input.character(if (kv.shifted) key.uppercase(Locale.ROOT) else key, key, pickedTail)
+                input.character(
+                    if (kv.shifted) key.uppercase(Locale.ROOT) else key,
+                    key,
+                    pickedTail,
+                    touch = touch?.takeIf { language.script == Script.LATIN && learningAllowed() },
+                )
                 if (!kv.capsLocked) kv.shifted = false
             }
         }

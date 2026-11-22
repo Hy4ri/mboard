@@ -29,6 +29,7 @@ sourceSets {
                 "com/m57/mboard/UserWords.kt",
                 "com/m57/mboard/StripPlanner.kt",
                 "com/m57/mboard/InputController.kt",
+                "com/m57/mboard/TouchSample.kt",
                 "android/**",
                 "com/m57/bench/**",
             )

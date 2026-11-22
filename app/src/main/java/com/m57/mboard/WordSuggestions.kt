@@ -403,14 +403,22 @@ class WordSuggestions(
         language: Language,
     ): String = language.contractions[word] ?: word
 
+    fun interface CorrectionEvidence {
+        fun logWeight(
+            typed: String,
+            candidate: String,
+        ): Double
+    }
+
     fun correction(
         word: String,
         language: Language,
         context: List<String> = emptyList(),
         dialectOn: Boolean = false,
         learned: Map<String, Int> = emptyMap(),
+        evidence: CorrectionEvidence? = null,
     ): String? {
-        val reading = correctionReading(word, language, context, dialectOn, learned) ?: return null
+        val reading = correctionReading(word, language, context, dialectOn, learned, evidence) ?: return null
         val model = model(language) ?: return null
         if (model.dictionary.hasCompetingReading(word, reading)) return null
         if (language.script != Script.LATIN || context.isEmpty()) return reading
@@ -418,7 +426,7 @@ class WordSuggestions(
         // Veto the winner rather than promote a runner-up that did not earn an automatic commit.
         if (matchKey(context.last()) == key && matchKey(word) != key) {
             val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
-            if (!scorer.repeatSupported(reading)) return null
+            if (!scorer.correctionRepeatSupported(reading)) return null
         }
         return reading
     }
@@ -430,29 +438,39 @@ class WordSuggestions(
         context: List<String>,
         dialectOn: Boolean,
         learned: Map<String, Int>,
+        evidence: CorrectionEvidence? = null,
     ): String? {
         if (closed) return null
         val model = model(language) ?: return null
-        val legacy = model.dictionary.correction(word)
-        // Arabic unknown forms are often valid inflections, not typos. Keep its conservative policy;
-        // context-ranked suggestions remain available without forcing a new spelling on space.
-        if (language.script == Script.ARABIC) return legacy
-        val options = model.dictionary.correctionOptions(word)
-        // Keep spelling normalization, contractions and the deliberate-word guards in the dictionary.
-        if (options.isEmpty()) return legacy
+        // Arabic unknown forms are often valid inflections, not typos. Keep its conservative policy.
+        if (language.script == Script.ARABIC) return model.dictionary.correction(word)
+        val options = model.dictionary.latinReadings(word)
+        if (options.isEmpty()) return null
+        if (options.size == 1) return options.first().word
         val scorer = Scorer(model, context, language, dialectOn && language.dialect != null, learned, emptyMap())
-        val ranked =
-            options
-                .map { c ->
-                    val frequency = model.dictionary.frequency(c.word)
-                    val editWeight = (c.score / maxOf(frequency, 1L)).coerceIn(1e-6, 1.0)
-                    c to scorer.probability(c.word) * editWeight
-                }.sortedByDescending { it.second }
-        val best = ranked.first()
-        val runner = ranked.getOrNull(1)
-        // Ambiguous typos stay suggestions, not automatic replacements. Context can break the tie.
-        if (runner != null && best.second < runner.second * 3.0) return null
-        return best.first.word
+        val scores = options.map { ln(scorer.probability(it.word)) + ln(it.channelWeight) }
+        val winner = confidentCorrection(scores) ?: return null
+        // A touch may expose ambiguity, but it cannot turn an unapproved alternative into a forced replacement.
+        if (evidence != null) {
+            val touchScores = scores.mapIndexed { i, score -> score + evidence.logWeight(word, options[i].word) }
+            if (confidentCorrection(touchScores) != winner) return null
+        }
+        return options[winner].word
+    }
+
+    private fun confidentCorrection(scores: List<Double>): Int? {
+        var winner = 0
+        var runner = Double.NEGATIVE_INFINITY
+        for (i in 1 until scores.size) {
+            val score = scores[i]
+            if (score > scores[winner]) {
+                runner = scores[winner]
+                winner = i
+            } else if (score > runner) {
+                runner = score
+            }
+        }
+        return winner.takeIf { scores[winner] - runner >= CORRECTION_LOG_GAP }
     }
 
     fun likelyIntended(
@@ -600,6 +618,14 @@ class WordSuggestions(
             val key = candidateKey(word)
             if ((learnedKeys[key] ?: 0) > 0) return true
             return listOfNotNull(nextRow, dialectNextRow).any { row ->
+                row.total > 0 && row.count(key).toDouble() / row.total >= REPEAT_MIN_SHARE
+            }
+        }
+
+        fun correctionRepeatSupported(word: String): Boolean {
+            if (repeatSupported(word)) return true
+            val key = candidateKey(word)
+            return listOfNotNull(contextRow, dialectContextRow).any { row ->
                 row.total > 0 && row.count(key).toDouble() / row.total >= REPEAT_MIN_SHARE
             }
         }
@@ -1003,6 +1029,7 @@ class WordSuggestions(
         /** Pseudo-counts each table level gives to the level below it. */
         const val BETA = 3.0
         const val DIALECT_BETA = 3.0
+        val CORRECTION_LOG_GAP = ln(3.0)
         const val REPEAT_MIN_SHARE = 0.02
         const val LEARNED_BETA = 3.0
 

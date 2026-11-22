@@ -81,6 +81,8 @@ class KeyboardView(
         val row: Int,
     )
 
+    var onTouchKey: ((String, TouchSample) -> Unit)? = null
+    private var touchGeometry = TouchSample.Geometry(emptyMap())
     private val cells = mutableListOf<Cell>()
     private var geometryLayout: Layout? = null
     private var geometryWidth = -1
@@ -389,6 +391,19 @@ class KeyboardView(
                 }
             }
         }
+        touchGeometry =
+            TouchSample.Geometry(
+                cells
+                    .mapNotNull { cell ->
+                        val key = cell.key.singleOrNull()?.lowercaseChar()
+                        if (cell.kind != KeyKind.CHAR || key == null || !key.isLetter()) {
+                            null
+                        } else {
+                            key to
+                                TouchSample.Bounds(cell.rect.centerX(), cell.rect.centerY(), cell.rect.width(), cell.rect.height())
+                        }
+                    }.toMap(),
+            )
         geometryWidth = width
         geometryHeight = drawnKeysHeight
         geometryLayout = layout
@@ -1006,7 +1021,15 @@ class KeyboardView(
             }
 
             releasedCell != null && picked != null && picked.key != Keys.SPACE -> {
-                onKey(picked.key)
+                val letter = picked.key.singleOrNull()?.lowercaseChar()
+                val callback = onTouchKey
+                if (releasedCell.key == picked.key && picked.kind == KeyKind.CHAR && letter != null && letter.isLetter() &&
+                    x.isFinite() && y.isFinite() && callback != null
+                ) {
+                    callback(picked.key, TouchSample(letter, x, y, touchGeometry))
+                } else {
+                    onKey(picked.key)
+                }
                 if (showPreview && preview != null) {
                     popup = preview
                     postDelayed(hidePopup, if (animationsEnabled()) Tokens.MOTION_FAST else 0L)

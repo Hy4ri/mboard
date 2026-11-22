@@ -77,6 +77,7 @@ class StripPlanner(
         val password: Boolean = false,
         val shifted: Boolean = false,
         val capsLocked: Boolean = false,
+        val touchesFor: (CaretContext) -> List<TouchSample?> = { emptyList() },
     )
 
     enum class StripMode {
@@ -175,14 +176,16 @@ class StripPlanner(
         wordStart: Boolean,
         contextWords: List<String> = emptyList(),
         policy: StripPolicy,
+        touches: List<TouchSample?> = emptyList(),
     ): String? {
         if (!policy.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || policy.password) return null
         if (userWords.knows(typed, policy.language)) return null
         if (words.state(policy.language) != WordSuggestions.State.READY) return null
         if (policy.language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
+        val evidence = if (touches.isEmpty()) null else TouchCorrectionEvidence(touches)
         val correction =
             words
-                .correction(typed, policy.language, contextWords, policy.dialect, learnedNext(contextWords, policy))
+                .correction(typed, policy.language, contextWords, policy.dialect, learnedNext(contextWords, policy), evidence)
                 ?.let { matchCase(it, typed, policy) } ?: return null
         return if (correction == typed || userWords.rejects(typed, correction, policy.language)) null else correction
     }
@@ -336,7 +339,7 @@ class StripPlanner(
         }
         val editingInside = context.editingInside
         // Space only auto-corrects at a word's end, so inside a word the correction is offered, not highlighted.
-        val autoCorrection = autoCorrection(typed, context.sentenceStart, context.contextWords, policy)
+        val autoCorrection = autoCorrection(typed, context.sentenceStart, context.contextWords, policy, policy.touchesFor(context))
         val hint =
             if (autoCorrection == null && policy.autoCorrect && !userWords.knows(typed, policy.language)) {
                 words.likelyIntended(typed, policy.language)?.let { matchCase(it, typed, policy) }
