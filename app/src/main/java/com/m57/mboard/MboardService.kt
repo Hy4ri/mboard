@@ -1,12 +1,15 @@
 package com.m57.mboard
 
+import android.content.ActivityNotFoundException
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Rect
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
+import android.provider.Settings
 import android.text.InputType
 import android.text.TextDirectionHeuristics
 import android.util.Log
@@ -41,6 +44,7 @@ class MboardService : InputMethodService() {
     private var auxiliary: LinearLayout? = null
     private var panelBody: FrameLayout? = null
     private var toolbar: LinearLayout? = null
+    private var keyboardRoot: View? = null
     private lateinit var ui: BoardUi
     private lateinit var settings: BoardSettings
     private lateinit var clips: ClipStore
@@ -132,6 +136,7 @@ class MboardService : InputMethodService() {
         emojiLoader.shutdownNow()
         emojiHandler.removeCallbacksAndMessages(null)
         keyboard?.cancelTouch()
+        TrackpadService.connected?.dismiss()
         clipboard.removePrimaryClipChangedListener(clipListener)
         settings.unregisterListener(settingsListener)
         suggestionHandler.removeCallbacksAndMessages(null)
@@ -276,6 +281,7 @@ class MboardService : InputMethodService() {
                     },
                 )
             }
+        keyboardRoot = root
         setMode(Mode.KEYS)
         return root
     }
@@ -291,13 +297,20 @@ class MboardService : InputMethodService() {
             label: String,
             active: Boolean = false,
             offInPassword: Boolean = false,
+            keepsTrackpad: Boolean = false,
             action: () -> Unit,
         ) {
             val off = offInPassword && password
             bar.addView(
                 ui
-                    .icon(res, label) { if (off) message(R.string.toolbar_off_in_password) else action() }
-                    .apply {
+                    .icon(res, label) {
+                        if (off) {
+                            message(R.string.toolbar_off_in_password)
+                        } else {
+                            if (!keepsTrackpad) TrackpadService.connected?.dismiss()
+                            action()
+                        }
+                    }.apply {
                         isSelected = active
                         imageTintList = ColorStateList.valueOf(if (active) ui.accentInk else ui.text)
                         background = ui.ripple(if (active) ui.accentContainer else Color.TRANSPARENT)
@@ -323,6 +336,13 @@ class MboardService : InputMethodService() {
         slot(R.drawable.ic_calculate, getString(R.string.toolbar_calculator), mode == Mode.CALCULATOR, true) {
             togglePanel(Mode.CALCULATOR)
         }
+        slot(
+            R.drawable.ic_trackpad,
+            getString(R.string.trackpad_title),
+            active = TrackpadService.connected?.isShowing == true,
+            offInPassword = true,
+            keepsTrackpad = true,
+        ) { openTrackpad() }
         val shieldOn = privateSession || password
         val privacyLabel =
             getString(
@@ -343,6 +363,75 @@ class MboardService : InputMethodService() {
         }
         slot(R.drawable.ic_settings, getString(R.string.toolbar_settings)) { openSettings() }
         slot(R.drawable.ic_keyboard_hide, getString(R.string.toolbar_hide_keyboard)) { requestHideSelf(0) }
+    }
+
+    private fun openTrackpad() {
+        val service = TrackpadService.connected
+        if (service == null) {
+            message(R.string.trackpad_enable)
+            try {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (e: ActivityNotFoundException) {
+                Log.w("mboard.trackpad", "Accessibility settings unavailable", e)
+                message(R.string.trackpad_unavailable)
+            }
+            return
+        }
+        if (service.isShowing) {
+            service.dismiss()
+            return
+        }
+        val root = keyboardRoot ?: return
+        val body = panelBody ?: return
+        val keyHeight = keyboard?.keysHeight ?: return
+        val owner = currentInputEditorInfo?.packageName
+        if (owner.isNullOrBlank() || root.display?.displayId != android.view.Display.DEFAULT_DISPLAY) {
+            message(R.string.trackpad_unavailable)
+            return
+        }
+        val location = IntArray(2)
+        body.getLocationOnScreen(location)
+        val bottom = location[1] + body.height
+        val bounds = Rect(location[0], bottom - keyHeight, location[0] + body.width, bottom)
+        // Keep the toolbar in place, even if the previously open panel covered the suggestion strip.
+        setMode(Mode.KEYS)
+        val showing =
+            service.show(
+                owner,
+                bounds,
+                keyboardTop = {
+                    val current = keyboardRoot
+                    if (isInputViewShown && current?.isAttachedToWindow == true) {
+                        current.getLocationOnScreen(location)
+                        location[1]
+                    } else {
+                        null
+                    }
+                },
+                onDismiss = ::refreshTrackpadChrome,
+                returnToTyping = {
+                    if (!destroyed && !isInputViewShown && currentInputEditorInfo?.packageName == owner && !fieldPolicy.password) {
+                        requestShowSelf(0)
+                    }
+                },
+            )
+        if (showing) refreshTrackpadChrome() else message(R.string.trackpad_unavailable)
+    }
+
+    private fun refreshTrackpadChrome() {
+        if (destroyed) return
+        rebuildToolbar()
+        updateAuxiliary()
+    }
+
+    override fun onWindowShown() {
+        super.onWindowShown()
+        TrackpadService.connected?.setKeyboardVisible(true)
+    }
+
+    override fun onWindowHidden() {
+        super.onWindowHidden()
+        TrackpadService.connected?.setKeyboardVisible(false)
     }
 
     private fun openSettings() = startActivity(Intent(this, SetupActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -374,7 +463,7 @@ class MboardService : InputMethodService() {
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
         // Browse panels own their header and fill the keys plus strip area, keeping the keyboard height constant.
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
-        auxiliary?.visibility = if (clipboardOpen || (next == Mode.KEYS && !stripNeeded())) View.GONE else View.VISIBLE
+        auxiliary?.visibility = if (clipboardOpen || (next == Mode.KEYS && !keyStripVisible())) View.GONE else View.VISIBLE
         panelBody?.let { body ->
             // Panels replace the hidden strip too, so opening one never shrinks the keyboard and small boards keep room.
             // Number pads have no strip row to replace, so their panels keep the pad's own height.
@@ -399,7 +488,7 @@ class MboardService : InputMethodService() {
         keyCode: Int,
         event: android.view.KeyEvent,
     ): Boolean {
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && (mode != Mode.KEYS || TrackpadService.connected?.isShowing == true)) {
             event.startTracking()
             return true
         }
@@ -410,9 +499,16 @@ class MboardService : InputMethodService() {
         keyCode: Int,
         event: android.view.KeyEvent,
     ): Boolean {
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
-            setMode(Mode.KEYS)
-            return true
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && event.isTracking && !event.isCanceled) {
+            val trackpad = TrackpadService.connected
+            if (trackpad?.isShowing == true) {
+                trackpad.dismiss()
+                return true
+            }
+            if (mode != Mode.KEYS) {
+                setMode(Mode.KEYS)
+                return true
+            }
         }
         return super.onKeyUp(keyCode, event)
     }
@@ -428,6 +524,7 @@ class MboardService : InputMethodService() {
         lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
+        if (fieldPolicy.password) TrackpadService.connected?.dismiss()
         defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language.layout
         lastSpace = 0L
         lastShift = 0L
@@ -872,11 +969,18 @@ class MboardService : InputMethodService() {
      */
     private fun stripNeeded(): Boolean = !fieldPolicy.numeric
 
+    private fun keyStripVisible() = stripNeeded() && TrackpadService.connected?.isShowing != true
+
     private fun updateAuxiliary() {
         if (keyboard?.isCursorScrubbing == true) return
         val bar = auxiliary ?: return
         if (mode == Mode.KEYS) {
-            bar.visibility = if (stripNeeded()) View.VISIBLE else View.GONE
+            val visible = keyStripVisible()
+            bar.visibility = if (visible) View.VISIBLE else View.GONE
+            if (!visible && TrackpadService.connected?.isShowing == true) {
+                if (bar.childCount > 0) bar.removeAllViews()
+                return
+            }
             bar.layoutParams = bar.layoutParams.apply { height = ui.dp(Tokens.STRIP_HEIGHT) }
             renderSuggestions(bar)
             return
