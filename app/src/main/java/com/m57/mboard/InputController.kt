@@ -140,8 +140,11 @@ class InputController(
                 }
 
                 candidatesStart < 0 || candidatesEnd < 0 || candidatesStart == candidatesEnd -> {
+                    // The report may be stale, so the editor can still hold our span: close it, or the next
+                    // commitText would replace the letters already typed.
                     composingWord = ""
                     composingBroken = true
+                    port.finishComposing()
                 }
             }
         }
