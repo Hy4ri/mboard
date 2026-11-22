@@ -1,6 +1,6 @@
 # mboard
 
-An offline English/Arabic Android keyboard. No network permission, sound, or vibration.
+An offline English/Arabic Android keyboard. No network permission; sound and vibration are off by default.
 
 ## Everyday typing
 
@@ -40,7 +40,7 @@ Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bo
 
 A compact home opens focused pages instead of displaying every control, playground and phrase editor in one long form:
 
-- Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, number row and previews.
+- Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, number row, previews, and opt-in haptics/key sounds.
 - Typing: suggestions, capitalization and double-space period.
 - Clipboard & privacy: history, retention and confirmed local-data deletion.
 - Saved phrases: dedicated draft editor, actual saved count, explicit Save/Delete.
@@ -51,7 +51,7 @@ Native single-choice dialogs replace inline spinners. The page header stays outs
 
 ## Privacy and limits
 
-- No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024).
+- No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024). Optional key haptics and sounds (off by default) use Android's built-in view haptic feedback and system sound effects without requesting extra permissions.
 - Clipboard capture runs only while mboard is visible, skips sensitive-marked clips/password/private fields, and reads text only (never resolves content URIs). Android's clipboard access rules still apply.
 - Up to 30 unpinned and 30 pinned clips. Clips larger than 20,000 characters are skipped, never silently truncated.
 - Expired clips are purged from storage when the store is opened/read or its retention changes. While the app process is stopped, expiry is enforced on the next access; this is not a background deletion scheduler.

@@ -56,6 +56,12 @@ class BoardSettings(
     var keyPreview: Boolean
         get() = prefs.getBoolean("preview", true)
         set(value) = prefs.edit().putBoolean("preview", value).apply()
+    var hapticFeedback: Boolean
+        get() = prefs.getBoolean("haptic_feedback", false)
+        set(value) = prefs.edit().putBoolean("haptic_feedback", value).apply()
+    var keySound: Boolean
+        get() = prefs.getBoolean("key_sound", false)
+        set(value) = prefs.edit().putBoolean("key_sound", value).apply()
     var clipboardHistory: Boolean
         get() = prefs.getBoolean("clipboard_history", true)
         set(value) = prefs.edit().putBoolean("clipboard_history", value).apply()

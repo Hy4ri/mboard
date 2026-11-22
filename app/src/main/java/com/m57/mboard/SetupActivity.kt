@@ -477,6 +477,26 @@ class SetupActivity : Activity() {
                 settings.keyPreview = it
             },
         )
+        components.add(
+            column,
+            components.toggle(
+                getString(R.string.detail_haptic_feedback_title),
+                getString(R.string.detail_haptic_feedback_summary),
+                settings.hapticFeedback,
+            ) {
+                settings.hapticFeedback = it
+            },
+        )
+        components.add(
+            column,
+            components.toggle(
+                getString(R.string.detail_key_sound_title),
+                getString(R.string.detail_key_sound_summary),
+                settings.keySound,
+            ) {
+                settings.keySound = it
+            },
+        )
     }
 
     private fun typing(column: LinearLayout) {

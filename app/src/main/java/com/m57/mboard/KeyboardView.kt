@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.media.AudioManager
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -24,6 +25,7 @@ class KeyboardView(
 ) : View(context) {
     private val ui = BoardUi(context)
     private val settings = BoardSettings(context)
+    private val audioManager = context.getSystemService(AudioManager::class.java)
     private val density = resources.displayMetrics.density
     private val rowHeight = settings.rowHeightDp * density
     private val gap = Tokens.KEY_GAP * density
@@ -842,6 +844,22 @@ class KeyboardView(
         if (steps != 0) onCursorMove(steps)
     }
 
+    private fun performKeyFeedback(key: String) {
+        if (settings.hapticFeedback) {
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        }
+        if (settings.keySound) {
+            val effect =
+                when (key) {
+                    Keys.BACKSPACE -> AudioManager.FX_KEYPRESS_DELETE
+                    Keys.SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
+                    Keys.ENTER -> AudioManager.FX_KEYPRESS_RETURN
+                    else -> AudioManager.FX_KEYPRESS_STANDARD
+                }
+            audioManager?.playSoundEffect(effect)
+        }
+    }
+
     private fun startsDeleteSwipe(x: Float) = !deleteRepeated && downX - x > DELETE_SWIPE_START_DP * density
 
     private fun beginTouch(
@@ -859,6 +877,7 @@ class KeyboardView(
         current = origin
         setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
         val key = origin?.key
+        if (key != null) performKeyFeedback(key)
         if ((key == Keys.SPACE && cursorScrubEnabled) || (key != null && language.alternatesFor(key) != null)) {
             postDelayed(hold, Tokens.MOTION_HOLD)
         }

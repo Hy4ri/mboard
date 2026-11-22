@@ -98,6 +98,10 @@
     <string name="detail_number_row_summary">إبقاء الأرقام أعلى الأحرف</string>
     <string name="detail_key_previews_title">معاينة المفاتيح</string>
     <string name="detail_key_previews_summary">إظهار الحرف بشكل مكبَّر عند الضغط</string>
+    <string name="detail_haptic_feedback_title">الاهتزاز اللمسي</string>
+    <string name="detail_haptic_feedback_summary">اهتزاز خفيف عند الضغط على المفاتيح (يتبع إعدادات النظام)</string>
+    <string name="detail_key_sound_title">أصوات المفاتيح</string>
+    <string name="detail_key_sound_summary">تشغيل أصوات نقر النظام عند الضغط (يتبع مستوى صوت النظام)</string>
 
     <!-- Settings: Typing -->
     <string name="typing_note">مساعدة عند الحاجة. قواميس مدمجة، مع تعلّم الكلمات التي تكتبها عند السماح بذلك، محفوظة على جهازك فقط.</string>

@@ -102,6 +102,10 @@
     <string name="detail_number_row_summary">Keep digits above the letters</string>
     <string name="detail_key_previews_title">Key previews</string>
     <string name="detail_key_previews_summary">Show a brief letter preview when pressed</string>
+    <string name="detail_haptic_feedback_title">Haptic feedback</string>
+    <string name="detail_haptic_feedback_summary">Light vibration on key press (follows system settings)</string>
+    <string name="detail_key_sound_title">Key sounds</string>
+    <string name="detail_key_sound_summary">Play system key click sounds (follows system volume)</string>
 
     <!-- Settings: Typing -->
     <string name="typing_note">Helpful when you want it. Bundled dictionaries plus, if you allow it, words you type, kept on this device.</string>
