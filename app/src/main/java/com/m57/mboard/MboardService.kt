@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
+import android.text.InputType
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
@@ -18,6 +19,7 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.Toast
+import com.m57.mboard.KeyboardView.DeleteRepeat
 import java.util.Locale
 
 class MboardService : InputMethodService() {
@@ -68,6 +70,13 @@ class MboardService : InputMethodService() {
     private val refreshSuggestions =
         Runnable {
             if (!destroyed && mode == Mode.KEYS && isInputViewShown) updateAuxiliary()
+        }
+    private val refreshAfterDeleteRepeat =
+        Runnable {
+            if (!destroyed && isInputViewShown) {
+                updateCapitalization()
+                updateAuxiliary()
+            }
         }
     private var defaultLayout = language.layout
     private val clipListener = ClipboardManager.OnPrimaryClipChangedListener { recordClip() }
@@ -153,6 +162,7 @@ class MboardService : InputMethodService() {
         editorGeneration++
         suggestionStrip?.render(emptyList(), "", editorGeneration, getString(R.string.strip_no_editor))
         suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
         keyboard?.cancelTouch()
         query = ""
         lastCorrection = null
@@ -189,7 +199,7 @@ class MboardService : InputMethodService() {
     override fun onCreateInputView(): View {
         ui = BoardUi(this)
         visualKey = settings.visualKey()
-        val kv = KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
+        val kv = KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd, ::canRepeatWords, ::repeatDelete)
         keyboard = kv
         kv.language = language
         kv.layout = defaultLayout
@@ -331,6 +341,7 @@ class MboardService : InputMethodService() {
 
     private fun setMode(next: Mode) {
         suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
         keyboard?.cancelTouch()
         if (fieldPolicy.password && next != Mode.KEYS) return
         val previous = mode
@@ -447,8 +458,13 @@ class MboardService : InputMethodService() {
             if (newSelStart != newSelEnd || kotlin.math.abs(newSelStart - oldSelStart) > last.corrected.length + 2) lastCorrection = null
         }
         if (mode == Mode.KEYS) {
-            updateCapitalization()
-            updateAuxiliary()
+            if (keyboard?.isRepeatingDelete == true) {
+                scheduleDeleteRefresh()
+            } else {
+                suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
+                updateCapitalization()
+                updateAuxiliary()
+            }
         }
     }
 
@@ -1181,10 +1197,6 @@ class MboardService : InputMethodService() {
                 if (query.isNotEmpty()) query = query.substring(0, query.offsetByCodePoints(query.length, -1))
             }
 
-            Keys.DELETE_WORD -> {
-                query = query.dropLast(wordDeleteLength(query))
-            }
-
             Keys.ENTER -> {
                 if (mode ==
                     Mode.CALCULATOR
@@ -1229,7 +1241,86 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
+    private fun canRepeatWords(): Boolean =
+        mode == Mode.EMOJI_SEARCH ||
+            (mode == Mode.KEYS && !fieldPolicy.password && !fieldPolicy.numeric && currentInputEditorInfo?.inputType != InputType.TYPE_NULL)
+
+    private fun scheduleDeleteRefresh() {
+        // Throttle rather than debounce: the strip still updates during a sustained hold.
+        if (!suggestionHandler.hasCallbacks(refreshAfterDeleteRepeat)) {
+            suggestionHandler.postDelayed(refreshAfterDeleteRepeat, DELETE_REPEAT_REFRESH_MS)
+        }
+    }
+
+    private fun repeatDelete(preferWord: Boolean): DeleteRepeat {
+        val word = preferWord && canRepeatWords()
+        val result =
+            when (mode) {
+                Mode.EMOJI_SEARCH, Mode.CALCULATOR -> {
+                    if (query.isEmpty()) return DeleteRepeat.STOP
+                    if (word) {
+                        query = query.dropLast(repeatWordDeleteLength(query))
+                        DeleteRepeat.WORD
+                    } else {
+                        query = query.substring(0, query.offsetByCodePoints(query.length, -1))
+                        DeleteRepeat.CHARACTER
+                    }
+                }
+
+                Mode.KEYS -> {
+                    val ic = currentInputConnection ?: return DeleteRepeat.STOP
+                    repeatEditorDelete(ic, word)
+                }
+
+                else -> {
+                    return DeleteRepeat.STOP
+                }
+            }
+        if (result != DeleteRepeat.STOP) {
+            pressDeleted = null
+            lastCorrection = null
+            pickedSpaceTail = null
+            lastSpace = 0L
+            lastShift = 0L
+            predictionTrail.reset()
+            scheduleDeleteRefresh()
+        }
+        return result
+    }
+
+    private fun repeatEditorDelete(
+        ic: InputConnection,
+        word: Boolean,
+    ): DeleteRepeat {
+        // Leave password and raw-key editors to native backspace without reading their text.
+        val before =
+            if (fieldPolicy.password || currentInputEditorInfo?.inputType == InputType.TYPE_NULL) {
+                null
+            } else {
+                if (!ic.getSelectedText(0).isNullOrEmpty()) return DeleteRepeat.STOP
+                ic.getTextBeforeCursor(if (word) DELETE_WORD_LOOKBACK else 2, 0)
+            }
+        if (before != null) {
+            if (before.isEmpty()) return DeleteRepeat.STOP
+            if (word) {
+                // A bounded editor response can start halfway through a surrogate pair.
+                val tail = if (before[0].isLowSurrogate()) before.subSequence(1, before.length) else before
+                if (tail.isNotEmpty()) {
+                    val count = repeatWordDeleteLength(tail.toString())
+                    return if (ic.deleteSurroundingText(count, 0)) DeleteRepeat.WORD else DeleteRepeat.STOP
+                }
+            }
+        }
+        if (!sendKey(ic, KeyEvent.KEYCODE_DEL)) return DeleteRepeat.STOP
+        // If the editor hides its text, don't pause or try to switch into word mode later in this hold.
+        return if (before == null || word) DeleteRepeat.CHARACTER_ONLY else DeleteRepeat.CHARACTER
+    }
+
     private fun onKey(key: String) {
+        if (suggestionHandler.hasCallbacks(refreshAfterDeleteRepeat)) {
+            suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
+            updateCapitalization()
+        }
         predictionTrail.reset()
         if (mode == Mode.EMOJI_SEARCH || mode == Mode.CALCULATOR) return onInternalKey(key)
         val ic = currentInputConnection ?: return
@@ -1281,20 +1372,6 @@ class MboardService : InputMethodService() {
                         pressDeleted = before.substring(before.offsetByCodePoints(before.length, -1))
                     }
                     sendKey(ic, KeyEvent.KEYCODE_DEL)
-                }
-            }
-
-            Keys.DELETE_WORD -> {
-                if (!ic.getSelectedText(0).isNullOrEmpty()) {
-                    ic.commitText("", 1)
-                } else {
-                    val before = ic.getTextBeforeCursor(64, 0)?.toString()
-                    val count = before?.let(::wordDeleteLength) ?: 0
-                    // Editors that hide their text still get a plain backspace.
-                    when {
-                        count > 0 -> ic.deleteSurroundingText(count, 0)
-                        before == null -> sendKey(ic, KeyEvent.KEYCODE_DEL)
-                    }
                 }
             }
 
@@ -1431,6 +1508,13 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
+    /** Line breaks get their own repeat tick instead of disappearing with the preceding word. */
+    private fun repeatWordDeleteLength(text: String): Int {
+        val lineStart = maxOf(text.lastIndexOf('\n'), text.lastIndexOf('\r')) + 1
+        if (lineStart < text.length) return wordDeleteLength(text.substring(lineStart))
+        return if (text.endsWith("\r\n")) 2 else 1
+    }
+
     /** UTF-16 length of trailing whitespace plus the word (or punctuation/emoji run) before it. */
     private fun wordDeleteLength(text: String): Int {
         val spaces = text.length - text.trimEnd().length
@@ -1469,6 +1553,9 @@ class MboardService : InputMethodService() {
     private fun message(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 
     private companion object {
+        const val DELETE_REPEAT_REFRESH_MS = 90L
+        const val DELETE_WORD_LOOKBACK = 64
+
         /** Text read before the caret for completions, and the sentence words kept from it. */
         const val CONTEXT_CHARS = 120
         const val CONTEXT_WORDS = 16
