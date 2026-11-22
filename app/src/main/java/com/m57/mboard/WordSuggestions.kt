@@ -53,7 +53,7 @@ class WordSuggestions(
     private val states = HashMap<String, State>()
     private val callbacks = HashMap<String, ArrayList<() -> Unit>>()
 
-    /** Arabic lexicon (with Jordanian words) read only for Arabizi lookups on a Latin layout. */
+    /** Arabic lexicon (with Jordanian words) for Arabizi lookups; the loaded Arabic model's dictionary when present, else read separately. */
     @Volatile private var arabiziLexicon: WordDictionary? = null
 
     @Volatile private var arabiziAllowlist: Set<String> = emptySet()
@@ -79,8 +79,13 @@ class WordSuggestions(
                                 .toSet()
                         }
                     val arabic = Languages.ARABIC
-                    val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
-                    val lexicon = readDictionary(arabic, dialect, KnownWordForms.EMPTY)
+                    // Arabizi only calls exactEntry, which ignores known forms, so a loaded Arabic model's
+                    // dictionary answers identically and a second full load is skipped.
+                    val lexicon =
+                        models[arabic.code]?.dictionary ?: run {
+                            val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
+                            readDictionary(arabic, dialect, KnownWordForms.EMPTY)
+                        }
                     synchronized(lock) {
                         if (closed) return@execute
                         arabiziAllowlist = allowlist
@@ -568,6 +573,28 @@ class WordSuggestions(
         private val userKeys = userCounts.mapKeys { candidateKey(it.key) }
         private val total = model.dictionary.totalFrequency.toDouble()
 
+        /** Direct n-gram/learned observation count for [word] after the current context. */
+        fun contextCount(word: String): Long {
+            val key = candidateKey(word)
+            return (nextRow?.count(key) ?: 0L) +
+                (contextRow?.count(key) ?: 0L) +
+                (dialectNextRow?.count(key) ?: 0L) +
+                (dialectContextRow?.count(key) ?: 0L) +
+                (learnedKeys[key]?.toLong() ?: 0L)
+        }
+
+        /**
+         * An immediate repeat (the the, i i) is plausible only when the last word's own table row lists it
+         * with a real share (no no, ha ha) or the user has typed it after that word.
+         */
+        fun repeatSupported(word: String): Boolean {
+            val key = candidateKey(word)
+            if ((learnedKeys[key] ?: 0) > 0) return true
+            return listOfNotNull(nextRow, dialectNextRow).any { row ->
+                row.total > 0 && row.count(key).toDouble() / row.total >= REPEAT_MIN_SHARE
+            }
+        }
+
         /** Context words, best known first, for prediction and context-only completions. */
         val sources: List<List<String>> =
             listOfNotNull(
@@ -654,7 +681,9 @@ class WordSuggestions(
             val tail = normalized + matchKey(candidate)
             val run = tail.takeLast(4)
             val repeatsRun = tail.size > 4 && tail.dropLast(1).windowed(4).any { it == run }
-            !repeatsRun && (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) } &&
+            val repeatsLast = normalized.isNotEmpty() && normalized.last() == matchKey(candidate) && !scorer.repeatSupported(candidate)
+            !repeatsRun && !repeatsLast &&
+                (2..4).none { size -> tail.size >= size * 2 && tail.takeLast(size) == tail.dropLast(size).takeLast(size) } &&
                 // Arabic single letters are word pieces in the tables, except the conjunction و and dialect ع (on).
                 (language.script != Script.ARABIC || candidate.length > 1 || candidate == "و" || (candidate == "ع" && dialectOn))
         }
@@ -753,10 +782,24 @@ class WordSuggestions(
         // bundled contraction without treating it as an automatic correction of that valid word.
         if (language.script == Script.LATIN && typed.all { it.isLetter() }) {
             for (i in 1 until typed.length) {
-                val contraction = typed.substring(0, i) + "'" + typed.substring(i)
-                if (model.dictionary.frequency(contraction) > 0L) {
-                    consider(contraction, ln(scorer.probability(contraction)))
-                    contractionChoices.add(contraction)
+                val rawContraction = typed.substring(0, i) + "'" + typed.substring(i)
+                val entry = model.dictionary.exactEntry(rawContraction) ?: continue
+                consider(entry.word, ln(scorer.probability(entry.word)))
+                contractionChoices.add(entry.word)
+            }
+        }
+
+        // Real-word confusions (their/there/they're, then/than, your/you're) compete in the same
+        // context scorer as strip-only suggestions; they never trigger automatic replacement.
+        val lowerForConfusion = typed.lowercase(Locale.ROOT)
+        val confusionAlternatives =
+            if (language.script == Script.LATIN) language.confusions[lowerForConfusion].orEmpty() else emptyList()
+        if (confusionAlternatives.isNotEmpty()) {
+            val typedProb = scorer.probability(typed)
+            for (alt in confusionAlternatives) {
+                val altProb = scorer.probability(alt)
+                if (altProb > typedProb) {
+                    consider(alt, ln(altProb) - CONFUSION_COST)
                 }
             }
         }
@@ -824,16 +867,27 @@ class WordSuggestions(
                     it.word in language.supplementalWords
                 }.maxByOrNull { scorer.probability(it.word) }
                 ?.word
-        // Reserve known auxiliary homographs (shed/she'd), not arbitrary possessives
-        // (days/day's) or unknown typos (alls/youd) that need the ordinary alternatives.
-        val contractionChoice =
-            if (model.dictionary.frequency(typed) > 0L) {
-                language.contractionHints[lowerTyped]?.let { wanted ->
-                    contractionChoices.firstOrNull { candidateKey(it) == candidateKey(wanted) }
-                }
+        // Reserve context-favored real-word confusions (better then -> than, over their -> there)
+        // and known auxiliary homographs (shed/she'd), never arbitrary possessives (days/day's).
+        val confusionChoice =
+            if (confusionAlternatives.isNotEmpty()) {
+                val typedProb = scorer.probability(typed)
+                confusionAlternatives
+                    .filter { alt ->
+                        scorer.contextCount(alt) > 0L && scorer.probability(alt) >= typedProb * CONFUSION_PROMOTE_RATIO
+                    }.maxByOrNull { scorer.probability(it) }
             } else {
                 null
             }
+        val contractionChoice =
+            confusionChoice
+                ?: if (model.dictionary.frequency(typed) > 0L) {
+                    language.contractionHints[lowerTyped]?.let { wanted ->
+                        contractionChoices.firstOrNull { candidateKey(it) == candidateKey(wanted) }
+                    }
+                } else {
+                    null
+                }
         // A full curated spelling one transposition away is more specific than an unrelated
         // longer prefix reading (resapwn -> respawn). This never changes replacement policy.
         val supplementalTypo =
@@ -940,6 +994,7 @@ class WordSuggestions(
         /** Pseudo-counts each table level gives to the level below it. */
         const val BETA = 3.0
         const val DIALECT_BETA = 3.0
+        const val REPEAT_MIN_SHARE = 0.02
         const val LEARNED_BETA = 3.0
 
         /** Unigram share per use of a learned word, capped at ten uses (about a top-500 word at two uses). */
@@ -947,6 +1002,8 @@ class WordSuggestions(
 
         /** Log-probability cost of reading the prefix as a typo or behind a clitic. */
         const val FUZZY_COST = 1.5
+        const val CONFUSION_COST = 1.0
+        const val CONFUSION_PROMOTE_RATIO = 1.5
         const val STRAY_COST = 3.0
         const val SPLIT_LISTED_MAX = 6000L
         const val SPLIT_COMMON_HALF = 100_000L

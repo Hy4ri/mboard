@@ -1,5 +1,7 @@
 package com.m57.mboard
 
+import java.util.Locale
+
 /** English word lists the dictionary consults beside its frequency list. */
 object EnglishWords {
     val CONTRACTIONS: Map<String, String> =
@@ -8,6 +10,8 @@ object EnglishWords {
             "im" to "I'm",
             "ive" to "I've",
             "weve" to "we've",
+            "hes" to "he's",
+            "shes" to "she's",
             "dont" to "don't",
             "cant" to "can't",
             "wont" to "won't",
@@ -22,32 +26,75 @@ object EnglishWords {
             "shouldnt" to "shouldn't",
             "havent" to "haven't",
             "hasnt" to "hasn't",
+            "hadnt" to "hadn't",
+            "mustnt" to "mustn't",
+            "neednt" to "needn't",
+            "mightnt" to "mightn't",
+            "aint" to "ain't",
             "youre" to "you're",
             "theyre" to "they're",
             "thats" to "that's",
             "whats" to "what's",
+            "whos" to "who's",
+            "wheres" to "where's",
+            "heres" to "here's",
+            "hows" to "how's",
             "theres" to "there's",
             "youve" to "you've",
             "youll" to "you'll",
+            "youd" to "you'd",
             "theyve" to "they've",
+            "theyll" to "they'll",
+            "itll" to "it'll",
+            "thatll" to "that'll",
+            "wholl" to "who'll",
             "wouldve" to "would've",
             "couldve" to "could've",
             "shouldve" to "should've",
+            "yall" to "y'all",
         )
 
     /** Auxiliary contractions of valid words; arbitrary possessives (days/day's) are not reserved. */
     val CONTRACTION_HINTS: Map<String, String> =
         mapOf(
-            "ill" to "i'll",
+            "ill" to "I'll",
             "well" to "we'll",
             "were" to "we're",
             "wed" to "we'd",
-            "id" to "i'd",
+            "id" to "I'd",
             "its" to "it's",
+            "lets" to "let's",
             "shed" to "she'd",
             "hell" to "he'll",
             "shell" to "she'll",
         )
+
+    private val CONFUSION_GROUPS: List<List<String>> =
+        listOf(
+            listOf("its", "it's"),
+            listOf("ill", "I'll"),
+            listOf("were", "we're"),
+            listOf("well", "we'll"),
+            listOf("lets", "let's"),
+            listOf("wed", "we'd"),
+            listOf("id", "I'd"),
+            listOf("shed", "she'd"),
+            listOf("hell", "he'll"),
+            listOf("shell", "she'll"),
+            listOf("their", "there", "they're"),
+            listOf("then", "than"),
+            listOf("your", "you're"),
+        )
+
+    /** Real-word homographs and confusions offered as context-ranked strip suggestions, never auto-replaced. */
+    val CONFUSIONS: Map<String, List<String>> =
+        buildMap {
+            for (group in CONFUSION_GROUPS) {
+                for (word in group) {
+                    put(word.lowercase(Locale.ROOT), group.filter { it != word })
+                }
+            }
+        }
 
     /** Chat words, technical abbreviations, units, brand names, and transliterations; never corrected. */
     val SLANG: Set<String> =
