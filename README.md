@@ -12,7 +12,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
-- Hold backspace to repeat deletion; lifting, hiding, or changing keyboards stops the repeat.
+- Hold backspace to repeat a few characters, then keep holding to erase words. Password and numeric fields repeat characters only. Lift or slide off the key to stop; swipe left from backspace before it starts repeating to select words for deletion.
 - Slide along the space bar to move the cursor. Use the globe key to switch language.
 - Numeric fields start with a keypad. ABC returns to letters; ?123 and =\< expose two symbol pages.
 - Enter follows the app's Go, Send, Search, Next, Done, or custom action.
@@ -24,6 +24,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Text tools: arrows, line boundaries, select all, copy/cut/paste, host-app undo/redo, selected-text upper/lowercase, and Arabic mark removal.
 - More tools/settings: text tools, offline calculator, saved phrases, Text Lab, settings, and system keyboard picker. In panels, Return replaces the text-tools slot instead of widening the toolbar.
 - Private: pauses learning/history recording, not ordinary dictionary suggestions. Password fields offer only input-independent bundled choices and block personal phrases, history capture, and automatic correction. The user's suggestions setting controls the strip; apps' no-suggestions flags do not override it. App-requested no-learning fields prevent recording new learned words. Learned words, next-word pairs and rejected autocorrections stay on the device. Word and pair counts fade in 14-day steps when loaded; a new entry gets a full first window. Undoing a correction remembers that specific replacement across fields, unless recording is paused. Manually picking it clears that rejection; the learned-word protection is independent. Delete learned words clears all three stores.
+- Trackpad: replace the keys with a pointer pad. First use opens Android Accessibility settings; enable **mboard Trackpad**, return to your app, and tap the toolbar button again. The toolbar stays in place, and suggestions are hidden. Slide in the middle to move the pointer, tap (or use the left-click icon in the side rail) to click, and swipe either edge or use two fingers to scroll. The right-click icon sends a touch long-press, not a mouse right-click. The drag icon arms the next drag, which Android receives when you lift your finger. Tap the toolbar icon again to close the pad. If Android hides the toolbar, a close button appears on the pad.
 - Hide: dismiss the keyboard.
 
 Calculator supports +, -, *, /, decimal numbers (including Arabic digits), parentheses and postfix %. Percentage is mathematical division by 100: `50%` = `0.5`. It is not spreadsheet-style relative percentage. Tap an answer or Enter to insert it. Invalid/divide-by-zero expressions are not inserted. Results are rounded to eight decimal places; this is a convenience tool, not a high-precision financial calculator.
@@ -50,6 +51,8 @@ A compact home opens focused pages instead of displaying every control, playgrou
 Native single-choice dialogs replace inline spinners. The page header stays outside scrolling content, and Back returns to the actual parent page. Setup actions appear only when mboard needs enabling/selecting. Settings and keyboard chrome are localized in English and Arabic (with Android per-app language support and RTL layout mirroring). Password samples clear on leaving the playground, changing password type or rebuilding appearance and never enter saved drafts. Unsaved phrase text remains only in the activity's memory; both editor fields opt out of normal autofill/view autosave.
 
 ## Privacy and limits
+
+- The optional Trackpad accessibility service does not retrieve screen content. It observes window-change package names to close the pad when leaving the app and sends touchscreen gestures only in response to pad controls. It needs neither network access nor general overlay permission.
 
 - No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024).
 - Clipboard capture runs only while mboard is visible, skips sensitive-marked clips/password/private fields, and reads text only (never resolves content URIs). Android's clipboard access rules still apply.

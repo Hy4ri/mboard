@@ -20,8 +20,12 @@ class KeyboardView(
     private val onCursorMove: (Int) -> Unit = {},
     private val onDeleteSwipe: (Int) -> Unit = {},
     private val onDeleteSwipeEnd: (Boolean) -> Unit = {},
+    private val canRepeatWords: () -> Boolean,
+    private val onRepeatDelete: (preferWord: Boolean) -> DeleteRepeat,
     private val onCursorScrubEnd: () -> Unit = {},
 ) : View(context) {
+    enum class DeleteRepeat { CHARACTER, CHARACTER_ONLY, WORD, STOP }
+
     private val ui = BoardUi(context)
     private val settings = BoardSettings(context)
     private val density = resources.displayMetrics.density
@@ -157,6 +161,10 @@ class KeyboardView(
     private var deleteSwiping = false
     private var deleteSteps = 0
     private var deleteRepeated = false
+    private var repeatWords = false
+    private var characterRepeats = 0
+    private var wordRepeatStartedAt: Long? = null
+    val isRepeatingDelete: Boolean get() = deleteRepeated && current?.key == Keys.BACKSPACE && origin == current
     var cursorScrubEnabled = true
         set(value) {
             if (field == value) return
@@ -226,17 +234,28 @@ class KeyboardView(
         object : Runnable {
             override fun run() {
                 if (pointer == MotionEvent.INVALID_POINTER_ID || current?.key != Keys.BACKSPACE || origin?.key != Keys.BACKSPACE) return
-                // Smooth ramp: characters speed up continuously, then whole words take over and also speed up.
-                val held = android.os.SystemClock.uptimeMillis() - deleteStart
-                val words = held >= DELETE_WORD_AFTER_MS
-                val interval =
-                    if (words) {
-                        ramp(held - DELETE_WORD_AFTER_MS, 2_000L, 140L, 60L)
-                    } else {
-                        ramp(held - 400L, DELETE_WORD_AFTER_MS - 400L, 70L, 25L)
-                    }
                 deleteRepeated = true
-                onKey(if (words) Keys.DELETE_WORD else Keys.BACKSPACE)
+                val preferWord = repeatWords && characterRepeats == DELETE_CHARACTER_REPEATS
+                val result = onRepeatDelete(preferWord)
+                if (result == DeleteRepeat.STOP || !isRepeatingDelete) return
+                if (result == DeleteRepeat.CHARACTER_ONLY || (preferWord && result != DeleteRepeat.WORD)) repeatWords = false
+
+                val now = now()
+                val interval =
+                    if (result == DeleteRepeat.WORD) {
+                        val start = wordRepeatStartedAt ?: now.also { wordRepeatStartedAt = it }
+                        ramp(now - start, DELETE_WORD_RAMP_MS, DELETE_WORD_INITIAL_MS, DELETE_WORD_MIN_MS)
+                    } else {
+                        characterRepeats = (characterRepeats + 1).coerceAtMost(DELETE_CHARACTER_REPEATS)
+                        if (repeatWords && characterRepeats == DELETE_CHARACTER_REPEATS) {
+                            // Leave time to lift before the first larger edit, even if the editor was slow.
+                            maxOf(DELETE_WORD_PAUSE_MS, DELETE_WORD_TARGET_MS - (now - deleteStart))
+                        } else {
+                            (DELETE_CHARACTER_INITIAL_MS - (characterRepeats - 1) * DELETE_CHARACTER_STEP_MS)
+                                .coerceAtLeast(DELETE_CHARACTER_MIN_MS)
+                        }
+                    }
+                // Never catch up with a burst of deletes after an editor or the main thread stalls.
                 postDelayed(this, interval)
             }
         }
@@ -604,6 +623,7 @@ class KeyboardView(
         popup = null
         alts = emptyList()
         altRects = emptyList()
+        deleteRepeated = false
         if (isCursorScrubbing) {
             isCursorScrubbing = false
             onCursorScrubEnd()
@@ -773,6 +793,19 @@ class KeyboardView(
                         }
                     }
 
+                    origin?.key == Keys.BACKSPACE -> {
+                        // Tolerate thumb drift, but leaving backspace stops the repeat and never types a neighbor.
+                        val bounds = origin?.rect
+                        if (bounds != null &&
+                            (
+                                x < bounds.left - touchSlop || x > bounds.right + touchSlop ||
+                                    y < bounds.top - touchSlop || y > bounds.bottom + touchSlop
+                            )
+                        ) {
+                            updatePressed(null)
+                        }
+                    }
+
                     origin?.key == Keys.SPACE -> {
                         trackSpaceMotion(event, index)
                     }
@@ -863,10 +896,12 @@ class KeyboardView(
             postDelayed(hold, Tokens.MOTION_HOLD)
         }
         if (key == Keys.BACKSPACE) {
-            deleteStart = android.os.SystemClock.uptimeMillis()
-            deleteRepeated = false
+            deleteStart = now()
+            repeatWords = canRepeatWords()
+            characterRepeats = 0
+            wordRepeatStartedAt = null
             onKey(Keys.BACKSPACE)
-            postDelayed(repeatDelete, 350L)
+            if (pointer == id && current?.key == Keys.BACKSPACE) postDelayed(repeatDelete, DELETE_HOLD_DELAY_MS)
         }
         invalidate()
     }
@@ -887,7 +922,6 @@ class KeyboardView(
         val picked = current
         val alternate = alts.getOrNull(altSelected)
         val wasScrubbing = isCursorScrubbing
-        val deleteWasSent = base?.key == Keys.BACKSPACE
         val releasedCell = keyAt(x, y)
         val preview = popup
         cancelTouch()
@@ -896,7 +930,7 @@ class KeyboardView(
                 onKey(alternate)
             }
 
-            wasScrubbing -> {
+            wasScrubbing || base?.key == Keys.BACKSPACE -> {
                 Unit
             }
 
@@ -905,7 +939,7 @@ class KeyboardView(
             }
 
             releasedCell != null && picked != null && picked.key != Keys.SPACE -> {
-                if (picked.key != Keys.BACKSPACE || !deleteWasSent) onKey(picked.key)
+                onKey(picked.key)
                 if (showPreview && preview != null) {
                     popup = preview
                     postDelayed(hidePopup, if (animationsEnabled()) Tokens.MOTION_FAST else 0L)
@@ -915,8 +949,17 @@ class KeyboardView(
     }
 
     private companion object {
+        const val DELETE_HOLD_DELAY_MS = 275L
+        const val DELETE_CHARACTER_REPEATS = 5
+        const val DELETE_CHARACTER_INITIAL_MS = 80L
+        const val DELETE_CHARACTER_STEP_MS = 8L
+        const val DELETE_CHARACTER_MIN_MS = 55L
+        const val DELETE_WORD_TARGET_MS = 800L
+        const val DELETE_WORD_PAUSE_MS = 170L
+        const val DELETE_WORD_INITIAL_MS = 140L
+        const val DELETE_WORD_MIN_MS = 75L
+        const val DELETE_WORD_RAMP_MS = 1_600L
         const val DELETE_SWIPE_START_DP = 20
-        const val DELETE_WORD_AFTER_MS = 1_500L
         const val DELETE_SWIPE_STEP_DP = 28
         val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
     }
