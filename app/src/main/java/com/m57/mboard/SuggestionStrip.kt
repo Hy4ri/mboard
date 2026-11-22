@@ -50,12 +50,35 @@ class SuggestionStrip(
                         pressedChoices[index] = null
                         picked?.let { onPick(it.word, it.prefix, it.editor) }
                     }.apply {
-                        setOnTouchListener { _, event ->
+                        setOnTouchListener { v, event ->
                             when (event.actionMasked) {
-                                android.view.MotionEvent.ACTION_DOWN -> pressedChoices[index] = choices[index]
-                                android.view.MotionEvent.ACTION_CANCEL -> pressedChoices[index] = null
+                                android.view.MotionEvent.ACTION_DOWN -> {
+                                    pressedChoices[index] = choices[index]
+                                    false
+                                }
+
+                                android.view.MotionEvent.ACTION_UP -> {
+                                    v.isPressed = false
+                                    val inside =
+                                        event.x >= 0f && event.x <= v.width &&
+                                            event.y >= 0f && event.y <= v.height
+                                    if (v.isEnabled && inside) {
+                                        v.performClick()
+                                    } else {
+                                        pressedChoices[index] = null
+                                    }
+                                    true
+                                }
+
+                                android.view.MotionEvent.ACTION_CANCEL -> {
+                                    pressedChoices[index] = null
+                                    false
+                                }
+
+                                else -> {
+                                    false
+                                }
                             }
-                            false // Native Button owns the click; this only snapshots its displayed choice.
                         }
                         maxLines = 1
                         ellipsize = TextUtils.TruncateAt.END
@@ -82,6 +105,8 @@ class SuggestionStrip(
             )
         }
     }
+
+    override fun shouldDelayChildPressedState(): Boolean = false
 
     fun render(
         words: List<String>,
