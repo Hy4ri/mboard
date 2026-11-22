@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
+import android.text.TextDirectionHeuristics
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
@@ -68,6 +69,13 @@ class MboardService : InputMethodService() {
     private val refreshSuggestions =
         Runnable {
             if (!destroyed && mode == Mode.KEYS && isInputViewShown) updateAuxiliary()
+        }
+    private val refreshAfterCursorScrub =
+        Runnable {
+            if (!destroyed && mode == Mode.KEYS && isInputViewShown && keyboard?.isCursorScrubbing != true) {
+                updateCapitalization()
+                updateAuxiliary()
+            }
         }
     private var defaultLayout = language.layout
     private val clipListener = ClipboardManager.OnPrimaryClipChangedListener { recordClip() }
@@ -154,6 +162,7 @@ class MboardService : InputMethodService() {
         suggestionStrip?.render(emptyList(), "", editorGeneration, getString(R.string.strip_no_editor))
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
+        suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         query = ""
         lastCorrection = null
     }
@@ -189,7 +198,11 @@ class MboardService : InputMethodService() {
     override fun onCreateInputView(): View {
         ui = BoardUi(this)
         visualKey = settings.visualKey()
-        val kv = KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd)
+        val kv =
+            KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd) {
+                suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
+                suggestionHandler.postDelayed(refreshAfterCursorScrub, CURSOR_REFRESH_MS)
+            }
         keyboard = kv
         kv.language = language
         kv.layout = defaultLayout
@@ -333,8 +346,10 @@ class MboardService : InputMethodService() {
         suggestionHandler.removeCallbacks(refreshSuggestions)
         keyboard?.cancelTouch()
         if (fieldPolicy.password && next != Mode.KEYS) return
+        suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         val previous = mode
         mode = next
+        keyboard?.cursorScrubEnabled = next == Mode.KEYS
         lastSpace = 0L
         if (next == Mode.EMOJI_SEARCH || next == Mode.CALCULATOR) {
             if (previous != next) query = ""
@@ -407,6 +422,7 @@ class MboardService : InputMethodService() {
         lastShift = 0L
         query = ""
         keyboard?.cancelTouch()
+        suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         if (toolbar != null) setMode(Mode.KEYS)
     }
 
@@ -446,7 +462,7 @@ class MboardService : InputMethodService() {
         lastCorrection?.let { last ->
             if (newSelStart != newSelEnd || kotlin.math.abs(newSelStart - oldSelStart) > last.corrected.length + 2) lastCorrection = null
         }
-        if (mode == Mode.KEYS) {
+        if (mode == Mode.KEYS && keyboard?.isCursorScrubbing != true && !suggestionHandler.hasCallbacks(refreshAfterCursorScrub)) {
             updateCapitalization()
             updateAuxiliary()
         }
@@ -841,6 +857,7 @@ class MboardService : InputMethodService() {
     private fun stripNeeded(): Boolean = !fieldPolicy.numeric
 
     private fun updateAuxiliary() {
+        if (keyboard?.isCursorScrubbing == true) return
         val bar = auxiliary ?: return
         if (mode == Mode.KEYS) {
             bar.visibility = if (stripNeeded()) View.VISIBLE else View.GONE
@@ -1065,7 +1082,11 @@ class MboardService : InputMethodService() {
         expected: String,
         generation: Long,
     ) {
-        if (generation != editorGeneration || mode != Mode.KEYS || !settings.suggestions) return
+        if (generation != editorGeneration || mode != Mode.KEYS || !settings.suggestions ||
+            keyboard?.isCursorScrubbing == true || suggestionHandler.hasCallbacks(refreshAfterCursorScrub)
+        ) {
+            return
+        }
         pickedSpaceTail = null
         if (fieldPolicy.password) {
             if (expected.isEmpty() && word in words.commonWords(language)) currentInputConnection?.commitText(word, 1)
@@ -1466,13 +1487,64 @@ class MboardService : InputMethodService() {
         if (mode != Mode.KEYS) return
         val ic = currentInputConnection ?: return
         val right = steps > 0
-        repeat(kotlin.math.abs(steps).coerceAtMost(20)) {
-            // A dpad key at the text end moves focus to another view, which can close the keyboard. Stop at the ends.
-            val next = if (right) ic.getTextAfterCursor(1, 0) else ic.getTextBeforeCursor(1, 0)
-            if (next != null && next.isEmpty()) return
-            sendKey(ic, if (right) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT)
-        }
+        val arrow = if (right) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT
         lastSpace = 0L
+        pickedSpaceTail = null
+        lastCorrection = null
+        predictionTrail.reset()
+        repeat(kotlin.math.abs(steps).coerceAtMost(MAX_CURSOR_STEPS_PER_EVENT)) {
+            if (fieldPolicy.password) {
+                // Masked fields use the existing logical guard without fetching extra password text.
+                val next = (if (right) ic.getTextAfterCursor(1, 0) else ic.getTextBeforeCursor(1, 0))
+                if (next.isNullOrEmpty() || !sendKey(ic, arrow)) return
+                return@repeat
+            }
+            val around = ic.getSurroundingText(1, 1, 0) ?: return
+            val start = minOf(around.selectionStart, around.selectionEnd)
+            val end = maxOf(around.selectionStart, around.selectionEnd)
+            if (start < 0 || end > around.text.length) return
+            if (start == end && (start == 0 || end == around.text.length)) {
+                if (around.text.isEmpty()) return
+                val caret = around.offset.toLong() + start
+                if (!canMoveInFromCursorEdge(ic, start == 0, caret.takeIf { around.offset >= 0 }, right)) return
+            }
+            // The editor owns visual navigation through shaped text, line wraps and bidi runs,
+            // including the first visual caret stop when moving inward from a document edge.
+            if (!sendKey(ic, arrow)) return
+        }
+    }
+
+    private fun canMoveInFromCursorEdge(
+        ic: InputConnection,
+        atStart: Boolean,
+        caret: Long?,
+        right: Boolean,
+    ): Boolean {
+        val text =
+            (if (atStart) ic.getTextAfterCursor(CURSOR_EDGE_CONTEXT, 0) else ic.getTextBeforeCursor(CURSOR_EDGE_CONTEXT, 0))
+                ?: return false
+        if (text.isEmpty()) return false
+        val newline = if (atStart) text.indexOf('\n') else text.lastIndexOf('\n')
+        val paragraphStart = if (atStart) 0 else newline + 1
+        val paragraphEnd = if (atStart && newline >= 0) newline else text.length
+        val length = paragraphEnd - paragraphStart
+        val ltrDefault = TextDirectionHeuristics.FIRSTSTRONG_LTR.isRtl(text, paragraphStart, length)
+        val rtlDefault = TextDirectionHeuristics.FIRSTSTRONG_RTL.isRtl(text, paragraphStart, length)
+
+        // Text before/after is in storage order, not screen order. At the edge, only send
+        // an inward arrow. If the paragraph's first strong character could be outside
+        // the window, don't risk sending a focus-traversal key.
+        if (newline < 0 &&
+            if (atStart) {
+                text.length >= CURSOR_EDGE_CONTEXT && ltrDefault != rtlDefault
+            } else {
+                caret?.let { it > text.length } ?: (text.length >= CURSOR_EDGE_CONTEXT)
+            }
+        ) {
+            return false
+        }
+        val rtl = if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL) rtlDefault else ltrDefault
+        return right == (atStart != rtl)
     }
 
     private fun message(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
@@ -1481,5 +1553,8 @@ class MboardService : InputMethodService() {
         /** Text read before the caret for completions, and the sentence words kept from it. */
         const val CONTEXT_CHARS = 120
         const val CONTEXT_WORDS = 16
+        const val CURSOR_EDGE_CONTEXT = 2_048
+        const val CURSOR_REFRESH_MS = 16L
+        const val MAX_CURSOR_STEPS_PER_EVENT = 32
     }
 }
