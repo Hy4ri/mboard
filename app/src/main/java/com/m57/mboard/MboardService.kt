@@ -46,6 +46,7 @@ class MboardService : InputMethodService() {
     private lateinit var emojiHistory: EmojiHistory
     private lateinit var words: WordSuggestions
     private lateinit var userWords: UserWords
+    private lateinit var stripPlanner: StripPlanner
     private val predictionTrail = PredictionTrail()
 
     // Backspace fires on touch-down; a swipe that follows puts that character back first.
@@ -94,6 +95,7 @@ class MboardService : InputMethodService() {
         emojiHistory = EmojiHistory(this)
         words = WordSuggestions(this)
         userWords = UserWords(this)
+        stripPlanner = StripPlanner(words, { userWords }, predictionTrail, rejectedCorrections)
         clipboard = getSystemService(ClipboardManager::class.java)
         clipboard.addPrimaryClipChangedListener(clipListener)
         settings.registerListener(settingsListener)
@@ -576,57 +578,47 @@ class MboardService : InputMethodService() {
         }
     }
 
-    private data class PrefixContext(
-        val prefix: String,
-        val status: String,
-        val commonEligible: Boolean = false,
-        val contextWords: List<String> = emptyList(),
-        val sentenceStart: Boolean = false,
-        /** Word letters right after the caret: the caret sits inside or at the start of an existing word. */
-        val suffix: String = "",
-        /** Whether anything follows the word, so a picked suggestion needs no trailing space. */
-        val textAfterWord: Boolean = false,
-    ) {
-        /** The whole word the caret touches; suggestions are for it and a pick replaces all of it. */
-        val word get() = prefix + suffix
+    private fun readEditorText(): StripPlanner.EditorText {
+        val ic = currentInputConnection ?: return StripPlanner.EditorText(null, null, hasEditor = false)
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return StripPlanner.EditorText(null, null, hasSelection = true)
+        val after = ic.getTextAfterCursor(StripPlanner.MAX_WORD_CHARS + 1, 0)?.toString()
+        val before = if (after != null) ic.getTextBeforeCursor(StripPlanner.CONTEXT_CHARS, 0)?.toString() else null
+        return StripPlanner.EditorText(before, after)
     }
 
-    private fun prefixContext(): PrefixContext {
-        val ic = currentInputConnection ?: return PrefixContext("", getString(R.string.strip_no_editor))
-        if (!ic.getSelectedText(0).isNullOrEmpty()) return PrefixContext("", getString(R.string.strip_selection_active))
-        val after =
-            ic.getTextAfterCursor(65, 0)?.toString()
-                ?: return PrefixContext("", getString(R.string.strip_no_surrounding_text))
-        val before =
-            ic.getTextBeforeCursor(CONTEXT_CHARS, 0)?.toString()
-                ?: return PrefixContext("", getString(R.string.strip_no_surrounding_text))
+    private fun prefixContext(): StripPlanner.CaretContext = stripPlanner.context(readEditorText())
 
-        val result = before.takeLastWhile(::wordChar)
-        val suffix = after.takeWhile(::wordChar)
-        if (result.length + suffix.length > 64) return PrefixContext("", getString(R.string.strip_word_too_long))
-        val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false && after.firstOrNull()?.isWhitespace() != false
-        val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
-        val sentenceStart = beforeWord.isEmpty() || beforeWord.last() in ".!?؟\n"
-        // Only the current sentence contributes context; punctuation and line breaks reset it.
-        val recent =
-            before
-                .dropLast(result.length)
-                .takeLastWhile { wordChar(it) || it == ' ' || it == '\t' }
-                .trim()
-                .split(Regex("\\s+"))
-                .filter { it.isNotEmpty() }
-                // The tables read two words; the rest lets prediction see a repeating phrase.
-                .takeLast(CONTEXT_WORDS)
-        return PrefixContext(
-            result,
-            getString(if (result.isEmpty() && suffix.isEmpty()) R.string.strip_idle_hint else R.string.strip_no_match),
-            idle,
-            recent,
-            sentenceStart,
-            suffix,
-            after.length > suffix.length,
+    private fun stripPolicy(): StripPlanner.StripPolicy =
+        StripPlanner.StripPolicy(
+            language = language,
+            dialect = settings.dialectEnabled(language.dialect),
+            suggestionsEnabled = settings.suggestions,
+            autoCorrect = settings.autoCorrect,
+            useLearnedHistory = !privateSession,
+            arabizi = settings.arabiziSuggestions,
+            numeric = fieldPolicy.numeric,
+            password = fieldPolicy.password,
+            shifted = keyboard?.shifted == true,
+            capsLocked = keyboard?.capsLocked == true,
         )
-    }
+
+    private fun statusText(status: StripPlanner.StripStatus): String =
+        when (status) {
+            StripPlanner.StripStatus.NUMBER_FIELD -> getString(R.string.strip_number_field)
+            StripPlanner.StripStatus.SUGGESTIONS_OFF -> getString(R.string.strip_suggestions_off)
+            StripPlanner.StripStatus.LOADING_DICTIONARY -> getString(R.string.strip_loading_dictionary, language.localizedName(this))
+            StripPlanner.StripStatus.DICTIONARY_FAILED -> getString(R.string.strip_dictionary_failed)
+            StripPlanner.StripStatus.SUGGESTIONS_UNAVAILABLE -> getString(R.string.strip_suggestions_unavailable)
+            StripPlanner.StripStatus.PREPARING -> getString(R.string.strip_preparing)
+            StripPlanner.StripStatus.STATIC_SUGGESTIONS -> getString(R.string.strip_static_suggestions)
+            StripPlanner.StripStatus.SAVED_ADDRESSES -> getString(R.string.strip_saved_addresses)
+            StripPlanner.StripStatus.NO_EDITOR -> getString(R.string.strip_no_editor)
+            StripPlanner.StripStatus.SELECTION_ACTIVE -> getString(R.string.strip_selection_active)
+            StripPlanner.StripStatus.NO_SURROUNDING_TEXT -> getString(R.string.strip_no_surrounding_text)
+            StripPlanner.StripStatus.WORD_TOO_LONG -> getString(R.string.strip_word_too_long)
+            StripPlanner.StripStatus.IDLE_HINT -> getString(R.string.strip_idle_hint)
+            StripPlanner.StripStatus.NO_MATCH -> getString(R.string.strip_no_match)
+        }
 
     private fun renderSuggestions(bar: LinearLayout) {
         val strip = suggestionStrip ?: return
@@ -634,116 +626,23 @@ class MboardService : InputMethodService() {
             bar.removeAllViews()
             bar.addView(strip, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
         }
-        // Numbers, phone and date fields take digits, not words: an honest empty strip.
-        if (fieldPolicy.numeric) {
-            strip.render(emptyList(), "", editorGeneration, shieldNote(getString(R.string.strip_number_field)))
-            return
-        }
-        val blocked = if (!settings.suggestions) getString(R.string.strip_suggestions_off) else null
-        if (blocked != null) {
-            // Email/URL fields skip dictionary words but still offer the user's saved email addresses.
-            val addresses = savedAddresses()
-            if (addresses != null && addresses.second.isNotEmpty()) {
-                strip.render(addresses.second, addresses.first, editorGeneration, blocked, addresses = true)
-                return
-            }
-            strip.render(emptyList(), "", editorGeneration, shieldNote(blocked))
-            return
-        }
-        val state = words.state(language)
-        if (state != WordSuggestions.State.READY) {
-            val message =
-                when (state) {
-                    WordSuggestions.State.LOADING -> getString(R.string.strip_loading_dictionary, language.localizedName(this))
-                    WordSuggestions.State.FAILED -> getString(R.string.strip_dictionary_failed)
-                    WordSuggestions.State.CLOSED -> getString(R.string.strip_suggestions_unavailable)
-                    else -> getString(R.string.strip_preparing)
-                }
-            strip.render(emptyList(), "", editorGeneration, shieldNote(message))
-            return
-        }
-        if (fieldPolicy.password) {
-            strip.render(words.commonWords(language), "", editorGeneration, shieldNote(getString(R.string.strip_static_suggestions)))
-            return
-        }
-        val addresses = savedAddresses()
-        if (addresses != null && addresses.second.isNotEmpty()) {
-            strip.render(addresses.second, addresses.first, editorGeneration, getString(R.string.strip_saved_addresses), addresses = true)
-            return
-        }
-        val context = prefixContext()
-        if (context.commonEligible) {
-            val predicted =
-                words
-                    .predict(context.contextWords, language, settings.dialectEnabled(language.dialect), learnedNext(context.contextWords))
-                    .let { predictionTrail.filter(context.contextWords, it) }
-            strip.render(
-                predicted.map { matchCase(it, "") },
-                "",
-                editorGeneration,
-                shieldNote(context.status),
+        val plan =
+            stripPlanner.plan(
+                policy = stripPolicy(),
+                readEditor = ::readEditorText,
+                readAddresses = ::savedAddresses,
+                readPhrases = phrases::all,
+                emojiForWord = if (settings.emojiSuggestions) Emojis::forWord else null,
             )
-            return
-        }
-        // The caret may sit inside an earlier word: suggest for that whole word, not just the part before it.
-        val typed = context.word
-        val editingInside = context.suffix.isNotEmpty()
-        // Space only auto-corrects at a word's end, so inside a word the correction is offered, not highlighted.
-        val autoCorrection = autoCorrection(typed, context.sentenceStart, context.contextWords)
-        val hint =
-            if (autoCorrection == null && settings.autoCorrect && !userWords.knows(typed, language)) {
-                words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
-            } else {
-                null
-            }
-        // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
-        val splitHint =
-            if (!userWords.knows(typed, language)) {
-                words.splitSuggestion(typed, language, context.contextWords, settings.dialectEnabled(language.dialect))
-            } else {
-                null
-            }
-        // A saved phrase starting with the typed word follows the correction; tapping it replaces the word.
-        val phrase =
-            if (fieldPolicy.password || typed.length < 2) {
-                null
-            } else {
-                phrases.all().firstOrNull { it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
-            }
-        // Learned words are ranked with the dictionary by how likely they are here.
-        val ranked =
-            words
-                .rank(
-                    typed,
-                    context.contextWords,
-                    language,
-                    settings.dialectEnabled(language.dialect),
-                    learnedNext(context.contextWords),
-                    if (privateSession) emptyMap() else userWords.completions(typed, language),
-                ).map { matchCase(it, typed) }
-        // A split leads only when no one-word typo candidate (fuzzy, two-edit, rule) is ranked, or the pair is very common.
-        val split = splitHint?.text?.let { matchCase(it, typed) }
-        val oneWordTypo = ranked.any { !it.startsWith(typed, ignoreCase = true) }
-        val leading = autoCorrection ?: hint ?: split?.takeIf { splitHint?.strong == true || !oneWordTypo }
-        val others =
-            (listOfNotNull(leading, phrase) + ranked)
-                .filter { it != typed }
-                .distinctBy { it.lowercase(Locale.ROOT) }
-                .toMutableList()
-        if (split != null && split != leading && others.none { it.equals(split, ignoreCase = true) }) {
-            others.add(minOf(1, others.size), split)
-        }
-        // The word as typed always keeps a slot, right after a correction or hint, so it can be kept with one tap
-        // (tapping it finishes the word with a space and no correction). Single letters are left out.
-        val keepAt = if (leading != null && leading != typed) 1 else 0
-        val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
-        // Franco typing on the English layout may also offer Arabic-script readings (suggest-only).
-        val readings = if (settings.arabiziSuggestions && !editingInside) words.arabizi(typed, language, 2) else emptyList()
-        val shown = Arabizi.place(wordChoices, typed, readings, lastSlotOnly = words.isArabiziListed(typed))
-        // A matching emoji takes the last slot so the correction and best completion stay put.
-        val emoji = if (settings.emojiSuggestions && !fieldPolicy.password) Emojis.forWord(typed) else null
-        val values = if (emoji == null) shown else shown.take(2) + emoji
-        strip.render(values, typed, editorGeneration, shieldNote(context.status), highlightFirst = autoCorrection != null && !editingInside)
+        val status = statusText(plan.status)
+        strip.render(
+            plan.suggestions,
+            plan.word,
+            editorGeneration,
+            if (plan.shieldNote) shieldNote(status) else status,
+            highlightFirst = plan.highlightFirst,
+            addresses = plan.addresses,
+        )
     }
 
     /** The strip status says why history is off whenever the shield or a password field is active. */
@@ -758,17 +657,7 @@ class MboardService : InputMethodService() {
         typed: String,
         wordStart: Boolean,
         contextWords: List<String> = emptyList(),
-    ): String? {
-        if (!settings.autoCorrect || typed.isEmpty() || typed in rejectedCorrections || fieldPolicy.password) return null
-        if (userWords.knows(typed, language)) return null
-        if (words.state(language) != WordSuggestions.State.READY) return null
-        if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
-        val correction =
-            words
-                .correction(typed, language, contextWords, settings.dialectEnabled(language.dialect), learnedNext(contextWords))
-                ?.let { matchCase(it, typed) } ?: return null
-        return if (correction == typed || userWords.rejects(typed, correction, language)) null else correction
-    }
+    ): String? = stripPlanner.autoCorrection(typed, wordStart, contextWords, stripPolicy())
 
     private val separators = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
 
@@ -809,7 +698,7 @@ class MboardService : InputMethodService() {
     /** Replace the whole word around the caret; a word ending at the caret is the ordinary case. */
     private fun replaceWord(
         ic: InputConnection,
-        context: PrefixContext,
+        context: StripPlanner.CaretContext,
         replacement: String,
     ): Boolean {
         if (context.suffix.isEmpty()) return replaceBeforeCursor(ic, context.prefix, replacement)
@@ -860,10 +749,7 @@ class MboardService : InputMethodService() {
         }
         rejectedCorrections += last.original
         learn(last.original, null)
-        if (learningAllowed()) {
-            userWords.reject(last.original, last.corrected, language)
-            userWords.save()
-        }
+        stripPlanner.rejectCorrection(last.original, last.corrected, language, learningAllowed())
         return true
     }
 
@@ -986,7 +872,7 @@ class MboardService : InputMethodService() {
     }
 
     /** In email fields: the text typed so far and saved email phrases that complete it. */
-    private fun savedAddresses(): Pair<String, List<String>>? {
+    private fun savedAddresses(): StripPlanner.SavedAddresses? {
         if (fieldPolicy.reason != SuggestionPolicy.Reason.ADDRESS || !settings.suggestions) return null
         // Browser omniboxes use URI variation: they need word predictions, not an email-only strip.
         val variation = (currentInputEditorInfo?.inputType ?: 0) and android.text.InputType.TYPE_MASK_VARIATION
@@ -1003,7 +889,7 @@ class MboardService : InputMethodService() {
                 .all()
                 .filter { '@' in it && it.none(Char::isWhitespace) && it.length > typed.length && it.startsWith(typed, ignoreCase = true) }
                 .take(3)
-        return typed to matches
+        return StripPlanner.SavedAddresses(typed, matches)
     }
 
     /** Recent emoji while the query is empty, ranked matches once typing starts. */
@@ -1086,15 +972,6 @@ class MboardService : InputMethodService() {
         return field
     }
 
-    /** Words the user has typed after the last context word; nothing in a private session. */
-    private fun learnedNext(contextWords: List<String>): Map<String, Int> =
-        if (privateSession) emptyMap() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
-
-    private fun matchCase(
-        word: String,
-        source: String,
-    ): String = WordDictionary.displayWord(word, source, language, keyboard?.shifted == true, keyboard?.capsLocked == true)
-
     private fun acceptSuggestion(
         word: String,
         expected: String,
@@ -1113,8 +990,8 @@ class MboardService : InputMethodService() {
         if (fieldPolicy.reason == SuggestionPolicy.Reason.ADDRESS) {
             val ic = currentInputConnection ?: return
             val addresses = savedAddresses()
-            if (addresses != null && word in addresses.second) {
-                if (addresses.first != expected) return updateAuxiliary()
+            if (addresses != null && word in addresses.matches) {
+                if (addresses.typed != expected) return updateAuxiliary()
                 val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
                 if (!done) message(R.string.msg_app_rejected_address)
                 updateAuxiliary()
@@ -1123,7 +1000,7 @@ class MboardService : InputMethodService() {
         }
         val ic = currentInputConnection ?: return
         val context = prefixContext()
-        if (context.word != expected || (expected.isEmpty() && !context.commonEligible)) {
+        if (context.word != expected || (expected.isEmpty() && !context.idle)) {
             updateAuxiliary()
             return
         }
@@ -1149,10 +1026,7 @@ class MboardService : InputMethodService() {
                 // An Arabic reading picked on the English layout is not learned into the English stores.
                 predictionTrail.reset()
             } else if (' ' !in word.trim()) {
-                if (learningAllowed() && userWords.rejects(context.word, word.trim(), language)) {
-                    userWords.acceptCorrection(context.word, word.trim(), language)
-                    userWords.save()
-                }
+                stripPlanner.acceptCorrection(context.word, word.trim(), language, learningAllowed())
                 predictionTrail.record(context.contextWords, word.trim())
                 learn(word.trim(), context.contextWords.lastOrNull())
             } else {
@@ -1427,10 +1301,7 @@ class MboardService : InputMethodService() {
     private fun learn(
         word: String,
         previous: String?,
-    ) {
-        if (word.isEmpty() || !learningAllowed()) return
-        userWords.record(word, previous, language)
-    }
+    ) = stripPlanner.learn(word, previous, language, learningAllowed())
 
     /** One recording guard for learned words, pairs and correction rejections. */
     private fun learningAllowed(): Boolean =
@@ -1484,12 +1355,14 @@ class MboardService : InputMethodService() {
         val spaces = text.length - text.trimEnd().length
         val rest = text.dropLast(spaces)
         val last = rest.lastOrNull() ?: return spaces
-        val run = if (wordChar(last)) rest.takeLastWhile(::wordChar) else rest.takeLastWhile { !wordChar(it) && !it.isWhitespace() }
+        val run =
+            if (StripPlanner.wordChar(last)) {
+                rest.takeLastWhile(StripPlanner::wordChar)
+            } else {
+                rest.takeLastWhile { !StripPlanner.wordChar(it) && !it.isWhitespace() }
+            }
         return spaces + run.length
     }
-
-    private fun wordChar(char: Char): Boolean =
-        char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
 
     private fun sendKey(
         ic: InputConnection,
@@ -1568,9 +1441,6 @@ class MboardService : InputMethodService() {
     private fun message(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 
     private companion object {
-        /** Text read before the caret for completions, and the sentence words kept from it. */
-        const val CONTEXT_CHARS = 120
-        const val CONTEXT_WORDS = 16
         const val CURSOR_EDGE_CONTEXT = 2_048
         const val CURSOR_REFRESH_MS = 16L
         const val MAX_CURSOR_STEPS_PER_EVENT = 32

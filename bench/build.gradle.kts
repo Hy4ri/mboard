@@ -27,6 +27,7 @@ sourceSets {
                 "com/m57/mboard/NeuralReranker.kt",
                 "com/m57/mboard/PredictionTrail.kt",
                 "com/m57/mboard/UserWords.kt",
+                "com/m57/mboard/StripPlanner.kt",
                 "android/**",
                 "com/m57/bench/**",
             )
