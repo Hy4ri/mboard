@@ -36,6 +36,7 @@ class KeyboardView(
     private data class Cell(
         val rect: RectF,
         val key: String,
+        val kind: KeyKind,
         val row: Int,
     )
 
@@ -117,14 +118,20 @@ class KeyboardView(
             return minOf(configured, maxOf(minimum, available)).toInt()
         }
     private var cachedRowsKey: Pair<Layout, Language>? = null
-    private var cachedRows: List<List<String>> = emptyList()
+    private var cachedRows: List<List<KeySpec>> = emptyList()
 
-    private val rows: List<List<String>>
+    private val rows: List<List<KeySpec>>
         get() {
             val key = layout to language
             if (cachedRowsKey == key) return cachedRows
             val visible = if (!showNumberRow && layout.letters) layout.rows.drop(1) else layout.rows
-            val computed = visible.map { row -> row.map { language.punctuation[it] ?: it } }
+            val computed =
+                visible.map { row ->
+                    row.map { spec ->
+                        val mapped = language.punctuation[spec.code]
+                        if (mapped != null) spec.copy(code = mapped) else spec
+                    }
+                }
             cachedRowsKey = key
             cachedRows = computed
             return computed
@@ -269,39 +276,15 @@ class KeyboardView(
         if (touchReady) access.resetLayout()
     }
 
-    private fun weight(key: String) =
-        when (key) {
-            Keys.SPACE -> {
-                if (layout.grid) 1f else 4f
-            }
-
-            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> {
-                if (layout.grid) 1f else 1.5f
-            }
-
-            Keys.PAD -> {
-                1f
-            }
-
-            // Pads are grids: every key is one column wide so the rows line up.
-            Keys.SYMBOLS, Keys.LETTERS, Keys.MORE_SYMBOLS -> {
-                if (layout.grid) 1f else 1.5f
-            }
-
-            else -> {
-                1f
-            }
-        }
-
     private fun geometry() {
         if (geometryWidth == width && geometryHeight == drawnKeysHeight && geometryLayout == layout) return
         cells.clear()
         releasedAt.clear()
         if (width <= 0) return
         val visibleRows = rows
-        val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
+        val maxUnits = visibleRows.maxOf { row -> row.sumOf { it.weight.toDouble() } }.toFloat()
         visibleRows.forEachIndexed { rowIndex, row ->
-            val units = row.sumOf { weight(it).toDouble() }.toFloat()
+            val units = row.sumOf { it.weight.toDouble() }.toFloat()
             val contentWidth =
                 if (resources.configuration.orientation ==
                     android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -312,12 +295,13 @@ class KeyboardView(
                 }
             val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
             var x = (width - units * unit) / 2
-            row.forEach { key ->
-                val size = weight(key) * unit
+            row.forEach { spec ->
+                val size = spec.weight * unit
                 cells.add(
                     Cell(
                         RectF(x + gap / 2, rowIndex * activeRowHeight + gap, x + size - gap / 2, (rowIndex + 1) * activeRowHeight),
-                        key,
+                        spec.code,
+                        spec.kind,
                         rowIndex,
                     ),
                 )
@@ -337,7 +321,7 @@ class KeyboardView(
         cells.forEach { cell ->
             val cursorKey = isCursorScrubbing && cell.key == Keys.SPACE
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
-            val special = cell.key in SPECIAL
+            val special = cell.kind == KeyKind.FUNCTION
             val base =
                 when {
                     cursorKey -> ui.accentContainer
@@ -586,7 +570,7 @@ class KeyboardView(
         removeCallbacks(repeatDelete)
         fadeOut(current)
         current = cell
-        setPopup(cell?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
+        setPopup(cell?.takeIf { it.kind == KeyKind.CHAR })
         invalidate()
     }
 
@@ -875,7 +859,7 @@ class KeyboardView(
         lastY = y
         origin = keyAt(x, y)
         current = origin
-        setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
+        setPopup(origin?.takeIf { it.kind == KeyKind.CHAR })
         val key = origin?.key
         if (key != null) performKeyFeedback(key)
         if ((key == Keys.SPACE && cursorScrubEnabled) || (key != null && language.alternatesFor(key) != null)) {
@@ -937,6 +921,5 @@ class KeyboardView(
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_WORD_AFTER_MS = 1_500L
         const val DELETE_SWIPE_STEP_DP = 28
-        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
     }
 }

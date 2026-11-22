@@ -28,7 +28,7 @@ class Language(
     val label: String,
     val script: Script,
     /** Letter rows in visual left-to-right order, without the number row. */
-    rows: List<List<String>>,
+    keyRows: List<List<KeySpec>>,
     /** Letters the typo model may substitute or insert; the keyboard's letters by default. */
     alphabet: String? = null,
     /** Stretch every row edge to edge instead of centering narrower rows. */
@@ -52,7 +52,8 @@ class Language(
     /** Valid surface forms used only to prevent destructive corrections, not as ranked completions. */
     val knownFormsAsset: String? = null,
 ) {
-    val layout = Layout.letters(rows, stretch)
+    val layout = Layout.letters(keyRows, stretch)
+    private val rows: List<List<String>> = keyRows.map { row -> row.map(KeySpec::code) }
     val alphabet = alphabet ?: rows.flatten().filter { it.length == 1 && it[0].isLetter() }.joinToString("")
 
     /**
@@ -143,12 +144,19 @@ object Languages {
             name = "English",
             label = "English",
             script = Script.LATIN,
-            rows =
+            keyRows =
                 listOf(
-                    "qwertyuiop".map(Char::toString),
-                    "asdfghjkl".map(Char::toString),
-                    listOf(Keys.SHIFT) + "zxcvbnm".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.SYMBOLS, Keys.GLOBE, ",", Keys.SPACE, ".", Keys.ENTER),
+                    KeySpec.chars("qwertyuiop"),
+                    KeySpec.chars("asdfghjkl"),
+                    listOf(KeySpec.fn(Keys.SHIFT)) + KeySpec.chars("zxcvbnm") + KeySpec.fn(Keys.BACKSPACE),
+                    listOf(
+                        KeySpec.fn(Keys.SYMBOLS),
+                        KeySpec.fn(Keys.GLOBE, 1f),
+                        KeySpec.char(","),
+                        KeySpec.space(),
+                        KeySpec.char("."),
+                        KeySpec.fn(Keys.ENTER),
+                    ),
                 ),
             alphabet = "abcdefghijklmnopqrstuvwxyz",
             alternates =
@@ -175,12 +183,19 @@ object Languages {
             name = "Arabic",
             label = "العربية",
             script = Script.ARABIC,
-            rows =
+            keyRows =
                 listOf(
-                    "ضصثقفغعهخحج".map(Char::toString),
-                    "شسيبلاتنمكط".map(Char::toString),
-                    "ذئءؤرىةوزظد".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.SYMBOLS, Keys.GLOBE, "،", Keys.SPACE, ".", Keys.ENTER),
+                    KeySpec.chars("ضصثقفغعهخحج"),
+                    KeySpec.chars("شسيبلاتنمكط"),
+                    KeySpec.chars("ذئءؤرىةوزظد") + KeySpec.fn(Keys.BACKSPACE),
+                    listOf(
+                        KeySpec.fn(Keys.SYMBOLS),
+                        KeySpec.fn(Keys.GLOBE, 1f),
+                        KeySpec.char("،"),
+                        KeySpec.space(),
+                        KeySpec.char("."),
+                        KeySpec.fn(Keys.ENTER),
+                    ),
                 ),
             stretch = true,
             alternates =
