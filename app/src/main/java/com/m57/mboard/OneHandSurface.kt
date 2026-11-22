@@ -31,6 +31,9 @@ class OneHandSurface(
     private val onModeChange: (String) -> Unit,
 ) : FrameLayout(context) {
     private var mode = normalize(mode)
+    private val leftExclusionRect = Rect()
+    private val rightExclusionRect = Rect()
+    private val exclusionRects = listOf(leftExclusionRect, rightExclusionRect)
     private var renderedMode: String? = null
     private val ui = BoardUi(context)
     private val rail =
@@ -417,11 +420,9 @@ class OneHandSurface(
         val edgeWidth = ui.dp(EDGE_DP)
         val exclusionTop = (height - ui.dp(200)).coerceAtLeast(0)
         // Space-bar scrubbing also runs into the edges, so both stay excluded even without panels.
-        systemGestureExclusionRects =
-            listOf(
-                Rect(0, exclusionTop, edgeWidth, height),
-                Rect(fullWidth - edgeWidth, exclusionTop, fullWidth, height),
-            )
+        leftExclusionRect.set(0, exclusionTop, edgeWidth, height)
+        rightExclusionRect.set(fullWidth - edgeWidth, exclusionTop, fullWidth, height)
+        systemGestureExclusionRects = exclusionRects
         // Panels push the keyboard over by their visible width.
         val offset = leftShown
         val width = fullWidth - leftShown - rightShown

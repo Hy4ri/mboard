@@ -129,6 +129,7 @@ class KeyboardView(
     // Shorter symbol/keypad layouts fill the same IME body instead of leaving a dead bottom band.
     private val activeRowHeight get() = (drawnKeysHeight - gap) / rows.size
     private val altStrip = RectF()
+    private val focusBounds = RectF()
     private val previewBubble = RectF()
     private val previewLabelBounds = RectF()
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -407,7 +408,8 @@ class KeyboardView(
             paint.color = ui.accentInk
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = Tokens.FOCUS_WIDTH * density
-            canvas.drawRoundRect(RectF(density, density, width - density, height - density), radius, radius, paint)
+            focusBounds.set(density, density, width - density, height - density)
+            canvas.drawRoundRect(focusBounds, radius, radius, paint)
             paint.style = Paint.Style.FILL
         }
         popup?.takeIf { showPreview && alts.isEmpty() }?.let { drawPreview(canvas, it, radius) }
