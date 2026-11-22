@@ -3,17 +3,16 @@ package com.m57.bench
 import android.content.Context
 import com.m57.mboard.Language
 import com.m57.mboard.PredictionTrail
+import com.m57.mboard.Script
+import com.m57.mboard.StripPlanner
 import com.m57.mboard.UserWords
 import com.m57.mboard.WordDictionary
 import com.m57.mboard.WordSuggestions
-import java.util.Locale
 
 /**
- * The suggestion strip as MboardService builds it, for an editor whose caret sits at the end of [text].
+ * Desktop bench wrapper around [StripPlanner] for an editor whose caret sits at the end of `text`.
  *
- * The dictionary, ranking, prediction and learning are the keyboard's real classes. Only the glue in
- * MboardService (prefixContext, renderSuggestions, autoCorrection, learn) is mirrored here, line for line,
- * because the service itself needs Android. Keep it in step with MboardService.kt when that glue changes.
+ * Dictionary loading, ranking, prediction, strip planning and learning are all the keyboard's real classes.
  */
 class Strip(
     context: Context,
@@ -27,6 +26,7 @@ class Strip(
     val predictionTrail = PredictionTrail()
     val userWords = UserWords(context)
     val rejectedCorrections = HashSet<String>()
+    val planner = StripPlanner(words, { userWords }, predictionTrail, rejectedCorrections)
 
     /** The bundled word list, to tell real-word typos (buy → but) from non-words. */
     val dictionary: WordDictionary =
@@ -37,7 +37,7 @@ class Strip(
 
     init {
         words.load(language) {}
-        if (arabizi && language.script == com.m57.mboard.Script.LATIN) {
+        if (arabizi && language.script == Script.LATIN) {
             words.loadArabizi {}
             val until = System.currentTimeMillis() + 60_000
             while (!words.arabiziReady()) {
@@ -54,11 +54,13 @@ class Strip(
     }
 
     class Caret(
-        val prefix: String,
-        val idle: Boolean,
-        val contextWords: List<String>,
-        val sentenceStart: Boolean,
-    )
+        internal val raw: StripPlanner.CaretContext,
+    ) {
+        val prefix: String get() = raw.prefix
+        val idle: Boolean get() = raw.idle
+        val contextWords: List<String> get() = raw.contextWords
+        val sentenceStart: Boolean get() = raw.sentenceStart
+    }
 
     class Shown(
         val values: List<String>,
@@ -66,141 +68,50 @@ class Strip(
         val highlight: Boolean,
     )
 
-    // MboardService.wordChar
-    fun wordChar(char: Char): Boolean =
-        char.isLetterOrDigit() || Character.getType(char) == Character.NON_SPACING_MARK.toInt() || char == '\''
-
-    // MboardService.prefixContext with nothing after the caret.
-    fun context(text: String): Caret {
-        val before = text.takeLast(120)
-        val result = before.takeLastWhile(::wordChar)
-        val idle = result.isEmpty() && before.lastOrNull()?.isWhitespace() != false
-        val beforeWord = before.dropLast(result.length).trimEnd(' ', '\t')
-        val sentenceStart = beforeWord.isEmpty() || beforeWord.last() in ".!?؟\n"
-        val recent =
-            before
-                .dropLast(result.length)
-                .takeLastWhile { wordChar(it) || it == ' ' || it == '\t' }
-                .trim()
-                .split(Regex("\\s+"))
-                .filter { it.isNotEmpty() }
-                .takeLast(16)
-        return Caret(result, idle, recent, sentenceStart)
-    }
-
     /** Keyboard shift state (auto-capitalize at a sentence start); the replay bench keeps it off. */
     var shifted = false
 
-    private fun matchCase(
-        word: String,
-        source: String,
-    ) = WordDictionary.displayWord(word, source, language, shifted, false)
+    private fun policy(numeric: Boolean = false): StripPlanner.StripPolicy =
+        StripPlanner.StripPolicy(
+            language = language,
+            dialect = dialect,
+            autoCorrect = autoCorrect,
+            useLearnedHistory = learning,
+            arabizi = arabizi,
+            numeric = numeric,
+            shifted = shifted,
+        )
 
-    private fun learnedNext(contextWords: List<String>): Map<String, Int> =
-        if (!learning) emptyMap() else contextWords.lastOrNull()?.let { userWords.next(it, language) }.orEmpty()
+    fun wordChar(char: Char): Boolean = StripPlanner.wordChar(char)
 
-    // MboardService.autoCorrection
+    fun context(text: String): Caret = Caret(planner.context(text))
+
     fun autoCorrection(
         typed: String,
         wordStart: Boolean,
         contextWords: List<String> = emptyList(),
-    ): String? {
-        if (!autoCorrect || typed.isEmpty() || typed in rejectedCorrections) return null
-        if (userWords.knows(typed, language)) return null
-        if (language.cased && typed.first().isUpperCase() && !wordStart && typed != "i") return null
-        val correction =
-            words.correction(typed, language, contextWords, dialect, learnedNext(contextWords))?.let { matchCase(it, typed) } ?: return null
-        return if (correction == typed || userWords.rejects(typed, correction, language)) null else correction
-    }
+    ): String? = planner.autoCorrection(typed, wordStart, contextWords, policy())
 
-    // MboardService.renderSuggestions, ordinary text field, no saved phrases, emoji suggestions off.
-    // [numeric] mirrors fieldPolicy.numeric: number, phone and date fields show no words, only a status.
     fun show(
         c: Caret,
         numeric: Boolean = false,
     ): Shown {
-        if (numeric) return Shown(emptyList(), false)
-        if (c.idle) {
-            val predicted =
-                words
-                    .predict(c.contextWords, language, dialect, learnedNext(c.contextWords))
-                    .let { predictionTrail.filter(c.contextWords, it) }
-            return Shown(predicted.map { matchCase(it, "") }.take(3), false)
-        }
-        val typed = c.prefix
-        val autoCorrection = autoCorrection(typed, c.sentenceStart, c.contextWords)
-        val hint =
-            if (autoCorrection == null && autoCorrect && !userWords.knows(typed, language)) {
-                words.likelyIntended(typed, language)?.let { matchCase(it, typed) }
-            } else {
-                null
-            }
-        // Space missed between two words ("fixxit" → "fix it"): a suggestion only, never applied on space.
-        val splitHint =
-            if (!userWords.knows(typed, language)) {
-                words.splitSuggestion(typed, language, c.contextWords, dialect)
-            } else {
-                null
-            }
-        val ranked =
-            words
-                .rank(
-                    typed,
-                    c.contextWords,
-                    language,
-                    dialect,
-                    learnedNext(c.contextWords),
-                    if (!learning) emptyMap() else userWords.completions(typed, language),
-                ).map { matchCase(it, typed) }
-        // A split leads only when no one-word typo candidate (fuzzy, two-edit, rule) is ranked, or the pair is very common.
-        val split = splitHint?.text?.let { matchCase(it, typed) }
-        val oneWordTypo = ranked.any { !it.startsWith(typed, ignoreCase = true) }
-        val leading = autoCorrection ?: hint ?: split?.takeIf { splitHint?.strong == true || !oneWordTypo }
-        val others =
-            (listOfNotNull(leading) + ranked)
-                .filter { it != typed }
-                .distinctBy { it.lowercase(Locale.ROOT) }
-                .toMutableList()
-        if (split != null && split != leading && others.none { it.equals(split, ignoreCase = true) }) {
-            others.add(minOf(1, others.size), split)
-        }
-        val keepAt = if (leading != null && leading != typed) 1 else 0
-        val wordChoices = if (typed.length >= 2) others.take(keepAt) + typed + others.drop(keepAt) else others
-        // MboardService: Arabizi readings (suggest-only); the app skips them when the caret is inside a word.
-        val readings = if (arabizi) words.arabizi(typed, language, 2) else emptyList()
-        return Shown(
-            com.m57.mboard.Arabizi
-                .place(wordChoices, typed, readings, lastSlotOnly = words.isArabiziListed(typed))
-                .take(3),
-            autoCorrection != null,
-        )
+        val plan = planner.plan(c.raw, policy(numeric))
+        return Shown(plan.suggestions, plan.highlightFirst)
     }
 
-    // The app calls these only under its normal recording guard (private/password/no-learning off).
     fun rejectCorrection(
         typed: String,
         corrected: String,
-    ) {
-        if (!learning) return
-        userWords.reject(typed, corrected, language)
-        userWords.save()
-    }
+    ) = planner.rejectCorrection(typed, corrected, language, learning)
 
     fun acceptCorrection(
         typed: String,
         corrected: String,
-    ) {
-        if (!learning || !userWords.rejects(typed, corrected, language)) return
-        userWords.acceptCorrection(typed, corrected, language)
-        userWords.save()
-    }
+    ) = planner.acceptCorrection(typed, corrected, language, learning)
 
-    // MboardService.learn in an ordinary field with learning on.
     fun learn(
         word: String,
         previous: String?,
-    ) {
-        if (!learning || word.isEmpty()) return
-        userWords.record(word, previous, language)
-    }
+    ) = planner.learn(word, previous, language, learning)
 }
