@@ -164,3 +164,21 @@ Reproduce only the accepted continuation refresh (from the repo root):
   jo_train_2.txt:2 jo_train_3.txt:2 jo_train_4a.txt:2 jo_train_4b.txt:2 jo_train_4c.txt:2)
 python3 -I bench/lm/make_assets.py --only-jordanian-next --dialect-source bench/lm/out_298_half
 ```
+
+### Jordanian replicated follower collisions
+
+`adjust_dialect_support.py` replays the split-trained inputs and their original
+weights using the existing tokenizer and evaluation exclusions. Identical
+normalized lines do not count as independent support. If a one-word context
+has an independently corroborated follower and multiple other followers whose
+entire published counts came from the same one normalized line, each of those
+single-source followers retains one raw observation, not the training replication
+weight. Curated followers, unrelated rare followers, and two-word contexts are
+unchanged. The aggregate row total loses the same replicated mass.
+
+To reproduce the adjustment against the unadjusted shipped asset:
+
+```sh
+git show 94ecbec:app/src/main/assets/jordanian_next.tsv > /tmp/jordanian-next-original.tsv
+python3 bench/lm/adjust_dialect_support.py /tmp/jordanian-next-original.tsv app/src/main/assets/jordanian_next.tsv
+```
