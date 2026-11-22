@@ -1358,13 +1358,22 @@ class MboardService : InputMethodService() {
             else -> {
                 // Only absorb the separator we inserted on a pick, never a manually typed space.
                 // Do this after autoCorrectBefore: an explicit literal pick must not be corrected again.
-                if (pickedTail != null && key in separators && key != Keys.SPACE &&
-                    ic.getSelectedText(0).isNullOrEmpty() &&
-                    ic.getTextBeforeCursor(pickedTail.length, 0)?.toString()?.endsWith(pickedTail) == true
-                ) {
-                    ic.deleteSurroundingText(1, 0)
+                val commit = if (kv.shifted) key.uppercase(Locale.ROOT) else key
+                val absorbSpace =
+                    pickedTail != null && key in separators && key != Keys.SPACE &&
+                        ic.getSelectedText(0).isNullOrEmpty() &&
+                        ic.getTextBeforeCursor(pickedTail.length, 0)?.toString()?.endsWith(pickedTail) == true
+                if (absorbSpace) {
+                    ic.beginBatchEdit()
+                    try {
+                        ic.deleteSurroundingText(1, 0)
+                        ic.commitText(commit, 1)
+                    } finally {
+                        ic.endBatchEdit()
+                    }
+                } else {
+                    ic.commitText(commit, 1)
                 }
-                ic.commitText(if (kv.shifted) key.uppercase(Locale.ROOT) else key, 1)
                 if (!kv.capsLocked) kv.shifted = false
             }
         }
