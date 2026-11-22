@@ -27,11 +27,37 @@ class KeyboardView(
     private val settings = BoardSettings(context)
     private val audioManager = context.getSystemService(AudioManager::class.java)
     private val density = resources.displayMetrics.density
-    private val rowHeight = settings.rowHeightDp * density
     private val gap = Tokens.KEY_GAP * density
     private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-    private val showNumberRow = settings.numberRow
-    private val showPreview = settings.keyPreview
+    private val rowHeight get() = rowHeightDp * density
+    var rowHeightDp: Int = settings.rowHeightDp
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            geometryHeight = -1
+            if (touchReady) access.resetLayout()
+            requestLayout()
+            invalidate()
+        }
+    var showNumberRow: Boolean = settings.numberRow
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            cachedRowsKey = null
+            geometryLayout = null
+            if (touchReady) access.resetLayout()
+            requestLayout()
+            invalidate()
+        }
+    var showPreview: Boolean = settings.keyPreview
+        set(value) {
+            if (field == value) return
+            field = value
+            if (!value) setPopup(null)
+            invalidate()
+        }
 
     private data class Cell(
         val rect: RectF,

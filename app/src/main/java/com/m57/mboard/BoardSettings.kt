@@ -107,8 +107,9 @@ class BoardSettings(
     fun unregisterListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
+    /** Settings that require rebuilding the input view tree (theme, palette, and edge-swipe panels). */
     fun visualKey() =
-        "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge:" +
+        "$appearance:$accent:$dialPadEdge:$emojiEdge:" +
             COLOR_ROLES.joinToString(",") { customColor(it)?.toString() ?: "-" }
 
     companion object {
