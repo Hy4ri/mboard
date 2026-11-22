@@ -162,6 +162,7 @@ class MboardService : InputMethodService() {
         kv.showPreview = settings.keyPreview
         kv.rowHeightDp = settings.rowHeightDp
         kv.showNumberRow = settings.numberRow
+        kv.splitWide = settings.splitWide
         keyboardSurface?.setMode(settings.oneHandMode)
         panelBody?.let { body ->
             val clipboardOpen = mode == Mode.CLIPBOARD || mode == Mode.EMOJI

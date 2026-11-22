@@ -138,6 +138,8 @@ object Tokens {
     const val FOCUS_WIDTH = 2
     const val SETTINGS_HEADER = 56
     const val CONTENT_MAX_WIDTH = 640
+    const val SPLIT_MIN_WIDTH = 600
+    const val SPLIT_GAP_MIN = 96
 
     // Motion in ms.
     const val MOTION_INSTANT = 70L

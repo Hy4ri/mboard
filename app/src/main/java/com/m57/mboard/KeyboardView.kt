@@ -58,6 +58,17 @@ class KeyboardView(
             if (!value) setPopup(null)
             invalidate()
         }
+    var splitWide: Boolean = settings.splitWide
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            geometryWidth = -1
+            if (touchReady) access.resetLayout()
+            invalidate()
+        }
+    private val splitActive: Boolean
+        get() = splitWide && !layout.grid && width >= Tokens.SPLIT_MIN_WIDTH * density
 
     private data class Cell(
         val rect: RectF,
@@ -302,6 +313,16 @@ class KeyboardView(
         if (touchReady) access.resetLayout()
     }
 
+    private fun splitRow(row: List<KeySpec>): Pair<List<KeySpec>, List<KeySpec>> {
+        val spaceIndex = row.indexOfFirst { it.kind == KeyKind.SPACE }
+        if (spaceIndex >= 0) {
+            val halfSpace = KeySpec.space(row[spaceIndex].weight / 2f)
+            return (row.subList(0, spaceIndex) + halfSpace) to (listOf(halfSpace) + row.subList(spaceIndex + 1, row.size))
+        }
+        val mid = (row.size + 1) / 2
+        return row.subList(0, mid) to row.subList(mid, row.size)
+    }
+
     private fun geometry() {
         if (geometryWidth == width && geometryHeight == drawnKeysHeight && geometryLayout == layout) return
         cells.clear()
@@ -309,29 +330,44 @@ class KeyboardView(
         if (width <= 0) return
         val visibleRows = rows
         val maxUnits = visibleRows.maxOf { row -> row.sumOf { it.weight.toDouble() } }.toFloat()
+        val split = splitActive
         visibleRows.forEachIndexed { rowIndex, row ->
             val units = row.sumOf { it.weight.toDouble() }.toFloat()
-            val contentWidth =
-                if (resources.configuration.orientation ==
-                    android.content.res.Configuration.ORIENTATION_LANDSCAPE
-                ) {
-                    minOf(width.toFloat(), Tokens.CONTENT_MAX_WIDTH * density)
-                } else {
-                    width.toFloat()
+            val top = rowIndex * activeRowHeight + gap
+            val bottom = (rowIndex + 1) * activeRowHeight
+            if (split) {
+                val contentWidth = minOf(width - Tokens.SPLIT_GAP_MIN * density, Tokens.CONTENT_MAX_WIDTH * density)
+                val unit = contentWidth / (if (layout.stretch) units else maxUnits)
+                val (leftHalf, rightHalf) = splitRow(row)
+                var x = 0f
+                leftHalf.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
                 }
-            val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
-            var x = (width - units * unit) / 2
-            row.forEach { spec ->
-                val size = spec.weight * unit
-                cells.add(
-                    Cell(
-                        RectF(x + gap / 2, rowIndex * activeRowHeight + gap, x + size - gap / 2, (rowIndex + 1) * activeRowHeight),
-                        spec.code,
-                        spec.kind,
-                        rowIndex,
-                    ),
-                )
-                x += size
+                val rightUnits = rightHalf.sumOf { it.weight.toDouble() }.toFloat()
+                x = width - rightUnits * unit
+                rightHalf.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
+                }
+            } else {
+                val contentWidth =
+                    if (resources.configuration.orientation ==
+                        android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                    ) {
+                        minOf(width.toFloat(), Tokens.CONTENT_MAX_WIDTH * density)
+                    } else {
+                        width.toFloat()
+                    }
+                val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
+                var x = (width - units * unit) / 2
+                row.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
+                }
             }
         }
         geometryWidth = width
@@ -573,8 +609,10 @@ class KeyboardView(
         val row = (y / activeRowHeight).toInt().coerceAtMost(rows.lastIndex)
         // Gaps are part of the closest key's target, but only within the same row.
         val candidates = cells.filter { it.row == row }
-        return candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }
-            ?: candidates.minByOrNull { minOf(abs(it.rect.left - x), abs(it.rect.right - x)) }
+        candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }?.let { return it }
+        val nearest = candidates.minByOrNull { minOf(abs(it.rect.left - x), abs(it.rect.right - x)) } ?: return null
+        if (splitActive && minOf(abs(nearest.rect.left - x), abs(nearest.rect.right - x)) > gap) return null
+        return nearest
     }
 
     private fun showAlternates(base: Cell) {

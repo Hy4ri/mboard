@@ -56,6 +56,9 @@ class BoardSettings(
     var keyPreview: Boolean
         get() = prefs.getBoolean("preview", true)
         set(value) = prefs.edit().putBoolean("preview", value).apply()
+    var splitWide: Boolean
+        get() = prefs.getBoolean("split_wide", false)
+        set(value) = prefs.edit().putBoolean("split_wide", value).apply()
     var hapticFeedback: Boolean
         get() = prefs.getBoolean("haptic_feedback", false)
         set(value) = prefs.edit().putBoolean("haptic_feedback", value).apply()

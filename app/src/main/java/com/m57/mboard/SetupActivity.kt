@@ -454,6 +454,16 @@ class SetupActivity : Activity() {
         }
         components.add(
             column,
+            components.toggle(
+                getString(R.string.layout_split_wide_title),
+                getString(R.string.layout_split_wide_summary),
+                settings.splitWide,
+            ) {
+                settings.splitWide = it
+            },
+        )
+        components.add(
+            column,
             components.note(getString(R.string.layout_thumb_note)),
         )
         column.addView(components.section(getString(R.string.section_key_details)))

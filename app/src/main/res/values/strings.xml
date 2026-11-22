@@ -96,6 +96,8 @@
     <string name="edge_right">Right edge</string>
     <string name="edge_swipe_left">Swipe from left edge</string>
     <string name="edge_swipe_right">Swipe from right edge</string>
+    <string name="layout_split_wide_title">Split keyboard on wide screens</string>
+    <string name="layout_split_wide_summary">Split keys into left and right halves on screens 600 dp or wider</string>
     <string name="layout_thumb_note">Thumb mode moves real keys; narrow windows use full width to keep them usable. Swipe in from an edge to show its panel; swipe back out to hide it.</string>
     <string name="section_key_details">KEY DETAILS</string>
     <string name="detail_number_row_title">Number row</string>
