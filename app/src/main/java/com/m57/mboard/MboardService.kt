@@ -59,8 +59,7 @@ class MboardService : InputMethodService() {
     private var visualKey = ""
     private var query = ""
     private var lastShift = 0L
-    private var lastSpace = 0L
-    private var pickedSpaceTail: String? = null
+    private lateinit var input: InputController
     private var privateSession = false
     private var lastClipStamp = 0L
     private var fieldPolicy = SuggestionPolicy.classify(0)
@@ -96,6 +95,7 @@ class MboardService : InputMethodService() {
         words = WordSuggestions(this)
         userWords = UserWords(this)
         stripPlanner = StripPlanner(words, { userWords }, predictionTrail, rejectedCorrections)
+        input = InputController(editorPort, stripPlanner, predictionTrail, rejectedCorrections, inputHost)
         clipboard = getSystemService(ClipboardManager::class.java)
         clipboard.addPrimaryClipChangedListener(clipListener)
         settings.registerListener(settingsListener)
@@ -176,7 +176,8 @@ class MboardService : InputMethodService() {
     }
 
     private fun resetEditorState() {
-        pickedSpaceTail = null
+        input.finishComposing()
+        input.reset()
         predictionTrail.reset()
         editorGeneration++
         suggestionStrip?.render(emptyList(), "", editorGeneration, getString(R.string.strip_no_editor))
@@ -184,12 +185,11 @@ class MboardService : InputMethodService() {
         keyboard?.cancelTouch()
         suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         query = ""
-        lastCorrection = null
     }
 
     override fun onFinishInput() {
         resetEditorState()
-        lastSpace = 0L
+        input.forgetSpace()
         lastShift = 0L
         super.onFinishInput()
     }
@@ -368,9 +368,10 @@ class MboardService : InputMethodService() {
         if (fieldPolicy.password && next != Mode.KEYS) return
         suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         val previous = mode
+        if (previous != next) input.finishComposing()
         mode = next
         keyboard?.cursorScrubEnabled = next == Mode.KEYS
-        lastSpace = 0L
+        input.forgetSpace()
         if (next == Mode.EMOJI_SEARCH || next == Mode.CALCULATOR) {
             if (previous != next) query = ""
             keyboard?.layout = if (next == Mode.CALCULATOR) Layout.CALC else language.layout
@@ -431,14 +432,13 @@ class MboardService : InputMethodService() {
         restarting: Boolean,
     ) {
         super.onStartInput(info, restarting)
-        pickedSpaceTail = null
+        input.reset(clearFallback = true)
         predictionTrail.reset()
         editorGeneration++
-        lastCorrection = null
         if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
         defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language.layout
-        lastSpace = 0L
+        input.forgetSpace()
         lastShift = 0L
         query = ""
         keyboard?.cancelTouch()
@@ -479,9 +479,7 @@ class MboardService : InputMethodService() {
     ) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         // A caret jump (tap elsewhere) means backspace no longer refers to the correction.
-        lastCorrection?.let { last ->
-            if (newSelStart != newSelEnd || kotlin.math.abs(newSelStart - oldSelStart) > last.corrected.length + 2) lastCorrection = null
-        }
+        input.caretMoved(oldSelStart, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         if (mode == Mode.KEYS && keyboard?.isCursorScrubbing != true && !suggestionHandler.hasCallbacks(refreshAfterCursorScrub)) {
             updateCapitalization()
             updateAuxiliary()
@@ -549,6 +547,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun toggleLanguage() {
+        input.finishComposing()
         language = Languages.next(language)
         settings.language = language
         if (defaultLayout != Layout.NUMBER) defaultLayout = language.layout
@@ -578,15 +577,9 @@ class MboardService : InputMethodService() {
         }
     }
 
-    private fun readEditorText(): StripPlanner.EditorText {
-        val ic = currentInputConnection ?: return StripPlanner.EditorText(null, null, hasEditor = false)
-        if (!ic.getSelectedText(0).isNullOrEmpty()) return StripPlanner.EditorText(null, null, hasSelection = true)
-        val after = ic.getTextAfterCursor(StripPlanner.MAX_WORD_CHARS + 1, 0)?.toString()
-        val before = if (after != null) ic.getTextBeforeCursor(StripPlanner.CONTEXT_CHARS, 0)?.toString() else null
-        return StripPlanner.EditorText(before, after)
-    }
+    private fun readEditorText(): StripPlanner.EditorText = input.readText()
 
-    private fun prefixContext(): StripPlanner.CaretContext = stripPlanner.context(readEditorText())
+    private fun prefixContext(): StripPlanner.CaretContext = input.context()
 
     private fun stripPolicy(): StripPlanner.StripPolicy =
         StripPlanner.StripPolicy(
@@ -653,105 +646,57 @@ class MboardService : InputMethodService() {
             else -> message
         }
 
-    private fun autoCorrection(
-        typed: String,
-        wordStart: Boolean,
-        contextWords: List<String> = emptyList(),
-    ): String? = stripPlanner.autoCorrection(typed, wordStart, contextWords, stripPolicy())
-
-    private val separators = setOf(Keys.SPACE, ".", ",", "،", "?", "؟", "!", ";", "؛", ":")
-
-    /** Typed word before the cursor replaced by auto-correction; backspace right after restores it. */
-    private data class Correction(
-        val original: String,
-        val corrected: String,
-        val separator: String,
-    )
-
-    private var lastCorrection: Correction? = null
     private val rejectedCorrections = HashSet<String>()
 
-    /**
-     * Replace [expected] immediately before the caret. Editors such as Instagram ignore or defer
-     * setSelection inside an IME edit, so delete-then-commit is used; a failed commit restores the word.
-     */
-    private fun replaceBeforeCursor(
-        ic: InputConnection,
-        expected: String,
-        replacement: String,
-    ): Boolean {
-        if (expected.isEmpty() || !ic.getSelectedText(0).isNullOrEmpty()) return false
-        if (ic.getTextBeforeCursor(expected.length, 0)?.toString() != expected) return false
-        ic.beginBatchEdit()
-        try {
-            if (!ic.deleteSurroundingText(expected.length, 0)) return false
-            if (!ic.commitText(replacement, 1)) {
-                ic.commitText(expected, 1)
-                return false
+    private val editorPort =
+        object : EditorPort {
+            private val ic get() = currentInputConnection
+            override val connected get() = ic != null
+
+            override fun hasSelection() = !ic?.getSelectedText(0).isNullOrEmpty()
+
+            override fun textBefore(count: Int) = ic?.getTextBeforeCursor(count, 0)?.toString()
+
+            override fun textAfter(count: Int) = ic?.getTextAfterCursor(count, 0)?.toString()
+
+            override fun commit(
+                text: String,
+                caretAfter: Boolean,
+            ) = ic?.commitText(text, if (caretAfter) 1 else 0) ?: false
+
+            override fun setComposing(text: String) = ic?.setComposingText(text, 1) ?: false
+
+            override fun finishComposing() = ic?.finishComposingText() ?: false
+
+            override fun deleteSurrounding(
+                before: Int,
+                after: Int,
+            ) = ic?.deleteSurroundingText(before, after) ?: false
+
+            override fun beginBatch() {
+                ic?.beginBatchEdit()
             }
-        } finally {
-            ic.endBatchEdit()
-        }
-        return true
-    }
 
-    /** Replace the whole word around the caret; a word ending at the caret is the ordinary case. */
-    private fun replaceWord(
-        ic: InputConnection,
-        context: StripPlanner.CaretContext,
-        replacement: String,
-    ): Boolean {
-        if (context.suffix.isEmpty()) return replaceBeforeCursor(ic, context.prefix, replacement)
-        if (!ic.getSelectedText(0).isNullOrEmpty()) return false
-        if (ic.getTextBeforeCursor(context.prefix.length, 0)?.toString() != context.prefix) return false
-        if (ic.getTextAfterCursor(context.suffix.length, 0)?.toString() != context.suffix) return false
-        ic.beginBatchEdit()
-        try {
-            if (!ic.deleteSurroundingText(context.prefix.length, context.suffix.length)) return false
-            if (!ic.commitText(replacement, 1)) {
-                // Put the word back with the caret where it was.
-                ic.commitText(context.prefix, 1)
-                ic.commitText(context.suffix, 0)
-                return false
+            override fun endBatch() {
+                ic?.endBatchEdit()
             }
-        } finally {
-            ic.endBatchEdit()
         }
-        return true
-    }
 
-    private fun autoCorrectBefore(
-        ic: InputConnection,
-        separator: String,
-    ) {
-        val kv = keyboard ?: return
-        if (mode != Mode.KEYS || kv.layout != language.layout) return
-        val context = prefixContext()
-        // A separator inside a word splits it; correcting the first half would mangle it.
-        if (context.suffix.isNotEmpty()) return
-        val typed = context.prefix
-        val corrected = autoCorrection(typed, context.sentenceStart, context.contextWords) ?: return
-        if (replaceBeforeCursor(ic, typed, corrected)) lastCorrection = Correction(typed, corrected, separator)
-    }
+    private val inputHost =
+        object : InputController.Host {
+            override val language get() = this@MboardService.language
+            override val autoCorrectActive get() = mode == Mode.KEYS && keyboard?.let { it.layout == language.layout } == true
+            override val doubleSpacePeriod get() = settings.doubleSpacePeriod && !fieldPolicy.password
+            override val composingEnabled get() =
+                settings.composingText && fieldPolicy.allowComposing &&
+                    mode == Mode.KEYS && keyboard?.let { it.layout == language.layout } == true
 
-    /** Backspace straight after an auto-correction puts the typed word back and stops correcting it. */
-    private fun undoCorrection(ic: InputConnection): Boolean {
-        val last = lastCorrection ?: return false
-        lastCorrection = null
-        val tail = last.corrected + last.separator
-        if (ic.getTextBeforeCursor(tail.length, 0)?.toString() != tail || !ic.getSelectedText(0).isNullOrEmpty()) return false
-        ic.beginBatchEdit()
-        try {
-            if (!ic.deleteSurroundingText(tail.length, 0)) return false
-            ic.commitText(last.original, 1)
-        } finally {
-            ic.endBatchEdit()
+            override fun policy() = stripPolicy()
+
+            override fun learningAllowed() = this@MboardService.learningAllowed()
+
+            override fun now() = SystemClock.uptimeMillis()
         }
-        rejectedCorrections += last.original
-        learn(last.original, null)
-        stripPlanner.rejectCorrection(last.original, last.corrected, language, learningAllowed())
-        return true
-    }
 
     /**
      * PIN, number, phone and date pads take digits, not words: they drop the strip row entirely.
@@ -982,7 +927,7 @@ class MboardService : InputMethodService() {
         ) {
             return
         }
-        pickedSpaceTail = null
+        input.forgetPickedSpace()
         if (fieldPolicy.password) {
             if (expected.isEmpty() && word in words.commonWords(language)) currentInputConnection?.commitText(word, 1)
             return
@@ -992,7 +937,7 @@ class MboardService : InputMethodService() {
             val addresses = savedAddresses()
             if (addresses != null && word in addresses.matches) {
                 if (addresses.typed != expected) return updateAuxiliary()
-                val done = if (expected.isEmpty()) ic.commitText(word, 1) else replaceBeforeCursor(ic, expected, word)
+                val done = if (expected.isEmpty()) ic.commitText(word, 1) else input.replaceBeforeCursor(expected, word)
                 if (!done) message(R.string.msg_app_rejected_address)
                 updateAuxiliary()
                 return
@@ -1006,35 +951,20 @@ class MboardService : InputMethodService() {
         }
         // An emoji replaces the typed word: "fire" → "🔥 ".
         if (expected.isNotEmpty() && Emojis.isEmoji(word)) {
-            if (replaceWord(ic, context, word + if (context.textAfterWord) "" else " ")) {
+            if (input.replaceWord(context, word + if (context.textAfterWord) "" else " ")) {
                 if (!privateSession && !fieldPolicy.password) emojiHistory.record(word)
             } else {
                 message(R.string.msg_app_rejected_emoji)
             }
-            lastSpace = 0L
+            input.forgetSpace()
             updateAuxiliary()
             return
         }
-        // A new or last word gets its separator; a word fixed in the middle of text keeps the spacing around it.
-        val value = word.trimEnd() + if (context.suffix.isNotEmpty() && context.textAfterWord) "" else " "
-        val done = if (expected.isEmpty()) ic.commitText(value, 1) else replaceWord(ic, context, value)
-        if (!done) {
+        if (!input.accept(word, context)) {
             message(R.string.msg_app_rejected_completion)
-        } else {
-            pickedSpaceTail = value.takeIf { it.endsWith(' ') }?.takeLast(33)
-            if (language.script == Script.LATIN && Arabizi.isReading(word)) {
-                // An Arabic reading picked on the English layout is not learned into the English stores.
-                predictionTrail.reset()
-            } else if (' ' !in word.trim()) {
-                stripPlanner.acceptCorrection(context.word, word.trim(), language, learningAllowed())
-                predictionTrail.record(context.contextWords, word.trim())
-                learn(word.trim(), context.contextWords.lastOrNull())
-            } else {
-                predictionTrail.reset()
-            }
-            if (keyboard?.capsLocked != true) keyboard?.shifted = false
+        } else if (keyboard?.capsLocked != true) {
+            keyboard?.shifted = false
         }
-        lastSpace = 0L
         updateAuxiliary()
         // Some editors publish surrounding text after commitText returns, just like ordinary typing.
         suggestionHandler.removeCallbacks(refreshSuggestions)
@@ -1042,7 +972,7 @@ class MboardService : InputMethodService() {
     }
 
     private fun pasteClipboard() {
-        pickedSpaceTail = null
+        input.forgetPickedSpace()
         predictionTrail.reset()
         if (fieldPolicy.password) return
         val raw =
@@ -1065,9 +995,10 @@ class MboardService : InputMethodService() {
             paste(raw)
             return
         }
+        input.finishComposing()
         val ic = currentInputConnection
         if (ic?.performContextMenuAction(android.R.id.paste) == true) {
-            lastSpace = 0L
+            input.forgetSpace()
             if (mode == Mode.KEYS) updateAuxiliary()
         } else {
             message(R.string.msg_nothing_to_paste)
@@ -1075,16 +1006,18 @@ class MboardService : InputMethodService() {
     }
 
     private fun paste(text: String) {
-        pickedSpaceTail = null
+        input.finishComposing()
+        input.forgetPickedSpace()
         predictionTrail.reset()
         if (currentInputConnection?.commitText(text, 1) == false) message(R.string.msg_app_rejected_text)
-        lastSpace = 0L
+        input.forgetSpace()
         if (mode == Mode.KEYS) updateAuxiliary()
     }
 
     private fun pasteEmoji(text: String) {
+        input.finishComposing()
         if (currentInputConnection?.commitText(text, 1) == true && !privateSession && !fieldPolicy.password) emojiHistory.record(text)
-        lastSpace = 0L
+        input.forgetSpace()
     }
 
     private fun onInternalKey(key: String) {
@@ -1147,22 +1080,15 @@ class MboardService : InputMethodService() {
         if (mode == Mode.EMOJI_SEARCH || mode == Mode.CALCULATOR) return onInternalKey(key)
         val ic = currentInputConnection ?: return
         val kv = keyboard ?: return
-        val pickedTail = pickedSpaceTail
-        if (key !in setOf(Keys.SHIFT, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)) pickedSpaceTail = null
-        if (key != Keys.SPACE) lastSpace = 0L
+        val pickedTail = input.beginKey(key, key in setOf(Keys.SHIFT, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD))
         pressDeleted = null
-        if (key == Keys.BACKSPACE && ic.getSelectedText(0).isNullOrEmpty() && undoCorrection(ic)) {
+        if (key == Keys.BACKSPACE && ic.getSelectedText(0).isNullOrEmpty() && input.undoCorrection() != null) {
             lastShift = 0L
             updateAuxiliary()
             return
         }
-        if (key != Keys.SHIFT) lastCorrection = null
-        if (key in separators) {
-            val before = prefixContext()
-            autoCorrectBefore(ic, key)
-            // Splitting a word inside teaches nothing: the half before the caret is not a word the user typed.
-            if (before.suffix.isEmpty()) learn(lastCorrection?.corrected ?: before.prefix, before.contextWords.lastOrNull())
-        }
+        if (key != Keys.SHIFT) input.forgetCorrection()
+        if (key in InputController.SEPARATORS) input.beforeSeparator(key)
         when (key) {
             Keys.SHIFT -> {
                 val now = SystemClock.uptimeMillis()
@@ -1187,17 +1113,19 @@ class MboardService : InputMethodService() {
             Keys.BACKSPACE -> {
                 pressDeleted = null
                 if (!ic.getSelectedText(0).isNullOrEmpty()) {
+                    input.finishComposing()
                     ic.commitText("", 1)
                 } else {
                     val before = ic.getTextBeforeCursor(2, 0)?.toString()
                     if (!before.isNullOrEmpty()) {
                         pressDeleted = before.substring(before.offsetByCodePoints(before.length, -1))
                     }
-                    sendKey(ic, KeyEvent.KEYCODE_DEL)
+                    if (!input.backspaceComposing()) sendKey(ic, KeyEvent.KEYCODE_DEL)
                 }
             }
 
             Keys.DELETE_WORD -> {
+                input.finishComposing()
                 if (!ic.getSelectedText(0).isNullOrEmpty()) {
                     ic.commitText("", 1)
                 } else {
@@ -1212,6 +1140,7 @@ class MboardService : InputMethodService() {
             }
 
             Keys.ENTER -> {
+                input.finishComposing()
                 val info = currentInputEditorInfo
                 val action = info?.imeOptions?.and(EditorInfo.IME_MASK_ACTION) ?: EditorInfo.IME_ACTION_NONE
                 val noAction = (info?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0
@@ -1229,64 +1158,31 @@ class MboardService : InputMethodService() {
             }
 
             Keys.SYMBOLS -> {
+                input.finishComposing()
                 kv.layout = Layout.SYMBOLS
             }
 
             Keys.MORE_SYMBOLS -> {
+                input.finishComposing()
                 kv.layout = Layout.SYMBOLS_MORE
             }
 
             Keys.PAD -> {
+                input.finishComposing()
                 kv.layout = Layout.NUMPAD
             }
 
             Keys.LETTERS -> {
+                input.finishComposing()
                 kv.layout = language.layout
             }
 
             Keys.SPACE -> {
-                val now = SystemClock.uptimeMillis()
-                val before = ic.getTextBeforeCursor(3, 0)?.toString().orEmpty()
-                val canPeriod =
-                    settings.doubleSpacePeriod && !fieldPolicy.password && lastSpace != 0L &&
-                        now - lastSpace < 600 &&
-                        before.endsWith(
-                            " ",
-                        ) && before.dropLast(1).lastOrNull()?.let { it.isLetterOrDigit() } == true &&
-                        ic.getSelectedText(0).isNullOrEmpty()
-                if (canPeriod) {
-                    ic.beginBatchEdit()
-                    try {
-                        if (ic.deleteSurroundingText(1, 0)) ic.commitText(". ", 1)
-                    } finally {
-                        ic.endBatchEdit()
-                    }
-                    lastSpace = 0L
-                } else {
-                    ic.commitText(" ", 1)
-                    lastSpace = now
-                }
+                input.space()
             }
 
             else -> {
-                // Only absorb the separator we inserted on a pick, never a manually typed space.
-                // Do this after autoCorrectBefore: an explicit literal pick must not be corrected again.
-                val commit = if (kv.shifted) key.uppercase(Locale.ROOT) else key
-                val absorbSpace =
-                    pickedTail != null && key in separators && key != Keys.SPACE &&
-                        ic.getSelectedText(0).isNullOrEmpty() &&
-                        ic.getTextBeforeCursor(pickedTail.length, 0)?.toString()?.endsWith(pickedTail) == true
-                if (absorbSpace) {
-                    ic.beginBatchEdit()
-                    try {
-                        ic.deleteSurroundingText(1, 0)
-                        ic.commitText(commit, 1)
-                    } finally {
-                        ic.endBatchEdit()
-                    }
-                } else {
-                    ic.commitText(commit, 1)
-                }
+                input.character(if (kv.shifted) key.uppercase(Locale.ROOT) else key, key, pickedTail)
                 if (!kv.capsLocked) kv.shifted = false
             }
         }
@@ -1296,12 +1192,6 @@ class MboardService : InputMethodService() {
         suggestionHandler.removeCallbacks(refreshSuggestions)
         suggestionHandler.postDelayed(refreshSuggestions, 30L)
     }
-
-    /** Learns only in ordinary fields, with learning on, outside the shield and apps' no-learning flag. */
-    private fun learn(
-        word: String,
-        previous: String?,
-    ) = stripPlanner.learn(word, previous, language, learningAllowed())
 
     /** One recording guard for learned words, pairs and correction rejections. */
     private fun learningAllowed(): Boolean =
@@ -1313,6 +1203,7 @@ class MboardService : InputMethodService() {
     private fun deleteSwipe(steps: Int) {
         val ic = currentInputConnection ?: return
         if (swipeCursor < 0 && swipeBefore == null) {
+            input.finishComposing()
             // The press already removed one character; give it back so the swipe owns the deletion.
             pressDeleted?.let { ic.commitText(it, 1) }
             pressDeleted = null
@@ -1345,8 +1236,8 @@ class MboardService : InputMethodService() {
             commit && length > 0 -> ic.deleteSurroundingText(length, 0)
             cursor >= 0 -> ic.setSelection(cursor, cursor)
         }
-        lastCorrection = null
-        lastSpace = 0L
+        input.forgetCorrection()
+        input.forgetSpace()
         updateAuxiliary()
     }
 
@@ -1379,9 +1270,9 @@ class MboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         val right = steps > 0
         val arrow = if (right) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT
-        lastSpace = 0L
-        pickedSpaceTail = null
-        lastCorrection = null
+        input.finishComposing()
+        input.forgetSpace()
+        input.reset()
         predictionTrail.reset()
         repeat(kotlin.math.abs(steps).coerceAtMost(MAX_CURSOR_STEPS_PER_EVENT)) {
             if (fieldPolicy.password) {

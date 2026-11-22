@@ -71,7 +71,7 @@ class Strip(
     /** Keyboard shift state (auto-capitalize at a sentence start); the replay bench keeps it off. */
     var shifted = false
 
-    private fun policy(numeric: Boolean = false): StripPlanner.StripPolicy =
+    fun policy(numeric: Boolean = false): StripPlanner.StripPolicy =
         StripPlanner.StripPolicy(
             language = language,
             dialect = dialect,

@@ -38,6 +38,8 @@ private const val USAGE = """usage: bench/suggest.sh [options] TEXT
   --no-autocap         field without sentence capitalization (default: capitalize at a sentence start)
   --arabizi            Arabizi suggestions on (off by default, as in the keyboard; English layout only)
   --no-arabizi         Arabizi suggestions off
+  --composing          (live/agent) keep the word being typed as a composing span (off by default)
+  --no-composing       composing span off
   --no-learning        (live) do not learn the words you type or pick (on by default, as in the keyboard)
   --log-dir DIR        where the run log goes (default bench/logs/suggest)
   --assets DIR         dictionary assets (default app/src/main/assets)
@@ -56,6 +58,7 @@ internal class Options(
     val autoCapitalize: Boolean,
     val learning: Boolean,
     val arabizi: Boolean,
+    val composing: Boolean,
     val assets: File,
     val logDir: File,
 )
@@ -76,6 +79,7 @@ private fun parseOptions(args: Array<String>): Options {
     var json = false
     var learning = true
     var arabizi = false
+    var composing = false
     var assets = File("../app/src/main/assets")
     var logDir = File("logs/suggest")
     val positional = ArrayList<String>()
@@ -129,6 +133,14 @@ private fun parseOptions(args: Array<String>): Options {
                     arabizi = false
                 }
 
+                "--composing" -> {
+                    composing = true
+                }
+
+                "--no-composing" -> {
+                    composing = false
+                }
+
                 "--dialect" -> {
                     dialect = true
                 }
@@ -173,6 +185,7 @@ private fun parseOptions(args: Array<String>): Options {
         autoCapitalize,
         learning,
         arabizi,
+        composing,
         assets,
         logDir,
     )
