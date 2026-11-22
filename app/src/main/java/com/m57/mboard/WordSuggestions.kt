@@ -53,7 +53,7 @@ class WordSuggestions(
     private val states = HashMap<String, State>()
     private val callbacks = HashMap<String, ArrayList<() -> Unit>>()
 
-    /** Arabic lexicon (with Jordanian words) read only for Arabizi lookups on a Latin layout. */
+    /** Arabic lexicon (with Jordanian words) for Arabizi lookups; the loaded Arabic model's dictionary when present, else read separately. */
     @Volatile private var arabiziLexicon: WordDictionary? = null
 
     @Volatile private var arabiziAllowlist: Set<String> = emptySet()
@@ -79,8 +79,13 @@ class WordSuggestions(
                                 .toSet()
                         }
                     val arabic = Languages.ARABIC
-                    val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
-                    val lexicon = readDictionary(arabic, dialect, KnownWordForms.EMPTY)
+                    // Arabizi only calls exactEntry, which ignores known forms, so a loaded Arabic model's
+                    // dictionary answers identically and a second full load is skipped.
+                    val lexicon =
+                        models[arabic.code]?.dictionary ?: run {
+                            val dialect = arabic.dialect?.let { readDialectVocabulary(it.wordsAsset) }.orEmpty()
+                            readDictionary(arabic, dialect, KnownWordForms.EMPTY)
+                        }
                     synchronized(lock) {
                         if (closed) return@execute
                         arabiziAllowlist = allowlist
