@@ -892,7 +892,7 @@ class KeyboardView(
         val preview = popup
         cancelTouch()
         when {
-            alternate != null && releasedCell != null -> {
+            alternate != null -> {
                 onKey(alternate)
             }
 
