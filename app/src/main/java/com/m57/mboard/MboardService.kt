@@ -1,12 +1,16 @@
 package com.m57.mboard
 
+import android.content.ActivityNotFoundException
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Rect
 import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
+import android.provider.Settings
+import android.text.InputType
 import android.text.TextDirectionHeuristics
 import android.util.Log
 import android.view.Gravity
@@ -19,6 +23,7 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.Toast
+import com.m57.mboard.KeyboardView.DeleteRepeat
 import java.util.Locale
 
 class MboardService : InputMethodService() {
@@ -39,6 +44,7 @@ class MboardService : InputMethodService() {
     private var auxiliary: LinearLayout? = null
     private var panelBody: FrameLayout? = null
     private var toolbar: LinearLayout? = null
+    private var keyboardRoot: View? = null
     private lateinit var ui: BoardUi
     private lateinit var settings: BoardSettings
     private lateinit var clips: ClipStore
@@ -69,6 +75,13 @@ class MboardService : InputMethodService() {
     private val refreshSuggestions =
         Runnable {
             if (!destroyed && mode == Mode.KEYS && isInputViewShown) updateAuxiliary()
+        }
+    private val refreshAfterDeleteRepeat =
+        Runnable {
+            if (!destroyed && isInputViewShown && keyboard?.isCursorScrubbing != true) {
+                updateCapitalization()
+                updateAuxiliary()
+            }
         }
     private val refreshAfterCursorScrub =
         Runnable {
@@ -125,6 +138,7 @@ class MboardService : InputMethodService() {
         emojiLoader.shutdownNow()
         emojiHandler.removeCallbacksAndMessages(null)
         keyboard?.cancelTouch()
+        TrackpadService.connected?.dismiss()
         clipboard.removePrimaryClipChangedListener(clipListener)
         settings.unregisterListener(settingsListener)
         suggestionHandler.removeCallbacksAndMessages(null)
@@ -182,6 +196,7 @@ class MboardService : InputMethodService() {
         editorGeneration++
         suggestionStrip?.render(emptyList(), "", editorGeneration, getString(R.string.strip_no_editor))
         suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
         keyboard?.cancelTouch()
         suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
         query = ""
@@ -219,7 +234,7 @@ class MboardService : InputMethodService() {
         ui = BoardUi(this)
         visualKey = settings.visualKey()
         val kv =
-            KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd) {
+            KeyboardView(this, ::onKey, ::moveCursor, ::deleteSwipe, ::deleteSwipeEnd, ::canRepeatWords, ::repeatDelete) {
                 suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
                 suggestionHandler.postDelayed(refreshAfterCursorScrub, CURSOR_REFRESH_MS)
             }
@@ -286,6 +301,7 @@ class MboardService : InputMethodService() {
                     },
                 )
             }
+        keyboardRoot = root
         setMode(Mode.KEYS)
         return root
     }
@@ -301,13 +317,20 @@ class MboardService : InputMethodService() {
             label: String,
             active: Boolean = false,
             offInPassword: Boolean = false,
+            keepsTrackpad: Boolean = false,
             action: () -> Unit,
         ) {
             val off = offInPassword && password
             bar.addView(
                 ui
-                    .icon(res, label) { if (off) message(R.string.toolbar_off_in_password) else action() }
-                    .apply {
+                    .icon(res, label) {
+                        if (off) {
+                            message(R.string.toolbar_off_in_password)
+                        } else {
+                            if (!keepsTrackpad) TrackpadService.connected?.dismiss()
+                            action()
+                        }
+                    }.apply {
                         isSelected = active
                         imageTintList = ColorStateList.valueOf(if (active) ui.accentInk else ui.text)
                         background = ui.ripple(if (active) ui.accentContainer else Color.TRANSPARENT)
@@ -333,6 +356,13 @@ class MboardService : InputMethodService() {
         slot(R.drawable.ic_calculate, getString(R.string.toolbar_calculator), mode == Mode.CALCULATOR, true) {
             togglePanel(Mode.CALCULATOR)
         }
+        slot(
+            R.drawable.ic_trackpad,
+            getString(R.string.trackpad_title),
+            active = TrackpadService.connected?.isShowing == true,
+            offInPassword = true,
+            keepsTrackpad = true,
+        ) { openTrackpad() }
         val shieldOn = privateSession || password
         val privacyLabel =
             getString(
@@ -355,6 +385,75 @@ class MboardService : InputMethodService() {
         slot(R.drawable.ic_keyboard_hide, getString(R.string.toolbar_hide_keyboard)) { requestHideSelf(0) }
     }
 
+    private fun openTrackpad() {
+        val service = TrackpadService.connected
+        if (service == null) {
+            message(R.string.trackpad_enable)
+            try {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (e: ActivityNotFoundException) {
+                Log.w("mboard.trackpad", "Accessibility settings unavailable", e)
+                message(R.string.trackpad_unavailable)
+            }
+            return
+        }
+        if (service.isShowing) {
+            service.dismiss()
+            return
+        }
+        val root = keyboardRoot ?: return
+        val body = panelBody ?: return
+        val keyHeight = keyboard?.keysHeight ?: return
+        val owner = currentInputEditorInfo?.packageName
+        if (owner.isNullOrBlank() || root.display?.displayId != android.view.Display.DEFAULT_DISPLAY) {
+            message(R.string.trackpad_unavailable)
+            return
+        }
+        val location = IntArray(2)
+        body.getLocationOnScreen(location)
+        val bottom = location[1] + body.height
+        val bounds = Rect(location[0], bottom - keyHeight, location[0] + body.width, bottom)
+        // Keep the toolbar in place, even if the previously open panel covered the suggestion strip.
+        setMode(Mode.KEYS)
+        val showing =
+            service.show(
+                owner,
+                bounds,
+                keyboardTop = {
+                    val current = keyboardRoot
+                    if (isInputViewShown && current?.isAttachedToWindow == true) {
+                        current.getLocationOnScreen(location)
+                        location[1]
+                    } else {
+                        null
+                    }
+                },
+                onDismiss = ::refreshTrackpadChrome,
+                returnToTyping = {
+                    if (!destroyed && !isInputViewShown && currentInputEditorInfo?.packageName == owner && !fieldPolicy.password) {
+                        requestShowSelf(0)
+                    }
+                },
+            )
+        if (showing) refreshTrackpadChrome() else message(R.string.trackpad_unavailable)
+    }
+
+    private fun refreshTrackpadChrome() {
+        if (destroyed) return
+        rebuildToolbar()
+        updateAuxiliary()
+    }
+
+    override fun onWindowShown() {
+        super.onWindowShown()
+        TrackpadService.connected?.setKeyboardVisible(true)
+    }
+
+    override fun onWindowHidden() {
+        super.onWindowHidden()
+        TrackpadService.connected?.setKeyboardVisible(false)
+    }
+
     private fun openSettings() = startActivity(Intent(this, SetupActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
     private fun togglePanel(next: Mode) = setMode(if (mode == next) Mode.KEYS else next)
@@ -364,6 +463,7 @@ class MboardService : InputMethodService() {
 
     private fun setMode(next: Mode) {
         suggestionHandler.removeCallbacks(refreshSuggestions)
+        suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
         keyboard?.cancelTouch()
         if (fieldPolicy.password && next != Mode.KEYS) return
         suggestionHandler.removeCallbacks(refreshAfterCursorScrub)
@@ -384,7 +484,7 @@ class MboardService : InputMethodService() {
         val keysVisible = next in setOf(Mode.KEYS, Mode.EMOJI_SEARCH, Mode.CALCULATOR)
         // Browse panels own their header and fill the keys plus strip area, keeping the keyboard height constant.
         val clipboardOpen = next == Mode.CLIPBOARD || next == Mode.EMOJI
-        auxiliary?.visibility = if (clipboardOpen || (next == Mode.KEYS && !stripNeeded())) View.GONE else View.VISIBLE
+        auxiliary?.visibility = if (clipboardOpen || (next == Mode.KEYS && !keyStripVisible())) View.GONE else View.VISIBLE
         panelBody?.let { body ->
             // Panels replace the hidden strip too, so opening one never shrinks the keyboard and small boards keep room.
             // Number pads have no strip row to replace, so their panels keep the pad's own height.
@@ -409,7 +509,7 @@ class MboardService : InputMethodService() {
         keyCode: Int,
         event: android.view.KeyEvent,
     ): Boolean {
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && (mode != Mode.KEYS || TrackpadService.connected?.isShowing == true)) {
             event.startTracking()
             return true
         }
@@ -420,9 +520,16 @@ class MboardService : InputMethodService() {
         keyCode: Int,
         event: android.view.KeyEvent,
     ): Boolean {
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && mode != Mode.KEYS && isInputViewShown) {
-            setMode(Mode.KEYS)
-            return true
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && event.isTracking && !event.isCanceled) {
+            val trackpad = TrackpadService.connected
+            if (trackpad?.isShowing == true) {
+                trackpad.dismiss()
+                return true
+            }
+            if (mode != Mode.KEYS) {
+                setMode(Mode.KEYS)
+                return true
+            }
         }
         return super.onKeyUp(keyCode, event)
     }
@@ -437,6 +544,7 @@ class MboardService : InputMethodService() {
         editorGeneration++
         if (!restarting) rejectedCorrections.clear()
         fieldPolicy = SuggestionPolicy.classify(info?.inputType ?: 0)
+        if (fieldPolicy.password) TrackpadService.connected?.dismiss()
         defaultLayout = if (fieldPolicy.numeric) Layout.NUMBER else language.layout
         input.forgetSpace()
         lastShift = 0L
@@ -481,8 +589,13 @@ class MboardService : InputMethodService() {
         // A caret jump (tap elsewhere) means backspace no longer refers to the correction.
         input.caretMoved(oldSelStart, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         if (mode == Mode.KEYS && keyboard?.isCursorScrubbing != true && !suggestionHandler.hasCallbacks(refreshAfterCursorScrub)) {
-            updateCapitalization()
-            updateAuxiliary()
+            if (keyboard?.isRepeatingDelete == true) {
+                scheduleDeleteRefresh()
+            } else {
+                suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
+                updateCapitalization()
+                updateAuxiliary()
+            }
         }
     }
 
@@ -705,11 +818,18 @@ class MboardService : InputMethodService() {
      */
     private fun stripNeeded(): Boolean = !fieldPolicy.numeric
 
+    private fun keyStripVisible() = stripNeeded() && TrackpadService.connected?.isShowing != true
+
     private fun updateAuxiliary() {
         if (keyboard?.isCursorScrubbing == true) return
         val bar = auxiliary ?: return
         if (mode == Mode.KEYS) {
-            bar.visibility = if (stripNeeded()) View.VISIBLE else View.GONE
+            val visible = keyStripVisible()
+            bar.visibility = if (visible) View.VISIBLE else View.GONE
+            if (!visible && TrackpadService.connected?.isShowing == true) {
+                if (bar.childCount > 0) bar.removeAllViews()
+                return
+            }
             bar.layoutParams = bar.layoutParams.apply { height = ui.dp(Tokens.STRIP_HEIGHT) }
             renderSuggestions(bar)
             return
@@ -1027,10 +1147,6 @@ class MboardService : InputMethodService() {
                 if (query.isNotEmpty()) query = query.substring(0, query.offsetByCodePoints(query.length, -1))
             }
 
-            Keys.DELETE_WORD -> {
-                query = query.dropLast(wordDeleteLength(query))
-            }
-
             Keys.ENTER -> {
                 if (mode ==
                     Mode.CALCULATOR
@@ -1075,7 +1191,87 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
+    private fun canRepeatWords(): Boolean =
+        mode == Mode.EMOJI_SEARCH ||
+            (mode == Mode.KEYS && !fieldPolicy.password && !fieldPolicy.numeric && currentInputEditorInfo?.inputType != InputType.TYPE_NULL)
+
+    private fun scheduleDeleteRefresh() {
+        // Throttle rather than debounce: the strip still updates during a sustained hold.
+        if (!suggestionHandler.hasCallbacks(refreshAfterDeleteRepeat)) {
+            suggestionHandler.postDelayed(refreshAfterDeleteRepeat, DELETE_REPEAT_REFRESH_MS)
+        }
+    }
+
+    private fun repeatDelete(preferWord: Boolean): DeleteRepeat {
+        val word = preferWord && canRepeatWords()
+        val result =
+            when (mode) {
+                Mode.EMOJI_SEARCH, Mode.CALCULATOR -> {
+                    if (query.isEmpty()) return DeleteRepeat.STOP
+                    if (word) {
+                        query = query.dropLast(repeatWordDeleteLength(query))
+                        DeleteRepeat.WORD
+                    } else {
+                        query = query.substring(0, query.offsetByCodePoints(query.length, -1))
+                        DeleteRepeat.CHARACTER
+                    }
+                }
+
+                Mode.KEYS -> {
+                    val ic = currentInputConnection ?: return DeleteRepeat.STOP
+                    input.finishComposing()
+                    repeatEditorDelete(ic, word)
+                }
+
+                else -> {
+                    return DeleteRepeat.STOP
+                }
+            }
+        if (result != DeleteRepeat.STOP) {
+            pressDeleted = null
+            input.forgetCorrection()
+            input.forgetPickedSpace()
+            input.forgetSpace()
+            lastShift = 0L
+            predictionTrail.reset()
+            scheduleDeleteRefresh()
+        }
+        return result
+    }
+
+    private fun repeatEditorDelete(
+        ic: InputConnection,
+        word: Boolean,
+    ): DeleteRepeat {
+        // Leave password and raw-key editors to native backspace without reading their text.
+        val before =
+            if (fieldPolicy.password || currentInputEditorInfo?.inputType == InputType.TYPE_NULL) {
+                null
+            } else {
+                if (!ic.getSelectedText(0).isNullOrEmpty()) return DeleteRepeat.STOP
+                ic.getTextBeforeCursor(if (word) DELETE_WORD_LOOKBACK else 2, 0)
+            }
+        if (before != null) {
+            if (before.isEmpty()) return DeleteRepeat.STOP
+            if (word) {
+                // A bounded editor response can start halfway through a surrogate pair.
+                val tail = if (before[0].isLowSurrogate()) before.subSequence(1, before.length) else before
+                if (tail.isNotEmpty()) {
+                    val count = repeatWordDeleteLength(tail.toString())
+                    return if (ic.deleteSurroundingText(count, 0)) DeleteRepeat.WORD else DeleteRepeat.STOP
+                }
+            }
+        }
+        if (!sendKey(ic, KeyEvent.KEYCODE_DEL)) return DeleteRepeat.STOP
+        // If the editor hides its text, don't pause or try to switch into word mode later in this hold.
+        return if (before == null || word) DeleteRepeat.CHARACTER_ONLY else DeleteRepeat.CHARACTER
+    }
+
     private fun onKey(key: String) {
+        if (suggestionHandler.hasCallbacks(refreshAfterDeleteRepeat)) {
+            suggestionHandler.removeCallbacks(refreshAfterDeleteRepeat)
+            updateCapitalization()
+        }
         predictionTrail.reset()
         if (mode == Mode.EMOJI_SEARCH || mode == Mode.CALCULATOR) return onInternalKey(key)
         val ic = currentInputConnection ?: return
@@ -1121,21 +1317,6 @@ class MboardService : InputMethodService() {
                         pressDeleted = before.substring(before.offsetByCodePoints(before.length, -1))
                     }
                     if (!input.backspaceComposing()) sendKey(ic, KeyEvent.KEYCODE_DEL)
-                }
-            }
-
-            Keys.DELETE_WORD -> {
-                input.finishComposing()
-                if (!ic.getSelectedText(0).isNullOrEmpty()) {
-                    ic.commitText("", 1)
-                } else {
-                    val before = ic.getTextBeforeCursor(64, 0)?.toString()
-                    val count = before?.let(::wordDeleteLength) ?: 0
-                    // Editors that hide their text still get a plain backspace.
-                    when {
-                        count > 0 -> ic.deleteSurroundingText(count, 0)
-                        before == null -> sendKey(ic, KeyEvent.KEYCODE_DEL)
-                    }
                 }
             }
 
@@ -1241,6 +1422,13 @@ class MboardService : InputMethodService() {
         updateAuxiliary()
     }
 
+    /** Line breaks get their own repeat tick instead of disappearing with the preceding word. */
+    private fun repeatWordDeleteLength(text: String): Int {
+        val lineStart = maxOf(text.lastIndexOf('\n'), text.lastIndexOf('\r')) + 1
+        if (lineStart < text.length) return wordDeleteLength(text.substring(lineStart))
+        return if (text.endsWith("\r\n")) 2 else 1
+    }
+
     /** UTF-16 length of trailing whitespace plus the word (or punctuation/emoji run) before it. */
     private fun wordDeleteLength(text: String): Int {
         val spaces = text.length - text.trimEnd().length
@@ -1332,6 +1520,8 @@ class MboardService : InputMethodService() {
     private fun message(res: Int) = Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 
     private companion object {
+        const val DELETE_REPEAT_REFRESH_MS = 90L
+        const val DELETE_WORD_LOOKBACK = 64
         const val CURSOR_EDGE_CONTEXT = 2_048
         const val CURSOR_REFRESH_MS = 16L
         const val MAX_CURSOR_STEPS_PER_EVENT = 32

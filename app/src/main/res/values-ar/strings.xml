@@ -390,4 +390,16 @@
     <string name="rail_full_width">لوحة مفاتيح بالعرض الكامل</string>
     <string name="rail_move_right">نقل لوحة المفاتيح لليمين</string>
     <string name="rail_move_left">نقل لوحة المفاتيح لليسار</string>
+    <string name="trackpad_title">لوحة اللمس</string>
+    <string name="trackpad_service_name">لوحة لمس mboard</string>
+    <string name="trackpad_service_description">يتيح للوحة لمس mboard النقر والضغط المطوّل والتمرير. يعمل فقط عند فتح لوحة اللمس ولا يقرأ محتوى الشاشة.</string>
+    <string name="trackpad_enable">فعّل لوحة لمس mboard في إعدادات تسهيل الاستخدام، ثم اضغط على لوحة اللمس مرة أخرى.</string>
+    <string name="trackpad_unavailable">لوحة اللمس غير متاحة على هذه الشاشة.</string>
+    <string name="trackpad_action_failed">تعذّر على أندرويد إكمال إيماءة لوحة اللمس.</string>
+    <string name="trackpad_hint">اسحب لتحريك المؤشر · انقر للضغط\nالتمرير: أي حافة أو إصبعان</string>
+    <string name="trackpad_left_description">نقرة يسرى</string>
+    <string name="trackpad_right_description">نقرة يمنى (ضغط مطوّل باللمس)</string>
+    <string name="trackpad_hold_description">إمساك للسحب التالي</string>
+    <string name="trackpad_hold_armed">السحب جاهز</string>
+    <string name="trackpad_hold_off">السحب غير مفعّل</string>
 </resources>
