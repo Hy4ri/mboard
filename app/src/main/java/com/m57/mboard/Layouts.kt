@@ -37,14 +37,46 @@ val ALTERNATES: Map<String, List<String>> =
         "*" to "×",
     ).mapValues { (_, value) -> value.map(Char::toString) }
 
-private val digits = "1234567890".map(Char::toString)
+/** Visual and interaction role of a key in a [Layout]. */
+enum class KeyKind {
+    /** Printable character key (normal key surface, shows press preview popup). */
+    CHAR,
+
+    /** Modifier or action key (function key surface, no press preview popup). */
+    FUNCTION,
+
+    /** Space bar (normal key surface, no press preview popup, supports cursor scrub). */
+    SPACE,
+}
+
+/** One key declared in a [Layout]: emitted [code], relative width [weight], and [kind]. */
+data class KeySpec(
+    val code: String,
+    val weight: Float = 1f,
+    val kind: KeyKind = KeyKind.CHAR,
+) {
+    companion object {
+        fun chars(text: String): List<KeySpec> = text.map { KeySpec(it.toString()) }
+
+        fun char(code: String): KeySpec = KeySpec(code, 1f, KeyKind.CHAR)
+
+        fun fn(
+            code: String,
+            weight: Float = 1.5f,
+        ): KeySpec = KeySpec(code, weight, KeyKind.FUNCTION)
+
+        fun space(weight: Float = 4f): KeySpec = KeySpec(Keys.SPACE, weight, KeyKind.SPACE)
+    }
+}
+
+private val digits = KeySpec.chars("1234567890")
 
 /**
  * A grid of keys. Letter layouts come from a [Language]; the rest are shared.
  * [letters] layouts carry a number row that the user can hide; [stretch] rows fill the width edge to edge.
  */
 class Layout(
-    val rows: List<List<String>>,
+    val rows: List<List<KeySpec>>,
     val letters: Boolean = false,
     val stretch: Boolean = false,
     val grid: Boolean = false,
@@ -52,7 +84,7 @@ class Layout(
     companion object {
         /** A language's letter rows below the shared number row. */
         fun letters(
-            rows: List<List<String>>,
+            rows: List<List<KeySpec>>,
             stretch: Boolean = false,
         ) = Layout(listOf(digits) + rows, letters = true, stretch = stretch)
 
@@ -60,47 +92,67 @@ class Layout(
             Layout(
                 listOf(
                     digits,
-                    "@#\$_%-+()/".map(Char::toString),
-                    listOf(Keys.MORE_SYMBOLS) + "*\"':;!?".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.LETTERS, Keys.PAD, ",", Keys.SPACE, ".", Keys.ENTER),
+                    KeySpec.chars("@#\$_%-+()/"),
+                    listOf(KeySpec.fn(Keys.MORE_SYMBOLS)) + KeySpec.chars("*\"':;!?") + KeySpec.fn(Keys.BACKSPACE),
+                    listOf(
+                        KeySpec.fn(Keys.LETTERS),
+                        KeySpec.fn(Keys.PAD, 1f),
+                        KeySpec.char(","),
+                        KeySpec.space(),
+                        KeySpec.char("."),
+                        KeySpec.fn(Keys.ENTER),
+                    ),
                 ),
             )
         val SYMBOLS_MORE =
             Layout(
                 listOf(
-                    "[]{}<>^\\|~".map(Char::toString),
-                    "€£¥₹¢©®™°•".map(Char::toString),
-                    listOf(Keys.SYMBOLS) + "=&…¿¡·`".map(Char::toString) + Keys.BACKSPACE,
-                    listOf(Keys.LETTERS, Keys.GLOBE, ",", Keys.SPACE, ".", Keys.ENTER),
+                    KeySpec.chars("[]{}<>^\\|~"),
+                    KeySpec.chars("€£¥₹¢©®™°•"),
+                    listOf(KeySpec.fn(Keys.SYMBOLS)) + KeySpec.chars("=&…¿¡·`") + KeySpec.fn(Keys.BACKSPACE),
+                    listOf(
+                        KeySpec.fn(Keys.LETTERS),
+                        KeySpec.fn(Keys.GLOBE, 1f),
+                        KeySpec.char(","),
+                        KeySpec.space(),
+                        KeySpec.char("."),
+                        KeySpec.fn(Keys.ENTER),
+                    ),
                 ),
             )
         val NUMPAD =
             Layout(
                 listOf(
-                    listOf("+", "1", "2", "3", "/"),
-                    listOf("-", "4", "5", "6", "%"),
-                    listOf("*", "7", "8", "9", Keys.BACKSPACE),
-                    listOf(Keys.SYMBOLS, ",", "0", ".", Keys.ENTER),
+                    KeySpec.chars("+123/"),
+                    KeySpec.chars("-456%"),
+                    KeySpec.chars("*789") + KeySpec.fn(Keys.BACKSPACE, 1f),
+                    listOf(
+                        KeySpec.fn(Keys.SYMBOLS, 1f),
+                        KeySpec.char(","),
+                        KeySpec.char("0"),
+                        KeySpec.char("."),
+                        KeySpec.fn(Keys.ENTER, 1f),
+                    ),
                 ),
                 grid = true,
             )
         val CALC =
             Layout(
                 listOf(
-                    listOf("+", "1", "2", "3", "÷"),
-                    listOf("−", "4", "5", "6", "×"),
-                    listOf("(", "7", "8", "9", Keys.BACKSPACE),
-                    listOf(")", "%", "0", ".", Keys.ENTER),
+                    KeySpec.chars("+123÷"),
+                    KeySpec.chars("−456×"),
+                    KeySpec.chars("(789") + KeySpec.fn(Keys.BACKSPACE, 1f),
+                    KeySpec.chars(")%0.") + KeySpec.fn(Keys.ENTER, 1f),
                 ),
                 grid = true,
             )
         val NUMBER =
             Layout(
                 listOf(
-                    listOf("1", "2", "3", Keys.BACKSPACE),
-                    listOf("4", "5", "6", "-"),
-                    listOf("7", "8", "9", "."),
-                    listOf(Keys.LETTERS, "0", Keys.SPACE, Keys.ENTER),
+                    KeySpec.chars("123") + KeySpec.fn(Keys.BACKSPACE, 1f),
+                    KeySpec.chars("456-"),
+                    KeySpec.chars("789."),
+                    listOf(KeySpec.fn(Keys.LETTERS, 1f), KeySpec.char("0"), KeySpec.space(1f), KeySpec.fn(Keys.ENTER, 1f)),
                 ),
                 grid = true,
             )

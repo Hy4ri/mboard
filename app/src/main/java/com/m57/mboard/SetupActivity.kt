@@ -454,6 +454,16 @@ class SetupActivity : Activity() {
         }
         components.add(
             column,
+            components.toggle(
+                getString(R.string.layout_split_wide_title),
+                getString(R.string.layout_split_wide_summary),
+                settings.splitWide,
+            ) {
+                settings.splitWide = it
+            },
+        )
+        components.add(
+            column,
             components.note(getString(R.string.layout_thumb_note)),
         )
         column.addView(components.section(getString(R.string.section_key_details)))
@@ -475,6 +485,26 @@ class SetupActivity : Activity() {
                 settings.keyPreview,
             ) {
                 settings.keyPreview = it
+            },
+        )
+        components.add(
+            column,
+            components.toggle(
+                getString(R.string.detail_haptic_feedback_title),
+                getString(R.string.detail_haptic_feedback_summary),
+                settings.hapticFeedback,
+            ) {
+                settings.hapticFeedback = it
+            },
+        )
+        components.add(
+            column,
+            components.toggle(
+                getString(R.string.detail_key_sound_title),
+                getString(R.string.detail_key_sound_summary),
+                settings.keySound,
+            ) {
+                settings.keySound = it
             },
         )
     }

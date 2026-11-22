@@ -147,12 +147,30 @@ class MboardService : InputMethodService() {
             keyboard?.layout = previousLayout
             keyboard?.shifted = previousShift
             keyboard?.capsLocked = previousCaps
+        } else {
+            applyLiveSettings()
         }
         if (key == "capitalize" && !settings.autoCapitalize && keyboard?.capsLocked != true) keyboard?.shifted = false
         if (key == "suggestions" && settings.suggestions) {
             loadWords()
         }
         updateAuxiliary()
+    }
+
+    private fun applyLiveSettings() {
+        val kv = keyboard ?: return
+        kv.showPreview = settings.keyPreview
+        kv.rowHeightDp = settings.rowHeightDp
+        kv.showNumberRow = settings.numberRow
+        kv.splitWide = settings.splitWide
+        keyboardSurface?.setMode(settings.oneHandMode)
+        panelBody?.let { body ->
+            val clipboardOpen = mode == Mode.CLIPBOARD || mode == Mode.EMOJI
+            val height = kv.keysHeight + if (clipboardOpen && stripNeeded()) ui.dp(Tokens.STRIP_HEIGHT) else 0
+            if (body.layoutParams != null && body.layoutParams.height != height) {
+                body.layoutParams = body.layoutParams.apply { this.height = height }
+            }
+        }
     }
 
     private fun resetEditorState() {
@@ -431,7 +449,7 @@ class MboardService : InputMethodService() {
         restarting: Boolean,
     ) {
         super.onStartInputView(info, restarting)
-        if (visualKey != settings.visualKey()) setInputView(onCreateInputView())
+        if (visualKey != settings.visualKey()) setInputView(onCreateInputView()) else applyLiveSettings()
         keyboard?.layout = defaultLayout
         keyboard?.capsLocked = false
         keyboard?.shifted = false

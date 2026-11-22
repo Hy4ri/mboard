@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.media.AudioManager
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -24,16 +25,55 @@ class KeyboardView(
 ) : View(context) {
     private val ui = BoardUi(context)
     private val settings = BoardSettings(context)
+    private val audioManager = context.getSystemService(AudioManager::class.java)
     private val density = resources.displayMetrics.density
-    private val rowHeight = settings.rowHeightDp * density
     private val gap = Tokens.KEY_GAP * density
     private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-    private val showNumberRow = settings.numberRow
-    private val showPreview = settings.keyPreview
+    private val rowHeight get() = rowHeightDp * density
+    var rowHeightDp: Int = settings.rowHeightDp
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            geometryHeight = -1
+            if (touchReady) access.resetLayout()
+            requestLayout()
+            invalidate()
+        }
+    var showNumberRow: Boolean = settings.numberRow
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            cachedRowsKey = null
+            geometryLayout = null
+            if (touchReady) access.resetLayout()
+            requestLayout()
+            invalidate()
+        }
+    var showPreview: Boolean = settings.keyPreview
+        set(value) {
+            if (field == value) return
+            field = value
+            if (!value) setPopup(null)
+            invalidate()
+        }
+    var splitWide: Boolean = settings.splitWide
+        set(value) {
+            if (field == value) return
+            cancelTouch()
+            field = value
+            geometryWidth = -1
+            if (touchReady) access.resetLayout()
+            invalidate()
+        }
+    private val splitActive: Boolean
+        get() = splitWide && !layout.grid && width >= Tokens.SPLIT_MIN_WIDTH * density
 
     private data class Cell(
         val rect: RectF,
         val key: String,
+        val kind: KeyKind,
         val row: Int,
     )
 
@@ -115,14 +155,20 @@ class KeyboardView(
             return minOf(configured, maxOf(minimum, available)).toInt()
         }
     private var cachedRowsKey: Pair<Layout, Language>? = null
-    private var cachedRows: List<List<String>> = emptyList()
+    private var cachedRows: List<List<KeySpec>> = emptyList()
 
-    private val rows: List<List<String>>
+    private val rows: List<List<KeySpec>>
         get() {
             val key = layout to language
             if (cachedRowsKey == key) return cachedRows
             val visible = if (!showNumberRow && layout.letters) layout.rows.drop(1) else layout.rows
-            val computed = visible.map { row -> row.map { language.punctuation[it] ?: it } }
+            val computed =
+                visible.map { row ->
+                    row.map { spec ->
+                        val mapped = language.punctuation[spec.code]
+                        if (mapped != null) spec.copy(code = mapped) else spec
+                    }
+                }
             cachedRowsKey = key
             cachedRows = computed
             return computed
@@ -267,29 +313,15 @@ class KeyboardView(
         if (touchReady) access.resetLayout()
     }
 
-    private fun weight(key: String) =
-        when (key) {
-            Keys.SPACE -> {
-                if (layout.grid) 1f else 4f
-            }
-
-            Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER -> {
-                if (layout.grid) 1f else 1.5f
-            }
-
-            Keys.PAD -> {
-                1f
-            }
-
-            // Pads are grids: every key is one column wide so the rows line up.
-            Keys.SYMBOLS, Keys.LETTERS, Keys.MORE_SYMBOLS -> {
-                if (layout.grid) 1f else 1.5f
-            }
-
-            else -> {
-                1f
-            }
+    private fun splitRow(row: List<KeySpec>): Pair<List<KeySpec>, List<KeySpec>> {
+        val spaceIndex = row.indexOfFirst { it.kind == KeyKind.SPACE }
+        if (spaceIndex >= 0) {
+            val halfSpace = KeySpec.space(row[spaceIndex].weight / 2f)
+            return (row.subList(0, spaceIndex) + halfSpace) to (listOf(halfSpace) + row.subList(spaceIndex + 1, row.size))
         }
+        val mid = (row.size + 1) / 2
+        return row.subList(0, mid) to row.subList(mid, row.size)
+    }
 
     private fun geometry() {
         if (geometryWidth == width && geometryHeight == drawnKeysHeight && geometryLayout == layout) return
@@ -297,29 +329,45 @@ class KeyboardView(
         releasedAt.clear()
         if (width <= 0) return
         val visibleRows = rows
-        val maxUnits = visibleRows.maxOf { row -> row.sumOf { weight(it).toDouble() } }.toFloat()
+        val maxUnits = visibleRows.maxOf { row -> row.sumOf { it.weight.toDouble() } }.toFloat()
+        val split = splitActive
         visibleRows.forEachIndexed { rowIndex, row ->
-            val units = row.sumOf { weight(it).toDouble() }.toFloat()
-            val contentWidth =
-                if (resources.configuration.orientation ==
-                    android.content.res.Configuration.ORIENTATION_LANDSCAPE
-                ) {
-                    minOf(width.toFloat(), Tokens.CONTENT_MAX_WIDTH * density)
-                } else {
-                    width.toFloat()
+            val units = row.sumOf { it.weight.toDouble() }.toFloat()
+            val top = rowIndex * activeRowHeight + gap
+            val bottom = (rowIndex + 1) * activeRowHeight
+            if (split) {
+                val contentWidth = minOf(width - Tokens.SPLIT_GAP_MIN * density, Tokens.CONTENT_MAX_WIDTH * density)
+                val unit = contentWidth / (if (layout.stretch) units else maxUnits)
+                val (leftHalf, rightHalf) = splitRow(row)
+                var x = 0f
+                leftHalf.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
                 }
-            val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
-            var x = (width - units * unit) / 2
-            row.forEach { key ->
-                val size = weight(key) * unit
-                cells.add(
-                    Cell(
-                        RectF(x + gap / 2, rowIndex * activeRowHeight + gap, x + size - gap / 2, (rowIndex + 1) * activeRowHeight),
-                        key,
-                        rowIndex,
-                    ),
-                )
-                x += size
+                val rightUnits = rightHalf.sumOf { it.weight.toDouble() }.toFloat()
+                x = width - rightUnits * unit
+                rightHalf.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
+                }
+            } else {
+                val contentWidth =
+                    if (resources.configuration.orientation ==
+                        android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                    ) {
+                        minOf(width.toFloat(), Tokens.CONTENT_MAX_WIDTH * density)
+                    } else {
+                        width.toFloat()
+                    }
+                val unit = contentWidth / (if (layout.stretch || layout.grid) units else maxUnits)
+                var x = (width - units * unit) / 2
+                row.forEach { spec ->
+                    val size = spec.weight * unit
+                    cells.add(Cell(RectF(x + gap / 2, top, x + size - gap / 2, bottom), spec.code, spec.kind, rowIndex))
+                    x += size
+                }
             }
         }
         geometryWidth = width
@@ -335,7 +383,7 @@ class KeyboardView(
         cells.forEach { cell ->
             val cursorKey = isCursorScrubbing && cell.key == Keys.SPACE
             val active = cell == current && pointer != MotionEvent.INVALID_POINTER_ID
-            val special = cell.key in SPECIAL
+            val special = cell.kind == KeyKind.FUNCTION
             val base =
                 when {
                     cursorKey -> ui.accentContainer
@@ -561,8 +609,10 @@ class KeyboardView(
         val row = (y / activeRowHeight).toInt().coerceAtMost(rows.lastIndex)
         // Gaps are part of the closest key's target, but only within the same row.
         val candidates = cells.filter { it.row == row }
-        return candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }
-            ?: candidates.minByOrNull { minOf(abs(it.rect.left - x), abs(it.rect.right - x)) }
+        candidates.firstOrNull { x >= it.rect.left && x <= it.rect.right }?.let { return it }
+        val nearest = candidates.minByOrNull { minOf(abs(it.rect.left - x), abs(it.rect.right - x)) } ?: return null
+        if (splitActive && minOf(abs(nearest.rect.left - x), abs(nearest.rect.right - x)) > gap) return null
+        return nearest
     }
 
     private fun showAlternates(base: Cell) {
@@ -584,7 +634,7 @@ class KeyboardView(
         removeCallbacks(repeatDelete)
         fadeOut(current)
         current = cell
-        setPopup(cell?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
+        setPopup(cell?.takeIf { it.kind == KeyKind.CHAR })
         invalidate()
     }
 
@@ -842,6 +892,22 @@ class KeyboardView(
         if (steps != 0) onCursorMove(steps)
     }
 
+    private fun performKeyFeedback(key: String) {
+        if (settings.hapticFeedback) {
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        }
+        if (settings.keySound) {
+            val effect =
+                when (key) {
+                    Keys.BACKSPACE -> AudioManager.FX_KEYPRESS_DELETE
+                    Keys.SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
+                    Keys.ENTER -> AudioManager.FX_KEYPRESS_RETURN
+                    else -> AudioManager.FX_KEYPRESS_STANDARD
+                }
+            audioManager?.playSoundEffect(effect)
+        }
+    }
+
     private fun startsDeleteSwipe(x: Float) = !deleteRepeated && downX - x > DELETE_SWIPE_START_DP * density
 
     private fun beginTouch(
@@ -857,8 +923,9 @@ class KeyboardView(
         lastY = y
         origin = keyAt(x, y)
         current = origin
-        setPopup(origin?.takeIf { it.key !in SPECIAL && it.key != Keys.SPACE })
+        setPopup(origin?.takeIf { it.kind == KeyKind.CHAR })
         val key = origin?.key
+        if (key != null) performKeyFeedback(key)
         if ((key == Keys.SPACE && cursorScrubEnabled) || (key != null && language.alternatesFor(key) != null)) {
             postDelayed(hold, Tokens.MOTION_HOLD)
         }
@@ -892,7 +959,7 @@ class KeyboardView(
         val preview = popup
         cancelTouch()
         when {
-            alternate != null && releasedCell != null -> {
+            alternate != null -> {
                 onKey(alternate)
             }
 
@@ -918,6 +985,5 @@ class KeyboardView(
         const val DELETE_SWIPE_START_DP = 20
         const val DELETE_WORD_AFTER_MS = 1_500L
         const val DELETE_SWIPE_STEP_DP = 28
-        val SPECIAL = setOf(Keys.SHIFT, Keys.BACKSPACE, Keys.ENTER, Keys.GLOBE, Keys.SYMBOLS, Keys.MORE_SYMBOLS, Keys.LETTERS, Keys.PAD)
     }
 }

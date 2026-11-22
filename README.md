@@ -1,6 +1,6 @@
 # mboard
 
-An offline English/Arabic Android keyboard. No network permission, sound, or vibration.
+An offline English/Arabic Android keyboard. No network permission; sound and vibration are off by default.
 
 ## Everyday typing
 
@@ -9,7 +9,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Optional Arabizi suggestions (Settings → Typing, off by default) offer Arabic-script words on the English layout, such as 7abibi → حبيبي. Only shipped Arabic/Jordanian words qualify. An editable bundled Franco allowlist (arabizi_allowlist.txt) lets spellings like shu and sho offer Arabic in the last slot, retaining the typed word and best English suggestion. No other digit-free input triggers Arabizi suggestions. Tap to commit; Arabic readings are never automatic replacements. Expansion is bounded to 600 spellings and 4,096 steps for words up to 14 characters.
 - Auto-correction (Settings → Typing) applies on space/punctuation at a word's end. English single-edit choices use context and key-centre proximity, with a confidence margin; contractions (dont → don't, i → I) and bounded two-edit fallback remain. Arabic keeps its conservative spelling/typo policy (انا → أنا, مدرسه → مدرسة), with context-ranked alternatives offered for tapping rather than forced guesses. When English text looks like two words with the space missed (fixit, or fixxit with a key above the space bar hit instead), the split (fix it) is offered as a suggestion only; it is never applied on space. The main suggestion sits in the middle slot of the strip, highlighted in bold accent when it will auto-correct on space. Backspace immediately after it restores your word and stops correcting it in that field. Password fields never use input-dependent prediction or auto-correction.
 - The row explains loading, disabled, unsupported-editor, selection, and no-match states instead of silently going blank. Common English choices respect Shift/caps lock. Suggestion replacement validates the word on both sides of the caret before a batched delete/commit and restores it if the editor rejects the commit; unsupported apps receive feedback.
-- Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
+- Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width. Optional split mode (Settings → Appearance, off by default) splits letter and symbol rows into left/right thumb halves with a centre gap when available width is at least 600 dp.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
 - Hold backspace to repeat deletion; lifting, hiding, or changing keyboards stops the repeat.
@@ -40,7 +40,7 @@ Transforms: title/sentence case, bullets, quote, inline/fenced code, Markdown bo
 
 A compact home opens focused pages instead of displaying every control, playground and phrase editor in one long form:
 
-- Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, number row and previews.
+- Appearance: theme, accent swatch/picker (including exact Crimson #990000), key height, thumb mode, opt-in wide-screen split keyboard, number row, previews, and opt-in haptics/key sounds.
 - Typing: suggestions, capitalization and double-space period.
 - Clipboard & privacy: history, retention and confirmed local-data deletion.
 - Saved phrases: dedicated draft editor, actual saved count, explicit Save/Delete.
@@ -51,7 +51,7 @@ Native single-choice dialogs replace inline spinners. The page header stays outs
 
 ## Privacy and limits
 
-- No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024).
+- No INTERNET or VIBRATE permission, so typed text cannot leave the device through the keyboard (cloud keyboards have repeatedly been found leaking keystrokes: Citizen Lab, 2023 and 2024). Optional key haptics and sounds (off by default) use Android's built-in view haptic feedback and system sound effects without requesting extra permissions.
 - Clipboard capture runs only while mboard is visible, skips sensitive-marked clips/password/private fields, and reads text only (never resolves content URIs). Android's clipboard access rules still apply.
 - Up to 30 unpinned and 30 pinned clips. Clips larger than 20,000 characters are skipped, never silently truncated.
 - Expired clips are purged from storage when the store is opened/read or its retention changes. While the app process is stopped, expiry is enforced on the next access; this is not a background deletion scheduler.

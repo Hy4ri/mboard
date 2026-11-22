@@ -92,12 +92,18 @@
     <string name="edge_right">الحافة اليمنى</string>
     <string name="edge_swipe_left">سحب من الحافة اليسرى</string>
     <string name="edge_swipe_right">سحب من الحافة اليمنى</string>
+    <string name="layout_split_wide_title">تقسيم لوحة المفاتيح على الشاشات العريضة</string>
+    <string name="layout_split_wide_summary">تقسيم المفاتيح إلى نصفين أيسر وأيمن على الشاشات بعرض 600 dp أو أكثر</string>
     <string name="layout_thumb_note">يُقرّب وضع اليد الواحدة المفاتيح نحو إبهامك، وتعود النوافذ الضيقة إلى العرض الكامل لسهولة الاستخدام. اسحب من الحافة للداخل لإظهار لوحتها، وللخارج لإخفائها.</string>
     <string name="section_key_details">تفاصيل المفاتيح</string>
     <string name="detail_number_row_title">صف الأرقام</string>
     <string name="detail_number_row_summary">إبقاء الأرقام أعلى الأحرف</string>
     <string name="detail_key_previews_title">معاينة المفاتيح</string>
     <string name="detail_key_previews_summary">إظهار الحرف بشكل مكبَّر عند الضغط</string>
+    <string name="detail_haptic_feedback_title">الاهتزاز اللمسي</string>
+    <string name="detail_haptic_feedback_summary">اهتزاز خفيف عند الضغط على المفاتيح (يتبع إعدادات النظام)</string>
+    <string name="detail_key_sound_title">أصوات المفاتيح</string>
+    <string name="detail_key_sound_summary">تشغيل أصوات نقر النظام عند الضغط (يتبع مستوى صوت النظام)</string>
 
     <!-- Settings: Typing -->
     <string name="typing_note">مساعدة عند الحاجة. قواميس مدمجة، مع تعلّم الكلمات التي تكتبها عند السماح بذلك، محفوظة على جهازك فقط.</string>

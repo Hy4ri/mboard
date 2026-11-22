@@ -56,6 +56,15 @@ class BoardSettings(
     var keyPreview: Boolean
         get() = prefs.getBoolean("preview", true)
         set(value) = prefs.edit().putBoolean("preview", value).apply()
+    var splitWide: Boolean
+        get() = prefs.getBoolean("split_wide", false)
+        set(value) = prefs.edit().putBoolean("split_wide", value).apply()
+    var hapticFeedback: Boolean
+        get() = prefs.getBoolean("haptic_feedback", false)
+        set(value) = prefs.edit().putBoolean("haptic_feedback", value).apply()
+    var keySound: Boolean
+        get() = prefs.getBoolean("key_sound", false)
+        set(value) = prefs.edit().putBoolean("key_sound", value).apply()
     var clipboardHistory: Boolean
         get() = prefs.getBoolean("clipboard_history", true)
         set(value) = prefs.edit().putBoolean("clipboard_history", value).apply()
@@ -101,8 +110,9 @@ class BoardSettings(
     fun unregisterListener(listener: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
+    /** Settings that require rebuilding the input view tree (theme, palette, and edge-swipe panels). */
     fun visualKey() =
-        "$appearance:$accent:$rowHeightDp:$numberRow:$keyPreview:$oneHandMode:$dialPadEdge:$emojiEdge:" +
+        "$appearance:$accent:$dialPadEdge:$emojiEdge:" +
             COLOR_ROLES.joinToString(",") { customColor(it)?.toString() ?: "-" }
 
     companion object {
