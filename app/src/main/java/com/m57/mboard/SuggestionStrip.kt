@@ -1,5 +1,6 @@
 package com.m57.mboard
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.SystemClock
 import android.text.TextUtils
@@ -50,36 +51,7 @@ class SuggestionStrip(
                         pressedChoices[index] = null
                         picked?.let { onPick(it.word, it.prefix, it.editor) }
                     }.apply {
-                        setOnTouchListener { v, event ->
-                            when (event.actionMasked) {
-                                android.view.MotionEvent.ACTION_DOWN -> {
-                                    pressedChoices[index] = choices[index]
-                                    false
-                                }
-
-                                android.view.MotionEvent.ACTION_UP -> {
-                                    v.isPressed = false
-                                    val inside =
-                                        event.x >= 0f && event.x <= v.width &&
-                                            event.y >= 0f && event.y <= v.height
-                                    if (v.isEnabled && inside) {
-                                        v.performClick()
-                                    } else {
-                                        pressedChoices[index] = null
-                                    }
-                                    true
-                                }
-
-                                android.view.MotionEvent.ACTION_CANCEL -> {
-                                    pressedChoices[index] = null
-                                    false
-                                }
-
-                                else -> {
-                                    false
-                                }
-                            }
-                        }
+                        snapshotChoiceOnTouch(index)
                         maxLines = 1
                         ellipsize = TextUtils.TruncateAt.END
                         // Key-style chips: same fill and edge as the letter keys, one fixed text size.
@@ -106,7 +78,17 @@ class SuggestionStrip(
         }
     }
 
-    override fun shouldDelayChildPressedState(): Boolean = false
+    // Listener only snapshots the displayed choice; Button owns the click.
+    @SuppressLint("ClickableViewAccessibility")
+    private fun Button.snapshotChoiceOnTouch(index: Int) {
+        setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                android.view.MotionEvent.ACTION_DOWN -> pressedChoices[index] = choices[index]
+                android.view.MotionEvent.ACTION_CANCEL -> pressedChoices[index] = null
+            }
+            false // Native Button owns the click; this only snapshots its displayed choice.
+        }
+    }
 
     fun render(
         words: List<String>,
