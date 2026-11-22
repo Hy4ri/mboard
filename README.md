@@ -12,7 +12,7 @@ An offline English/Arabic Android keyboard. No network permission, sound, or vib
 - Left/right thumb modes narrow the actual keys and add Full/side-switch controls. Below 300 dp, keys use full width.
 - Tap Shift for one uppercase letter; double-tap it for caps lock; tap again to unlock.
 - Hold a letter for accents/Arabic variants. Slide across the strip and release to pick.
-- Hold backspace to repeat deletion; lifting, hiding, or changing keyboards stops the repeat.
+- Hold backspace to repeat a few characters, then keep holding to erase words. Password and numeric fields repeat characters only. Lift or slide off the key to stop; swipe left from backspace before it starts repeating to select words for deletion.
 - Slide along the space bar to move the cursor. Use the globe key to switch language.
 - Numeric fields start with a keypad. ABC returns to letters; ?123 and =\< expose two symbol pages.
 - Enter follows the app's Go, Send, Search, Next, Done, or custom action.
