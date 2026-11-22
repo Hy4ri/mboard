@@ -1,9 +1,11 @@
 package com.m57.mboard
 
 import android.content.Context
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.Locale
+import java.util.TreeMap
 
 /**
  * On-device list of words the user types, and which word they type after which, per language.
@@ -23,6 +25,42 @@ class UserWords
             var decayEpoch: Long,
         )
 
+        private class PairTable {
+            val byPrev = HashMap<String, LinkedHashMap<String, Word>>()
+            var size = 0
+
+            fun put(
+                prev: String,
+                next: String,
+                word: Word,
+            ) {
+                val followers = byPrev.getOrPut(prev) { LinkedHashMap() }
+                if (followers.put(next, word) == null) size++
+            }
+
+            fun removeMin() {
+                var minPrev: String? = null
+                var minNext: String? = null
+                var minWord: Word? = null
+                for ((prev, followers) in byPrev) {
+                    for ((next, word) in followers) {
+                        if (minWord == null || isLessUsed(word, minWord)) {
+                            minPrev = prev
+                            minNext = next
+                            minWord = word
+                        }
+                    }
+                }
+                if (minPrev != null && minNext != null) {
+                    val followers = byPrev[minPrev] ?: return
+                    if (followers.remove(minNext) != null) {
+                        size--
+                        if (followers.isEmpty()) byPrev.remove(minPrev)
+                    }
+                }
+            }
+        }
+
         private class Rejection(
             val typed: String,
             val corrected: String,
@@ -30,10 +68,12 @@ class UserWords
         )
 
         private val prefs = context.getSharedPreferences("user_words", Context.MODE_PRIVATE)
-        private val loaded = HashMap<Language, LinkedHashMap<String, Word>>()
-        private val loadedPairs = HashMap<Language, LinkedHashMap<String, Word>>()
+        private val loaded = HashMap<Language, TreeMap<String, Word>>()
+        private val loadedPairs = HashMap<Language, PairTable>()
         private val loadedRejections = HashMap<Language, LinkedHashMap<String, Rejection>>()
-        private var dirty = false
+        private val dirtyWords = HashSet<Language>()
+        private val dirtyPairs = HashSet<Language>()
+        private val dirtyRejections = HashSet<Language>()
         private var clock = 0L
 
         private fun key(word: String) = word.lowercase(Locale.ROOT)
@@ -44,53 +84,88 @@ class UserWords
 
         private fun rejectionPref(language: Language) = "${language.code}_rejections"
 
-        private fun words(language: Language) = loaded.getOrPut(language) { read(pref(language)) }
+        private fun words(language: Language) = loaded.getOrPut(language) { readWords(language) }
 
-        /** Keyed "previous next" in lowercase; the display is the next word as last typed. */
-        private fun pairs(language: Language) = loadedPairs.getOrPut(language) { read(pairPref(language)) }
+        /** Indexed by lowercase previous word -> lowercase next word; display is the next word as last typed. */
+        private fun pairs(language: Language) = loadedPairs.getOrPut(language) { readPairs(language) }
 
         private fun rejections(language: Language) = loadedRejections.getOrPut(language) { readRejections(rejectionPref(language)) }
 
-        private fun read(name: String): LinkedHashMap<String, Word> {
-            val map = LinkedHashMap<String, Word>()
+        private fun decodeWord(
+            entry: JSONArray,
+            now: Long,
+            onDirty: () -> Unit,
+        ): Word? {
+            val display = entry.optString(0)
+            if (display.isEmpty()) return null
+            var count = entry.optInt(1).coerceIn(1, 1_000)
+            val used = entry.optLong(2)
+            clock = maxOf(clock, used)
+            var epoch = if (entry.length() > 3) entry.optLong(3, now) else now
+            if (entry.length() <= 3) onDirty()
+            if (epoch < 0L) {
+                epoch = now
+                onDirty()
+            }
+
+            if (now > epoch) {
+                val periods = (now - epoch) / DECAY_PERIOD_MILLIS
+                if (periods > 0L) {
+                    val shift = periods.coerceAtMost(31L).toInt()
+                    count = count shr shift
+                    epoch += periods * DECAY_PERIOD_MILLIS
+                    onDirty()
+                }
+            }
+
+            if (count > 0) {
+                return Word(display, count.coerceAtMost(1_000), used, epoch)
+            }
+            onDirty()
+            return null
+        }
+
+        private fun readWords(language: Language): TreeMap<String, Word> {
+            val map = TreeMap<String, Word>()
             val now = nowMillis().coerceAtLeast(0L)
+            var changed = false
             try {
-                val json = JSONObject(prefs.getString(name, "{}") ?: "{}")
+                val json = JSONObject(prefs.getString(pref(language), "{}") ?: "{}")
                 json.keys().forEach { k ->
                     val entry = json.optJSONArray(k) ?: return@forEach
-                    val display = entry.optString(0)
-                    if (display.isNotEmpty()) {
-                        var count = entry.optInt(1).coerceIn(1, 1_000)
-                        val used = entry.optLong(2)
-                        clock = maxOf(clock, used)
-                        var epoch = if (entry.length() > 3) entry.optLong(3, now) else now
-                        if (entry.length() <= 3) dirty = true
-                        if (epoch < 0L) {
-                            epoch = now
-                            dirty = true
-                        }
+                    val word = decodeWord(entry, now) { changed = true }
+                    if (word != null) map[k] = word
+                }
+            } catch (_: JSONException) {
+                // A damaged list starts over rather than breaking typing.
+            }
+            if (changed) dirtyWords.add(language)
+            return map
+        }
 
-                        if (now > epoch) {
-                            val periods = (now - epoch) / DECAY_PERIOD_MILLIS
-                            if (periods > 0L) {
-                                val shift = periods.coerceAtMost(31L).toInt()
-                                count = count shr shift
-                                epoch += periods * DECAY_PERIOD_MILLIS
-                                dirty = true
-                            }
-                        }
-
-                        if (count > 0) {
-                            map[k] = Word(display, count.coerceAtMost(1_000), used, epoch)
-                        } else {
-                            dirty = true
-                        }
+        private fun readPairs(language: Language): PairTable {
+            val table = PairTable()
+            val now = nowMillis().coerceAtLeast(0L)
+            var changed = false
+            try {
+                val json = JSONObject(prefs.getString(pairPref(language), "{}") ?: "{}")
+                json.keys().forEach { k ->
+                    val entry = json.optJSONArray(k) ?: return@forEach
+                    val sep = k.indexOf(' ')
+                    if (sep <= 0 || sep + 1 >= k.length) {
+                        changed = true
+                        return@forEach
+                    }
+                    val word = decodeWord(entry, now) { changed = true }
+                    if (word != null) {
+                        table.put(k.substring(0, sep), k.substring(sep + 1), word)
                     }
                 }
             } catch (_: JSONException) {
                 // A damaged list starts over rather than breaking typing.
             }
-            return map
+            if (changed) dirtyPairs.add(language)
+            return table
         }
 
         private fun readRejections(name: String): LinkedHashMap<String, Rejection> {
@@ -128,31 +203,65 @@ class UserWords
             language: Language,
         ) {
             if (!pairable(word)) return
-            if (word.length >= 2) bump(words(language), key(word), word, LIMIT)
+            val wordKey = key(word)
+            if (word.length >= 2) {
+                bumpWord(words(language), wordKey, word)
+                dirtyWords.add(language)
+            }
             // Single letters still pair: "I" → "am", "a" → "lot".
-            if (previous != null && pairable(previous)) bump(pairs(language), key(previous) + " " + key(word), word, PAIR_LIMIT)
-            dirty = true
+            if (previous != null && pairable(previous)) {
+                bumpPair(pairs(language), key(previous), wordKey, word)
+                dirtyPairs.add(language)
+            }
         }
 
         private fun pairable(word: String) = word.length in 1..32 && word.none(Char::isDigit)
 
-        private fun bump(
-            map: LinkedHashMap<String, Word>,
+        private fun bumpWord(
+            map: TreeMap<String, Word>,
             k: String,
             display: String,
-            limit: Int,
         ) {
             val now = nowMillis().coerceAtLeast(0L)
             val entry = map.getOrPut(k) { Word(display, 0, 0, now) }
             entry.display = display
             entry.count = (entry.count + 1).coerceAtMost(1_000)
             entry.used = ++clock
-            if (map.size > limit) {
+            while (map.size > LIMIT) {
                 // Drop the least-used, oldest entries first.
-                map.entries
-                    .sortedWith(compareBy({ it.value.count }, { it.value.used }))
-                    .take(map.size - limit)
-                    .forEach { map.remove(it.key) }
+                var minKey: String? = null
+                var minWord: Word? = null
+                for ((entryKey, word) in map) {
+                    if (minWord == null || isLessUsed(word, minWord)) {
+                        minKey = entryKey
+                        minWord = word
+                    }
+                }
+                if (minKey == null) break
+                map.remove(minKey)
+            }
+        }
+
+        private fun bumpPair(
+            table: PairTable,
+            prevKey: String,
+            nextKey: String,
+            display: String,
+        ) {
+            val now = nowMillis().coerceAtLeast(0L)
+            val followers = table.byPrev.getOrPut(prevKey) { LinkedHashMap() }
+            var entry = followers[nextKey]
+            if (entry == null) {
+                entry = Word(display, 0, 0, now)
+                followers[nextKey] = entry
+                table.size++
+            }
+            entry.display = display
+            entry.count = (entry.count + 1).coerceAtMost(1_000)
+            entry.used = ++clock
+            while (table.size > PAIR_LIMIT) {
+                // Drop the least-used, oldest entries first.
+                table.removeMin()
             }
         }
 
@@ -170,13 +279,19 @@ class UserWords
             val map = rejections(language)
             val entry = map.getOrPut(k) { Rejection(typed, corrected, 0) }
             entry.used = ++clock
-            if (map.size > REJECTION_LIMIT) {
-                map.entries
-                    .sortedWith(compareBy { it.value.used })
-                    .take(map.size - REJECTION_LIMIT)
-                    .forEach { map.remove(it.key) }
+            while (map.size > REJECTION_LIMIT) {
+                var oldestKey: String? = null
+                var oldestUsed = Long.MAX_VALUE
+                for ((entryKey, rej) in map) {
+                    if (oldestKey == null || rej.used < oldestUsed) {
+                        oldestKey = entryKey
+                        oldestUsed = rej.used
+                    }
+                }
+                if (oldestKey == null) break
+                map.remove(oldestKey)
             }
-            dirty = true
+            dirtyRejections.add(language)
         }
 
         fun rejects(
@@ -202,7 +317,7 @@ class UserWords
             if (kTyped == kCorrected) return
             val map = rejections(language)
             if (map.remove(rejectionKey(typed, corrected)) != null) {
-                dirty = true
+                dirtyRejections.add(language)
             }
         }
 
@@ -212,13 +327,8 @@ class UserWords
             language: Language,
         ): Map<String, Int> {
             if (previous.isEmpty()) return emptyMap()
-            val start = key(previous) + " "
-            return pairs(language)
-                .entries
-                .filter { it.value.count >= TRUSTED && it.key.startsWith(start) }
-                .sortedWith(compareByDescending<Map.Entry<String, Word>> { it.value.count }.thenByDescending { it.value.used })
-                .take(6)
-                .associate { it.value.display to it.value.count }
+            val followers = pairs(language).byPrev[key(previous)] ?: return emptyMap()
+            return topTrusted(followers.values)
         }
 
         /** A word typed often enough that auto-correction should leave it alone. */
@@ -234,49 +344,94 @@ class UserWords
         ): Map<String, Int> {
             if (typed.isEmpty()) return emptyMap()
             val prefix = key(typed)
-            return words(language)
-                .entries
-                .filter { it.value.count >= TRUSTED && it.key.length > prefix.length && it.key.startsWith(prefix) }
-                .sortedWith(compareByDescending<Map.Entry<String, Word>> { it.value.count }.thenByDescending { it.value.used })
-                .take(6)
-                .associate { it.value.display to it.value.count }
+            // TreeMap order keeps all keys strictly longer than prefix with the same prefix contiguous.
+            val tail = words(language).tailMap(prefix, false)
+            val top = ArrayList<Word>(TOP_LIMIT)
+            for ((k, w) in tail) {
+                if (!k.startsWith(prefix)) break
+                if (w.count >= TRUSTED) insertTop(top, w)
+            }
+            if (top.isEmpty()) return emptyMap()
+            val result = LinkedHashMap<String, Int>(top.size)
+            for (w in top) result[w.display] = w.count
+            return result
+        }
+
+        private fun topTrusted(candidates: Collection<Word>): Map<String, Int> {
+            val top = ArrayList<Word>(TOP_LIMIT)
+            for (w in candidates) {
+                if (w.count >= TRUSTED) insertTop(top, w)
+            }
+            if (top.isEmpty()) return emptyMap()
+            val result = LinkedHashMap<String, Int>(top.size)
+            for (w in top) result[w.display] = w.count
+            return result
+        }
+
+        private fun insertTop(
+            top: ArrayList<Word>,
+            candidate: Word,
+        ) {
+            if (top.size == TOP_LIMIT && !isMoreUsed(candidate, top[TOP_LIMIT - 1])) return
+            var pos = top.size
+            while (pos > 0 && isMoreUsed(candidate, top[pos - 1])) pos--
+            if (top.size < TOP_LIMIT) {
+                top.add(pos, candidate)
+            } else {
+                top.add(pos, candidate)
+                top.removeAt(TOP_LIMIT)
+            }
         }
 
         fun size() = Languages.ALL.sumOf { words(it).size }
 
         fun save() {
-            if (!dirty) return
+            if (dirtyWords.isEmpty() && dirtyPairs.isEmpty() && dirtyRejections.isEmpty()) return
             val edit = prefs.edit()
-            loaded.forEach { (language, map) -> edit.putString(pref(language), json(map)) }
-            loadedPairs.forEach { (language, map) -> edit.putString(pairPref(language), json(map)) }
-            loadedRejections.forEach { (language, map) -> edit.putString(rejectionPref(language), jsonRejections(map)) }
+            for (language in dirtyWords) {
+                loaded[language]?.let { edit.putString(pref(language), jsonWords(it)) }
+            }
+            for (language in dirtyPairs) {
+                loadedPairs[language]?.let { edit.putString(pairPref(language), jsonPairs(it)) }
+            }
+            for (language in dirtyRejections) {
+                loadedRejections[language]?.let { edit.putString(rejectionPref(language), jsonRejections(it)) }
+            }
             edit.apply()
-            dirty = false
+            dirtyWords.clear()
+            dirtyPairs.clear()
+            dirtyRejections.clear()
         }
 
-        private fun json(map: Map<String, Word>): String {
+        private fun jsonWords(map: Map<String, Word>): String {
             val json = JSONObject()
-            map.forEach { (k, w) ->
-                json.put(
-                    k,
-                    org.json
-                        .JSONArray()
-                        .put(w.display)
-                        .put(w.count)
-                        .put(w.used)
-                        .put(w.decayEpoch),
-                )
+            map.forEach { (k, w) -> json.put(k, wordJson(w)) }
+            return json.toString()
+        }
+
+        private fun jsonPairs(table: PairTable): String {
+            val json = JSONObject()
+            table.byPrev.forEach { (prev, followers) ->
+                followers.forEach { (next, w) ->
+                    json.put("$prev $next", wordJson(w))
+                }
             }
             return json.toString()
         }
+
+        private fun wordJson(w: Word): JSONArray =
+            JSONArray()
+                .put(w.display)
+                .put(w.count)
+                .put(w.used)
+                .put(w.decayEpoch)
 
         private fun jsonRejections(map: Map<String, Rejection>): String {
             val json = JSONObject()
             map.forEach { (k, r) ->
                 json.put(
                     k,
-                    org.json
-                        .JSONArray()
+                    JSONArray()
                         .put(r.typed)
                         .put(r.corrected)
                         .put(r.used),
@@ -289,7 +444,9 @@ class UserWords
             loaded.clear()
             loadedPairs.clear()
             loadedRejections.clear()
-            dirty = false
+            dirtyWords.clear()
+            dirtyPairs.clear()
+            dirtyRejections.clear()
             prefs.edit().clear().apply()
         }
 
@@ -298,6 +455,17 @@ class UserWords
             const val PAIR_LIMIT = 5_000
             const val REJECTION_LIMIT = 500
             const val TRUSTED = 2
+            const val TOP_LIMIT = 6
             const val DECAY_PERIOD_MILLIS = 14L * 24 * 60 * 60 * 1000
+
+            fun isLessUsed(
+                a: Word,
+                b: Word,
+            ) = a.count < b.count || (a.count == b.count && a.used < b.used)
+
+            fun isMoreUsed(
+                a: Word,
+                b: Word,
+            ) = a.count > b.count || (a.count == b.count && a.used > b.used)
         }
     }

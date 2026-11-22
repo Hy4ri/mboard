@@ -11,7 +11,7 @@ open class Context(
     val assets = AssetManager(assetsDir)
     private val prefs = HashMap<String, SharedPreferences>()
 
-    fun getSharedPreferences(
+    open fun getSharedPreferences(
         name: String,
         mode: Int,
     ): SharedPreferences = prefs.getOrPut(name) { MemoryPreferences() }
