@@ -5,9 +5,17 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 
-# The JDK comes from the dev shell; enter it once if the caller is not already in it.
-if ! command -v java > /dev/null; then
-  [ -z "${MBOARD_IN_NIX:-}" ] || { echo "suggest: no java inside nix develop either" >&2; exit 1; }
+has_java21() {
+  command -v java > /dev/null 2>&1 || return 1
+  local out
+  out="$(java -version 2>&1 || true)"
+  [[ "$out" =~ version\ \"([0-9]+) ]] && [ "${BASH_REMATCH[1]}" -ge 21 ]
+}
+
+# The JDK comes from the dev shell; enter it once if the caller is not already on Java 21+.
+if ! has_java21; then
+  [ -z "${MBOARD_IN_NIX:-}" ] || { echo "suggest: Java >= 21 not found inside nix develop either" >&2; exit 1; }
+  command -v nix > /dev/null 2>&1 || { echo "suggest: requires Java >= 21 on PATH or 'nix' to enter nix develop" >&2; exit 1; }
   # The dev shell's banner goes to stderr so stdout stays clean for programs.
   # fd 3 carries the real stdout past the shell hook; the script gets it back as stdout.
   exec 3>&1
